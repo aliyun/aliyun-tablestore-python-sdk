@@ -1,0 +1,7 @@
+import os
+
+OTS_ID = os.getenv("OTS_TEST_ACCESS_KEY_ID")
+OTS_SECRET = os.getenv("OTS_TEST_ACCESS_KEY_SECRET")
+OTS_ENDPOINT = os.getenv("OTS_TEST_ENDPOINT")
+OTS_INSTANCE = os.getenv("OTS_TEST_INSTANCE")
+
