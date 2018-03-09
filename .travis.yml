@@ -7,7 +7,7 @@ python:
 - 3.5
 - 3.6
 install:
-- pip install requests nose nose-cov python-coveralls protobuf-py3 urllib3 certifi crcmod future six
+- pip install requests nose nose-cov python-coveralls protobuf urllib3 certifi crcmod future six
 - pip install --upgrade mock
 - ./setup.py install
 script:
