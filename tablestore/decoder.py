@@ -5,8 +5,8 @@ import google.protobuf.text_format as text_format
 from tablestore.metadata import *
 from tablestore.plainbuffer.plain_buffer_builder import *
 
-import tablestore.protobuf.table_store_pb as pb
-import tablestore.protobuf.table_store_filter_pb as filter_pb
+import tablestore.protobuf.table_store_pb2 as pb
+import tablestore.protobuf.table_store_filter_pb2 as filter_pb
 
 class OTSProtoBufferDecoder(object):
 

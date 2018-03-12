@@ -24,8 +24,8 @@ import tablestore
 from tablestore.error import *
 from tablestore.encoder import OTSProtoBufferEncoder
 from tablestore.decoder import OTSProtoBufferDecoder
-import tablestore.protobuf.table_store_pb as pb2
-import tablestore.protobuf.table_store_filter_pb as filter_pb2
+import tablestore.protobuf.table_store_pb2 as pb2
+import tablestore.protobuf.table_store_filter_pb2 as filter_pb2
 
 
 class OTSProtocol(object):

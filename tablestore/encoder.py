@@ -6,8 +6,8 @@ from builtins import int
 from tablestore.error import *
 from tablestore.metadata import *
 from tablestore.plainbuffer.plain_buffer_builder import *
-import tablestore.protobuf.table_store_pb as pb2
-import tablestore.protobuf.table_store_filter_pb as filter_pb2
+import tablestore.protobuf.table_store_pb2 as pb2
+import tablestore.protobuf.table_store_filter_pb2 as filter_pb2
 
 INT32_MAX = 2147483647
 INT32_MIN = -2147483648
