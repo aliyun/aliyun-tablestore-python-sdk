@@ -292,7 +292,7 @@ class PlainBufferCodedOutputStream(object):
 
             cell_check_sum = PlainBufferCrc8.crc_int8(cell_check_sum, VT_BLOB)
             cell_check_sum = PlainBufferCrc8.crc_int32(cell_check_sum, len(binary_value))
-            cell_check_sum = PlainBufferCrc8.crc_string(cell_check_sum, binary_value.decode("utf-8"))
+            cell_check_sum = PlainBufferCrc8.crc_bytes(cell_check_sum, binary_value)
         else:
             raise OTSClientError("Unsupported primary key type: " + type(value)) 
         return cell_check_sum
@@ -333,7 +333,7 @@ class PlainBufferCodedOutputStream(object):
             self.output_stream.write_bytes(value)
             cell_check_sum = PlainBufferCrc8.crc_int8(cell_check_sum, VT_BLOB)
             cell_check_sum = PlainBufferCrc8.crc_int32(cell_check_sum, len(value))
-            cell_check_sum = PlainBufferCrc8.crc_string(cell_check_sum, value.decode("utf-8"))
+            cell_check_sum = PlainBufferCrc8.crc_bytes(cell_check_sum, value)
         elif isinstance(value, float):
             if const.SYS_BITS == 64:
                 double_in_long, = struct.unpack("q", struct.pack("d", value))

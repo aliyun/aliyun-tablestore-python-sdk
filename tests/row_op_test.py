@@ -1227,5 +1227,92 @@ class RowOpTest(APITestBase):
         cu, rrow, token = self.client_test.get_row(table_name, [("PK" , 12)], max_version=1)
         self.assert_equal(rrow, None)
 
+    def test_bytearray(self):
+        '''使用bytearray的两种构造函数构造row value，保证能读写成功'''
+        table_name = "bytearray" + self.get_python_version()
+
+        table_meta = TableMeta(table_name, [("PK1", "BINARY"), ("PK2", "BINARY")])
+        reserved_throughput = ReservedThroughput(CapacityUnit(0, 0))
+        table_options = TableOptions()
+        self.client_test.create_table(table_meta, table_options, reserved_throughput)
+        self.wait_for_partition_load(table_name) 
+
+        # Put
+        primary_key = [('PK1', bytearray([1,23,45,101,33])), ('PK2', bytearray("武汉"))]
+        attribute_columns = [('address', bytearray([238,180,225,242,32])), ('age', 29.7), 
+                             ('female', False), ('mobile',15100000000), ('name','萧峰')]
+        row = Row(primary_key, attribute_columns)
+
+        consumed, return_row = self.client_test.put_row(table_name, row, None)
+        
+        # Read
+        consumed, return_row, next_token = self.client_test.get_row(table_name, primary_key, [], None, 1)
+        self.assert_equal(return_row.primary_key, primary_key)
+        self.assert_columns(return_row.attribute_columns, attribute_columns)        
+
+        # Update
+        update_of_attribute_columns = {
+            'PUT' : [('address', bytearray([2,9,0,199,12]))],
+            }
+        row = Row(primary_key, update_of_attribute_columns)
+        consumed, return_row = self.client_test.update_row(table_name, row, None) 
+
+        # Read
+        attribute_columns = [('address', bytearray([2,9,0,199,12])), ('age', 29.7), 
+                              ('female', False), ('mobile',15100000000), ('name','萧峰')]
+        consumed, return_row, next_token = self.client_test.get_row(table_name, primary_key, [], None, 1)
+        self.assert_equal(return_row.primary_key, primary_key)
+        self.assert_columns(return_row.attribute_columns, attribute_columns)
+
+        # Batch Write
+        put_row_items = []
+        primary_key1 = [('PK1',bytearray([1,1,1])), ('PK2',bytearray("西安"))]
+        attribute_columns1 = [("address", bytearray([10,10])), ('age',1)]
+        row1 = Row(primary_key1, attribute_columns1)
+        item1 = PutRowItem(row1, None)
+        put_row_items.append(item1) 
+
+        primary_key2 = [('PK1',bytearray([2,2,2])), ('PK2',bytearray("西安"))]
+        attribute_columns2 = {'put': [('address', bytearray([20, 20]))]}
+        row2 = Row(primary_key2, attribute_columns2)
+        item2 = UpdateRowItem(row2, None)
+        put_row_items.append(item2)
+
+        item3 = DeleteRowItem(Row(primary_key), None)
+        put_row_items.append(item3)
+
+        request = BatchWriteRowRequest()
+        request.add(TableInBatchWriteRowItem(table_name, put_row_items))
+        result = self.client_test.batch_write_row(request)
+
+        self.assert_equal(True, result.is_all_succeed())
+
+        # Batch Read
+        rows_to_get = []
+        rows_to_get.append([('PK1',bytearray([1,1,1])), ('PK2',bytearray("西安"))])
+        rows_to_get.append([('PK1',bytearray([2,2,2])), ('PK2',bytearray("西安"))])
+
+        request = BatchGetRowRequest()
+        request.add(TableInBatchGetRowItem(table_name, rows_to_get, [], None, 1))
+
+        result = self.client_test.batch_get_row(request)
+        
+        table_result = result.get_result_by_table(table_name)
+        self.assert_equal(2, len(table_result))
+        self.assert_equal([('PK1',bytearray([1,1,1])), ('PK2',bytearray("西安"))], table_result[0].row.primary_key)
+        self.assert_columns(attribute_columns1, table_result[0].row.attribute_columns)
+
+        self.assert_equal([('PK1',bytearray([2,2,2])), ('PK2',bytearray("西安"))], table_result[1].row.primary_key)
+        self.assert_columns(attribute_columns2['put'], table_result[1].row.attribute_columns)
+
+        # Delete
+        primary_key3 = [('PK1',bytearray([1,1,1])), ('PK2',bytearray("西安"))]
+        self.client_test.delete_row(table_name, Row(primary_key3), None)
+
+        # Read
+        consumed, return_row, next_token = self.client_test.get_row(table_name, primary_key3, [], None, 1)
+        self.assert_equal(return_row, None)
+
+
 if __name__ == '__main__':
     unittest.main()

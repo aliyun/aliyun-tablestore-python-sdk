@@ -43,7 +43,7 @@ class PlainBufferCrc8(object):
             bytes_ = bytes_.encode('utf-8')
         elif not isinstance(bytes_, six.binary_type):
             raise TypeError("must be string, actual:" + str(type(bytes_)))
-        
+
         if sys.version_info[0] == 2:
             for byte in bytes_:
                 crc = CRC8_TABLE[((crc & 0xff) ^ ord(byte))]
@@ -51,6 +51,12 @@ class PlainBufferCrc8(object):
             for byte in bytes_:
                 crc = CRC8_TABLE[((crc & 0xff) ^ byte)]
         return crc
+
+    @staticmethod
+    def crc_bytes(crc, bytes_):
+	for byte in bytes_:
+            crc = CRC8_TABLE[((crc & 0xff) ^ byte)]
+	return crc
 
     @staticmethod
     def crc_int8(crc, byte):
