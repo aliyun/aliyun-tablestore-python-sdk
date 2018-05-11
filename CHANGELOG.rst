@@ -3,6 +3,21 @@ TableStore SDK for Python 版本记录
 
 Python SDK的版本号遵循 `Semantic Versioning <http://semver.org/>`_ 规则。
 
+Version 4.3.5
+-------------
+
+- Fix bytearray encode bug
+
+Version 4.3.4
+-------------
+
+- replace protobuf-py3 by protobuf
+
+Version 4.3.2
+-------------
+
+- remove crcmod
+
 Version 4.3.0
 -------------
 
