@@ -54,9 +54,9 @@ class PlainBufferCrc8(object):
 
     @staticmethod
     def crc_bytes(crc, bytes_):
-	for byte in bytes_:
+        for byte in bytes_:
             crc = CRC8_TABLE[((crc & 0xff) ^ byte)]
-	return crc
+        return crc
 
     @staticmethod
     def crc_int8(crc, byte):
