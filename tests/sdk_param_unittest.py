@@ -134,7 +134,7 @@ class SDKParamTest(unittest.TestCase):
             self.assertTrue(False)
         except OTSClientError:
             pass
-    
+
         try:
             primary_key = [('PK1','hello'), ('PK2',100)]
             attribute_columns = [('COL1','world'), ('COL2',1000)]
@@ -142,14 +142,14 @@ class SDKParamTest(unittest.TestCase):
             self.assertTrue(False)
         except:
             pass
-    
+
         try:
             condition = Condition(RowExistenceExpectation.IGNORE)
             consumed = self.client.put_row('test_table', condition, 'primary_key', 'attribute_columns')
             self.assertTrue(False)
         except:
             pass
-    
+
     def test_get_row(self):
         try:
             self.client.get_row('one', 'two')
@@ -183,21 +183,21 @@ class SDKParamTest(unittest.TestCase):
             self.assertTrue(False)
         except OTSClientError as e:
             pass
-            
+
         try:
             condition = Condition(RowExistenceExpectation.IGNORE)
             consumed = self.client.update_row('test_table', condition, [('PK1', 'STRING'), ('PK2', 'INTEGER')], {'put' : []})
             self.assertTrue(False)
         except OTSClientError as e:
             pass
-            
+
         try:
             condition = Condition(RowExistenceExpectation.IGNORE)
             consumed = self.client.update_row('test_table', condition, [('PK1', 'STRING'), ('PK2', 'INTEGER')], {'delete' : []})
             self.assertTrue(False)
         except OTSClientError as e:
             pass
- 
+
     def test_delete_row(self):
         try:
             self.client.delete_row('one', 'two', 'three', 'four')
@@ -291,8 +291,8 @@ class SDKParamTest(unittest.TestCase):
             start_primary_key = [('PK1','hello'),('PK2',100)]
             end_primary_key = [('PK1',INF_MAX),('PK2',INF_MIN)]
             columns_to_get = ['COL1','COL2']
-            response = self.client.get_range('table_name', 'InvalidDirection', 
-                        start_primary_key, end_primary_key, 
+            response = self.client.get_range('table_name', 'InvalidDirection',
+                        start_primary_key, end_primary_key,
                         columns_to_get, limit=100, max_version=1
             )
             self.assertTrue(False)
@@ -303,8 +303,8 @@ class SDKParamTest(unittest.TestCase):
             start_primary_key = ['PK1','hello','PK2',100]
             end_primary_key = [('PK1',INF_MAX), ('PK2',INF_MIN)]
             columns_to_get = ['COL1', 'COL2']
-            response = self.client.get_range('table_name', 'FORWARD', 
-                        start_primary_key, end_primary_key, 
+            response = self.client.get_range('table_name', 'FORWARD',
+                        start_primary_key, end_primary_key,
                         columns_to_get, limit=100, max_version=1
             )
             self.assertTrue(False)
@@ -315,8 +315,8 @@ class SDKParamTest(unittest.TestCase):
             start_primary_key = [('PK1','hello'),('PK2',100)]
             end_primary_key = [('PK1',INF_MAX), ('PK2',INF_MIN)]
             columns_to_get = ['COL1', 'COL2']
-            response = self.client.get_range('table_name', 'FORWARD', 
-                        start_primary_key, end_primary_key, 
+            response = self.client.get_range('table_name', 'FORWARD',
+                        start_primary_key, end_primary_key,
                         columns_to_get, limit=100, max_version=-1
             )
             self.assertTrue(False)
@@ -325,7 +325,7 @@ class SDKParamTest(unittest.TestCase):
 
 
         try:
-            response = self.client.get_range('table_name', 'FORWARD', 
+            response = self.client.get_range('table_name', 'FORWARD',
                         'primary_key', 'primary_key', 'columns_to_get', 100)
             self.assertTrue(False)
         except:
@@ -370,16 +370,16 @@ class SDKParamTest(unittest.TestCase):
             cond = Condition(RowExistenceExpectation.IGNORE, SingleColumnCondition("", "", ""))
             self.assertTrue(False)
         except OTSClientError as e:
-            self.assertEqual("Expect input comparator should be one of ['ComparatorType.EQUAL', 'ComparatorType.NOT_EQUAL', 'ComparatorType.GREATER_THAN', 'ComparatorType.GREATER_EQUAL', 'ComparatorType.LESS_THAN', 'ComparatorType.LESS_EQUAL'], but ''", str(e))
+            self.assertEqual("Expect input comparator of SingleColumnCondition should be one of ['ComparatorType.EQUAL', 'ComparatorType.NOT_EQUAL', 'ComparatorType.GREATER_THAN', 'ComparatorType.GREATER_EQUAL', 'ComparatorType.LESS_THAN', 'ComparatorType.LESS_EQUAL'], but ''", str(e))
 
 
     def test_column_condition(self):
         cond = SingleColumnCondition("uid", 100, ComparatorType.EQUAL)
         self.assertEqual(ColumnConditionType.SINGLE_COLUMN_CONDITION, cond.get_type())
-        
+
         cond = CompositeColumnCondition(LogicalOperator.AND)
         self.assertEqual(ColumnConditionType.COMPOSITE_COLUMN_CONDITION, cond.get_type())
-       
+
 
     def test_relation_condition(self):
         SingleColumnCondition("uid", 100, ComparatorType.EQUAL)
@@ -393,14 +393,14 @@ class SDKParamTest(unittest.TestCase):
             cond = SingleColumnCondition("uid", 100, "")
             self.assertTrue(False)
         except OTSClientError as e:
-            self.assertEqual("Expect input comparator should be one of ['ComparatorType.EQUAL', 'ComparatorType.NOT_EQUAL', 'ComparatorType.GREATER_THAN', 'ComparatorType.GREATER_EQUAL', 'ComparatorType.LESS_THAN', 'ComparatorType.LESS_EQUAL'], but ''", str(e))
-       
+            self.assertEqual("Expect input comparator of SingleColumnCondition should be one of ['ComparatorType.EQUAL', 'ComparatorType.NOT_EQUAL', 'ComparatorType.GREATER_THAN', 'ComparatorType.GREATER_EQUAL', 'ComparatorType.LESS_THAN', 'ComparatorType.LESS_EQUAL'], but ''", str(e))
+
         try:
             cond = SingleColumnCondition("uid", 100, ComparatorType.LESS_EQUAL, "True")
             self.assertTrue(False)
         except OTSClientError as e:
-            self.assertEqual("The input pass_if_missing should be an instance of Bool, not str", str(e))
-       
+            self.assertEqual("The input pass_if_missing of SingleColumnCondition should be an instance of Bool, not str", str(e))
+
 
     def test_composite_condition(self):
         CompositeColumnCondition(LogicalOperator.NOT)
@@ -412,7 +412,7 @@ class SDKParamTest(unittest.TestCase):
             self.assertTrue(False)
         except OTSClientError as e:
             self.assertEqual("Expect input combinator should be one of ['LogicalOperator.NOT', 'LogicalOperator.AND', 'LogicalOperator.OR'], but ''", str(e))
- 
+
 
 if __name__ == '__main__':
     unittest.main()

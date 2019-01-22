@@ -7,6 +7,7 @@ from tablestore.plainbuffer.plain_buffer_builder import *
 
 import tablestore.protobuf.table_store_pb2 as pb
 import tablestore.protobuf.table_store_filter_pb2 as filter_pb
+import tablestore.protobuf.search_pb2 as search_pb
 
 class OTSProtoBufferDecoder(object):
 
@@ -14,18 +15,23 @@ class OTSProtoBufferDecoder(object):
         self.encoding = encoding
 
         self.api_decode_map = {
-            'CreateTable'       : self._decode_create_table,
-            'ListTable'         : self._decode_list_table,
-            'DeleteTable'       : self._decode_delete_table,
-            'DescribeTable'     : self._decode_describe_table,
-            'UpdateTable'       : self._decode_update_table,
-            'GetRow'            : self._decode_get_row,
-            'PutRow'            : self._decode_put_row,
-            'UpdateRow'         : self._decode_update_row,
-            'DeleteRow'         : self._decode_delete_row,
-            'BatchGetRow'       : self._decode_batch_get_row,
-            'BatchWriteRow'     : self._decode_batch_write_row,
-            'GetRange'          : self._decode_get_range,
+            'CreateTable'         : self._decode_create_table,
+            'ListTable'           : self._decode_list_table,
+            'DeleteTable'         : self._decode_delete_table,
+            'DescribeTable'       : self._decode_describe_table,
+            'UpdateTable'         : self._decode_update_table,
+            'GetRow'              : self._decode_get_row,
+            'PutRow'              : self._decode_put_row,
+            'UpdateRow'           : self._decode_update_row,
+            'DeleteRow'           : self._decode_delete_row,
+            'BatchGetRow'         : self._decode_batch_get_row,
+            'BatchWriteRow'       : self._decode_batch_write_row,
+            'GetRange'            : self._decode_get_range,
+            'ListSearchIndex'     : self._decode_list_search_index,
+            'DeleteSearchIndex'   : self._decode_delete_search_index,
+            'DescribeSearchIndex' : self._decode_describe_search_index,
+            'CreateSearchIndex'   : self._decode_create_search_index,
+            'Search'              : self._decode_search
         }
 
     def _parse_string(self, string):
@@ -349,3 +355,169 @@ class OTSProtoBufferDecoder(object):
         handler = self.api_decode_map[api_name]
         return handler(response_body)
 
+    def _parse_index_info(self, proto):
+        return (proto.table_name, proto.index_name)
+
+    def _parse_field_type(self, proto):
+        field_type = None
+        if proto == search_pb.LONG:
+            field_type = FieldType.LONG
+        elif proto == search_pb.DOUBLE:
+            field_type = FieldType.DOUBLE
+        elif proto == search_pb.BOOLEAN:
+            field_type = FieldType.BOOLEAN
+        elif proto == search_pb.KEYWORD:
+            field_type = FieldType.KEYWORD
+        elif proto == search_pb.TEXT:
+            field_type = FieldType.TEXT
+        elif proto == search_pb.NESTED:
+            field_type = FieldType.NESTED
+        elif proto == search_pb.GEO_POINT:
+            field_type = FieldType.GEOPOINT
+        else:
+            raise OTSClientError("Unknown field type: %d" % proto)
+
+        return field_type
+
+    def _parse_field_schema(self, proto):
+        sub_field_schemas = []
+        for sub_field_schema_proto in proto.field_schemas:
+            sub_field_schemas.append(self._parse_field_schema(sub_field_schema_proto))
+
+        field_schema = FieldSchema(
+            proto.field_name, self._parse_field_type(proto.field_type),
+            index=proto.index, store=proto.store, is_array=proto.is_array,
+            enable_sort_and_agg=proto.enable_sort_and_agg,
+            analyzer=proto.analyzer, sub_field_schemas=sub_field_schemas,
+        )
+        
+        return field_schema
+
+    def _parse_sort_order(self, proto):
+        if proto is None:
+            return None 
+
+        return SortOrder.ASC if proto == SortOrder.ASC else SortOrder.DESC
+
+    def _parse_sort_mode(self, proto):
+        if proto is None:
+            return None
+
+        if proto == SortMode.AVG:
+            return SortMode.AVG
+        elif proto == SortMode.MIN:
+            return SortMode.MIN
+        else:
+            return SortMode.MAX
+
+    def _parse_geo_distance_type(self, proto):
+        if proto is None:
+            return None
+
+        return GeoDistanceType.ARC if proto == GeoDistanceType.ARC else GeoDistanceType.PLANE
+
+    def _parse_index_setting(self, proto):
+        index_setting = IndexSetting()
+        index_setting.routing_fields.extend(proto.routing_fields)
+        return index_setting
+
+    def _parse_nested_filter(self, proto):
+        return None
+
+    def _parse_index_sorter(self, proto):
+        sorter = None
+        if proto.HasField('field_sort'):
+            sorter = FieldSort(
+                proto.field_sort.field_name, sort_order=self._parse_sort_order(proto.field_sort.order),
+                sort_mode=self._parse_sort_mode(proto.field_sort.mode), 
+                nested_filter=self._parse_nested_filter(proto.field_sort.nested_filter)) 
+        elif proto.HasField('geo_distance_sort'):
+            sorter = GeoDistanceSort(
+                proto.geo_distance_sort.field_name,
+                proto.geo_distance_sort.points,
+                sort_order=self._parse_sort_order(proto.geo_distance_sort.order),
+                sort_mode=self._parse_sort_mode(proto.geo_distance_sort.mode),
+                geo_distance_type=self._parse_geo_distance_type(proto.geo_distance_sort.distance_type),
+                nested_filter=self._parse_nested_filter(proto.geo_distance_sort.nested_filter)
+            )
+        elif proto.HasField('score_sort'):
+            sorter = ScoreSort(
+                sort_order=self._parse_sort_order(proto.score_sort.order)
+            )
+        elif proto.HasField('pk_sort'):
+            sorter = PrimaryKeySort(
+                sort_order=self._parse_sort_order(proto.pk_sort.order)
+            ) 
+        else:
+            raise OTSClientError(
+                "Can't find any index sorter."
+            )
+
+        return sorter
+
+    def _parse_index_sort(self, proto):
+        sorters = []
+        for sorter_proto in proto.sorter:
+            sorters.append(self._parse_index_sorter(sorter_proto))
+        index_sort = Sort(sorters)
+        return index_sort
+
+
+    def _parse_index_meta(self, proto):
+        fields = []
+        for field_schema_proto in proto.field_schemas:
+            fields.append(self._parse_field_schema(field_schema_proto))
+
+        index_setting = self._parse_index_setting(proto.index_setting)
+        index_sort = self._parse_index_sort(proto.index_sort)
+
+        index_meta = IndexMeta(fields, index_setting, index_sort)
+        return index_meta 
+
+    def _parse_sync_stat(self, proto):
+        sync_stat = SyncStat(SyncPhase.FULL if proto.sync_phase == search_pb.FULL else SyncPhase.INCR, proto.current_sync_timestamp) 
+        return sync_stat
+
+    def _decode_list_search_index(self, body):
+        proto = search_pb.ListSearchIndexResponse()
+        proto.ParseFromString(body)
+
+        indices = []
+        for index in proto.indices:
+            indices.append(self._parse_index_info(index))
+        return indices, proto
+
+    def _decode_describe_search_index(self, body):
+        proto = search_pb.DescribeSearchIndexResponse()
+        proto.ParseFromString(body)
+
+        index_meta = self._parse_index_meta(proto.schema)
+        sync_stat = self._parse_sync_stat(proto.sync_stat) 
+
+        return (index_meta, sync_stat), proto
+
+    def _decode_create_search_index(self, body):
+        proto = search_pb.CreateSearchIndexResponse()
+        proto.ParseFromString(body)
+
+        return None, proto 
+
+    def _decode_delete_search_index(self, body):
+        proto = search_pb.DeleteSearchIndexResponse()
+        proto.ParseFromString(body)
+
+        return None, proto 
+    
+    def _decode_search(self, body):
+        proto = search_pb.SearchResponse()
+        proto.ParseFromString(body)
+        rows = []
+        for row_proto in proto.rows:
+            input_stream = PlainBufferInputStream(row_proto)
+            codedInputStream = PlainBufferCodedInputStream(input_stream)
+            primary_key_columns, attribute_columns = codedInputStream.read_row()
+            rows.append((primary_key_columns, attribute_columns))
+        total_count = proto.total_hits
+        is_all_succeed = proto.is_all_succeed
+
+        return (rows, proto.next_token, total_count, proto.is_all_succeed), proto 

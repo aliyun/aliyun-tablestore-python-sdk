@@ -6,16 +6,16 @@ import hashlib
 import base64
 
 try:
-    import urlparse 
+    import urlparse
 except ImportError:
     import urllib.parse as urlparse
 
 import google.protobuf.text_format as text_format
 
-from tablestore import * 
+from tablestore import *
 from tablestore.metadata import *
 from tablestore.error import *
-import tablestore.protobuf.table_store_pb as pb2
+import tablestore.protobuf.table_store_pb2 as pb2
 
 
 class MockConnection(object):
@@ -24,7 +24,7 @@ class MockConnection(object):
         self.host = host
         self.path = path
         self.user_key = 'accesskey'
-       
+
         self.api_mock_map = {
             'CreateTable'       : self._mock_create_table,
             'ListTable'         : self._mock_list_table,
@@ -46,7 +46,7 @@ class MockConnection(object):
         if handler is None:
             raise OTSClientError("API %s is not supported." % api_name)
 
-        proto_body = handler(body) 
+        proto_body = handler(body)
 
         response_body = proto_body.SerializeToString()
 
@@ -93,7 +93,7 @@ class MockConnection(object):
     def _mock_delete_table(self, body):
         proto = pb2.DeleteTableResponse()
         return proto
-        
+
     def _mock_describe_table(self, body):
         proto = pb2.DescribeTableResponse()
 
@@ -110,7 +110,7 @@ class MockConnection(object):
         proto.reserved_throughput_details.last_increase_time = int(123456)
         proto.reserved_throughput_details.last_decrease_time = int(123456)
         proto.reserved_throughput_details.number_of_decreases_today = 5
-        
+
         return proto
 
     def _mock_update_table(self, body):
@@ -125,20 +125,20 @@ class MockConnection(object):
     def _mock_get_row(self, body):
         proto = pb2.GetRowResponse()
         proto.consumed.capacity_unit.read = 10
-        primary_key_columns = proto.row.primary_key_columns.add() 
+        primary_key_columns = proto.row.primary_key_columns.add()
         primary_key_columns.name = 'PK1'
         primary_key_columns.value.type = pb2.STRING
         primary_key_columns.value.v_string = 'Hello'
-        primary_key_columns = proto.row.primary_key_columns.add() 
+        primary_key_columns = proto.row.primary_key_columns.add()
         primary_key_columns.name = 'PK2'
         primary_key_columns.value.type = pb2.BINARY
         primary_key_columns.value.v_binary = 'World'
 
-        column = proto.row.attribute_columns.add() 
+        column = proto.row.attribute_columns.add()
         column.name = 'COL1'
         column.value.type = pb2.STRING
         column.value.v_string = 'test'
-        column = proto.row.attribute_columns.add() 
+        column = proto.row.attribute_columns.add()
         column.name = 'COL2'
         column.value.type = pb2.INTEGER
         column.value.v_int = 100
@@ -170,20 +170,20 @@ class MockConnection(object):
         row_item.is_ok = True
         row_item.consumed.capacity_unit.read = 100
 
-        primary_key_columns = row_item.row.primary_key_columns.add() 
+        primary_key_columns = row_item.row.primary_key_columns.add()
         primary_key_columns.name = 'PK1'
         primary_key_columns.value.type = pb2.STRING
         primary_key_columns.value.v_string = 'Hello'
-        primary_key_columns = row_item.row.primary_key_columns.add() 
+        primary_key_columns = row_item.row.primary_key_columns.add()
         primary_key_columns.name = 'PK2'
         primary_key_columns.value.type = pb2.INTEGER
         primary_key_columns.value.v_int = 100
 
-        column = row_item.row.attribute_columns.add() 
+        column = row_item.row.attribute_columns.add()
         column.name = 'COL1'
         column.value.type = pb2.STRING
         column.value.v_string = 'test'
-        column = row_item.row.attribute_columns.add() 
+        column = row_item.row.attribute_columns.add()
         column.name = 'COL2'
         column.value.type = pb2.INTEGER
         column.value.v_int = 1000
@@ -229,7 +229,7 @@ class MockConnection(object):
         next_primary_key.name = 'PK1'
         next_primary_key.value.type = pb2.STRING
         next_primary_key.value.v_string = 'NextStart'
-        next_primary_key = proto.next_start_primary_key.add() 
+        next_primary_key = proto.next_start_primary_key.add()
         next_primary_key.name = 'PK2'
         next_primary_key.value.type = pb2.INTEGER
         next_primary_key.value.v_int = 101
@@ -239,16 +239,16 @@ class MockConnection(object):
         primary_key.name = 'PK1'
         primary_key.value.type = pb2.STRING
         primary_key.value.v_string = 'Hello'
-        primary_key = row_item.primary_key_columns.add() 
+        primary_key = row_item.primary_key_columns.add()
         primary_key.name = 'PK2'
         primary_key.value.type = pb2.INTEGER
         primary_key.value.v_int = 100
 
-        column = row_item.attribute_columns.add() 
+        column = row_item.attribute_columns.add()
         column.name = 'COL1'
         column.value.type = pb2.STRING
         column.value.v_string = 'test'
-        column = row_item.attribute_columns.add() 
+        column = row_item.attribute_columns.add()
         column.name = 'COL2'
         column.value.type = pb2.INTEGER
         column.value.v_int = 1000

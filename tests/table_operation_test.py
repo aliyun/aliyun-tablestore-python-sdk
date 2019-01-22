@@ -17,7 +17,7 @@ class TableOperationTest(APITestBase):
         table_name = 'table_test_delete_existing' + self.get_python_version()
         table_meta = TableMeta(table_name, [('PK0', 'STRING'), ('PK1', 'INTEGER')])
         table_options = TableOptions()
-        reserved_throughput = ReservedThroughput(CapacityUnit(100, 100))
+        reserved_throughput = ReservedThroughput(CapacityUnit(0, 0))
         self.client_test.create_table(table_meta, table_options, reserved_throughput)
         self.client_test.delete_table(table_name)
         self.assert_equal(False, table_name in self.client_test.list_table())
@@ -34,7 +34,7 @@ class TableOperationTest(APITestBase):
         table_name = 'table_test_already_exist' + self.get_python_version()
         table_meta = TableMeta(table_name, [('PK0', 'STRING'), ('PK1', 'INTEGER')])
         table_options = TableOptions()
-        reserved_throughput = ReservedThroughput(CapacityUnit(100, 100))
+        reserved_throughput = ReservedThroughput(CapacityUnit(0, 0))
         self.client_test.create_table(table_meta, table_options, reserved_throughput)
 
         table_meta_new = TableMeta(table_name, [('PK2', 'STRING'), ('PK3', 'STRING')])
@@ -53,7 +53,7 @@ class TableOperationTest(APITestBase):
         table_name = 'table_test_sequence' + self.get_python_version()
         table_meta = TableMeta(table_name, [('PK9', 'STRING'), ('PK1', 'INTEGER'), ('PK3', 'BINARY')])
         table_options = TableOptions()
-        reserved_throughput = ReservedThroughput(CapacityUnit(100, 100))
+        reserved_throughput = ReservedThroughput(CapacityUnit(0, 0))
         self.client_test.create_table(table_meta, table_options, reserved_throughput)
 
         table_list = self.client_test.list_table()
@@ -66,7 +66,7 @@ class TableOperationTest(APITestBase):
         table_name = 'table_test_duplicate_PK' + self.get_python_version()
         table_meta = TableMeta(table_name, [('PK0', 'STRING'), ('PK0', 'INTEGER')])
         table_options = TableOptions()
-        reserved_throughput = ReservedThroughput(CapacityUnit(100, 100))
+        reserved_throughput = ReservedThroughput(CapacityUnit(0, 0))
         try:
             self.client_test.create_table(table_meta, table_options, reserved_throughput)
             self.assert_false()
@@ -80,7 +80,7 @@ class TableOperationTest(APITestBase):
         table_name = 'table_PK_option_default' + self.get_python_version()
         table_meta = TableMeta(table_name, [('PK0', 'INTEGER'), ('PK1', 'INTEGER'), ('PK2', 'INTEGER')])
         table_options = TableOptions()
-        reserved_throughput = ReservedThroughput(CapacityUnit(100, 100))
+        reserved_throughput = ReservedThroughput(CapacityUnit(0, 0))
         self.client_test.create_table(table_meta, table_options, reserved_throughput)
 
         describe_response = self.client_test.describe_table(table_name)
@@ -92,7 +92,7 @@ class TableOperationTest(APITestBase):
         table_name = 'table_PK_option_default' + self.get_python_version()
         table_meta = TableMeta(table_name, [('PK0', 'INTEGER'), ('PK1', 'INTEGER'), ('PK2', 'INTEGER')])
         table_options = TableOptions(1200000, 2, 86401)
-        reserved_throughput = ReservedThroughput(CapacityUnit(100, 100))
+        reserved_throughput = ReservedThroughput(CapacityUnit(0, 0))
         self.client_test.create_table(table_meta, table_options, reserved_throughput)
 
         describe_response = self.client_test.describe_table(table_name)
@@ -103,7 +103,7 @@ class TableOperationTest(APITestBase):
         table_name = 'table_PK_option_default' + self.get_python_version()
         table_meta = TableMeta(table_name, [('PK0', 'INTEGER'), ('PK1', 'INTEGER'), ('PK2', 'INTEGER')])
         table_options = TableOptions()
-        reserved_throughput = ReservedThroughput(CapacityUnit(100, 100))
+        reserved_throughput = ReservedThroughput(CapacityUnit(0, 0))
         self.client_test.create_table(table_meta, table_options, reserved_throughput)
 
         describe_response = self.client_test.describe_table(table_name)
@@ -111,8 +111,7 @@ class TableOperationTest(APITestBase):
 
         time.sleep(60)
         table_options = TableOptions(1200000, 2, 86401)
-        reserved_throughput = ReservedThroughput(CapacityUnit(100, 100))
-        self.client_test.update_table(table_name, table_options, reserved_throughput)
+        self.client_test.update_table(table_name, table_options)
 
         describe_response = self.client_test.describe_table(table_name)
         self.assert_DescribeTableResponse(describe_response, reserved_throughput.capacity_unit, table_meta, table_options)
@@ -123,7 +122,7 @@ class TableOperationTest(APITestBase):
         table_name = 'table_PK_type_STRING' + self.get_python_version()
         table_meta = TableMeta(table_name, [('PK0', 'STRING'), ('PK1', 'STRING'), ('PK2', 'STRING'), ('PK3', 'STRING')])
         table_options = TableOptions()
-        reserved_throughput = ReservedThroughput(CapacityUnit(100, 100))
+        reserved_throughput = ReservedThroughput(CapacityUnit(0, 0))
         self.client_test.create_table(table_meta, table_options, reserved_throughput)
 
         describe_response = self.client_test.describe_table(table_name)
@@ -135,7 +134,7 @@ class TableOperationTest(APITestBase):
         table_name = 'table_PK_type_INTEGER' + self.get_python_version()
         table_meta = TableMeta(table_name, [('PK0', 'INTEGER'), ('PK1', 'INTEGER'), ('PK2', 'INTEGER'), ('PK3', 'INTEGER')])
         table_options = TableOptions()
-        reserved_throughput = ReservedThroughput(CapacityUnit(100, 100))
+        reserved_throughput = ReservedThroughput(CapacityUnit(0, 0))
         self.client_test.create_table(table_meta, table_options, reserved_throughput)
 
         describe_response = self.client_test.describe_table(table_name)
@@ -147,7 +146,7 @@ class TableOperationTest(APITestBase):
         table_name = 'table_PK_type_BINARY' + self.get_python_version()
         table_meta = TableMeta(table_name, [('PK0', 'BINARY'), ('PK1', 'BINARY'), ('PK2', 'BINARY'), ('PK3', 'BINARY')])
         table_options = TableOptions()
-        reserved_throughput = ReservedThroughput(CapacityUnit(100, 100))
+        reserved_throughput = ReservedThroughput(CapacityUnit(0, 0))
         self.client_test.create_table(table_meta, table_options, reserved_throughput)
 
         describe_response = self.client_test.describe_table(table_name)
@@ -170,7 +169,7 @@ class TableOperationTest(APITestBase):
         for pk_schema, i in zip(pk_list, er_col):
             table_meta = TableMeta(table_name, pk_schema)
             table_options = TableOptions()
-            reserved_throughput = ReservedThroughput(CapacityUnit(100, 100))
+            reserved_throughput = ReservedThroughput(CapacityUnit(0, 0))
             try:
                 self.client_test.create_table(table_meta, table_options, reserved_throughput)
                 self.assert_false()
@@ -186,13 +185,13 @@ class TableOperationTest(APITestBase):
         table_name = 'table_create_again' + self.get_python_version()
         table_meta = TableMeta(table_name, [('PK0', 'INTEGER'), ('PK1', 'STRING')])
         table_options = TableOptions()
-        reserved_throughput = ReservedThroughput(CapacityUnit(1, 1))
+        reserved_throughput = ReservedThroughput(CapacityUnit(0, 0))
         self.client_test.create_table(table_meta, table_options, reserved_throughput)
 
         self.client_test.delete_table(table_name)
 
         table_meta_new = TableMeta(table_name, [('PK0_new', 'INTEGER'), ('PK1', 'STRING')])
-        reserved_throughput_new = ReservedThroughput(CapacityUnit(2, 2))
+        reserved_throughput_new = ReservedThroughput(CapacityUnit(0, 0))
         self.client_test.create_table(table_meta_new, table_options, reserved_throughput_new)
         self.wait_for_partition_load('table_create_again')
 
@@ -208,10 +207,10 @@ class TableOperationTest(APITestBase):
         time.sleep(1) # to avoid too frequently table operation
         table_name_1 = 'table1_CU_mess_up_test' + self.get_python_version()
         table_meta_1 = TableMeta(table_name_1, [('PK0', 'STRING'), ('PK1', 'STRING')])
-        reserved_throughput_1 = ReservedThroughput(CapacityUnit(1, 2))
+        reserved_throughput_1 = ReservedThroughput(CapacityUnit(0, 0))
         table_name_2 = 'table2_CU_mess_up_test' + self.get_python_version()
         table_meta_2 = TableMeta(table_name_2, [('PK0', 'STRING'), ('PK1', 'STRING')])
-        reserved_throughput_2 = ReservedThroughput(CapacityUnit(2, 1))
+        reserved_throughput_2 = ReservedThroughput(CapacityUnit(0, 0))
         pk_dict_exist = [('PK0','a'), ('PK1','1')]
         pk_dict_not_exist = [('PK0','B'), ('PK1','2')]
         table_options = TableOptions()
@@ -246,7 +245,7 @@ class TableOperationTest(APITestBase):
         table_name = 'table_cu_0_1' + self.get_python_version()
         table_meta = TableMeta(table_name, [('PK0', 'STRING'), ('PK1', 'STRING')])
         table_options = TableOptions()
-        reserved_throughput = ReservedThroughput(CapacityUnit(0, 1))
+        reserved_throughput = ReservedThroughput(CapacityUnit(0, 0))
         self.client_test.create_table(table_meta, table_options, reserved_throughput)
         self.wait_for_partition_load(table_name)
 
@@ -259,7 +258,7 @@ class TableOperationTest(APITestBase):
         table_name = 'table_cu_1_0' + self.get_python_version()
         table_meta = TableMeta(table_name, [('PK0', 'STRING'), ('PK1', 'STRING')])
         table_options = TableOptions()
-        reserved_throughput = ReservedThroughput(CapacityUnit(1, 0))
+        reserved_throughput = ReservedThroughput(CapacityUnit(0, 0))
         self.client_test.create_table(table_meta, table_options, reserved_throughput)
         self.wait_for_partition_load(table_name)
 
@@ -272,7 +271,7 @@ class TableOperationTest(APITestBase):
         table_name = 'table_cu_1_1' + self.get_python_version()
         table_meta = TableMeta(table_name, [('PK0', 'STRING'), ('PK1', 'STRING')])
         table_options = TableOptions()
-        reserved_throughput = ReservedThroughput(CapacityUnit(1, 1))
+        reserved_throughput = ReservedThroughput(CapacityUnit(0, 0))
         self.client_test.create_table(table_meta, table_options, reserved_throughput)
         self.wait_for_partition_load(table_name)
 

@@ -2,8 +2,8 @@
 
 import sys
 import six
-from builtins import int 
-import tablestore 
+from builtins import int
+import tablestore
 from tablestore.metadata import *
 from .plain_buffer_consts import *
 from .plain_buffer_crc8 import *
@@ -28,14 +28,14 @@ class PlainBufferBuilder(object):
             size += len(value.encode('utf-8'))
         elif isinstance(value, six.binary_type):
             size += const.LITTLE_ENDIAN_SIZE
-            size += len(value)            
+            size += len(value)
         elif isinstance(value, bytearray):
             size += const.LITTLE_ENDIAN_SIZE
             size += len(value)
         else:
             raise OTSClientError("Unsupported primary key type:" + str(type(value)))
         return size
-       
+
     @staticmethod
     def compute_variant_value_size(value):
         return PlainBufferBuilder.compute_primary_key_value_size(value) - const.LITTLE_ENDIAN_SIZE - 1
@@ -48,7 +48,7 @@ class PlainBufferBuilder(object):
         size += PlainBufferBuilder.compute_primary_key_value_size(pk_value)
         size += 2
         return size
-    
+
     @staticmethod
     def compute_column_value_size(value):
         size = 1
@@ -56,14 +56,14 @@ class PlainBufferBuilder(object):
 
         if isinstance(value, bool):
             size += 1
-        elif isinstance(value, int): 
+        elif isinstance(value, int):
             size += LITTLE_ENDIAN_64_SIZE
         elif isinstance(value, six.text_type):
             size += const.LITTLE_ENDIAN_SIZE
             size += len(value.encode('utf-8'))
         elif isinstance(value, six.binary_type):
             size += const.LITTLE_ENDIAN_SIZE
-            size += len(value)            
+            size += len(value)
         elif isinstance(value, bytearray):
             size += const.LITTLE_ENDIAN_SIZE
             size += len(value)
@@ -76,26 +76,26 @@ class PlainBufferBuilder(object):
     @staticmethod
     def compute_variant_value_size(column_value):
         return PlainBufferBuilder.compute_column_value_size(column_value) - const.LITTLE_ENDIAN_SIZE - 1
-    
+
     @staticmethod
     def compute_column_size(column_name, column_value, timestamp = None):
         size = 1
         size += 1 + const.LITTLE_ENDIAN_SIZE
         size += len(column_name)
         if column_value is not None:
-            size += PlainBufferBuilder.compute_column_value_size(column_value) 
+            size += PlainBufferBuilder.compute_column_value_size(column_value)
         if timestamp is not None:
             size += 1 + LITTLE_ENDIAN_64_SIZE
         size += 2
         return size
-    
+
     @staticmethod
     def compute_column_size2(column_name, column_value, update_type):
         size = PlainBufferBuilder.compute_column_size(column_name, column_value)
         if update_type == UpdateType.DELETE or update_type == UpdateType.DELETE_ALL:
             size += 2
         return size
-    
+
     @staticmethod
     def compute_primary_key_size(primary_key):
         if not isinstance(primary_key, list):
@@ -105,7 +105,7 @@ class PlainBufferBuilder(object):
         for pk in primary_key:
             size += PlainBufferBuilder.compute_primary_key_column_size(pk[0], pk[1])
         return size
-    
+
     @staticmethod
     def compute_put_row_size(primary_key, attribute_columns):
         size = const.LITTLE_ENDIAN_SIZE
@@ -118,7 +118,7 @@ class PlainBufferBuilder(object):
                     size += PlainBufferBuilder.compute_column_size(attr[0], attr[1])
                 else:
                     size += PlainBufferBuilder.compute_column_size(attr[0], attr[1], attr[2])
-                
+
         size += 2
         return size
 
@@ -141,10 +141,10 @@ class PlainBufferBuilder(object):
                             size += PlainBufferBuilder.compute_column_size2(column[0], column[1], update_type)
                 else:
                     raise OTSClientError("Unsupported column type:" + str(type(columns)))
-                
+
         size += 2
         return size
-    
+
     @staticmethod
     def compute_delete_row_size(primary_key):
         size = const.LITTLE_ENDIAN_SIZE
@@ -157,7 +157,7 @@ class PlainBufferBuilder(object):
         buf_size = PlainBufferBuilder.compute_variant_value_size(value)
         stream = PlainBufferOutputStream(buf_size)
         coded_stream = PlainBufferCodedOutputStream(stream)
-    
+
         coded_stream.write_primary_key_value(value)
         return stream.get_buffer()
 
@@ -166,7 +166,7 @@ class PlainBufferBuilder(object):
         buf_size = PlainBufferBuilder.compute_variant_value_size(value)
         stream = PlainBufferOutputStream(buf_size)
         coded_stream = PlainBufferCodedOutputStream(stream)
-    
+
         coded_stream.write_column_value(value)
         return stream.get_buffer()
 
@@ -178,7 +178,7 @@ class PlainBufferBuilder(object):
 
         output_stream = PlainBufferOutputStream(buf_size)
         coded_output_stream = PlainBufferCodedOutputStream(output_stream)
-        
+
         row_checksum = 0
         coded_output_stream.write_header()
 
@@ -208,11 +208,11 @@ class PlainBufferBuilder(object):
 
         for key in list(attribute_columns.keys()):
             if not isinstance(attribute_columns[key], list):
-                raise OTSClientError("the columns value of update-row must be list, but is %s" % 
+                raise OTSClientError("the columns value of update-row must be list, but is %s" %
                                      str(type(attribute_columns.values)))
             for cell in attribute_columns[key]:
                 if key.upper() != UpdateType.DELETE and key.upper() != UpdateType.DELETE_ALL and not isinstance(cell, tuple):
-                    raise OTSClientError("the cell of update-row must be tuple, but is %s" % 
+                    raise OTSClientError("the cell of update-row must be tuple, but is %s" %
                                          str(type(cell)))
 
         buf_size = PlainBufferBuilder.compute_update_row_size(primary_key, attribute_columns)

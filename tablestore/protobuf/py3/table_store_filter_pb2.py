@@ -8,7 +8,6 @@ from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
 from google.protobuf import reflection as _reflection
 from google.protobuf import symbol_database as _symbol_database
-from google.protobuf import descriptor_pb2
 # @@protoc_insertion_point(imports)
 
 _sym_db = _symbol_database.Default()
@@ -20,6 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='table_store_filter.proto',
   package='com.aliyun.tablestore.protocol',
   syntax='proto2',
+  serialized_options=None,
   serialized_pb=_b('\n\x18table_store_filter.proto\x12\x1e\x63om.aliyun.tablestore.protocol\"\xc0\x01\n\x17SingleColumnValueFilter\x12\x42\n\ncomparator\x18\x01 \x02(\x0e\x32..com.aliyun.tablestore.protocol.ComparatorType\x12\x13\n\x0b\x63olumn_name\x18\x02 \x02(\t\x12\x14\n\x0c\x63olumn_value\x18\x03 \x02(\x0c\x12\x19\n\x11\x66ilter_if_missing\x18\x04 \x02(\x08\x12\x1b\n\x13latest_version_only\x18\x05 \x02(\x08\"\x9e\x01\n\x1a\x43ompositeColumnValueFilter\x12\x43\n\ncombinator\x18\x01 \x02(\x0e\x32/.com.aliyun.tablestore.protocol.LogicalOperator\x12;\n\x0bsub_filters\x18\x02 \x03(\x0b\x32&.com.aliyun.tablestore.protocol.Filter\"7\n\x16\x43olumnPaginationFilter\x12\x0e\n\x06offset\x18\x01 \x02(\x05\x12\r\n\x05limit\x18\x02 \x02(\x05\"R\n\x06\x46ilter\x12\x38\n\x04type\x18\x01 \x02(\x0e\x32*.com.aliyun.tablestore.protocol.FilterType\x12\x0e\n\x06\x66ilter\x18\x02 \x02(\x0c*a\n\nFilterType\x12\x1a\n\x16\x46T_SINGLE_COLUMN_VALUE\x10\x01\x12\x1d\n\x19\x46T_COMPOSITE_COLUMN_VALUE\x10\x02\x12\x18\n\x14\x46T_COLUMN_PAGINATION\x10\x03*\x80\x01\n\x0e\x43omparatorType\x12\x0c\n\x08\x43T_EQUAL\x10\x01\x12\x10\n\x0c\x43T_NOT_EQUAL\x10\x02\x12\x13\n\x0f\x43T_GREATER_THAN\x10\x03\x12\x14\n\x10\x43T_GREATER_EQUAL\x10\x04\x12\x10\n\x0c\x43T_LESS_THAN\x10\x05\x12\x11\n\rCT_LESS_EQUAL\x10\x06*4\n\x0fLogicalOperator\x12\n\n\x06LO_NOT\x10\x01\x12\n\n\x06LO_AND\x10\x02\x12\t\n\x05LO_OR\x10\x03')
 )
 
@@ -31,19 +31,19 @@ _FILTERTYPE = _descriptor.EnumDescriptor(
   values=[
     _descriptor.EnumValueDescriptor(
       name='FT_SINGLE_COLUMN_VALUE', index=0, number=1,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='FT_COMPOSITE_COLUMN_VALUE', index=1, number=2,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='FT_COLUMN_PAGINATION', index=2, number=3,
-      options=None,
+      serialized_options=None,
       type=None),
   ],
   containing_type=None,
-  options=None,
+  serialized_options=None,
   serialized_start=557,
   serialized_end=654,
 )
@@ -58,31 +58,31 @@ _COMPARATORTYPE = _descriptor.EnumDescriptor(
   values=[
     _descriptor.EnumValueDescriptor(
       name='CT_EQUAL', index=0, number=1,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='CT_NOT_EQUAL', index=1, number=2,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='CT_GREATER_THAN', index=2, number=3,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='CT_GREATER_EQUAL', index=3, number=4,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='CT_LESS_THAN', index=4, number=5,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='CT_LESS_EQUAL', index=5, number=6,
-      options=None,
+      serialized_options=None,
       type=None),
   ],
   containing_type=None,
-  options=None,
+  serialized_options=None,
   serialized_start=657,
   serialized_end=785,
 )
@@ -97,19 +97,19 @@ _LOGICALOPERATOR = _descriptor.EnumDescriptor(
   values=[
     _descriptor.EnumValueDescriptor(
       name='LO_NOT', index=0, number=1,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='LO_AND', index=1, number=2,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='LO_OR', index=2, number=3,
-      options=None,
+      serialized_options=None,
       type=None),
   ],
   containing_type=None,
-  options=None,
+  serialized_options=None,
   serialized_start=787,
   serialized_end=839,
 )
@@ -144,42 +144,42 @@ _SINGLECOLUMNVALUEFILTER = _descriptor.Descriptor(
       has_default_value=False, default_value=1,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='column_name', full_name='com.aliyun.tablestore.protocol.SingleColumnValueFilter.column_name', index=1,
       number=2, type=9, cpp_type=9, label=2,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='column_value', full_name='com.aliyun.tablestore.protocol.SingleColumnValueFilter.column_value', index=2,
       number=3, type=12, cpp_type=9, label=2,
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='filter_if_missing', full_name='com.aliyun.tablestore.protocol.SingleColumnValueFilter.filter_if_missing', index=3,
       number=4, type=8, cpp_type=7, label=2,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='latest_version_only', full_name='com.aliyun.tablestore.protocol.SingleColumnValueFilter.latest_version_only', index=4,
       number=5, type=8, cpp_type=7, label=2,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
@@ -203,21 +203,21 @@ _COMPOSITECOLUMNVALUEFILTER = _descriptor.Descriptor(
       has_default_value=False, default_value=1,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='sub_filters', full_name='com.aliyun.tablestore.protocol.CompositeColumnValueFilter.sub_filters', index=1,
       number=2, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
@@ -241,21 +241,21 @@ _COLUMNPAGINATIONFILTER = _descriptor.Descriptor(
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='limit', full_name='com.aliyun.tablestore.protocol.ColumnPaginationFilter.limit', index=1,
       number=2, type=5, cpp_type=1, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
@@ -279,21 +279,21 @@ _FILTER = _descriptor.Descriptor(
       has_default_value=False, default_value=1,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='filter', full_name='com.aliyun.tablestore.protocol.Filter.filter', index=1,
       number=2, type=12, cpp_type=9, label=2,
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],

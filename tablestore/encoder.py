@@ -8,6 +8,7 @@ from tablestore.metadata import *
 from tablestore.plainbuffer.plain_buffer_builder import *
 import tablestore.protobuf.table_store_pb2 as pb2
 import tablestore.protobuf.table_store_filter_pb2 as filter_pb2
+import tablestore.protobuf.search_pb2 as search_pb2
 
 INT32_MAX = 2147483647
 INT32_MIN = -2147483648
@@ -59,19 +60,27 @@ class OTSProtoBufferEncoder(object):
         self.encoding = encoding
 
         self.api_encode_map = {
-            'CreateTable'       : self._encode_create_table, 
-            'DeleteTable'       : self._encode_delete_table, 
-            'ListTable'         : self._encode_list_table,
-            'UpdateTable'       : self._encode_update_table,
-            'DescribeTable'     : self._encode_describe_table,
-            'GetRow'            : self._encode_get_row,
-            'PutRow'            : self._encode_put_row,
-            'UpdateRow'         : self._encode_update_row,
-            'DeleteRow'         : self._encode_delete_row,
-            'BatchGetRow'       : self._encode_batch_get_row,
-            'BatchWriteRow'     : self._encode_batch_write_row,
-            'GetRange'          : self._encode_get_range
+            'CreateTable'         : self._encode_create_table, 
+            'DeleteTable'         : self._encode_delete_table, 
+            'ListTable'           : self._encode_list_table,
+            'UpdateTable'         : self._encode_update_table,
+            'DescribeTable'       : self._encode_describe_table,
+            'GetRow'              : self._encode_get_row,
+            'PutRow'              : self._encode_put_row,
+            'UpdateRow'           : self._encode_update_row,
+            'DeleteRow'           : self._encode_delete_row,
+            'BatchGetRow'         : self._encode_batch_get_row,
+            'BatchWriteRow'       : self._encode_batch_write_row,
+            'GetRange'            : self._encode_get_range,
+            'ListSearchIndex'     : self._encode_list_search_index,
+            'CreateSearchIndex'   : self._encode_create_search_index,
+            'DescribeSearchIndex' : self._encode_describe_search_index,
+            'DeleteSearchIndex'   : self._encode_delete_search_index,
+            'Search'              : self._encode_search
         }
+
+    def _get_enum(self, value):
+        return value if six.PY2 else value.value
 
     def _get_unicode(self, value):
         if isinstance(value, six.binary_type):
@@ -346,6 +355,103 @@ class OTSProtoBufferEncoder(object):
                         key
                     )
                 )
+
+    def _make_index_field_schema(self, proto, field_schema):
+        proto.field_name = self._get_unicode(field_schema.field_name)
+        proto.field_type = self._get_enum(field_schema.field_type)
+        if field_schema.index is not None:
+            proto.index = field_schema.index
+
+        if field_schema.store is not None:
+            proto.store = field_schema.store
+
+        if field_schema.is_array is not None:
+            proto.is_array = field_schema.is_array
+
+        if field_schema.enable_sort_and_agg is not None:
+            proto.enable_sort_and_agg = field_schema.enable_sort_and_agg
+
+        if field_schema.analyzer: 
+            proto.analyzer = field_schema.analyzer
+
+        for sub_field_schema in field_schema.sub_field_schemas:
+            sub_field_proto = proto.field_schemas.add()
+            self._make_index_field_schema(sub_field_proto, sub_field_schema) 
+
+
+    def _make_index_setting(self, proto, index_setting):
+        proto.number_of_shards = 1
+        proto.routing_fields.extend(index_setting.routing_fields)
+
+    def _make_index_sorter(self, proto, sorter):
+        if not isinstance(sorter, Sorter):
+            raise OTSClientError(
+                "sorter should be an instance of Sorter, not %s"
+                % sorter.__class__.__name__
+            )
+
+        if isinstance(sorter, PrimaryKeySort):
+            proto.pk_sort.order = self._get_enum(sorter.sort_order)
+        elif isinstance(sorter, FieldSort):
+            proto.field_sort.field_name = sorter.field_name
+
+            if sorter.sort_order is not None:
+                proto.field_sort.order = self._get_enum(sorter.sort_order)
+
+            if sorter.sort_mode is not None:
+                proto.field_sort.mode = self._get_enum(sorter.sort_mode)
+
+            if sorter.nested_filter is not None:
+                proto.field_sort.nested_filter = self._encode_nested_filter(sorter.nested_filter) 
+        elif isinstance(sorter, GeoDistanceSort):
+            proto.geo_distance_sort.field_name = sorter.field_name
+            proto.geo_distance_sort.points = sorter.points
+
+            if sorter.sort_order is not None:
+                proto.geo_distance_sort.order = self._get_enum(sorter.sort_order)
+            
+            if sorter.sort_mode is not None:
+                proto.geo_distance_sort.mode = sorter.sort_mode
+            
+            if sorter.geo_distance_type is not None:
+                proto.geo_distance_sort.distance_type = self._get_enum(sorter.geo_distance_type)
+
+            if sorter.nested_filter is not None:
+                proto.geo_distance_sort.nested_filter = self._encode_nested_filter(sorter.nested_filter)
+        elif isinstance(sorter, ScoreSort):
+            proto.score_sort.order = self._get_enum(sorter.sort_order)
+        else:
+            raise OTSClientError(
+                "Only PrimaryKeySort and FieldSort are allowed, not %s."
+                % sorter.__class__.__name__
+            )
+
+    def _make_index_sort(self, proto, index_sort):
+        if not isinstance(index_sort, Sort):
+            raise OTSClientError(
+                "index_sort should be an instance of Sort, not %s"
+                % index_sort.__class__.__name__
+            )
+
+        for sorter in index_sort.sorters:
+            self._make_index_sorter(proto.sorter.add(), sorter)
+
+    def _make_index_meta(self, proto, index_meta):
+        if not isinstance(index_meta, IndexMeta):
+            raise OTSClientError(
+                "index_meta should be an instance of IndexMeta, not %s"
+                % index_meta.__class__.__name__
+            )
+
+        for field in index_meta.fields:
+            field_proto = proto.field_schemas.add()
+            self._make_index_field_schema(field_proto, field)
+
+        index_setting = index_meta.index_setting if index_meta.index_setting else IndexSetting()
+        self._make_index_setting(proto.index_setting, index_setting)
+
+        if index_meta.index_sort:
+            self._make_index_sort(proto.index_sort, index_meta.index_sort)
 
     def _make_table_meta(self, proto, table_meta):
         if not isinstance(table_meta, TableMeta):
@@ -691,3 +797,257 @@ class OTSProtoBufferEncoder(object):
 
         handler = self.api_encode_map[api_name]
         return handler(*args, **kwargs)
+
+    def _encode_list_search_index(self, table_name):
+        proto = search_pb2.ListSearchIndexRequest()
+        if table_name:
+            proto.table_name = self._get_unicode(table_name)
+        
+        return proto
+
+    def _encode_delete_search_index(self, table_name, index_name):
+        proto = search_pb2.DeleteSearchIndexRequest()
+        proto.table_name = table_name
+        proto.index_name = index_name
+
+        return proto
+
+    def _encode_describe_search_index(self, table_name, index_name):
+        proto = search_pb2.DescribeSearchIndexRequest()
+        proto.table_name = self._get_unicode(table_name)
+        proto.index_name = self._get_unicode(index_name)
+
+        return proto
+        
+
+    def _encode_create_search_index(self, table_name, index_name, index_meta):
+        proto = search_pb2.CreateSearchIndexRequest()
+        proto.table_name = self._get_unicode(table_name)
+        proto.index_name = self._get_unicode(index_name)
+        self._make_index_meta(proto.schema, index_meta)
+
+        return proto
+
+    def _encode_nested_filter(self, nested_filter):
+        nested_filter_proto = None
+        if nested_filter:
+            # TODO encode nested filter
+            pass
+        return nested_filter_proto
+
+    def _encode_search(self, table_name, index_name, search_query, columns_to_get, routing_keys):
+        proto = search_pb2.SearchRequest()
+        proto.table_name = table_name
+        proto.index_name = index_name
+
+        if columns_to_get is not None:
+            proto.columns_to_get.return_type = self._get_enum(columns_to_get.return_type)
+            self._make_repeated_column_names(proto.columns_to_get.column_names, columns_to_get.column_names)
+
+        proto.search_query = self._encode_search_query(search_query)
+        if routing_keys is not None:
+            for routing_key in routing_keys:
+                proto.routing_values.append(bytes(PlainBufferBuilder.serialize_primary_key(routing_key))) 
+
+        return proto
+
+    def _encode_match_query(self, query):
+        proto = search_pb2.MatchQuery()
+        proto.field_name = self._get_unicode(query.field_name)
+        proto.text = self._get_unicode(query.text)
+
+        if query.minimum_should_match is not None:
+            proto.minimum_should_match = query.minimum_should_match
+
+        if query.operator is not None:
+            proto.operator = search_pb2.OR if (query.operator == QueryOperator.OR) else search_pb2.AND
+
+        return proto.SerializeToString() 
+
+    def _encode_match_phase_query(self, query):
+        proto = search_pb2.MatchPhraseQuery()
+        proto.field_name = self._get_unicode(query.field_name)
+        proto.text = self._get_unicode(query.text)
+        return proto.SerializeToString() 
+
+    def _encode_term_query(self, query):
+        proto = search_pb2.TermQuery()
+        proto.field_name = self._get_unicode(query.field_name)
+        proto.term = bytes(PlainBufferBuilder.serialize_column_value(query.column_value))
+        return proto.SerializeToString() 
+
+    def _encode_range_query(self, query):
+        proto = search_pb2.RangeQuery()
+        proto.field_name = self._get_unicode(query.field_name)
+        if query.range_from is not None:
+            proto.range_from = bytes(PlainBufferBuilder.serialize_column_value(query.range_from))
+
+        if query.range_to is not None:
+            proto.range_to = bytes(PlainBufferBuilder.serialize_column_value(query.range_to))
+
+        if query.include_lower is not None:
+            proto.include_lower = query.include_lower
+
+        if query.include_upper is not None:
+            proto.include_upper = query.include_upper
+        return proto.SerializeToString() 
+
+    def _encode_prefix_query(self, query):
+        proto = search_pb2.PrefixQuery()
+        proto.field_name = self._get_unicode(query.field_name)
+        proto.prefix = self._get_unicode(query.prefix)
+        return proto.SerializeToString() 
+
+    def _encode_bool_query(self, query):
+        proto = search_pb2.BoolQuery()
+
+        for q in query.must_queries:
+            q_proto = proto.must_queries.add()
+            self._make_query(q_proto, q)
+
+        for q in query.must_not_queries:
+            q_proto = proto.must_not_queries.add()
+            self._make_query(q_proto, q)
+
+        for q in query.filter_queries:
+            q_proto = proto.filter_queries.add()
+            self._make_query(q_proto, q)
+
+        for q in query.should_queries:
+            q_proto = proto.should_queries.add()
+            self._make_query(q_proto, q)
+
+        if query.minimum_should_match is not None:
+            proto.minimum_should_match = query.minimum_should_match
+        return proto.SerializeToString() 
+
+    def _encode_nested_query(self, query):
+        proto = search_pb2.NestedQuery()
+        proto.path = query.path
+        self._make_query(proto.query, query.query)
+        if query.score_mode is not None:
+            proto.score_mode = self._get_enum(query.score_mode) 
+        return proto.SerializeToString() 
+
+    def _encode_wildcard_query(self, query):
+        proto = search_pb2.WildcardQuery()
+        proto.field_name = self._get_unicode(query.field_name)
+        proto.value = self._get_unicode(query.value)
+        return proto.SerializeToString() 
+
+    def _encode_match_all_query(self, query):
+        proto = search_pb2.MatchAllQuery()
+        return proto.SerializeToString() 
+
+    def _encode_geo_bounding_box_query(self, query):
+        proto = search_pb2.GeoBoundingBoxQuery()
+        proto.field_name = self._get_unicode(query.field_name)
+        proto.top_left = self._get_unicode(query.top_left)
+        proto.bottom_right = self._get_unicode(query.bottom_right)
+        return proto.SerializeToString() 
+
+    def _encode_geo_distance_query(self, query):
+        proto = search_pb2.GeoDistanceQuery()
+        proto.field_name = self._get_unicode(query.field_name)
+        proto.center_point = self._get_unicode(query.center_point)
+        proto.distance = float(query.distance)
+        return proto.SerializeToString() 
+
+    def _encode_geo_polygon_query(self, query):
+        proto = search_pb2.GeoPolygonQuery()
+        proto.field_name = self._get_unicode(query.field_name)
+        proto.points.extend(query.points)
+        return proto.SerializeToString() 
+
+    def _encode_terms_query(self, query):
+        proto = search_pb2.TermsQuery()
+        proto.field_name = query.field_name
+        for column_value in query.column_values:
+            proto.terms.append(bytes(PlainBufferBuilder.serialize_column_value(column_value)))
+        return proto.SerializeToString() 
+
+    def _make_function_value_factor(self, proto, value_factor):
+        proto.field_name = self._get_unicode(value_factor.field_name)
+
+    def _encode_function_score_query(self, query):
+        proto = search_pb2.FunctionScoreQuery()
+        self._make_query(proto.query, query.query)
+        self._make_function_value_factor(proto.field_value_factor, query.field_value_factor)
+        return proto.SerializeToString()
+
+    def _make_query(self, proto, query):
+        if isinstance(query, MatchQuery):
+            proto.type = search_pb2.MATCH_QUERY
+            proto.query = self._encode_match_query(query)
+        elif isinstance(query, MatchPhraseQuery):
+            proto.type = search_pb2.MATCH_PHRASE_QUERY
+            proto.query = self._encode_match_phase_query(query)
+        elif isinstance(query, TermQuery):
+            proto.type = search_pb2.TERM_QUERY
+            proto.query = self._encode_term_query(query)
+        elif isinstance(query, RangeQuery):
+            proto.type = search_pb2.RANGE_QUERY
+            proto.query = self._encode_range_query(query)
+        elif isinstance(query, PrefixQuery):
+            proto.type = search_pb2.PREFIX_QUERY
+            proto.query = self._encode_prefix_query(query)
+        elif isinstance(query, BoolQuery):
+            proto.type = search_pb2.BOOL_QUERY
+            proto.query = self._encode_bool_query(query)
+        elif isinstance(query, NestedQuery):
+            proto.type = search_pb2.NESTED_QUERY
+            proto.query = self._encode_nested_query(query)
+        elif isinstance(query, WildcardQuery):
+            proto.type = search_pb2.WILDCARD_QUERY
+            proto.query = self._encode_wildcard_query(query)
+        elif isinstance(query, MatchAllQuery):
+            proto.type = search_pb2.MATCH_ALL_QUERY
+            proto.query = self._encode_match_all_query(query)
+        elif isinstance(query, GeoBoundingBoxQuery):
+            proto.type = search_pb2.GEO_BOUNDING_BOX_QUERY
+            proto.query = self._encode_geo_bounding_box_query(query)
+        elif isinstance(query, GeoDistanceQuery):
+            proto.type = search_pb2.GEO_DISTANCE_QUERY
+            proto.query = self._encode_geo_distance_query(query)
+        elif isinstance(query, GeoPolygonQuery):
+            proto.type = search_pb2.GEO_POLYGON_QUERY
+            proto.query = self._encode_geo_polygon_query(query)
+        elif isinstance(query, TermsQuery):
+            proto.type = search_pb2.TERMS_QUERY
+            proto.query = self._encode_terms_query(query)
+        elif isinstance(query, FunctionScoreQuery):
+            proto.type = search_pb2.FUNCTION_SCORE_QUERY
+            proto.query = self._encode_function_score_query(query)
+        else:
+            raise OTSClientError(
+                "Invalid query type: %s"
+                % query.__class__.__name__
+            )
+
+    def _make_collapse(self, proto, collapse):
+        proto.field_name = collapse.field_name
+
+    def _encode_search_query(self, search_query):
+        proto = search_pb2.SearchQuery()
+        self._make_query(proto.query, search_query.query)
+
+        if search_query.sort is not None:
+            self._make_index_sort(proto.sort, search_query.sort)
+
+        if search_query.get_total_count is not None:
+            proto.get_total_count = search_query.get_total_count
+
+        if search_query.next_token is not None:
+            proto.token = search_query.next_token
+
+        if search_query.offset is not None:
+            proto.offset = search_query.offset
+
+        if search_query.limit is not None:
+            proto.limit = search_query.limit
+
+        #if search_query.collapse is not None:
+        #    self._make_collapse(proto.collapse, search_query.collapse)
+
+        return proto.SerializeToString()
+        

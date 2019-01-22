@@ -17,7 +17,7 @@ except ImportError:
             pass
 
 try:
-    import urlparse 
+    import urlparse
 except ImportError:
     import urllib.parse as urlparse
 
@@ -44,7 +44,7 @@ class OTSClient(object):
     DEFAULT_LOGGER_NAME = 'tablestore-client'
 
     protocol_class = OTSProtocol
-    connection_pool_class = ConnectionPool 
+    connection_pool_class = ConnectionPool
 
     def __init__(self, end_point, access_key_id, access_key_secret, instance_name, **kwargs):
         """
@@ -118,13 +118,13 @@ class OTSClient(object):
         # intialize protocol instance via user configuration
         self.protocol = self.protocol_class(
             access_key_id,
-            access_key_secret, 
+            access_key_secret,
             sts_token,
-            instance_name, 
-            self.encoding, 
+            instance_name,
+            self.encoding,
             self.logger
         )
-        
+
         # initialize connection via user configuration
         self.connection = self.connection_pool_class(
             host, path, timeout=self.socket_timeout, maxsize=self.max_connection,
@@ -206,7 +206,7 @@ class OTSClient(object):
     def list_table(self):
         """
         说明：获取所有表名的列表。
-        
+
         返回：表名列表。
 
         ``table_list``表示获取的表名列表，类型为tuple，如：('MyTable1', 'MyTable2')。
@@ -219,9 +219,9 @@ class OTSClient(object):
         return self._request_helper('ListTable')
 
     def update_table(self, table_name, table_options = None, reserved_throughput = None):
-        """ 
+        """
         说明：更新表属性，目前只支持修改预留读写吞吐量。
-        
+
         ``table_name``是对应的表名。
         ``table_options``是``tablestore.metadata.TableOptions``类的示例，它包含time_to_live，max_version和max_time_deviation三个参数。
         ``reserved_throughput``是``tablestore.metadata.ReservedThroughput``类的实例，表示预留读写吞吐量。
@@ -258,7 +258,7 @@ class OTSClient(object):
 
         return self._request_helper('DescribeTable', table_name)
 
-    def get_row(self, table_name, primary_key, columns_to_get=None, 
+    def get_row(self, table_name, primary_key, columns_to_get=None,
                 column_filter=None, max_version=1, time_range=None,
                 start_column=None, end_column=None, token=None):
         """
@@ -285,7 +285,7 @@ class OTSClient(object):
         """
 
         return self._request_helper(
-                    'GetRow', table_name, primary_key, columns_to_get, 
+                    'GetRow', table_name, primary_key, columns_to_get,
                     column_filter, max_version, time_range,
                     start_column, end_column, token
         )
@@ -317,7 +317,7 @@ class OTSClient(object):
         return self._request_helper(
                     'PutRow', table_name, row, condition, return_type
         )
-    
+
     def update_row(self, table_name, row, condition, return_type = None):
         """
         说明：更新一行数据。
@@ -343,7 +343,7 @@ class OTSClient(object):
             }
             row = Row(primary_key, update_of_attribute_columns)
             condition = Condition('EXPECT_EXIST')
-            consumed = client.update_row('myTable', row, condition) 
+            consumed = client.update_row('myTable', row, condition)
         """
 
         return self._request_helper(
@@ -369,7 +369,7 @@ class OTSClient(object):
             primary_key = [('gid',1), ('uid',101)]
             row = Row(primary_key)
             condition = Condition('IGNORE')
-            consumed, return_row = client.delete_row('myTable', row, condition) 
+            consumed, return_row = client.delete_row('myTable', row, condition)
         """
 
         return self._request_helper(
@@ -431,7 +431,7 @@ class OTSClient(object):
         ``response``为返回的结果，类型为tablestore.metadata.BatchWriteRowResponse
 
         示例：
-            # put 
+            # put
             row_items = []
             row = Row([('gid',0), ('uid', 0)], [('index', 6), ('addr', 'china')])
             row_items.append(PutRowItem(row,
@@ -459,15 +459,15 @@ class OTSClient(object):
         """
 
         response = self._request_helper('BatchWriteRow', request)
-        
+
         return BatchWriteRowResponse(request, response)
 
 
-    def get_range(self, table_name, direction, 
-                  inclusive_start_primary_key, 
-                  exclusive_end_primary_key, 
-                  columns_to_get=None, 
-                  limit=None, 
+    def get_range(self, table_name, direction,
+                  inclusive_start_primary_key,
+                  exclusive_end_primary_key,
+                  columns_to_get=None,
+                  limit=None,
                   column_filter=None,
                   max_version=1,
                   time_range=None,
@@ -499,18 +499,18 @@ class OTSClient(object):
 
         示例：
 
-            inclusive_start_primary_key = [('gid',1), ('uid',INF_MIN)] 
-            exclusive_end_primary_key = [('gid',4), ('uid',INF_MAX)] 
+            inclusive_start_primary_key = [('gid',1), ('uid',INF_MIN)]
+            exclusive_end_primary_key = [('gid',4), ('uid',INF_MAX)]
             columns_to_get = ['name', 'address', 'mobile', 'age']
             consumed, next_start_primary_key, row_list, next_token = client.get_range(
-                        'myTable', 'FORWARD', 
+                        'myTable', 'FORWARD',
                         inclusive_start_primary_key, exclusive_end_primary_key,
                         columns_to_get, 100
             )
         """
 
         return self._request_helper(
-                    'GetRange', table_name, direction, 
+                    'GetRange', table_name, direction,
                     inclusive_start_primary_key, exclusive_end_primary_key,
                     columns_to_get, limit,
                     column_filter, max_version,
@@ -520,12 +520,12 @@ class OTSClient(object):
 
     def xget_range(self, table_name, direction,
                    inclusive_start_primary_key,
-                   exclusive_end_primary_key, 
+                   exclusive_end_primary_key,
                    consumed_counter,
-                   columns_to_get=None, 
+                   columns_to_get=None,
                    count=None,
                    column_filter=None,
-                   max_version=1, 
+                   max_version=1,
                    time_range=None,
                    start_column=None,
                    end_column=None,
@@ -556,16 +556,16 @@ class OTSClient(object):
         示例：
 
             consumed_counter = CapacityUnit(0, 0)
-            inclusive_start_primary_key = [('gid',1), ('uid',INF_MIN)] 
-            exclusive_end_primary_key = [('gid',4), ('uid',INF_MAX)] 
+            inclusive_start_primary_key = [('gid',1), ('uid',INF_MIN)]
+            exclusive_end_primary_key = [('gid',4), ('uid',INF_MAX)]
             columns_to_get = ['name', 'address', 'mobile', 'age']
             range_iterator = client.xget_range(
-                        'myTable', Direction.FORWARD, 
+                        'myTable', Direction.FORWARD,
                         inclusive_start_primary_key, exclusive_end_primary_key,
                         consumed_counter, columns_to_get, 100
             )
             for row in range_iterator:
-               pass 
+               pass
         """
 
         if not isinstance(consumed_counter, CapacityUnit):
@@ -585,7 +585,7 @@ class OTSClient(object):
         while next_start_pk:
             consumed, next_start_pk, row_list, next_token = self.get_range(
                 table_name, direction,
-                next_start_pk, exclusive_end_primary_key, 
+                next_start_pk, exclusive_end_primary_key,
                 columns_to_get, left_count, column_filter,
                 max_version, time_range, start_column,
                 end_column, token
@@ -596,7 +596,7 @@ class OTSClient(object):
                 if left_count is not None:
                     left_count -= 1
                     if left_count <= 0:
-                        return 
+                        return
 
 
     def _validate_parameter(self, endpoint, access_key_id, access_key_secret, instance_name):
@@ -612,4 +612,103 @@ class OTSClient(object):
         if instance_name is None or len(instance_name) == 0:
             raise OTSClientError('instance_name is None or empty.')
 
+    def list_search_index(self, table_name=None):
+        """
+        List all search indexes, or indexes under one table.
+
+        :type table_name: str
+        :param table_name: The name of table.
+
+        Example usage:
+            search_index_list = client.list_search_inex()
+        """
+
+        return self._request_helper('ListSearchIndex', table_name)
+
+    def delete_search_index(self, table_name, index_name):
+        """
+        Delete the search index.
+
+        Example usage:
+            client.delete_search_index('table1', 'index1')
+        """
+        self._request_helper('DeleteSearchIndex', table_name, index_name)
+
+    def create_search_index(self, table_name, index_name, index_meta):
+        """
+        Create search index.
+
+        :type table_name: str
+        :param table_name: The name of table.
+
+        :type index_name: str
+        :param index_name: The name of index.
+
+        :type index_meta: tablestore.metadata.IndexMeta
+        :param index_meta: The definition of index, includes fields' schema, index setting and index pre-sorting configuration.
+
+        Example usage:
+            field_a = FieldSchema('k', FieldType.KEYWORD, index=True, enable_sort_and_agg=True, store=True)
+            field_b = FieldSchema('t', FieldType.TEXT, index=True, store=True, analyzer=AnalyzerType.SINGLEWORD)
+            field_c = FieldSchema('g', FieldType.GEOPOINT, index=True, store=True)
+            field_d = FieldSchema('ka', FieldType.KEYWORD, index=True, is_array=True, store=True)
+            nested_field = FieldSchema('n', FieldType.NESTED, sub_field_schemas=
+                [
+                    FieldSchema('nk', FieldType.KEYWORD, index=True, enable_sort_and_agg=True, store=True),
+                    FieldSchema('nt', FieldType.TEXT, index=True, store=True, analyzer=AnalyzerType.SINGLEWORD),
+                   FieldSchema('ng', FieldType.GEOPOINT, index=True, store=True, enable_sort_and_agg=True)
+                    ])
+           fields = [field_a, field_b, field_c, field_d, nested_field]
+
+           index_meta = IndexMeta(fields, index_setting=None, index_sort=None)
+           client.create_search_index('table_1', 'index_1', index_meta)
+        """
+
+        self._request_helper('CreateSearchIndex', table_name, index_name, index_meta)
+
+    def describe_search_index(self, table_name, index_name):
+        """
+        Describe search index.
+
+        :type table_name: str
+        :param table_name: The name of table.
+
+        :type index_name: str
+        :param index_name: The name of index.
+
+        Example usage:
+            index_meta = client.describe_search_index('t1', 'index_1')
+        """
+
+        return self._request_helper('DescribeSearchIndex', table_name, index_name)
+
+    def search(self, table_name, index_name, search_query, columns_to_get=None, routing_keys=None):
+        """
+        Perform search query on search index.
+
+        :type table_name: str
+        :param table_name: The name of table.
+
+        :type index_name: str
+        :param index_name: The name of index.
+
+        :type search_query: tablestore.metadata.SearchQuery
+        :param search_query: The query to perform.
+
+        :type columns_to_get: tablestore.metadata.ColumnsToGet
+        :param columns_to_get: columns to return.
+
+        :type routing_keys: list
+        : param routing_keys: list of routing key.
+
+        Example usage:
+            query = TermQuery('k', 'key000')
+            client.search(
+                table_name, index_name,
+                SearchQuery(query, limit=100),
+                ColumnsToGet(return_type=ColumnReturnType.ALL)
+            )
+        """
+
+        return self._request_helper('Search', table_name, index_name, search_query, columns_to_get, routing_keys)
 

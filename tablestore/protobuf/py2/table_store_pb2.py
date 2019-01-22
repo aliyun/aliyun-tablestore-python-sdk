@@ -11,7 +11,7 @@ from google.protobuf import descriptor_pb2
 DESCRIPTOR = descriptor.FileDescriptor(
   name='table_store.proto',
   package='com.aliyun.tablestore.protocol',
-  serialized_pb='\n\x11table_store.proto\x12\x1e\x63om.aliyun.tablestore.protocol\"&\n\x05\x45rror\x12\x0c\n\x04\x63ode\x18\x01 \x02(\t\x12\x0f\n\x07message\x18\x02 \x01(\t\"\xa0\x01\n\x10PrimaryKeySchema\x12\x0c\n\x04name\x18\x01 \x02(\t\x12<\n\x04type\x18\x02 \x02(\x0e\x32..com.aliyun.tablestore.protocol.PrimaryKeyType\x12@\n\x06option\x18\x03 \x01(\x0e\x32\x30.com.aliyun.tablestore.protocol.PrimaryKeyOption\",\n\x0ePartitionRange\x12\r\n\x05\x62\x65gin\x18\x01 \x02(\x0c\x12\x0b\n\x03\x65nd\x18\x02 \x02(\x0c\"a\n\x0cTableOptions\x12\x14\n\x0ctime_to_live\x18\x01 \x01(\x05\x12\x14\n\x0cmax_versions\x18\x02 \x01(\x05\x12%\n\x1d\x64\x65viation_cell_version_in_sec\x18\x05 \x01(\x03\"f\n\tTableMeta\x12\x12\n\ntable_name\x18\x01 \x02(\t\x12\x45\n\x0bprimary_key\x18\x02 \x03(\x0b\x32\x30.com.aliyun.tablestore.protocol.PrimaryKeySchema\"u\n\tCondition\x12N\n\rrow_existence\x18\x01 \x02(\x0e\x32\x37.com.aliyun.tablestore.protocol.RowExistenceExpectation\x12\x18\n\x10\x63olumn_condition\x18\x02 \x01(\x0c\"+\n\x0c\x43\x61pacityUnit\x12\x0c\n\x04read\x18\x01 \x01(\x05\x12\r\n\x05write\x18\x02 \x01(\x05\"\x98\x01\n\x19ReservedThroughputDetails\x12\x43\n\rcapacity_unit\x18\x01 \x02(\x0b\x32,.com.aliyun.tablestore.protocol.CapacityUnit\x12\x1a\n\x12last_increase_time\x18\x02 \x02(\x03\x12\x1a\n\x12last_decrease_time\x18\x03 \x01(\x03\"Y\n\x12ReservedThroughput\x12\x43\n\rcapacity_unit\x18\x01 \x02(\x0b\x32,.com.aliyun.tablestore.protocol.CapacityUnit\"W\n\x10\x43onsumedCapacity\x12\x43\n\rcapacity_unit\x18\x01 \x02(\x0b\x32,.com.aliyun.tablestore.protocol.CapacityUnit\"\xad\x02\n\x12\x43reateTableRequest\x12=\n\ntable_meta\x18\x01 \x02(\x0b\x32).com.aliyun.tablestore.protocol.TableMeta\x12O\n\x13reserved_throughput\x18\x02 \x02(\x0b\x32\x32.com.aliyun.tablestore.protocol.ReservedThroughput\x12\x43\n\rtable_options\x18\x03 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.TableOptions\x12\x42\n\npartitions\x18\x04 \x03(\x0b\x32..com.aliyun.tablestore.protocol.PartitionRange\"\x15\n\x13\x43reateTableResponse\"\xbe\x01\n\x12UpdateTableRequest\x12\x12\n\ntable_name\x18\x01 \x02(\t\x12O\n\x13reserved_throughput\x18\x02 \x01(\x0b\x32\x32.com.aliyun.tablestore.protocol.ReservedThroughput\x12\x43\n\rtable_options\x18\x03 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.TableOptions\"\xba\x01\n\x13UpdateTableResponse\x12^\n\x1breserved_throughput_details\x18\x01 \x02(\x0b\x32\x39.com.aliyun.tablestore.protocol.ReservedThroughputDetails\x12\x43\n\rtable_options\x18\x02 \x02(\x0b\x32,.com.aliyun.tablestore.protocol.TableOptions\"*\n\x14\x44\x65scribeTableRequest\x12\x12\n\ntable_name\x18\x01 \x02(\t\"\x91\x02\n\x15\x44\x65scribeTableResponse\x12=\n\ntable_meta\x18\x01 \x02(\x0b\x32).com.aliyun.tablestore.protocol.TableMeta\x12^\n\x1breserved_throughput_details\x18\x02 \x02(\x0b\x32\x39.com.aliyun.tablestore.protocol.ReservedThroughputDetails\x12\x43\n\rtable_options\x18\x03 \x02(\x0b\x32,.com.aliyun.tablestore.protocol.TableOptions\x12\x14\n\x0cshard_splits\x18\x06 \x03(\x0c\"\x12\n\x10ListTableRequest\"(\n\x11ListTableResponse\x12\x13\n\x0btable_names\x18\x01 \x03(\t\"(\n\x12\x44\x65leteTableRequest\x12\x12\n\ntable_name\x18\x01 \x02(\t\"\x15\n\x13\x44\x65leteTableResponse\"&\n\x10LoadTableRequest\x12\x12\n\ntable_name\x18\x01 \x02(\t\"\x13\n\x11LoadTableResponse\"(\n\x12UnloadTableRequest\x12\x12\n\ntable_name\x18\x01 \x02(\t\"\x15\n\x13UnloadTableResponse\"H\n\tTimeRange\x12\x12\n\nstart_time\x18\x01 \x01(\x03\x12\x10\n\x08\x65nd_time\x18\x02 \x01(\x03\x12\x15\n\rspecific_time\x18\x03 \x01(\x03\"P\n\rReturnContent\x12?\n\x0breturn_type\x18\x01 \x01(\x0e\x32*.com.aliyun.tablestore.protocol.ReturnType\"\xee\x01\n\rGetRowRequest\x12\x12\n\ntable_name\x18\x01 \x02(\t\x12\x13\n\x0bprimary_key\x18\x02 \x02(\x0c\x12\x16\n\x0e\x63olumns_to_get\x18\x03 \x03(\t\x12=\n\ntime_range\x18\x04 \x01(\x0b\x32).com.aliyun.tablestore.protocol.TimeRange\x12\x14\n\x0cmax_versions\x18\x05 \x01(\x05\x12\x0e\n\x06\x66ilter\x18\x07 \x01(\x0c\x12\x14\n\x0cstart_column\x18\x08 \x01(\t\x12\x12\n\nend_column\x18\t \x01(\t\x12\r\n\x05token\x18\n \x01(\x0c\"u\n\x0eGetRowResponse\x12\x42\n\x08\x63onsumed\x18\x01 \x02(\x0b\x32\x30.com.aliyun.tablestore.protocol.ConsumedCapacity\x12\x0b\n\x03row\x18\x02 \x02(\x0c\x12\x12\n\nnext_token\x18\x03 \x01(\x0c\"\xbf\x01\n\x10UpdateRowRequest\x12\x12\n\ntable_name\x18\x01 \x02(\t\x12\x12\n\nrow_change\x18\x02 \x02(\x0c\x12<\n\tcondition\x18\x03 \x02(\x0b\x32).com.aliyun.tablestore.protocol.Condition\x12\x45\n\x0ereturn_content\x18\x04 \x01(\x0b\x32-.com.aliyun.tablestore.protocol.ReturnContent\"d\n\x11UpdateRowResponse\x12\x42\n\x08\x63onsumed\x18\x01 \x02(\x0b\x32\x30.com.aliyun.tablestore.protocol.ConsumedCapacity\x12\x0b\n\x03row\x18\x02 \x01(\x0c\"\xb5\x01\n\rPutRowRequest\x12\x12\n\ntable_name\x18\x01 \x02(\t\x12\x0b\n\x03row\x18\x02 \x02(\x0c\x12<\n\tcondition\x18\x03 \x02(\x0b\x32).com.aliyun.tablestore.protocol.Condition\x12\x45\n\x0ereturn_content\x18\x04 \x01(\x0b\x32-.com.aliyun.tablestore.protocol.ReturnContent\"a\n\x0ePutRowResponse\x12\x42\n\x08\x63onsumed\x18\x01 \x02(\x0b\x32\x30.com.aliyun.tablestore.protocol.ConsumedCapacity\x12\x0b\n\x03row\x18\x02 \x01(\x0c\"\xc0\x01\n\x10\x44\x65leteRowRequest\x12\x12\n\ntable_name\x18\x01 \x02(\t\x12\x13\n\x0bprimary_key\x18\x02 \x02(\x0c\x12<\n\tcondition\x18\x03 \x02(\x0b\x32).com.aliyun.tablestore.protocol.Condition\x12\x45\n\x0ereturn_content\x18\x04 \x01(\x0b\x32-.com.aliyun.tablestore.protocol.ReturnContent\"d\n\x11\x44\x65leteRowResponse\x12\x42\n\x08\x63onsumed\x18\x01 \x02(\x0b\x32\x30.com.aliyun.tablestore.protocol.ConsumedCapacity\x12\x0b\n\x03row\x18\x02 \x01(\x0c\"\xfa\x01\n\x19TableInBatchGetRowRequest\x12\x12\n\ntable_name\x18\x01 \x02(\t\x12\x13\n\x0bprimary_key\x18\x02 \x03(\x0c\x12\r\n\x05token\x18\x03 \x03(\x0c\x12\x16\n\x0e\x63olumns_to_get\x18\x04 \x03(\t\x12=\n\ntime_range\x18\x05 \x01(\x0b\x32).com.aliyun.tablestore.protocol.TimeRange\x12\x14\n\x0cmax_versions\x18\x06 \x01(\x05\x12\x0e\n\x06\x66ilter\x18\x08 \x01(\x0c\x12\x14\n\x0cstart_column\x18\t \x01(\t\x12\x12\n\nend_column\x18\n \x01(\t\"_\n\x12\x42\x61tchGetRowRequest\x12I\n\x06tables\x18\x01 \x03(\x0b\x32\x39.com.aliyun.tablestore.protocol.TableInBatchGetRowRequest\"\xc4\x01\n\x18RowInBatchGetRowResponse\x12\r\n\x05is_ok\x18\x01 \x02(\x08\x12\x34\n\x05\x65rror\x18\x02 \x01(\x0b\x32%.com.aliyun.tablestore.protocol.Error\x12\x42\n\x08\x63onsumed\x18\x03 \x01(\x0b\x32\x30.com.aliyun.tablestore.protocol.ConsumedCapacity\x12\x0b\n\x03row\x18\x04 \x01(\x0c\x12\x12\n\nnext_token\x18\x05 \x01(\x0c\"x\n\x1aTableInBatchGetRowResponse\x12\x12\n\ntable_name\x18\x01 \x02(\t\x12\x46\n\x04rows\x18\x02 \x03(\x0b\x32\x38.com.aliyun.tablestore.protocol.RowInBatchGetRowResponse\"a\n\x13\x42\x61tchGetRowResponse\x12J\n\x06tables\x18\x01 \x03(\x0b\x32:.com.aliyun.tablestore.protocol.TableInBatchGetRowResponse\"\xf1\x01\n\x19RowInBatchWriteRowRequest\x12;\n\x04type\x18\x01 \x02(\x0e\x32-.com.aliyun.tablestore.protocol.OperationType\x12\x12\n\nrow_change\x18\x02 \x02(\x0c\x12<\n\tcondition\x18\x03 \x02(\x0b\x32).com.aliyun.tablestore.protocol.Condition\x12\x45\n\x0ereturn_content\x18\x04 \x01(\x0b\x32-.com.aliyun.tablestore.protocol.ReturnContent\"z\n\x1bTableInBatchWriteRowRequest\x12\x12\n\ntable_name\x18\x01 \x02(\t\x12G\n\x04rows\x18\x02 \x03(\x0b\x32\x39.com.aliyun.tablestore.protocol.RowInBatchWriteRowRequest\"c\n\x14\x42\x61tchWriteRowRequest\x12K\n\x06tables\x18\x01 \x03(\x0b\x32;.com.aliyun.tablestore.protocol.TableInBatchWriteRowRequest\"\xb2\x01\n\x1aRowInBatchWriteRowResponse\x12\r\n\x05is_ok\x18\x01 \x02(\x08\x12\x34\n\x05\x65rror\x18\x02 \x01(\x0b\x32%.com.aliyun.tablestore.protocol.Error\x12\x42\n\x08\x63onsumed\x18\x03 \x01(\x0b\x32\x30.com.aliyun.tablestore.protocol.ConsumedCapacity\x12\x0b\n\x03row\x18\x04 \x01(\x0c\"|\n\x1cTableInBatchWriteRowResponse\x12\x12\n\ntable_name\x18\x01 \x02(\t\x12H\n\x04rows\x18\x02 \x03(\x0b\x32:.com.aliyun.tablestore.protocol.RowInBatchWriteRowResponse\"e\n\x15\x42\x61tchWriteRowResponse\x12L\n\x06tables\x18\x01 \x03(\x0b\x32<.com.aliyun.tablestore.protocol.TableInBatchWriteRowResponse\"\xf0\x02\n\x0fGetRangeRequest\x12\x12\n\ntable_name\x18\x01 \x02(\t\x12<\n\tdirection\x18\x02 \x02(\x0e\x32).com.aliyun.tablestore.protocol.Direction\x12\x16\n\x0e\x63olumns_to_get\x18\x03 \x03(\t\x12=\n\ntime_range\x18\x04 \x01(\x0b\x32).com.aliyun.tablestore.protocol.TimeRange\x12\x14\n\x0cmax_versions\x18\x05 \x01(\x05\x12\r\n\x05limit\x18\x06 \x01(\x05\x12#\n\x1binclusive_start_primary_key\x18\x07 \x02(\x0c\x12!\n\x19\x65xclusive_end_primary_key\x18\x08 \x02(\x0c\x12\x0e\n\x06\x66ilter\x18\n \x01(\x0c\x12\x14\n\x0cstart_column\x18\x0b \x01(\t\x12\x12\n\nend_column\x18\x0c \x01(\t\x12\r\n\x05token\x18\r \x01(\x0c\"\x98\x01\n\x10GetRangeResponse\x12\x42\n\x08\x63onsumed\x18\x01 \x02(\x0b\x32\x30.com.aliyun.tablestore.protocol.ConsumedCapacity\x12\x0c\n\x04rows\x18\x02 \x02(\x0c\x12\x1e\n\x16next_start_primary_key\x18\x03 \x01(\x0c\x12\x12\n\nnext_token\x18\x04 \x01(\x0c*5\n\x0ePrimaryKeyType\x12\x0b\n\x07INTEGER\x10\x01\x12\n\n\x06STRING\x10\x02\x12\n\n\x06\x42INARY\x10\x03*&\n\x10PrimaryKeyOption\x12\x12\n\x0e\x41UTO_INCREMENT\x10\x01*M\n\x17RowExistenceExpectation\x12\n\n\x06IGNORE\x10\x00\x12\x10\n\x0c\x45XPECT_EXIST\x10\x01\x12\x14\n\x10\x45XPECT_NOT_EXIST\x10\x02*$\n\nReturnType\x12\x0b\n\x07RT_NONE\x10\x00\x12\t\n\x05RT_PK\x10\x01*0\n\rOperationType\x12\x07\n\x03PUT\x10\x01\x12\n\n\x06UPDATE\x10\x02\x12\n\n\x06\x44\x45LETE\x10\x03*&\n\tDirection\x12\x0b\n\x07\x46ORWARD\x10\x00\x12\x0c\n\x08\x42\x41\x43KWARD\x10\x01')
+  serialized_pb='\n\x11table_store.proto\x12\x1e\x63om.aliyun.tablestore.protocol\"&\n\x05\x45rror\x12\x0c\n\x04\x63ode\x18\x01 \x02(\t\x12\x0f\n\x07message\x18\x02 \x01(\t\"\xa0\x01\n\x10PrimaryKeySchema\x12\x0c\n\x04name\x18\x01 \x02(\t\x12<\n\x04type\x18\x02 \x02(\x0e\x32..com.aliyun.tablestore.protocol.PrimaryKeyType\x12@\n\x06option\x18\x03 \x01(\x0e\x32\x30.com.aliyun.tablestore.protocol.PrimaryKeyOption\"d\n\x13\x44\x65\x66inedColumnSchema\x12\x0c\n\x04name\x18\x01 \x02(\t\x12?\n\x04type\x18\x02 \x02(\x0e\x32\x31.com.aliyun.tablestore.protocol.DefinedColumnType\"a\n\x0cTableOptions\x12\x14\n\x0ctime_to_live\x18\x01 \x01(\x05\x12\x14\n\x0cmax_versions\x18\x02 \x01(\x05\x12%\n\x1d\x64\x65viation_cell_version_in_sec\x18\x05 \x01(\x03\"\xd1\x01\n\tIndexMeta\x12\x0c\n\x04name\x18\x01 \x02(\t\x12\x13\n\x0bprimary_key\x18\x02 \x03(\t\x12\x16\n\x0e\x64\x65\x66ined_column\x18\x03 \x03(\t\x12J\n\x11index_update_mode\x18\x04 \x02(\x0e\x32/.com.aliyun.tablestore.protocol.IndexUpdateMode\x12=\n\nindex_type\x18\x05 \x02(\x0e\x32).com.aliyun.tablestore.protocol.IndexType\"\xb3\x01\n\tTableMeta\x12\x12\n\ntable_name\x18\x01 \x02(\t\x12\x45\n\x0bprimary_key\x18\x02 \x03(\x0b\x32\x30.com.aliyun.tablestore.protocol.PrimaryKeySchema\x12K\n\x0e\x64\x65\x66ined_column\x18\x03 \x03(\x0b\x32\x33.com.aliyun.tablestore.protocol.DefinedColumnSchema\"u\n\tCondition\x12N\n\rrow_existence\x18\x01 \x02(\x0e\x32\x37.com.aliyun.tablestore.protocol.RowExistenceExpectation\x12\x18\n\x10\x63olumn_condition\x18\x02 \x01(\x0c\"+\n\x0c\x43\x61pacityUnit\x12\x0c\n\x04read\x18\x01 \x01(\x05\x12\r\n\x05write\x18\x02 \x01(\x05\"\x98\x01\n\x19ReservedThroughputDetails\x12\x43\n\rcapacity_unit\x18\x01 \x02(\x0b\x32,.com.aliyun.tablestore.protocol.CapacityUnit\x12\x1a\n\x12last_increase_time\x18\x02 \x02(\x03\x12\x1a\n\x12last_decrease_time\x18\x03 \x01(\x03\"Y\n\x12ReservedThroughput\x12\x43\n\rcapacity_unit\x18\x01 \x02(\x0b\x32,.com.aliyun.tablestore.protocol.CapacityUnit\"W\n\x10\x43onsumedCapacity\x12\x43\n\rcapacity_unit\x18\x01 \x02(\x0b\x32,.com.aliyun.tablestore.protocol.CapacityUnit\"E\n\x13StreamSpecification\x12\x15\n\renable_stream\x18\x01 \x02(\x08\x12\x17\n\x0f\x65xpiration_time\x18\x02 \x01(\x05\"l\n\rStreamDetails\x12\x15\n\renable_stream\x18\x01 \x02(\x08\x12\x11\n\tstream_id\x18\x02 \x01(\t\x12\x17\n\x0f\x65xpiration_time\x18\x03 \x01(\x05\x12\x18\n\x10last_enable_time\x18\x04 \x01(\x03\"\xf3\x02\n\x12\x43reateTableRequest\x12=\n\ntable_meta\x18\x01 \x02(\x0b\x32).com.aliyun.tablestore.protocol.TableMeta\x12O\n\x13reserved_throughput\x18\x02 \x02(\x0b\x32\x32.com.aliyun.tablestore.protocol.ReservedThroughput\x12\x43\n\rtable_options\x18\x03 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.TableOptions\x12H\n\x0bstream_spec\x18\x05 \x01(\x0b\x32\x33.com.aliyun.tablestore.protocol.StreamSpecification\x12>\n\x0bindex_metas\x18\x07 \x03(\x0b\x32).com.aliyun.tablestore.protocol.IndexMeta\"\x15\n\x13\x43reateTableResponse\"\x87\x01\n\x12\x43reateIndexRequest\x12\x17\n\x0fmain_table_name\x18\x01 \x02(\t\x12=\n\nindex_meta\x18\x02 \x02(\x0b\x32).com.aliyun.tablestore.protocol.IndexMeta\x12\x19\n\x11include_base_data\x18\x03 \x01(\x08\"\x15\n\x13\x43reateIndexResponse\"?\n\x10\x44ropIndexRequest\x12\x17\n\x0fmain_table_name\x18\x01 \x02(\t\x12\x12\n\nindex_name\x18\x02 \x02(\t\"\x13\n\x11\x44ropIndexResponse\"\x88\x02\n\x12UpdateTableRequest\x12\x12\n\ntable_name\x18\x01 \x02(\t\x12O\n\x13reserved_throughput\x18\x02 \x01(\x0b\x32\x32.com.aliyun.tablestore.protocol.ReservedThroughput\x12\x43\n\rtable_options\x18\x03 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.TableOptions\x12H\n\x0bstream_spec\x18\x04 \x01(\x0b\x32\x33.com.aliyun.tablestore.protocol.StreamSpecification\"\x81\x02\n\x13UpdateTableResponse\x12^\n\x1breserved_throughput_details\x18\x01 \x02(\x0b\x32\x39.com.aliyun.tablestore.protocol.ReservedThroughputDetails\x12\x43\n\rtable_options\x18\x02 \x02(\x0b\x32,.com.aliyun.tablestore.protocol.TableOptions\x12\x45\n\x0estream_details\x18\x03 \x01(\x0b\x32-.com.aliyun.tablestore.protocol.StreamDetails\"*\n\x14\x44\x65scribeTableRequest\x12\x12\n\ntable_name\x18\x01 \x02(\t\"\x98\x03\n\x15\x44\x65scribeTableResponse\x12=\n\ntable_meta\x18\x01 \x02(\x0b\x32).com.aliyun.tablestore.protocol.TableMeta\x12^\n\x1breserved_throughput_details\x18\x02 \x02(\x0b\x32\x39.com.aliyun.tablestore.protocol.ReservedThroughputDetails\x12\x43\n\rtable_options\x18\x03 \x02(\x0b\x32,.com.aliyun.tablestore.protocol.TableOptions\x12\x45\n\x0estream_details\x18\x05 \x01(\x0b\x32-.com.aliyun.tablestore.protocol.StreamDetails\x12\x14\n\x0cshard_splits\x18\x06 \x03(\x0c\x12>\n\x0bindex_metas\x18\x08 \x03(\x0b\x32).com.aliyun.tablestore.protocol.IndexMeta\"\x12\n\x10ListTableRequest\"(\n\x11ListTableResponse\x12\x13\n\x0btable_names\x18\x01 \x03(\t\"(\n\x12\x44\x65leteTableRequest\x12\x12\n\ntable_name\x18\x01 \x02(\t\"\x15\n\x13\x44\x65leteTableResponse\"&\n\x10LoadTableRequest\x12\x12\n\ntable_name\x18\x01 \x02(\t\"\x13\n\x11LoadTableResponse\"(\n\x12UnloadTableRequest\x12\x12\n\ntable_name\x18\x01 \x02(\t\"\x15\n\x13UnloadTableResponse\"H\n\tTimeRange\x12\x12\n\nstart_time\x18\x01 \x01(\x03\x12\x10\n\x08\x65nd_time\x18\x02 \x01(\x03\x12\x15\n\rspecific_time\x18\x03 \x01(\x03\"m\n\rReturnContent\x12?\n\x0breturn_type\x18\x01 \x01(\x0e\x32*.com.aliyun.tablestore.protocol.ReturnType\x12\x1b\n\x13return_column_names\x18\x02 \x03(\t\"\x86\x02\n\rGetRowRequest\x12\x12\n\ntable_name\x18\x01 \x02(\t\x12\x13\n\x0bprimary_key\x18\x02 \x02(\x0c\x12\x16\n\x0e\x63olumns_to_get\x18\x03 \x03(\t\x12=\n\ntime_range\x18\x04 \x01(\x0b\x32).com.aliyun.tablestore.protocol.TimeRange\x12\x14\n\x0cmax_versions\x18\x05 \x01(\x05\x12\x0e\n\x06\x66ilter\x18\x07 \x01(\x0c\x12\x14\n\x0cstart_column\x18\x08 \x01(\t\x12\x12\n\nend_column\x18\t \x01(\t\x12\r\n\x05token\x18\n \x01(\x0c\x12\x16\n\x0etransaction_id\x18\x0b \x01(\t\"u\n\x0eGetRowResponse\x12\x42\n\x08\x63onsumed\x18\x01 \x02(\x0b\x32\x30.com.aliyun.tablestore.protocol.ConsumedCapacity\x12\x0b\n\x03row\x18\x02 \x02(\x0c\x12\x12\n\nnext_token\x18\x03 \x01(\x0c\"\xd7\x01\n\x10UpdateRowRequest\x12\x12\n\ntable_name\x18\x01 \x02(\t\x12\x12\n\nrow_change\x18\x02 \x02(\x0c\x12<\n\tcondition\x18\x03 \x02(\x0b\x32).com.aliyun.tablestore.protocol.Condition\x12\x45\n\x0ereturn_content\x18\x04 \x01(\x0b\x32-.com.aliyun.tablestore.protocol.ReturnContent\x12\x16\n\x0etransaction_id\x18\x05 \x01(\t\"d\n\x11UpdateRowResponse\x12\x42\n\x08\x63onsumed\x18\x01 \x02(\x0b\x32\x30.com.aliyun.tablestore.protocol.ConsumedCapacity\x12\x0b\n\x03row\x18\x02 \x01(\x0c\"\xcd\x01\n\rPutRowRequest\x12\x12\n\ntable_name\x18\x01 \x02(\t\x12\x0b\n\x03row\x18\x02 \x02(\x0c\x12<\n\tcondition\x18\x03 \x02(\x0b\x32).com.aliyun.tablestore.protocol.Condition\x12\x45\n\x0ereturn_content\x18\x04 \x01(\x0b\x32-.com.aliyun.tablestore.protocol.ReturnContent\x12\x16\n\x0etransaction_id\x18\x05 \x01(\t\"a\n\x0ePutRowResponse\x12\x42\n\x08\x63onsumed\x18\x01 \x02(\x0b\x32\x30.com.aliyun.tablestore.protocol.ConsumedCapacity\x12\x0b\n\x03row\x18\x02 \x01(\x0c\"\xd8\x01\n\x10\x44\x65leteRowRequest\x12\x12\n\ntable_name\x18\x01 \x02(\t\x12\x13\n\x0bprimary_key\x18\x02 \x02(\x0c\x12<\n\tcondition\x18\x03 \x02(\x0b\x32).com.aliyun.tablestore.protocol.Condition\x12\x45\n\x0ereturn_content\x18\x04 \x01(\x0b\x32-.com.aliyun.tablestore.protocol.ReturnContent\x12\x16\n\x0etransaction_id\x18\x05 \x01(\t\"d\n\x11\x44\x65leteRowResponse\x12\x42\n\x08\x63onsumed\x18\x01 \x02(\x0b\x32\x30.com.aliyun.tablestore.protocol.ConsumedCapacity\x12\x0b\n\x03row\x18\x02 \x01(\x0c\"\xfa\x01\n\x19TableInBatchGetRowRequest\x12\x12\n\ntable_name\x18\x01 \x02(\t\x12\x13\n\x0bprimary_key\x18\x02 \x03(\x0c\x12\r\n\x05token\x18\x03 \x03(\x0c\x12\x16\n\x0e\x63olumns_to_get\x18\x04 \x03(\t\x12=\n\ntime_range\x18\x05 \x01(\x0b\x32).com.aliyun.tablestore.protocol.TimeRange\x12\x14\n\x0cmax_versions\x18\x06 \x01(\x05\x12\x0e\n\x06\x66ilter\x18\x08 \x01(\x0c\x12\x14\n\x0cstart_column\x18\t \x01(\t\x12\x12\n\nend_column\x18\n \x01(\t\"_\n\x12\x42\x61tchGetRowRequest\x12I\n\x06tables\x18\x01 \x03(\x0b\x32\x39.com.aliyun.tablestore.protocol.TableInBatchGetRowRequest\"\xc4\x01\n\x18RowInBatchGetRowResponse\x12\r\n\x05is_ok\x18\x01 \x02(\x08\x12\x34\n\x05\x65rror\x18\x02 \x01(\x0b\x32%.com.aliyun.tablestore.protocol.Error\x12\x42\n\x08\x63onsumed\x18\x03 \x01(\x0b\x32\x30.com.aliyun.tablestore.protocol.ConsumedCapacity\x12\x0b\n\x03row\x18\x04 \x01(\x0c\x12\x12\n\nnext_token\x18\x05 \x01(\x0c\"x\n\x1aTableInBatchGetRowResponse\x12\x12\n\ntable_name\x18\x01 \x02(\t\x12\x46\n\x04rows\x18\x02 \x03(\x0b\x32\x38.com.aliyun.tablestore.protocol.RowInBatchGetRowResponse\"a\n\x13\x42\x61tchGetRowResponse\x12J\n\x06tables\x18\x01 \x03(\x0b\x32:.com.aliyun.tablestore.protocol.TableInBatchGetRowResponse\"\xf1\x01\n\x19RowInBatchWriteRowRequest\x12;\n\x04type\x18\x01 \x02(\x0e\x32-.com.aliyun.tablestore.protocol.OperationType\x12\x12\n\nrow_change\x18\x02 \x02(\x0c\x12<\n\tcondition\x18\x03 \x02(\x0b\x32).com.aliyun.tablestore.protocol.Condition\x12\x45\n\x0ereturn_content\x18\x04 \x01(\x0b\x32-.com.aliyun.tablestore.protocol.ReturnContent\"z\n\x1bTableInBatchWriteRowRequest\x12\x12\n\ntable_name\x18\x01 \x02(\t\x12G\n\x04rows\x18\x02 \x03(\x0b\x32\x39.com.aliyun.tablestore.protocol.RowInBatchWriteRowRequest\"{\n\x14\x42\x61tchWriteRowRequest\x12K\n\x06tables\x18\x01 \x03(\x0b\x32;.com.aliyun.tablestore.protocol.TableInBatchWriteRowRequest\x12\x16\n\x0etransaction_id\x18\x02 \x01(\t\"\xb2\x01\n\x1aRowInBatchWriteRowResponse\x12\r\n\x05is_ok\x18\x01 \x02(\x08\x12\x34\n\x05\x65rror\x18\x02 \x01(\x0b\x32%.com.aliyun.tablestore.protocol.Error\x12\x42\n\x08\x63onsumed\x18\x03 \x01(\x0b\x32\x30.com.aliyun.tablestore.protocol.ConsumedCapacity\x12\x0b\n\x03row\x18\x04 \x01(\x0c\"|\n\x1cTableInBatchWriteRowResponse\x12\x12\n\ntable_name\x18\x01 \x02(\t\x12H\n\x04rows\x18\x02 \x03(\x0b\x32:.com.aliyun.tablestore.protocol.RowInBatchWriteRowResponse\"e\n\x15\x42\x61tchWriteRowResponse\x12L\n\x06tables\x18\x01 \x03(\x0b\x32<.com.aliyun.tablestore.protocol.TableInBatchWriteRowResponse\"\x88\x03\n\x0fGetRangeRequest\x12\x12\n\ntable_name\x18\x01 \x02(\t\x12<\n\tdirection\x18\x02 \x02(\x0e\x32).com.aliyun.tablestore.protocol.Direction\x12\x16\n\x0e\x63olumns_to_get\x18\x03 \x03(\t\x12=\n\ntime_range\x18\x04 \x01(\x0b\x32).com.aliyun.tablestore.protocol.TimeRange\x12\x14\n\x0cmax_versions\x18\x05 \x01(\x05\x12\r\n\x05limit\x18\x06 \x01(\x05\x12#\n\x1binclusive_start_primary_key\x18\x07 \x02(\x0c\x12!\n\x19\x65xclusive_end_primary_key\x18\x08 \x02(\x0c\x12\x0e\n\x06\x66ilter\x18\n \x01(\x0c\x12\x14\n\x0cstart_column\x18\x0b \x01(\t\x12\x12\n\nend_column\x18\x0c \x01(\t\x12\r\n\x05token\x18\r \x01(\x0c\x12\x16\n\x0etransaction_id\x18\x0e \x01(\t\"\x98\x01\n\x10GetRangeResponse\x12\x42\n\x08\x63onsumed\x18\x01 \x02(\x0b\x32\x30.com.aliyun.tablestore.protocol.ConsumedCapacity\x12\x0c\n\x04rows\x18\x02 \x02(\x0c\x12\x1e\n\x16next_start_primary_key\x18\x03 \x01(\x0c\x12\x12\n\nnext_token\x18\x04 \x01(\x0c\"?\n\x1cStartLocalTransactionRequest\x12\x12\n\ntable_name\x18\x01 \x02(\t\x12\x0b\n\x03key\x18\x02 \x02(\x0c\"7\n\x1dStartLocalTransactionResponse\x12\x16\n\x0etransaction_id\x18\x01 \x02(\t\"2\n\x18\x43ommitTransactionRequest\x12\x16\n\x0etransaction_id\x18\x01 \x02(\t\"\x1b\n\x19\x43ommitTransactionResponse\"1\n\x17\x41\x62ortTransactionRequest\x12\x16\n\x0etransaction_id\x18\x01 \x02(\t\"\x1a\n\x18\x41\x62ortTransactionResponse\"\'\n\x11ListStreamRequest\x12\x12\n\ntable_name\x18\x01 \x01(\t\"F\n\x06Stream\x12\x11\n\tstream_id\x18\x01 \x02(\t\x12\x12\n\ntable_name\x18\x02 \x02(\t\x12\x15\n\rcreation_time\x18\x03 \x02(\x03\"M\n\x12ListStreamResponse\x12\x37\n\x07streams\x18\x01 \x03(\x0b\x32&.com.aliyun.tablestore.protocol.Stream\"M\n\x0bStreamShard\x12\x10\n\x08shard_id\x18\x01 \x02(\t\x12\x11\n\tparent_id\x18\x02 \x01(\t\x12\x19\n\x11parent_sibling_id\x18\x03 \x01(\t\"a\n\x15\x44\x65scribeStreamRequest\x12\x11\n\tstream_id\x18\x01 \x02(\t\x12 \n\x18inclusive_start_shard_id\x18\x02 \x01(\t\x12\x13\n\x0bshard_limit\x18\x03 \x01(\x05\"\x88\x02\n\x16\x44\x65scribeStreamResponse\x12\x11\n\tstream_id\x18\x01 \x02(\t\x12\x17\n\x0f\x65xpiration_time\x18\x02 \x02(\x05\x12\x12\n\ntable_name\x18\x03 \x02(\t\x12\x15\n\rcreation_time\x18\x04 \x02(\x03\x12\x43\n\rstream_status\x18\x05 \x02(\x0e\x32,.com.aliyun.tablestore.protocol.StreamStatus\x12;\n\x06shards\x18\x06 \x03(\x0b\x32+.com.aliyun.tablestore.protocol.StreamShard\x12\x15\n\rnext_shard_id\x18\x07 \x01(\t\">\n\x17GetShardIteratorRequest\x12\x11\n\tstream_id\x18\x01 \x02(\t\x12\x10\n\x08shard_id\x18\x02 \x02(\t\"2\n\x18GetShardIteratorResponse\x12\x16\n\x0eshard_iterator\x18\x01 \x02(\t\"?\n\x16GetStreamRecordRequest\x12\x16\n\x0eshard_iterator\x18\x01 \x02(\t\x12\r\n\x05limit\x18\x02 \x01(\x05\"\xf5\x01\n\x17GetStreamRecordResponse\x12\\\n\x0estream_records\x18\x01 \x03(\x0b\x32\x44.com.aliyun.tablestore.protocol.GetStreamRecordResponse.StreamRecord\x12\x1b\n\x13next_shard_iterator\x18\x02 \x01(\t\x1a_\n\x0cStreamRecord\x12?\n\x0b\x61\x63tion_type\x18\x01 \x02(\x0e\x32*.com.aliyun.tablestore.protocol.ActionType\x12\x0e\n\x06record\x18\x02 \x02(\x0c\"j\n\x1f\x43omputeSplitPointsBySizeRequest\x12\x12\n\ntable_name\x18\x01 \x02(\t\x12\x12\n\nsplit_size\x18\x02 \x02(\x03\x12\x1f\n\x17split_size_unit_in_byte\x18\x03 \x01(\x03\"\xd4\x02\n ComputeSplitPointsBySizeResponse\x12\x42\n\x08\x63onsumed\x18\x01 \x02(\x0b\x32\x30.com.aliyun.tablestore.protocol.ConsumedCapacity\x12@\n\x06schema\x18\x02 \x03(\x0b\x32\x30.com.aliyun.tablestore.protocol.PrimaryKeySchema\x12\x14\n\x0csplit_points\x18\x03 \x03(\x0c\x12\x61\n\tlocations\x18\x04 \x03(\x0b\x32N.com.aliyun.tablestore.protocol.ComputeSplitPointsBySizeResponse.SplitLocation\x1a\x31\n\rSplitLocation\x12\x10\n\x08location\x18\x01 \x02(\t\x12\x0e\n\x06repeat\x18\x02 \x02(\x12*5\n\x0ePrimaryKeyType\x12\x0b\n\x07INTEGER\x10\x01\x12\n\n\x06STRING\x10\x02\x12\n\n\x06\x42INARY\x10\x03*c\n\x11\x44\x65\x66inedColumnType\x12\x0f\n\x0b\x44\x43T_INTEGER\x10\x01\x12\x0e\n\nDCT_DOUBLE\x10\x02\x12\x0f\n\x0b\x44\x43T_BOOLEAN\x10\x03\x12\x0e\n\nDCT_STRING\x10\x04\x12\x0c\n\x08\x44\x43T_BLOB\x10\x07*&\n\x10PrimaryKeyOption\x12\x12\n\x0e\x41UTO_INCREMENT\x10\x01*:\n\x0fIndexUpdateMode\x12\x13\n\x0fIUM_ASYNC_INDEX\x10\x00\x12\x12\n\x0eIUM_SYNC_INDEX\x10\x01*4\n\tIndexType\x12\x13\n\x0fIT_GLOBAL_INDEX\x10\x00\x12\x12\n\x0eIT_LOCAL_INDEX\x10\x01*M\n\x17RowExistenceExpectation\x12\n\n\x06IGNORE\x10\x00\x12\x10\n\x0c\x45XPECT_EXIST\x10\x01\x12\x14\n\x10\x45XPECT_NOT_EXIST\x10\x02*9\n\nReturnType\x12\x0b\n\x07RT_NONE\x10\x00\x12\t\n\x05RT_PK\x10\x01\x12\x13\n\x0fRT_AFTER_MODIFY\x10\x02*0\n\rOperationType\x12\x07\n\x03PUT\x10\x01\x12\n\n\x06UPDATE\x10\x02\x12\n\n\x06\x44\x45LETE\x10\x03*&\n\tDirection\x12\x0b\n\x07\x46ORWARD\x10\x00\x12\x0c\n\x08\x42\x41\x43KWARD\x10\x01*6\n\x0cStreamStatus\x12\x13\n\x0fSTREAM_ENABLING\x10\x01\x12\x11\n\rSTREAM_ACTIVE\x10\x02*9\n\nActionType\x12\x0b\n\x07PUT_ROW\x10\x01\x12\x0e\n\nUPDATE_ROW\x10\x02\x12\x0e\n\nDELETE_ROW\x10\x03')
 
 _PRIMARYKEYTYPE = descriptor.EnumDescriptor(
   name='PrimaryKeyType',
@@ -34,8 +34,42 @@ _PRIMARYKEYTYPE = descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=5853,
-  serialized_end=5906,
+  serialized_start=8949,
+  serialized_end=9002,
+)
+
+
+_DEFINEDCOLUMNTYPE = descriptor.EnumDescriptor(
+  name='DefinedColumnType',
+  full_name='com.aliyun.tablestore.protocol.DefinedColumnType',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    descriptor.EnumValueDescriptor(
+      name='DCT_INTEGER', index=0, number=1,
+      options=None,
+      type=None),
+    descriptor.EnumValueDescriptor(
+      name='DCT_DOUBLE', index=1, number=2,
+      options=None,
+      type=None),
+    descriptor.EnumValueDescriptor(
+      name='DCT_BOOLEAN', index=2, number=3,
+      options=None,
+      type=None),
+    descriptor.EnumValueDescriptor(
+      name='DCT_STRING', index=3, number=4,
+      options=None,
+      type=None),
+    descriptor.EnumValueDescriptor(
+      name='DCT_BLOB', index=4, number=7,
+      options=None,
+      type=None),
+  ],
+  containing_type=None,
+  options=None,
+  serialized_start=9004,
+  serialized_end=9103,
 )
 
 
@@ -52,8 +86,52 @@ _PRIMARYKEYOPTION = descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=5908,
-  serialized_end=5946,
+  serialized_start=9105,
+  serialized_end=9143,
+)
+
+
+_INDEXUPDATEMODE = descriptor.EnumDescriptor(
+  name='IndexUpdateMode',
+  full_name='com.aliyun.tablestore.protocol.IndexUpdateMode',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    descriptor.EnumValueDescriptor(
+      name='IUM_ASYNC_INDEX', index=0, number=0,
+      options=None,
+      type=None),
+    descriptor.EnumValueDescriptor(
+      name='IUM_SYNC_INDEX', index=1, number=1,
+      options=None,
+      type=None),
+  ],
+  containing_type=None,
+  options=None,
+  serialized_start=9145,
+  serialized_end=9203,
+)
+
+
+_INDEXTYPE = descriptor.EnumDescriptor(
+  name='IndexType',
+  full_name='com.aliyun.tablestore.protocol.IndexType',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    descriptor.EnumValueDescriptor(
+      name='IT_GLOBAL_INDEX', index=0, number=0,
+      options=None,
+      type=None),
+    descriptor.EnumValueDescriptor(
+      name='IT_LOCAL_INDEX', index=1, number=1,
+      options=None,
+      type=None),
+  ],
+  containing_type=None,
+  options=None,
+  serialized_start=9205,
+  serialized_end=9257,
 )
 
 
@@ -78,8 +156,8 @@ _ROWEXISTENCEEXPECTATION = descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=5948,
-  serialized_end=6025,
+  serialized_start=9259,
+  serialized_end=9336,
 )
 
 
@@ -97,11 +175,15 @@ _RETURNTYPE = descriptor.EnumDescriptor(
       name='RT_PK', index=1, number=1,
       options=None,
       type=None),
+    descriptor.EnumValueDescriptor(
+      name='RT_AFTER_MODIFY', index=2, number=2,
+      options=None,
+      type=None),
   ],
   containing_type=None,
   options=None,
-  serialized_start=6027,
-  serialized_end=6063,
+  serialized_start=9338,
+  serialized_end=9395,
 )
 
 
@@ -126,8 +208,8 @@ _OPERATIONTYPE = descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=6065,
-  serialized_end=6113,
+  serialized_start=9397,
+  serialized_end=9445,
 )
 
 
@@ -148,25 +230,88 @@ _DIRECTION = descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=6115,
-  serialized_end=6153,
+  serialized_start=9447,
+  serialized_end=9485,
+)
+
+
+_STREAMSTATUS = descriptor.EnumDescriptor(
+  name='StreamStatus',
+  full_name='com.aliyun.tablestore.protocol.StreamStatus',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    descriptor.EnumValueDescriptor(
+      name='STREAM_ENABLING', index=0, number=1,
+      options=None,
+      type=None),
+    descriptor.EnumValueDescriptor(
+      name='STREAM_ACTIVE', index=1, number=2,
+      options=None,
+      type=None),
+  ],
+  containing_type=None,
+  options=None,
+  serialized_start=9487,
+  serialized_end=9541,
+)
+
+
+_ACTIONTYPE = descriptor.EnumDescriptor(
+  name='ActionType',
+  full_name='com.aliyun.tablestore.protocol.ActionType',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    descriptor.EnumValueDescriptor(
+      name='PUT_ROW', index=0, number=1,
+      options=None,
+      type=None),
+    descriptor.EnumValueDescriptor(
+      name='UPDATE_ROW', index=1, number=2,
+      options=None,
+      type=None),
+    descriptor.EnumValueDescriptor(
+      name='DELETE_ROW', index=2, number=3,
+      options=None,
+      type=None),
+  ],
+  containing_type=None,
+  options=None,
+  serialized_start=9543,
+  serialized_end=9600,
 )
 
 
 INTEGER = 1
 STRING = 2
 BINARY = 3
+DCT_INTEGER = 1
+DCT_DOUBLE = 2
+DCT_BOOLEAN = 3
+DCT_STRING = 4
+DCT_BLOB = 7
 AUTO_INCREMENT = 1
+IUM_ASYNC_INDEX = 0
+IUM_SYNC_INDEX = 1
+IT_GLOBAL_INDEX = 0
+IT_LOCAL_INDEX = 1
 IGNORE = 0
 EXPECT_EXIST = 1
 EXPECT_NOT_EXIST = 2
 RT_NONE = 0
 RT_PK = 1
+RT_AFTER_MODIFY = 2
 PUT = 1
 UPDATE = 2
 DELETE = 3
 FORWARD = 0
 BACKWARD = 1
+STREAM_ENABLING = 1
+STREAM_ACTIVE = 2
+PUT_ROW = 1
+UPDATE_ROW = 2
+DELETE_ROW = 3
 
 
 
@@ -247,24 +392,24 @@ _PRIMARYKEYSCHEMA = descriptor.Descriptor(
 )
 
 
-_PARTITIONRANGE = descriptor.Descriptor(
-  name='PartitionRange',
-  full_name='com.aliyun.tablestore.protocol.PartitionRange',
+_DEFINEDCOLUMNSCHEMA = descriptor.Descriptor(
+  name='DefinedColumnSchema',
+  full_name='com.aliyun.tablestore.protocol.DefinedColumnSchema',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     descriptor.FieldDescriptor(
-      name='begin', full_name='com.aliyun.tablestore.protocol.PartitionRange.begin', index=0,
-      number=1, type=12, cpp_type=9, label=2,
-      has_default_value=False, default_value="",
+      name='name', full_name='com.aliyun.tablestore.protocol.DefinedColumnSchema.name', index=0,
+      number=1, type=9, cpp_type=9, label=2,
+      has_default_value=False, default_value=unicode("", "utf-8"),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='end', full_name='com.aliyun.tablestore.protocol.PartitionRange.end', index=1,
-      number=2, type=12, cpp_type=9, label=2,
-      has_default_value=False, default_value="",
+      name='type', full_name='com.aliyun.tablestore.protocol.DefinedColumnSchema.type', index=1,
+      number=2, type=14, cpp_type=8, label=2,
+      has_default_value=False, default_value=1,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -278,7 +423,7 @@ _PARTITIONRANGE = descriptor.Descriptor(
   is_extendable=False,
   extension_ranges=[],
   serialized_start=256,
-  serialized_end=300,
+  serialized_end=356,
 )
 
 
@@ -319,8 +464,64 @@ _TABLEOPTIONS = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=302,
-  serialized_end=399,
+  serialized_start=358,
+  serialized_end=455,
+)
+
+
+_INDEXMETA = descriptor.Descriptor(
+  name='IndexMeta',
+  full_name='com.aliyun.tablestore.protocol.IndexMeta',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='name', full_name='com.aliyun.tablestore.protocol.IndexMeta.name', index=0,
+      number=1, type=9, cpp_type=9, label=2,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='primary_key', full_name='com.aliyun.tablestore.protocol.IndexMeta.primary_key', index=1,
+      number=2, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='defined_column', full_name='com.aliyun.tablestore.protocol.IndexMeta.defined_column', index=2,
+      number=3, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='index_update_mode', full_name='com.aliyun.tablestore.protocol.IndexMeta.index_update_mode', index=3,
+      number=4, type=14, cpp_type=8, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='index_type', full_name='com.aliyun.tablestore.protocol.IndexMeta.index_type', index=4,
+      number=5, type=14, cpp_type=8, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=458,
+  serialized_end=667,
 )
 
 
@@ -345,6 +546,13 @@ _TABLEMETA = descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    descriptor.FieldDescriptor(
+      name='defined_column', full_name='com.aliyun.tablestore.protocol.TableMeta.defined_column', index=2,
+      number=3, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -354,8 +562,8 @@ _TABLEMETA = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=401,
-  serialized_end=503,
+  serialized_start=670,
+  serialized_end=849,
 )
 
 
@@ -389,8 +597,8 @@ _CONDITION = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=505,
-  serialized_end=622,
+  serialized_start=851,
+  serialized_end=968,
 )
 
 
@@ -424,8 +632,8 @@ _CAPACITYUNIT = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=624,
-  serialized_end=667,
+  serialized_start=970,
+  serialized_end=1013,
 )
 
 
@@ -466,8 +674,8 @@ _RESERVEDTHROUGHPUTDETAILS = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=670,
-  serialized_end=822,
+  serialized_start=1016,
+  serialized_end=1168,
 )
 
 
@@ -494,8 +702,8 @@ _RESERVEDTHROUGHPUT = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=824,
-  serialized_end=913,
+  serialized_start=1170,
+  serialized_end=1259,
 )
 
 
@@ -522,8 +730,92 @@ _CONSUMEDCAPACITY = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=915,
-  serialized_end=1002,
+  serialized_start=1261,
+  serialized_end=1348,
+)
+
+
+_STREAMSPECIFICATION = descriptor.Descriptor(
+  name='StreamSpecification',
+  full_name='com.aliyun.tablestore.protocol.StreamSpecification',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='enable_stream', full_name='com.aliyun.tablestore.protocol.StreamSpecification.enable_stream', index=0,
+      number=1, type=8, cpp_type=7, label=2,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='expiration_time', full_name='com.aliyun.tablestore.protocol.StreamSpecification.expiration_time', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=1350,
+  serialized_end=1419,
+)
+
+
+_STREAMDETAILS = descriptor.Descriptor(
+  name='StreamDetails',
+  full_name='com.aliyun.tablestore.protocol.StreamDetails',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='enable_stream', full_name='com.aliyun.tablestore.protocol.StreamDetails.enable_stream', index=0,
+      number=1, type=8, cpp_type=7, label=2,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='stream_id', full_name='com.aliyun.tablestore.protocol.StreamDetails.stream_id', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='expiration_time', full_name='com.aliyun.tablestore.protocol.StreamDetails.expiration_time', index=2,
+      number=3, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='last_enable_time', full_name='com.aliyun.tablestore.protocol.StreamDetails.last_enable_time', index=3,
+      number=4, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=1421,
+  serialized_end=1529,
 )
 
 
@@ -556,8 +848,15 @@ _CREATETABLEREQUEST = descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='partitions', full_name='com.aliyun.tablestore.protocol.CreateTableRequest.partitions', index=3,
-      number=4, type=11, cpp_type=10, label=3,
+      name='stream_spec', full_name='com.aliyun.tablestore.protocol.CreateTableRequest.stream_spec', index=3,
+      number=5, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='index_metas', full_name='com.aliyun.tablestore.protocol.CreateTableRequest.index_metas', index=4,
+      number=7, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -571,8 +870,8 @@ _CREATETABLEREQUEST = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=1005,
-  serialized_end=1306,
+  serialized_start=1532,
+  serialized_end=1903,
 )
 
 
@@ -592,8 +891,127 @@ _CREATETABLERESPONSE = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=1308,
-  serialized_end=1329,
+  serialized_start=1905,
+  serialized_end=1926,
+)
+
+
+_CREATEINDEXREQUEST = descriptor.Descriptor(
+  name='CreateIndexRequest',
+  full_name='com.aliyun.tablestore.protocol.CreateIndexRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='main_table_name', full_name='com.aliyun.tablestore.protocol.CreateIndexRequest.main_table_name', index=0,
+      number=1, type=9, cpp_type=9, label=2,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='index_meta', full_name='com.aliyun.tablestore.protocol.CreateIndexRequest.index_meta', index=1,
+      number=2, type=11, cpp_type=10, label=2,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='include_base_data', full_name='com.aliyun.tablestore.protocol.CreateIndexRequest.include_base_data', index=2,
+      number=3, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=1929,
+  serialized_end=2064,
+)
+
+
+_CREATEINDEXRESPONSE = descriptor.Descriptor(
+  name='CreateIndexResponse',
+  full_name='com.aliyun.tablestore.protocol.CreateIndexResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=2066,
+  serialized_end=2087,
+)
+
+
+_DROPINDEXREQUEST = descriptor.Descriptor(
+  name='DropIndexRequest',
+  full_name='com.aliyun.tablestore.protocol.DropIndexRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='main_table_name', full_name='com.aliyun.tablestore.protocol.DropIndexRequest.main_table_name', index=0,
+      number=1, type=9, cpp_type=9, label=2,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='index_name', full_name='com.aliyun.tablestore.protocol.DropIndexRequest.index_name', index=1,
+      number=2, type=9, cpp_type=9, label=2,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=2089,
+  serialized_end=2152,
+)
+
+
+_DROPINDEXRESPONSE = descriptor.Descriptor(
+  name='DropIndexResponse',
+  full_name='com.aliyun.tablestore.protocol.DropIndexResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=2154,
+  serialized_end=2173,
 )
 
 
@@ -625,6 +1043,13 @@ _UPDATETABLEREQUEST = descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    descriptor.FieldDescriptor(
+      name='stream_spec', full_name='com.aliyun.tablestore.protocol.UpdateTableRequest.stream_spec', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -634,8 +1059,8 @@ _UPDATETABLEREQUEST = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=1332,
-  serialized_end=1522,
+  serialized_start=2176,
+  serialized_end=2440,
 )
 
 
@@ -660,6 +1085,13 @@ _UPDATETABLERESPONSE = descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    descriptor.FieldDescriptor(
+      name='stream_details', full_name='com.aliyun.tablestore.protocol.UpdateTableResponse.stream_details', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -669,8 +1101,8 @@ _UPDATETABLERESPONSE = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=1525,
-  serialized_end=1711,
+  serialized_start=2443,
+  serialized_end=2700,
 )
 
 
@@ -697,8 +1129,8 @@ _DESCRIBETABLEREQUEST = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=1713,
-  serialized_end=1755,
+  serialized_start=2702,
+  serialized_end=2744,
 )
 
 
@@ -731,8 +1163,22 @@ _DESCRIBETABLERESPONSE = descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='shard_splits', full_name='com.aliyun.tablestore.protocol.DescribeTableResponse.shard_splits', index=3,
+      name='stream_details', full_name='com.aliyun.tablestore.protocol.DescribeTableResponse.stream_details', index=3,
+      number=5, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='shard_splits', full_name='com.aliyun.tablestore.protocol.DescribeTableResponse.shard_splits', index=4,
       number=6, type=12, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='index_metas', full_name='com.aliyun.tablestore.protocol.DescribeTableResponse.index_metas', index=5,
+      number=8, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -746,8 +1192,8 @@ _DESCRIBETABLERESPONSE = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=1758,
-  serialized_end=2031,
+  serialized_start=2747,
+  serialized_end=3155,
 )
 
 
@@ -767,8 +1213,8 @@ _LISTTABLEREQUEST = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=2033,
-  serialized_end=2051,
+  serialized_start=3157,
+  serialized_end=3175,
 )
 
 
@@ -795,8 +1241,8 @@ _LISTTABLERESPONSE = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=2053,
-  serialized_end=2093,
+  serialized_start=3177,
+  serialized_end=3217,
 )
 
 
@@ -823,8 +1269,8 @@ _DELETETABLEREQUEST = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=2095,
-  serialized_end=2135,
+  serialized_start=3219,
+  serialized_end=3259,
 )
 
 
@@ -844,8 +1290,8 @@ _DELETETABLERESPONSE = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=2137,
-  serialized_end=2158,
+  serialized_start=3261,
+  serialized_end=3282,
 )
 
 
@@ -872,8 +1318,8 @@ _LOADTABLEREQUEST = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=2160,
-  serialized_end=2198,
+  serialized_start=3284,
+  serialized_end=3322,
 )
 
 
@@ -893,8 +1339,8 @@ _LOADTABLERESPONSE = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=2200,
-  serialized_end=2219,
+  serialized_start=3324,
+  serialized_end=3343,
 )
 
 
@@ -921,8 +1367,8 @@ _UNLOADTABLEREQUEST = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=2221,
-  serialized_end=2261,
+  serialized_start=3345,
+  serialized_end=3385,
 )
 
 
@@ -942,8 +1388,8 @@ _UNLOADTABLERESPONSE = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=2263,
-  serialized_end=2284,
+  serialized_start=3387,
+  serialized_end=3408,
 )
 
 
@@ -984,8 +1430,8 @@ _TIMERANGE = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=2286,
-  serialized_end=2358,
+  serialized_start=3410,
+  serialized_end=3482,
 )
 
 
@@ -1003,6 +1449,13 @@ _RETURNCONTENT = descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    descriptor.FieldDescriptor(
+      name='return_column_names', full_name='com.aliyun.tablestore.protocol.ReturnContent.return_column_names', index=1,
+      number=2, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -1012,8 +1465,8 @@ _RETURNCONTENT = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=2360,
-  serialized_end=2440,
+  serialized_start=3484,
+  serialized_end=3593,
 )
 
 
@@ -1087,6 +1540,13 @@ _GETROWREQUEST = descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    descriptor.FieldDescriptor(
+      name='transaction_id', full_name='com.aliyun.tablestore.protocol.GetRowRequest.transaction_id', index=9,
+      number=11, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -1096,8 +1556,8 @@ _GETROWREQUEST = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=2443,
-  serialized_end=2681,
+  serialized_start=3596,
+  serialized_end=3858,
 )
 
 
@@ -1138,8 +1598,8 @@ _GETROWRESPONSE = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=2683,
-  serialized_end=2800,
+  serialized_start=3860,
+  serialized_end=3977,
 )
 
 
@@ -1178,6 +1638,13 @@ _UPDATEROWREQUEST = descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    descriptor.FieldDescriptor(
+      name='transaction_id', full_name='com.aliyun.tablestore.protocol.UpdateRowRequest.transaction_id', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -1187,8 +1654,8 @@ _UPDATEROWREQUEST = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=2803,
-  serialized_end=2994,
+  serialized_start=3980,
+  serialized_end=4195,
 )
 
 
@@ -1222,8 +1689,8 @@ _UPDATEROWRESPONSE = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=2996,
-  serialized_end=3096,
+  serialized_start=4197,
+  serialized_end=4297,
 )
 
 
@@ -1262,6 +1729,13 @@ _PUTROWREQUEST = descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    descriptor.FieldDescriptor(
+      name='transaction_id', full_name='com.aliyun.tablestore.protocol.PutRowRequest.transaction_id', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -1271,8 +1745,8 @@ _PUTROWREQUEST = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=3099,
-  serialized_end=3280,
+  serialized_start=4300,
+  serialized_end=4505,
 )
 
 
@@ -1306,8 +1780,8 @@ _PUTROWRESPONSE = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=3282,
-  serialized_end=3379,
+  serialized_start=4507,
+  serialized_end=4604,
 )
 
 
@@ -1346,6 +1820,13 @@ _DELETEROWREQUEST = descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    descriptor.FieldDescriptor(
+      name='transaction_id', full_name='com.aliyun.tablestore.protocol.DeleteRowRequest.transaction_id', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -1355,8 +1836,8 @@ _DELETEROWREQUEST = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=3382,
-  serialized_end=3574,
+  serialized_start=4607,
+  serialized_end=4823,
 )
 
 
@@ -1390,8 +1871,8 @@ _DELETEROWRESPONSE = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=3576,
-  serialized_end=3676,
+  serialized_start=4825,
+  serialized_end=4925,
 )
 
 
@@ -1474,8 +1955,8 @@ _TABLEINBATCHGETROWREQUEST = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=3679,
-  serialized_end=3929,
+  serialized_start=4928,
+  serialized_end=5178,
 )
 
 
@@ -1502,8 +1983,8 @@ _BATCHGETROWREQUEST = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=3931,
-  serialized_end=4026,
+  serialized_start=5180,
+  serialized_end=5275,
 )
 
 
@@ -1558,8 +2039,8 @@ _ROWINBATCHGETROWRESPONSE = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=4029,
-  serialized_end=4225,
+  serialized_start=5278,
+  serialized_end=5474,
 )
 
 
@@ -1593,8 +2074,8 @@ _TABLEINBATCHGETROWRESPONSE = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=4227,
-  serialized_end=4347,
+  serialized_start=5476,
+  serialized_end=5596,
 )
 
 
@@ -1621,8 +2102,8 @@ _BATCHGETROWRESPONSE = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=4349,
-  serialized_end=4446,
+  serialized_start=5598,
+  serialized_end=5695,
 )
 
 
@@ -1670,8 +2151,8 @@ _ROWINBATCHWRITEROWREQUEST = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=4449,
-  serialized_end=4690,
+  serialized_start=5698,
+  serialized_end=5939,
 )
 
 
@@ -1705,8 +2186,8 @@ _TABLEINBATCHWRITEROWREQUEST = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=4692,
-  serialized_end=4814,
+  serialized_start=5941,
+  serialized_end=6063,
 )
 
 
@@ -1724,6 +2205,13 @@ _BATCHWRITEROWREQUEST = descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    descriptor.FieldDescriptor(
+      name='transaction_id', full_name='com.aliyun.tablestore.protocol.BatchWriteRowRequest.transaction_id', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -1733,8 +2221,8 @@ _BATCHWRITEROWREQUEST = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=4816,
-  serialized_end=4915,
+  serialized_start=6065,
+  serialized_end=6188,
 )
 
 
@@ -1782,8 +2270,8 @@ _ROWINBATCHWRITEROWRESPONSE = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=4918,
-  serialized_end=5096,
+  serialized_start=6191,
+  serialized_end=6369,
 )
 
 
@@ -1817,8 +2305,8 @@ _TABLEINBATCHWRITEROWRESPONSE = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=5098,
-  serialized_end=5222,
+  serialized_start=6371,
+  serialized_end=6495,
 )
 
 
@@ -1845,8 +2333,8 @@ _BATCHWRITEROWRESPONSE = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=5224,
-  serialized_end=5325,
+  serialized_start=6497,
+  serialized_end=6598,
 )
 
 
@@ -1941,6 +2429,13 @@ _GETRANGEREQUEST = descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    descriptor.FieldDescriptor(
+      name='transaction_id', full_name='com.aliyun.tablestore.protocol.GetRangeRequest.transaction_id', index=12,
+      number=14, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -1950,8 +2445,8 @@ _GETRANGEREQUEST = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=5328,
-  serialized_end=5696,
+  serialized_start=6601,
+  serialized_end=6993,
 )
 
 
@@ -1999,13 +2494,722 @@ _GETRANGERESPONSE = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=5699,
-  serialized_end=5851,
+  serialized_start=6996,
+  serialized_end=7148,
+)
+
+
+_STARTLOCALTRANSACTIONREQUEST = descriptor.Descriptor(
+  name='StartLocalTransactionRequest',
+  full_name='com.aliyun.tablestore.protocol.StartLocalTransactionRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='table_name', full_name='com.aliyun.tablestore.protocol.StartLocalTransactionRequest.table_name', index=0,
+      number=1, type=9, cpp_type=9, label=2,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='key', full_name='com.aliyun.tablestore.protocol.StartLocalTransactionRequest.key', index=1,
+      number=2, type=12, cpp_type=9, label=2,
+      has_default_value=False, default_value="",
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=7150,
+  serialized_end=7213,
+)
+
+
+_STARTLOCALTRANSACTIONRESPONSE = descriptor.Descriptor(
+  name='StartLocalTransactionResponse',
+  full_name='com.aliyun.tablestore.protocol.StartLocalTransactionResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='transaction_id', full_name='com.aliyun.tablestore.protocol.StartLocalTransactionResponse.transaction_id', index=0,
+      number=1, type=9, cpp_type=9, label=2,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=7215,
+  serialized_end=7270,
+)
+
+
+_COMMITTRANSACTIONREQUEST = descriptor.Descriptor(
+  name='CommitTransactionRequest',
+  full_name='com.aliyun.tablestore.protocol.CommitTransactionRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='transaction_id', full_name='com.aliyun.tablestore.protocol.CommitTransactionRequest.transaction_id', index=0,
+      number=1, type=9, cpp_type=9, label=2,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=7272,
+  serialized_end=7322,
+)
+
+
+_COMMITTRANSACTIONRESPONSE = descriptor.Descriptor(
+  name='CommitTransactionResponse',
+  full_name='com.aliyun.tablestore.protocol.CommitTransactionResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=7324,
+  serialized_end=7351,
+)
+
+
+_ABORTTRANSACTIONREQUEST = descriptor.Descriptor(
+  name='AbortTransactionRequest',
+  full_name='com.aliyun.tablestore.protocol.AbortTransactionRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='transaction_id', full_name='com.aliyun.tablestore.protocol.AbortTransactionRequest.transaction_id', index=0,
+      number=1, type=9, cpp_type=9, label=2,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=7353,
+  serialized_end=7402,
+)
+
+
+_ABORTTRANSACTIONRESPONSE = descriptor.Descriptor(
+  name='AbortTransactionResponse',
+  full_name='com.aliyun.tablestore.protocol.AbortTransactionResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=7404,
+  serialized_end=7430,
+)
+
+
+_LISTSTREAMREQUEST = descriptor.Descriptor(
+  name='ListStreamRequest',
+  full_name='com.aliyun.tablestore.protocol.ListStreamRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='table_name', full_name='com.aliyun.tablestore.protocol.ListStreamRequest.table_name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=7432,
+  serialized_end=7471,
+)
+
+
+_STREAM = descriptor.Descriptor(
+  name='Stream',
+  full_name='com.aliyun.tablestore.protocol.Stream',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='stream_id', full_name='com.aliyun.tablestore.protocol.Stream.stream_id', index=0,
+      number=1, type=9, cpp_type=9, label=2,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='table_name', full_name='com.aliyun.tablestore.protocol.Stream.table_name', index=1,
+      number=2, type=9, cpp_type=9, label=2,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='creation_time', full_name='com.aliyun.tablestore.protocol.Stream.creation_time', index=2,
+      number=3, type=3, cpp_type=2, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=7473,
+  serialized_end=7543,
+)
+
+
+_LISTSTREAMRESPONSE = descriptor.Descriptor(
+  name='ListStreamResponse',
+  full_name='com.aliyun.tablestore.protocol.ListStreamResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='streams', full_name='com.aliyun.tablestore.protocol.ListStreamResponse.streams', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=7545,
+  serialized_end=7622,
+)
+
+
+_STREAMSHARD = descriptor.Descriptor(
+  name='StreamShard',
+  full_name='com.aliyun.tablestore.protocol.StreamShard',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='shard_id', full_name='com.aliyun.tablestore.protocol.StreamShard.shard_id', index=0,
+      number=1, type=9, cpp_type=9, label=2,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='parent_id', full_name='com.aliyun.tablestore.protocol.StreamShard.parent_id', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='parent_sibling_id', full_name='com.aliyun.tablestore.protocol.StreamShard.parent_sibling_id', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=7624,
+  serialized_end=7701,
+)
+
+
+_DESCRIBESTREAMREQUEST = descriptor.Descriptor(
+  name='DescribeStreamRequest',
+  full_name='com.aliyun.tablestore.protocol.DescribeStreamRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='stream_id', full_name='com.aliyun.tablestore.protocol.DescribeStreamRequest.stream_id', index=0,
+      number=1, type=9, cpp_type=9, label=2,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='inclusive_start_shard_id', full_name='com.aliyun.tablestore.protocol.DescribeStreamRequest.inclusive_start_shard_id', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='shard_limit', full_name='com.aliyun.tablestore.protocol.DescribeStreamRequest.shard_limit', index=2,
+      number=3, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=7703,
+  serialized_end=7800,
+)
+
+
+_DESCRIBESTREAMRESPONSE = descriptor.Descriptor(
+  name='DescribeStreamResponse',
+  full_name='com.aliyun.tablestore.protocol.DescribeStreamResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='stream_id', full_name='com.aliyun.tablestore.protocol.DescribeStreamResponse.stream_id', index=0,
+      number=1, type=9, cpp_type=9, label=2,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='expiration_time', full_name='com.aliyun.tablestore.protocol.DescribeStreamResponse.expiration_time', index=1,
+      number=2, type=5, cpp_type=1, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='table_name', full_name='com.aliyun.tablestore.protocol.DescribeStreamResponse.table_name', index=2,
+      number=3, type=9, cpp_type=9, label=2,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='creation_time', full_name='com.aliyun.tablestore.protocol.DescribeStreamResponse.creation_time', index=3,
+      number=4, type=3, cpp_type=2, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='stream_status', full_name='com.aliyun.tablestore.protocol.DescribeStreamResponse.stream_status', index=4,
+      number=5, type=14, cpp_type=8, label=2,
+      has_default_value=False, default_value=1,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='shards', full_name='com.aliyun.tablestore.protocol.DescribeStreamResponse.shards', index=5,
+      number=6, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='next_shard_id', full_name='com.aliyun.tablestore.protocol.DescribeStreamResponse.next_shard_id', index=6,
+      number=7, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=7803,
+  serialized_end=8067,
+)
+
+
+_GETSHARDITERATORREQUEST = descriptor.Descriptor(
+  name='GetShardIteratorRequest',
+  full_name='com.aliyun.tablestore.protocol.GetShardIteratorRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='stream_id', full_name='com.aliyun.tablestore.protocol.GetShardIteratorRequest.stream_id', index=0,
+      number=1, type=9, cpp_type=9, label=2,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='shard_id', full_name='com.aliyun.tablestore.protocol.GetShardIteratorRequest.shard_id', index=1,
+      number=2, type=9, cpp_type=9, label=2,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=8069,
+  serialized_end=8131,
+)
+
+
+_GETSHARDITERATORRESPONSE = descriptor.Descriptor(
+  name='GetShardIteratorResponse',
+  full_name='com.aliyun.tablestore.protocol.GetShardIteratorResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='shard_iterator', full_name='com.aliyun.tablestore.protocol.GetShardIteratorResponse.shard_iterator', index=0,
+      number=1, type=9, cpp_type=9, label=2,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=8133,
+  serialized_end=8183,
+)
+
+
+_GETSTREAMRECORDREQUEST = descriptor.Descriptor(
+  name='GetStreamRecordRequest',
+  full_name='com.aliyun.tablestore.protocol.GetStreamRecordRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='shard_iterator', full_name='com.aliyun.tablestore.protocol.GetStreamRecordRequest.shard_iterator', index=0,
+      number=1, type=9, cpp_type=9, label=2,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='limit', full_name='com.aliyun.tablestore.protocol.GetStreamRecordRequest.limit', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=8185,
+  serialized_end=8248,
+)
+
+
+_GETSTREAMRECORDRESPONSE_STREAMRECORD = descriptor.Descriptor(
+  name='StreamRecord',
+  full_name='com.aliyun.tablestore.protocol.GetStreamRecordResponse.StreamRecord',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='action_type', full_name='com.aliyun.tablestore.protocol.GetStreamRecordResponse.StreamRecord.action_type', index=0,
+      number=1, type=14, cpp_type=8, label=2,
+      has_default_value=False, default_value=1,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='record', full_name='com.aliyun.tablestore.protocol.GetStreamRecordResponse.StreamRecord.record', index=1,
+      number=2, type=12, cpp_type=9, label=2,
+      has_default_value=False, default_value="",
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=8401,
+  serialized_end=8496,
+)
+
+_GETSTREAMRECORDRESPONSE = descriptor.Descriptor(
+  name='GetStreamRecordResponse',
+  full_name='com.aliyun.tablestore.protocol.GetStreamRecordResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='stream_records', full_name='com.aliyun.tablestore.protocol.GetStreamRecordResponse.stream_records', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='next_shard_iterator', full_name='com.aliyun.tablestore.protocol.GetStreamRecordResponse.next_shard_iterator', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[_GETSTREAMRECORDRESPONSE_STREAMRECORD, ],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=8251,
+  serialized_end=8496,
+)
+
+
+_COMPUTESPLITPOINTSBYSIZEREQUEST = descriptor.Descriptor(
+  name='ComputeSplitPointsBySizeRequest',
+  full_name='com.aliyun.tablestore.protocol.ComputeSplitPointsBySizeRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='table_name', full_name='com.aliyun.tablestore.protocol.ComputeSplitPointsBySizeRequest.table_name', index=0,
+      number=1, type=9, cpp_type=9, label=2,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='split_size', full_name='com.aliyun.tablestore.protocol.ComputeSplitPointsBySizeRequest.split_size', index=1,
+      number=2, type=3, cpp_type=2, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='split_size_unit_in_byte', full_name='com.aliyun.tablestore.protocol.ComputeSplitPointsBySizeRequest.split_size_unit_in_byte', index=2,
+      number=3, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=8498,
+  serialized_end=8604,
+)
+
+
+_COMPUTESPLITPOINTSBYSIZERESPONSE_SPLITLOCATION = descriptor.Descriptor(
+  name='SplitLocation',
+  full_name='com.aliyun.tablestore.protocol.ComputeSplitPointsBySizeResponse.SplitLocation',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='location', full_name='com.aliyun.tablestore.protocol.ComputeSplitPointsBySizeResponse.SplitLocation.location', index=0,
+      number=1, type=9, cpp_type=9, label=2,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='repeat', full_name='com.aliyun.tablestore.protocol.ComputeSplitPointsBySizeResponse.SplitLocation.repeat', index=1,
+      number=2, type=18, cpp_type=2, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=8898,
+  serialized_end=8947,
+)
+
+_COMPUTESPLITPOINTSBYSIZERESPONSE = descriptor.Descriptor(
+  name='ComputeSplitPointsBySizeResponse',
+  full_name='com.aliyun.tablestore.protocol.ComputeSplitPointsBySizeResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='consumed', full_name='com.aliyun.tablestore.protocol.ComputeSplitPointsBySizeResponse.consumed', index=0,
+      number=1, type=11, cpp_type=10, label=2,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='schema', full_name='com.aliyun.tablestore.protocol.ComputeSplitPointsBySizeResponse.schema', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='split_points', full_name='com.aliyun.tablestore.protocol.ComputeSplitPointsBySizeResponse.split_points', index=2,
+      number=3, type=12, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='locations', full_name='com.aliyun.tablestore.protocol.ComputeSplitPointsBySizeResponse.locations', index=3,
+      number=4, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[_COMPUTESPLITPOINTSBYSIZERESPONSE_SPLITLOCATION, ],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=8607,
+  serialized_end=8947,
 )
 
 _PRIMARYKEYSCHEMA.fields_by_name['type'].enum_type = _PRIMARYKEYTYPE
 _PRIMARYKEYSCHEMA.fields_by_name['option'].enum_type = _PRIMARYKEYOPTION
+_DEFINEDCOLUMNSCHEMA.fields_by_name['type'].enum_type = _DEFINEDCOLUMNTYPE
+_INDEXMETA.fields_by_name['index_update_mode'].enum_type = _INDEXUPDATEMODE
+_INDEXMETA.fields_by_name['index_type'].enum_type = _INDEXTYPE
 _TABLEMETA.fields_by_name['primary_key'].message_type = _PRIMARYKEYSCHEMA
+_TABLEMETA.fields_by_name['defined_column'].message_type = _DEFINEDCOLUMNSCHEMA
 _CONDITION.fields_by_name['row_existence'].enum_type = _ROWEXISTENCEEXPECTATION
 _RESERVEDTHROUGHPUTDETAILS.fields_by_name['capacity_unit'].message_type = _CAPACITYUNIT
 _RESERVEDTHROUGHPUT.fields_by_name['capacity_unit'].message_type = _CAPACITYUNIT
@@ -2013,14 +3217,20 @@ _CONSUMEDCAPACITY.fields_by_name['capacity_unit'].message_type = _CAPACITYUNIT
 _CREATETABLEREQUEST.fields_by_name['table_meta'].message_type = _TABLEMETA
 _CREATETABLEREQUEST.fields_by_name['reserved_throughput'].message_type = _RESERVEDTHROUGHPUT
 _CREATETABLEREQUEST.fields_by_name['table_options'].message_type = _TABLEOPTIONS
-_CREATETABLEREQUEST.fields_by_name['partitions'].message_type = _PARTITIONRANGE
+_CREATETABLEREQUEST.fields_by_name['stream_spec'].message_type = _STREAMSPECIFICATION
+_CREATETABLEREQUEST.fields_by_name['index_metas'].message_type = _INDEXMETA
+_CREATEINDEXREQUEST.fields_by_name['index_meta'].message_type = _INDEXMETA
 _UPDATETABLEREQUEST.fields_by_name['reserved_throughput'].message_type = _RESERVEDTHROUGHPUT
 _UPDATETABLEREQUEST.fields_by_name['table_options'].message_type = _TABLEOPTIONS
+_UPDATETABLEREQUEST.fields_by_name['stream_spec'].message_type = _STREAMSPECIFICATION
 _UPDATETABLERESPONSE.fields_by_name['reserved_throughput_details'].message_type = _RESERVEDTHROUGHPUTDETAILS
 _UPDATETABLERESPONSE.fields_by_name['table_options'].message_type = _TABLEOPTIONS
+_UPDATETABLERESPONSE.fields_by_name['stream_details'].message_type = _STREAMDETAILS
 _DESCRIBETABLERESPONSE.fields_by_name['table_meta'].message_type = _TABLEMETA
 _DESCRIBETABLERESPONSE.fields_by_name['reserved_throughput_details'].message_type = _RESERVEDTHROUGHPUTDETAILS
 _DESCRIBETABLERESPONSE.fields_by_name['table_options'].message_type = _TABLEOPTIONS
+_DESCRIBETABLERESPONSE.fields_by_name['stream_details'].message_type = _STREAMDETAILS
+_DESCRIBETABLERESPONSE.fields_by_name['index_metas'].message_type = _INDEXMETA
 _RETURNCONTENT.fields_by_name['return_type'].enum_type = _RETURNTYPE
 _GETROWREQUEST.fields_by_name['time_range'].message_type = _TIMERANGE
 _GETROWRESPONSE.fields_by_name['consumed'].message_type = _CONSUMEDCAPACITY
@@ -2051,18 +3261,35 @@ _BATCHWRITEROWRESPONSE.fields_by_name['tables'].message_type = _TABLEINBATCHWRIT
 _GETRANGEREQUEST.fields_by_name['direction'].enum_type = _DIRECTION
 _GETRANGEREQUEST.fields_by_name['time_range'].message_type = _TIMERANGE
 _GETRANGERESPONSE.fields_by_name['consumed'].message_type = _CONSUMEDCAPACITY
+_LISTSTREAMRESPONSE.fields_by_name['streams'].message_type = _STREAM
+_DESCRIBESTREAMRESPONSE.fields_by_name['stream_status'].enum_type = _STREAMSTATUS
+_DESCRIBESTREAMRESPONSE.fields_by_name['shards'].message_type = _STREAMSHARD
+_GETSTREAMRECORDRESPONSE_STREAMRECORD.fields_by_name['action_type'].enum_type = _ACTIONTYPE
+_GETSTREAMRECORDRESPONSE_STREAMRECORD.containing_type = _GETSTREAMRECORDRESPONSE;
+_GETSTREAMRECORDRESPONSE.fields_by_name['stream_records'].message_type = _GETSTREAMRECORDRESPONSE_STREAMRECORD
+_COMPUTESPLITPOINTSBYSIZERESPONSE_SPLITLOCATION.containing_type = _COMPUTESPLITPOINTSBYSIZERESPONSE;
+_COMPUTESPLITPOINTSBYSIZERESPONSE.fields_by_name['consumed'].message_type = _CONSUMEDCAPACITY
+_COMPUTESPLITPOINTSBYSIZERESPONSE.fields_by_name['schema'].message_type = _PRIMARYKEYSCHEMA
+_COMPUTESPLITPOINTSBYSIZERESPONSE.fields_by_name['locations'].message_type = _COMPUTESPLITPOINTSBYSIZERESPONSE_SPLITLOCATION
 DESCRIPTOR.message_types_by_name['Error'] = _ERROR
 DESCRIPTOR.message_types_by_name['PrimaryKeySchema'] = _PRIMARYKEYSCHEMA
-DESCRIPTOR.message_types_by_name['PartitionRange'] = _PARTITIONRANGE
+DESCRIPTOR.message_types_by_name['DefinedColumnSchema'] = _DEFINEDCOLUMNSCHEMA
 DESCRIPTOR.message_types_by_name['TableOptions'] = _TABLEOPTIONS
+DESCRIPTOR.message_types_by_name['IndexMeta'] = _INDEXMETA
 DESCRIPTOR.message_types_by_name['TableMeta'] = _TABLEMETA
 DESCRIPTOR.message_types_by_name['Condition'] = _CONDITION
 DESCRIPTOR.message_types_by_name['CapacityUnit'] = _CAPACITYUNIT
 DESCRIPTOR.message_types_by_name['ReservedThroughputDetails'] = _RESERVEDTHROUGHPUTDETAILS
 DESCRIPTOR.message_types_by_name['ReservedThroughput'] = _RESERVEDTHROUGHPUT
 DESCRIPTOR.message_types_by_name['ConsumedCapacity'] = _CONSUMEDCAPACITY
+DESCRIPTOR.message_types_by_name['StreamSpecification'] = _STREAMSPECIFICATION
+DESCRIPTOR.message_types_by_name['StreamDetails'] = _STREAMDETAILS
 DESCRIPTOR.message_types_by_name['CreateTableRequest'] = _CREATETABLEREQUEST
 DESCRIPTOR.message_types_by_name['CreateTableResponse'] = _CREATETABLERESPONSE
+DESCRIPTOR.message_types_by_name['CreateIndexRequest'] = _CREATEINDEXREQUEST
+DESCRIPTOR.message_types_by_name['CreateIndexResponse'] = _CREATEINDEXRESPONSE
+DESCRIPTOR.message_types_by_name['DropIndexRequest'] = _DROPINDEXREQUEST
+DESCRIPTOR.message_types_by_name['DropIndexResponse'] = _DROPINDEXRESPONSE
 DESCRIPTOR.message_types_by_name['UpdateTableRequest'] = _UPDATETABLEREQUEST
 DESCRIPTOR.message_types_by_name['UpdateTableResponse'] = _UPDATETABLERESPONSE
 DESCRIPTOR.message_types_by_name['DescribeTableRequest'] = _DESCRIBETABLEREQUEST
@@ -2098,6 +3325,24 @@ DESCRIPTOR.message_types_by_name['TableInBatchWriteRowResponse'] = _TABLEINBATCH
 DESCRIPTOR.message_types_by_name['BatchWriteRowResponse'] = _BATCHWRITEROWRESPONSE
 DESCRIPTOR.message_types_by_name['GetRangeRequest'] = _GETRANGEREQUEST
 DESCRIPTOR.message_types_by_name['GetRangeResponse'] = _GETRANGERESPONSE
+DESCRIPTOR.message_types_by_name['StartLocalTransactionRequest'] = _STARTLOCALTRANSACTIONREQUEST
+DESCRIPTOR.message_types_by_name['StartLocalTransactionResponse'] = _STARTLOCALTRANSACTIONRESPONSE
+DESCRIPTOR.message_types_by_name['CommitTransactionRequest'] = _COMMITTRANSACTIONREQUEST
+DESCRIPTOR.message_types_by_name['CommitTransactionResponse'] = _COMMITTRANSACTIONRESPONSE
+DESCRIPTOR.message_types_by_name['AbortTransactionRequest'] = _ABORTTRANSACTIONREQUEST
+DESCRIPTOR.message_types_by_name['AbortTransactionResponse'] = _ABORTTRANSACTIONRESPONSE
+DESCRIPTOR.message_types_by_name['ListStreamRequest'] = _LISTSTREAMREQUEST
+DESCRIPTOR.message_types_by_name['Stream'] = _STREAM
+DESCRIPTOR.message_types_by_name['ListStreamResponse'] = _LISTSTREAMRESPONSE
+DESCRIPTOR.message_types_by_name['StreamShard'] = _STREAMSHARD
+DESCRIPTOR.message_types_by_name['DescribeStreamRequest'] = _DESCRIBESTREAMREQUEST
+DESCRIPTOR.message_types_by_name['DescribeStreamResponse'] = _DESCRIBESTREAMRESPONSE
+DESCRIPTOR.message_types_by_name['GetShardIteratorRequest'] = _GETSHARDITERATORREQUEST
+DESCRIPTOR.message_types_by_name['GetShardIteratorResponse'] = _GETSHARDITERATORRESPONSE
+DESCRIPTOR.message_types_by_name['GetStreamRecordRequest'] = _GETSTREAMRECORDREQUEST
+DESCRIPTOR.message_types_by_name['GetStreamRecordResponse'] = _GETSTREAMRECORDRESPONSE
+DESCRIPTOR.message_types_by_name['ComputeSplitPointsBySizeRequest'] = _COMPUTESPLITPOINTSBYSIZEREQUEST
+DESCRIPTOR.message_types_by_name['ComputeSplitPointsBySizeResponse'] = _COMPUTESPLITPOINTSBYSIZERESPONSE
 
 class Error(message.Message):
   __metaclass__ = reflection.GeneratedProtocolMessageType
@@ -2111,17 +3356,23 @@ class PrimaryKeySchema(message.Message):
   
   # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.PrimaryKeySchema)
 
-class PartitionRange(message.Message):
+class DefinedColumnSchema(message.Message):
   __metaclass__ = reflection.GeneratedProtocolMessageType
-  DESCRIPTOR = _PARTITIONRANGE
+  DESCRIPTOR = _DEFINEDCOLUMNSCHEMA
   
-  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.PartitionRange)
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.DefinedColumnSchema)
 
 class TableOptions(message.Message):
   __metaclass__ = reflection.GeneratedProtocolMessageType
   DESCRIPTOR = _TABLEOPTIONS
   
   # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.TableOptions)
+
+class IndexMeta(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _INDEXMETA
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.IndexMeta)
 
 class TableMeta(message.Message):
   __metaclass__ = reflection.GeneratedProtocolMessageType
@@ -2159,6 +3410,18 @@ class ConsumedCapacity(message.Message):
   
   # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.ConsumedCapacity)
 
+class StreamSpecification(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _STREAMSPECIFICATION
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.StreamSpecification)
+
+class StreamDetails(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _STREAMDETAILS
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.StreamDetails)
+
 class CreateTableRequest(message.Message):
   __metaclass__ = reflection.GeneratedProtocolMessageType
   DESCRIPTOR = _CREATETABLEREQUEST
@@ -2170,6 +3433,30 @@ class CreateTableResponse(message.Message):
   DESCRIPTOR = _CREATETABLERESPONSE
   
   # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.CreateTableResponse)
+
+class CreateIndexRequest(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _CREATEINDEXREQUEST
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.CreateIndexRequest)
+
+class CreateIndexResponse(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _CREATEINDEXRESPONSE
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.CreateIndexResponse)
+
+class DropIndexRequest(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _DROPINDEXREQUEST
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.DropIndexRequest)
+
+class DropIndexResponse(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _DROPINDEXRESPONSE
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.DropIndexResponse)
 
 class UpdateTableRequest(message.Message):
   __metaclass__ = reflection.GeneratedProtocolMessageType
@@ -2380,5 +3667,125 @@ class GetRangeResponse(message.Message):
   DESCRIPTOR = _GETRANGERESPONSE
   
   # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.GetRangeResponse)
+
+class StartLocalTransactionRequest(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _STARTLOCALTRANSACTIONREQUEST
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.StartLocalTransactionRequest)
+
+class StartLocalTransactionResponse(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _STARTLOCALTRANSACTIONRESPONSE
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.StartLocalTransactionResponse)
+
+class CommitTransactionRequest(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _COMMITTRANSACTIONREQUEST
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.CommitTransactionRequest)
+
+class CommitTransactionResponse(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _COMMITTRANSACTIONRESPONSE
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.CommitTransactionResponse)
+
+class AbortTransactionRequest(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _ABORTTRANSACTIONREQUEST
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.AbortTransactionRequest)
+
+class AbortTransactionResponse(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _ABORTTRANSACTIONRESPONSE
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.AbortTransactionResponse)
+
+class ListStreamRequest(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _LISTSTREAMREQUEST
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.ListStreamRequest)
+
+class Stream(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _STREAM
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.Stream)
+
+class ListStreamResponse(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _LISTSTREAMRESPONSE
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.ListStreamResponse)
+
+class StreamShard(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _STREAMSHARD
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.StreamShard)
+
+class DescribeStreamRequest(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _DESCRIBESTREAMREQUEST
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.DescribeStreamRequest)
+
+class DescribeStreamResponse(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _DESCRIBESTREAMRESPONSE
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.DescribeStreamResponse)
+
+class GetShardIteratorRequest(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _GETSHARDITERATORREQUEST
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.GetShardIteratorRequest)
+
+class GetShardIteratorResponse(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _GETSHARDITERATORRESPONSE
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.GetShardIteratorResponse)
+
+class GetStreamRecordRequest(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _GETSTREAMRECORDREQUEST
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.GetStreamRecordRequest)
+
+class GetStreamRecordResponse(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  
+  class StreamRecord(message.Message):
+    __metaclass__ = reflection.GeneratedProtocolMessageType
+    DESCRIPTOR = _GETSTREAMRECORDRESPONSE_STREAMRECORD
+    
+    # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.GetStreamRecordResponse.StreamRecord)
+  DESCRIPTOR = _GETSTREAMRECORDRESPONSE
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.GetStreamRecordResponse)
+
+class ComputeSplitPointsBySizeRequest(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _COMPUTESPLITPOINTSBYSIZEREQUEST
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.ComputeSplitPointsBySizeRequest)
+
+class ComputeSplitPointsBySizeResponse(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  
+  class SplitLocation(message.Message):
+    __metaclass__ = reflection.GeneratedProtocolMessageType
+    DESCRIPTOR = _COMPUTESPLITPOINTSBYSIZERESPONSE_SPLITLOCATION
+    
+    # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.ComputeSplitPointsBySizeResponse.SplitLocation)
+  DESCRIPTOR = _COMPUTESPLITPOINTSBYSIZERESPONSE
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.ComputeSplitPointsBySizeResponse)
 
 # @@protoc_insertion_point(module_scope)

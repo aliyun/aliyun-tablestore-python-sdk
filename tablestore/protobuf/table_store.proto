@@ -1,3 +1,4 @@
+syntax = "proto2";
 package com.aliyun.tablestore.protocol;
 
 message Error {
@@ -11,6 +12,14 @@ enum PrimaryKeyType {
     BINARY = 3;
 }
 
+enum DefinedColumnType {
+    DCT_INTEGER = 1;
+    DCT_DOUBLE = 2;
+    DCT_BOOLEAN = 3;
+    DCT_STRING = 4;
+    DCT_BLOB = 7;
+}
+
 enum PrimaryKeyOption {
     AUTO_INCREMENT = 1;
 }
@@ -21,20 +30,39 @@ message PrimaryKeySchema {
     optional PrimaryKeyOption option = 3; 
 }
 
-message PartitionRange {
-    required bytes begin = 1; // encoded as SQLVariant
-    required bytes end = 2; // encoded as SQLVariant
+message DefinedColumnSchema {
+    required string name = 1;
+    required DefinedColumnType type = 2;
 }
 
 message TableOptions {
-    optional int32 time_to_live = 1; // 可以动态更改
-    optional int32 max_versions = 2; // 可以动态更改
-    optional int64 deviation_cell_version_in_sec = 5; // 可以动态修改
+    optional int32 time_to_live = 1;
+    optional int32 max_versions = 2;
+    optional int64 deviation_cell_version_in_sec = 5;
+}
+
+enum IndexUpdateMode {
+    IUM_ASYNC_INDEX = 0;
+    IUM_SYNC_INDEX = 1;
+}
+
+enum IndexType {
+    IT_GLOBAL_INDEX = 0;
+    IT_LOCAL_INDEX = 1;
+}
+
+message IndexMeta {
+    required string name = 1;
+    repeated string primary_key = 2;
+    repeated string defined_column = 3;
+    required IndexUpdateMode index_update_mode = 4;
+    required IndexType index_type = 5;
 }
 
 message TableMeta {
     required string table_name = 1;
     repeated PrimaryKeySchema primary_key = 2;
+    repeated DefinedColumnSchema defined_column = 3;
 }
 
 enum RowExistenceExpectation {
@@ -54,9 +82,9 @@ message CapacityUnit {
 }
 
 message ReservedThroughputDetails {
-    required CapacityUnit capacity_unit = 1; // 表当前的预留吞吐量的值。
-    required int64 last_increase_time = 2; // 最后一次上调预留吞吐量的时间。
-    optional int64 last_decrease_time = 3; // 最后一次下调预留吞吐量的时间。
+    required CapacityUnit capacity_unit = 1;
+    required int64 last_increase_time = 2;
+    optional int64 last_decrease_time = 3;
 }
 
 message ReservedThroughput {
@@ -67,45 +95,58 @@ message ConsumedCapacity {
     required CapacityUnit capacity_unit = 1;
 }
 
-/* #############################################  CreateTable  ############################################# */
-/**
- * table_meta用于存储表中不可更改的schema属性，可以更改的ReservedThroughput和TableOptions独立出来，作为UpdateTable的参数。
- * 加入GlobalIndex和LocalIndex之后，结构会变为：
- * message CreateTableRequest {
- *         required TableMeta table_meta = 1;
- *         required ReservedThroughput reserved_throughput = 2;
- *         required TableOptions table_options = 3;
- *         repeated LocalIndex local_indexes = 4; // LocalIndex不再单独包含ReservedThroughput和TableOptions，其与主表共享配置。
- *         repeated GlobalIndex global_indexes = 5; // GlobalIndex内单独包含ReservedThroughput和TableOptions
- * }
- */
+message StreamSpecification {
+    required bool enable_stream = 1;
+    optional int32 expiration_time = 2;
+}
+
+message StreamDetails {
+    required bool enable_stream = 1;
+    optional string stream_id = 2;
+    optional int32 expiration_time = 3;
+    optional int64 last_enable_time = 4;
+}
+
 message CreateTableRequest {
     required TableMeta table_meta = 1;
-    required ReservedThroughput reserved_throughput = 2; // 未放在TableOptions内，原因是UpdateTableResponse中会返回ReservedThroughputDetails，而TableOptions没有类似的返回结构。
+    required ReservedThroughput reserved_throughput = 2; 
     optional TableOptions table_options = 3;
-    repeated PartitionRange partitions = 4;
+    optional StreamSpecification stream_spec = 5;
+    repeated IndexMeta index_metas = 7;
 }
 
 message CreateTableResponse {
 }
 
-/* ######################################################################################################### */
+message CreateIndexRequest {
+    required string main_table_name = 1;
+    required IndexMeta index_meta = 2;
+    optional bool include_base_data = 3;
+}
 
+message CreateIndexResponse {
+}
 
-/* #############################################  UpdateTable  ############################################# */
+message DropIndexRequest {
+    required string main_table_name = 1;
+    required string index_name = 2;
+}
+
+message DropIndexResponse {
+}
+
 message UpdateTableRequest {
     required string table_name = 1;
     optional ReservedThroughput reserved_throughput = 2;
     optional TableOptions table_options = 3;
+    optional StreamSpecification stream_spec = 4;
 }
 
 message UpdateTableResponse {
     required ReservedThroughputDetails reserved_throughput_details = 1;
     required TableOptions table_options = 2;
+    optional StreamDetails stream_details = 3;
 }
-/* ######################################################################################################### */
-
-/* #############################################  DescribeTable  ############################################# */
 message DescribeTableRequest {
     required string table_name = 1;
 }
@@ -114,42 +155,28 @@ message DescribeTableResponse {
     required TableMeta table_meta = 1;
     required ReservedThroughputDetails reserved_throughput_details = 2;
     required TableOptions table_options = 3;
+    optional StreamDetails stream_details = 5;
     repeated bytes shard_splits = 6;
+    repeated IndexMeta index_metas = 8;
 }
-/* ########################################################################################################### */
-
-/* #############################################  ListTable  ############################################# */
 message ListTableRequest {
 }
 
-/**
- * 当前只返回一个简单的名称列表，需要讨论是否有业务场景需要获取除了表名之外的其他信息。
- * 其他信息可以包含预留吞吐量以及表的状态，这个信息只能是一个粗略的信息，表的详细信息还是需要通过DescribeTable来获取。
- */
 message ListTableResponse {
     repeated string table_names = 1;
 }
-/* ####################################################################################################### */
-
-/* #############################################  DeleteTable  ############################################# */
 message DeleteTableRequest {
     required string table_name = 1;
 }
 
 message DeleteTableResponse {
 }
-/* ######################################################################################################### */
-
-/* #############################################  LoadTable  ############################################# */
 message LoadTableRequest {
     required string table_name = 1;
 }
 
 message LoadTableResponse {
 }
-/* ######################################################################################################### */
-
-/* #############################################  UnloadTable  ############################################# */
 message UnloadTableRequest {
     required string table_name = 1;
 }
@@ -157,111 +184,82 @@ message UnloadTableRequest {
 message UnloadTableResponse {
 
 }
-/* ########################################################################################################## */
-
-/**
- * 时间戳的取值最小值为0，最大值为INT64.MAX
- * 1. 若要查询一个范围，则指定start_time和end_time
- * 2. 若要查询一个特定时间戳，则指定specific_time
- */
 message TimeRange {
     optional int64 start_time = 1;
     optional int64 end_time = 2;
     optional int64 specific_time = 3;
 }
 
-/* #############################################  GetRow  ############################################# */
-
 enum ReturnType {
     RT_NONE = 0;
     RT_PK = 1;
+    RT_AFTER_MODIFY = 2;
 }
 
 message ReturnContent {
     optional ReturnType return_type = 1;
-}
+    repeated string return_column_names = 2;
+} 
 
-/**
- * 1. 支持用户指定版本时间戳范围或者特定的版本时间来读取指定版本的列
- * 2. 目前暂不支持行内的断点
- */
 message GetRowRequest {
     required string table_name = 1;
-    required bytes primary_key = 2; // encoded as InplaceRowChangeSet, but only has primary key
-    repeated string columns_to_get = 3; // 不指定则读出所有的列
+    required bytes primary_key = 2; 
+    repeated string columns_to_get = 3; 
     optional TimeRange time_range = 4;
     optional int32 max_versions = 5;
     optional bytes filter = 7;
     optional string start_column = 8;
     optional string end_column = 9;
     optional bytes token = 10;
+    optional string transaction_id = 11;
 }
 
 message GetRowResponse {
     required ConsumedCapacity consumed = 1;
-    required bytes row = 2; // encoded as InplaceRowChangeSet
+    required bytes row = 2; 
     optional bytes next_token = 3;
 }
-/* #################################################################################################### */
-
-/* #############################################  UpdateRow  ############################################# */
 message UpdateRowRequest {
     required string table_name = 1;
     required bytes row_change = 2;
     required Condition condition = 3;
     optional ReturnContent return_content = 4;
+    optional string transaction_id = 5;
 }
 
 message UpdateRowResponse {
     required ConsumedCapacity consumed = 1;
     optional bytes row = 2;
 }
-/* ####################################################################################################### */
-
-/* #############################################  PutRow  ############################################# */
-
-
-/**
- * 这里允许用户为每列单独设置timestamp，而不是强制整行统一一个timestamp。
- * 原因是列都是用统一的结构，该结构本身是带timestamp的，其次强制统一timestamp增强了规范性但是丧失了灵活性，且该规范性没有明显的好处，反而带来了结构的复杂。
- */
 message PutRowRequest {
     required string table_name = 1;
-    required bytes row = 2; // encoded as InplaceRowChangeSet
+    required bytes row = 2; 
     required Condition condition = 3;
     optional ReturnContent return_content = 4;
+    optional string transaction_id = 5;
 }
 
 message PutRowResponse {
     required ConsumedCapacity consumed = 1;
-    optional bytes row = 2; // encoded as InplaceRowChangeSet
+    optional bytes row = 2;
 }
-/* #################################################################################################### */
-
-/* #############################################  DeleteRow  ############################################# */
-/**
- * OTS只支持删除该行的所有列所有版本，不支持：
- *  1. 删除所有列的所有小于等于某个版本的所有版本
- */
 message DeleteRowRequest {
     required string table_name = 1;
-    required bytes primary_key = 2; // encoded as InplaceRowChangeSet, but only has primary key
+    required bytes primary_key = 2; 
     required Condition condition = 3;
     optional ReturnContent return_content = 4;
+    optional string transaction_id = 5;
 }
 
 message DeleteRowResponse {
     required ConsumedCapacity consumed = 1;
     optional bytes row = 2;
 }
-/* ####################################################################################################### */
-
-/* #############################################  BatchGetRow  ############################################# */
 message TableInBatchGetRowRequest {
     required string table_name = 1;
-    repeated bytes primary_key = 2; // encoded as InplaceRowChangeSet, but only has primary key
+    repeated bytes primary_key = 2; 
     repeated bytes token = 3;
-    repeated string columns_to_get = 4;  // 不指定则读出所有的列
+    repeated string columns_to_get = 4; 
     optional TimeRange time_range = 5;
     optional int32 max_versions = 6;
     optional bytes filter = 8;
@@ -277,7 +275,7 @@ message RowInBatchGetRowResponse {
     required bool is_ok = 1;
     optional Error error = 2;
     optional ConsumedCapacity consumed = 3;
-    optional bytes row = 4; // encoded as InplaceRowChangeSet
+    optional bytes row = 4; 
     optional bytes next_token = 5;
 }
 
@@ -289,9 +287,6 @@ message TableInBatchGetRowResponse {
 message BatchGetRowResponse {
     repeated TableInBatchGetRowResponse tables = 1;
 }
-/* ######################################################################################################### */
-
-/* #############################################  BatchWriteRow  ############################################# */
 
 enum OperationType {
     PUT = 1;
@@ -301,9 +296,9 @@ enum OperationType {
 
 message RowInBatchWriteRowRequest {
     required OperationType type = 1;
-    required bytes row_change = 2; // encoded as InplaceRowChangeSet
+    required bytes row_change = 2; 
     required Condition condition = 3;
-    optional ReturnContent return_content = 4;
+    optional ReturnContent return_content = 4; 
 }
 
 message TableInBatchWriteRowRequest {
@@ -313,13 +308,14 @@ message TableInBatchWriteRowRequest {
 
 message BatchWriteRowRequest {
     repeated TableInBatchWriteRowRequest tables = 1;
+    optional string transaction_id = 2;
 }
 
 message RowInBatchWriteRowResponse {
     required bool is_ok = 1;
     optional Error error = 2;
     optional ConsumedCapacity consumed = 3;
-    optional bytes row = 4; // encoded as InplaceRowChangeSet
+    optional bytes row = 4; 
 }
 
 message TableInBatchWriteRowResponse {
@@ -330,40 +326,163 @@ message TableInBatchWriteRowResponse {
 message BatchWriteRowResponse {
     repeated TableInBatchWriteRowResponse tables = 1;
 }
-/* ########################################################################################################### */
-
-/* #############################################  GetRange  ############################################# */
 enum Direction {
     FORWARD = 0;
     BACKWARD = 1;
 }
 
-/**
- * HBase支持以下参数：
- *     1. TimeRange或指定time
- *     2. Filter（根据列值或列名来过滤）
- * 我们只支持给同版本的选择条件。
- */
 message GetRangeRequest {
     required string table_name = 1;
     required Direction direction = 2;
-    repeated string columns_to_get = 3;  // 不指定则读出所有的列
+    repeated string columns_to_get = 3; 
     optional TimeRange time_range = 4;
     optional int32 max_versions = 5;
     optional int32 limit = 6;
-    required bytes inclusive_start_primary_key = 7; // encoded as InplaceRowChangeSet, but only has primary key
-    required bytes exclusive_end_primary_key = 8; // encoded as InplaceRowChangeSet, but only has primary key
+    required bytes inclusive_start_primary_key = 7; 
+    required bytes exclusive_end_primary_key = 8; 
     optional bytes filter = 10;
     optional string start_column = 11;
     optional string end_column = 12;
     optional bytes token = 13;
+    optional string transaction_id = 14;
 }
 
 message GetRangeResponse {
     required ConsumedCapacity consumed = 1;
-    required bytes rows = 2; // encoded as InplaceRowChangeSet
-    optional bytes next_start_primary_key = 3; // 若为空，则代表数据全部读取完毕. encoded as InplaceRowChangeSet, but only has primary key
+    required bytes rows = 2; 
+    optional bytes next_start_primary_key = 3;
     optional bytes next_token = 4;
 }
-/* ###################################################################################################### */
+
+message StartLocalTransactionRequest {
+    required string table_name = 1;
+    required bytes key = 2; 
+}
+
+message StartLocalTransactionResponse {
+    required string transaction_id = 1;
+};
+
+message CommitTransactionRequest {
+    required string transaction_id = 1;
+}
+
+message CommitTransactionResponse {
+};
+
+message AbortTransactionRequest {
+    required string transaction_id = 1;
+}
+
+message AbortTransactionResponse {
+};
+
+
+message ListStreamRequest {
+    optional string table_name = 1;
+}
+
+message Stream {
+    required string stream_id = 1;
+    required string table_name = 2;
+    required int64 creation_time = 3;
+}
+
+message ListStreamResponse {
+    repeated Stream streams = 1;
+}
+
+message StreamShard {
+    required string shard_id = 1;
+    optional string parent_id = 2;
+    optional string parent_sibling_id = 3;
+}
+
+enum StreamStatus {
+    STREAM_ENABLING = 1;
+    STREAM_ACTIVE = 2;
+}
+
+message DescribeStreamRequest {
+    required string stream_id = 1;
+    optional string inclusive_start_shard_id = 2;
+    optional int32 shard_limit = 3;
+}
+
+message DescribeStreamResponse {
+    required string stream_id = 1;
+    required int32 expiration_time = 2;
+    required string table_name = 3;
+    required int64 creation_time = 4;
+    required StreamStatus stream_status = 5;
+    repeated StreamShard shards = 6;
+    optional string next_shard_id = 7;
+}
+
+message GetShardIteratorRequest {
+    required string stream_id = 1;
+    required string shard_id = 2;
+}
+
+message GetShardIteratorResponse {
+    required string shard_iterator = 1;
+}
+
+message GetStreamRecordRequest {
+    required string shard_iterator = 1;
+    optional int32 limit = 2;
+}
+
+enum ActionType {
+    PUT_ROW = 1;
+    UPDATE_ROW = 2;
+    DELETE_ROW = 3;
+}
+
+message GetStreamRecordResponse {
+    message StreamRecord {
+        required ActionType action_type = 1;
+        required bytes record = 2;
+    }
+    repeated StreamRecord stream_records = 1;
+    optional string next_shard_iterator = 2;
+}
+
+message ComputeSplitPointsBySizeRequest {
+    required string table_name = 1;
+    required int64 split_size = 2; // in 100MB
+    optional int64 split_size_unit_in_byte = 3;
+}
+
+message ComputeSplitPointsBySizeResponse {
+    required ConsumedCapacity consumed = 1;
+    repeated PrimaryKeySchema schema = 2;
+
+    /**
+     * Split points between splits, in the increasing order
+     *
+     * A split is a consecutive range of primary keys,
+     * whose data size is about split_size specified in the request.
+     * The size could be hard to be precise.
+     * 
+     * A split point is an array of primary-key column w.r.t. table schema,
+     * which is never longer than that of table schema.
+     * Tailing -inf will be omitted to reduce transmission payloads.
+     */
+    repeated bytes split_points = 3;
+
+    /**
+     * Locations where splits lies in.
+     *
+     * By the managed nature of TableStore, these locations are no more than hints.
+     * If a location is not suitable to be seen, an empty string will be placed.
+     */
+     message SplitLocation {
+         required string location = 1;
+         required sint64 repeat = 2;
+     }
+     repeated SplitLocation locations = 4;
+}
+/* -------------------------------------- */
+
 

@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 
-__version__ = '4.3.7'
+__version__ = '4.5.0'
 __all__ = [
     'OTSClient',
 
@@ -44,6 +44,40 @@ __all__ = [
     'CompositeColumnCondition',
     'SingleColumnCondition',
     'RowExistenceExpectation',
+    'IndexMeta',
+    'FieldSchema',
+    'FieldType',
+    'IndexSetting',
+    'Sort',
+    'PrimaryKeySort',
+    'ScoreSort',
+    'GeoDistanceSort',
+    'FieldSort',
+    'SortOrder',
+    'SortMode',
+    'AnalyzerType',
+    'Sorter',
+    'SyncStat',
+    'SyncPhase',
+    'QueryOperator',
+    'MatchQuery',
+    'MatchPhraseQuery',
+    'TermQuery',
+    'RangeQuery',
+    'PrefixQuery',
+    'BoolQuery',
+    'FunctionScoreQuery',
+    'NestedQuery',
+    'WildcardQuery',
+    'MatchAllQuery',
+    'GeoBoundingBoxQuery',
+    'GeoDistanceQuery',
+    'GeoPolygonQuery',
+    'TermsQuery',
+    'SearchQuery',
+    'ColumnsToGet',
+    'ColumnReturnType',
+    'FieldValueFactor',
 ]
 
 

@@ -3,10 +3,10 @@ import subprocess
 
 from . import test_config
 from . import restriction
-from builtins import int 
+from builtins import int
 from unittest import TestCase
-from tablestore import * 
-from tablestore.error import * 
+from tablestore import *
+from tablestore.error import *
 from tablestore.retry import *
 import types
 import math
@@ -16,7 +16,7 @@ import traceback
 import sys
 import six
 
-import os 
+import os
 import inspect
 import logging
 
@@ -26,16 +26,16 @@ class APITestBase(TestCase):
         TestCase.__init__(self, methodName=methodName)
         self.start_time = 0
 
-        self.logger = logging.getLogger('APITestBase')  
-        self.logger.setLevel(logging.INFO) 
-          
-        fh = logging.FileHandler('tablestore_sdk_test.log')  
-        fh.setLevel(logging.INFO)  
-          
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')  
-        fh.setFormatter(formatter)  
-          
-        self.logger.addHandler(fh)  
+        self.logger = logging.getLogger('APITestBase')
+        self.logger.setLevel(logging.INFO)
+
+        fh = logging.FileHandler('tablestore_sdk_test.log')
+        fh.setLevel(logging.INFO)
+
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        fh.setFormatter(formatter)
+
+        self.logger.addHandler(fh)
 
     def setUp(self):
         self.client_test = OTSClient(
@@ -46,10 +46,13 @@ class APITestBase(TestCase):
             logger_name = 'APITestBase',
             retry_policy=DefaultRetryPolicy(),
         )
-        
+
         time.sleep(1) # to avoid too frequent table operations
+        #return # for test, skip delete
         for table_name in self.client_test.list_table():
             if table_name.find(self.get_python_version()) != -1:
+                for table_name, index_name in self.client_test.list_search_index(table_name):
+                    self.client_test.delete_search_index(table_name, index_name)
                 self.client_test.delete_table(table_name)
 
     def tearDown(self):
@@ -57,7 +60,7 @@ class APITestBase(TestCase):
 
     def case_post_check(self):
         pass
-    
+
     def assert_error(self, error, http_status, error_code, error_message):
         self.assert_equal(error.http_status, http_status)
         self.assert_equal(error.code, error_code)
@@ -72,7 +75,7 @@ class APITestBase(TestCase):
             res = res.decode('utf-8')
         if isinstance(expect_res, six.binary_type):
             expect_res = expect_res.decode('utf-8')
-            
+
         if res != expect_res:
             #self.logger.warn("\nAssertion Failed\nactual: %s\nexpect: %s\n" % (res.decode('utf-8'), expect_res.decode('utf-8')) + "".join(traceback.format_stack()))
             self.assertEqual(res, expect_res)
@@ -105,11 +108,11 @@ class APITestBase(TestCase):
                 self.logger.info("ReadCU: %s, WriteCU: %s, ReadCUSum: %s, WriteCUSum: %s, Count: %s" % (rc, wc, read_cu_sum, write_cu_sum, count))
             except OTSServiceError as e:
                 self.assert_error(e, 403, "OTSNotEnoughCapacityUnit", "Remaining capacity unit is not enough.")
-        
+
         end_time = time.time()
         interval = end_time - start_time
         if interval >= max_elapsed_time * 1.2:
-                raise Exception('Exceed max elapsed_time: %s, %s' % (interval, max_elapsed_time)) 
+                raise Exception('Exceed max elapsed_time: %s, %s' % (interval, max_elapsed_time))
         avg_read_cu = read_cu_sum / interval
         avg_write_cu = write_cu_sum / interval
         self.logger.info("Interval: %s, AvgReadCU: %s, AvgWriteCU: %s, ReadCU: %s, WriteCU: %s" % (interval, avg_read_cu, avg_write_cu, read_cu, write_cu))
@@ -121,11 +124,11 @@ class APITestBase(TestCase):
         if write_cu != 0:
             self.assertTrue(avg_write_cu >= write_cu * 0.8)
             self.assertTrue(avg_write_cu < write_cu * 1.2)
- 
+
     def try_to_consuming(self, table_name, pk_dict_exist, pk_dict_not_exist,
-                         capacity_unit): 
-        read = capacity_unit.read  
-        write = capacity_unit.write 
+                         capacity_unit):
+        read = capacity_unit.read
+        write = capacity_unit.write
         no_check_flag = 0
         if read > 1 or write > 1:
             read = read - 1
@@ -147,12 +150,12 @@ class APITestBase(TestCase):
             self.assert_consumed(consumed_update, expect_consumed)
             self.assert_equal(write, self.sum_CU_from_row(pk_dict_exist, columns))
         #consume(0, 1)
-        if 1 == no_check_flag: 
+        if 1 == no_check_flag:
             try:
                 consumed_update,return_row = self.client_test.delete_row(table_name, Row(pk_dict_not_exist), Condition(RowExistenceExpectation.IGNORE))
             except OTSServiceError as e:
                 self.assert_false()
-        
+
         #read
         while read >= write and write != 0:
             read = read - write
@@ -165,28 +168,10 @@ class APITestBase(TestCase):
             self.assert_consumed(consumed_read, CapacityUnit(1, 0))
             self.assert_equal(return_row, None)
 
-    def check_CU_by_consuming(self, table_name, pk_dict_exist, pk_dict_not_exist, 
-                              capacity_unit):  
+    def check_CU_by_consuming(self, table_name, pk_dict_exist, pk_dict_not_exist,
+                              capacity_unit):
         begin_time = time.time()
         self.try_to_consuming(table_name, pk_dict_exist, pk_dict_not_exist, capacity_unit)
-        #只在CU较小进行强验证
-        if capacity_unit.write <= 1 and capacity_unit.read <= 1:
-            #consume(0, 1)
-            try:
-                consumed_update,pk,attr = self.client_test.delete_row(table_name, Condition(RowExistenceExpectation.IGNORE), pk_dict_not_exist)
-                end_time = time.time()
-                if end_time - begin_time < 1:
-                    self.assert_false()
-            except OTSServiceError as e:
-                self.assert_error(e, 403, "OTSNotEnoughCapacityUnit", "Remaining capacity unit for write is not enough.")
-            #consume(1, 0)
-            try:
-                consumed_read, pk, attr, token = self.client_test.get_row(table_name, pk_dict_not_exist, max_version = 1)
-                end_time = time.time()
-                if end_time - begin_time < 1:
-                    self.assert_false()
-            except OTSServiceError as e:
-                self.assert_error(e, 403, "OTSNotEnoughCapacityUnit", "Remaining capacity unit for read is not enough.")
 
     def assert_consumed(self, consumed, expect_consumed):
         if consumed == None or expect_consumed == None:
@@ -206,13 +191,13 @@ class APITestBase(TestCase):
             self.assert_equal(columns[index][0], expect_columns[index][0])
             self.assert_equal(columns[index][1], expect_columns[index][1])
 
- 
+
     def assert_RowDataItem_equal(self, response, expect_response):
         self.assert_equal(len(response), len(expect_response))
         for i in range(len(response)):
             self.assert_equal(len(response[i]), len(expect_response[i]))
             for j in range(len(response[i])):
-            
+
                 if expect_response[i][j].is_ok and not response[i][j].is_ok:
                     raise Exception("BatchGetRow failed on at least one row, ErrorCode: %s ErrorMessage: %s" % (response[i][j].error_code, response[i][j].error_message))
 
@@ -227,7 +212,7 @@ class APITestBase(TestCase):
                     self.assert_consumed(response[i][j].consumed, expect_response[i][j].consumed)
 
     def assert_BatchWriteRowResponseItem(self, response, expect_response):
-        
+
 
 
         self.assert_equal(len(response), len(expect_response))
@@ -320,20 +305,20 @@ class APITestBase(TestCase):
             elif isinstance(v[1], (six.binary_type, bytearray, six.text_type)):
                 sum += len(v[1])
             else:
-                raise Exception("wrong type is set in column value") 
+                raise Exception("wrong type is set in column value")
             #sum += 4
         return sum
 
     def sum_CU_from_row(self, pk_dict, column_dict):
-        sum = self.get_row_size(pk_dict, column_dict) 
+        sum = self.get_row_size(pk_dict, column_dict)
         return int(math.ceil(sum * 1.0 / 4096))
-    
+
     def _create_table_with_4_pk(self, table_name):
-        table_meta = TableMeta(table_name, [('PK0', 'STRING'), ('PK1', 'STRING'), 
-            ('PK2', 'STRING'), ('PK3', 'STRING')])                
+        table_meta = TableMeta(table_name, [('PK0', 'STRING'), ('PK1', 'STRING'),
+            ('PK2', 'STRING'), ('PK3', 'STRING')])
         table_options = TableOptions()
         reserved_throughput = ReservedThroughput(CapacityUnit(
-            restriction.MaxReadWriteCapacityUnit, 
+            restriction.MaxReadWriteCapacityUnit,
             restriction.MaxReadWriteCapacityUnit
         ))
         self.client_test.create_table(table_meta, table_options, reserved_throughput)
@@ -362,5 +347,5 @@ class APITestBase(TestCase):
         else:
             python_version = '%s_%s_%s' % (sys.version_info.major, sys.version_info.minor, sys.version_info.micro)
         return python_version
-        
+
 

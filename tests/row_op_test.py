@@ -3,7 +3,7 @@
 import unittest
 from lib.api_test_base import APITestBase
 from tablestore import *
-import lib.restriction as restriction 
+import lib.restriction as restriction
 import copy
 from tablestore.error import *
 import math
@@ -37,7 +37,7 @@ class RowOpTest(APITestBase):
             self.client_test.delete_row(table_name, Row(wrong_pk), Condition(RowExistenceExpectation.IGNORE))
             self.assert_false()
         except OTSServiceError as e:
-            self.assert_error(e, 400, "OTSInvalidPK", error_msg)    
+            self.assert_error(e, 400, "OTSInvalidPK", error_msg)
 
         request = BatchGetRowRequest()
         request.add(TableInBatchGetRowItem(table_name, [wrong_pk], [], None, 1))
@@ -55,7 +55,7 @@ class RowOpTest(APITestBase):
             request.add(TableInBatchWriteRowItem(table_name, [wrong_pk_item]))
             response = self.client_test.batch_write_row(request)
         except OTSServiceError as e:
-            self.assert_error(e, 400, 'OTSParameterInvalid', 'Attribute column is missing.') 
+            self.assert_error(e, 400, 'OTSParameterInvalid', 'Attribute column is missing.')
 
         wrong_pk_item = UpdateRowItem(Row(wrong_pk, {'put':[('C1','V')]}), Condition(RowExistenceExpectation.IGNORE))
         request = BatchWriteRowRequest()
@@ -67,10 +67,10 @@ class RowOpTest(APITestBase):
         self.assert_equal(1, len(put_failed))
         self.assert_equal('OTSInvalidPK', put_failed[0].error_code)
         self.assert_equal(error_msg, put_failed[0].error_message)
-        
+
         wrong_pk_item = DeleteRowItem(Row(wrong_pk), Condition(RowExistenceExpectation.IGNORE))
         request = BatchWriteRowRequest()
-        request.add(TableInBatchWriteRowItem(table_name, [wrong_pk_item])) 
+        request.add(TableInBatchWriteRowItem(table_name, [wrong_pk_item]))
         response = self.client_test.batch_write_row(request)
 
         put_succ, put_failed = response.get_delete()
@@ -78,7 +78,7 @@ class RowOpTest(APITestBase):
         self.assert_equal(1, len(put_failed))
         self.assert_equal('OTSInvalidPK', put_failed[0].error_code)
         self.assert_equal(error_msg, put_failed[0].error_message)
-        
+
         get_range_end = []
         for k in wrong_pk:
             get_range_end.append((k[0], INF_MAX))
@@ -92,7 +92,7 @@ class RowOpTest(APITestBase):
     def _check_all_row_op_without_exception(self, table_name, pks, cols):
         cu, row,token = self.client_test.get_row(table_name, pks, max_version=1)
         self.assert_equal(row, None)
-        
+
         row = Row(pks, cols)
         cu,return_row = self.client_test.put_row(table_name, row, Condition(RowExistenceExpectation.IGNORE))
         cu, return_row, token = self.client_test.get_row(table_name, pks, max_version=1)
@@ -108,7 +108,7 @@ class RowOpTest(APITestBase):
         cu,return_row = self.client_test.delete_row(table_name, Row(pks), Condition(RowExistenceExpectation.IGNORE))
         cu, rrow, token = self.client_test.get_row(table_name, pks, max_version=1)
         self.assert_equal(rrow, None)
-        
+
         request = BatchGetRowRequest()
         request.add(TableInBatchGetRowItem(table_name, [pks], [], None, 1))
         response = self.client_test.batch_get_row(request)
@@ -130,7 +130,7 @@ class RowOpTest(APITestBase):
         self.assert_equal(0, len(put_failed))
         self.assert_equal(None, put_succ[0].error_code)
         self.assert_equal(None, put_succ[0].error_message)
-        
+
         cu, rrow, token = self.client_test.get_row(table_name, pks, max_version=1)
         self.assert_equal(rrow.primary_key, pks)
         self.assert_columns(rrow.attribute_columns, cols)
@@ -138,7 +138,7 @@ class RowOpTest(APITestBase):
         pks_item = UpdateRowItem(Row(pks, {'put':cols}), Condition(RowExistenceExpectation.IGNORE))
         request = BatchWriteRowRequest()
         request.add(TableInBatchWriteRowItem(table_name, [pks_item]))
-        response = self.client_test.batch_write_row(request)        
+        response = self.client_test.batch_write_row(request)
 
         update_succ, update_failed = response.get_update()
         self.assert_equal(1, len(update_succ))
@@ -168,7 +168,7 @@ class RowOpTest(APITestBase):
         for k in pks:
             get_range_end.append((k[0], INF_MAX))
         self.client_test.get_range(table_name, 'FORWARD', pks, get_range_end, max_version=1)
- 
+
     def test_pk_name_not_match(self):
         """建一个表，PK为[('PK1', 'STRING')]，测试所有行操作API，PK为[('PK2', 'blah')]，期望返回OTSMetaNotMatch"""
         table_name = 'XXB' + self.get_python_version()
@@ -180,7 +180,7 @@ class RowOpTest(APITestBase):
         table_options = TableOptions()
         self.client_test.create_table(table_meta, table_options, reserved_throughput)
         self.wait_for_partition_load(table_name)
- 
+
         wrong_pk = [('PK2', 'blah')]
         self._check_all_row_op_with_exception_meta_not_match(table_name, wrong_pk, 'Validate PK name fail. Input: PK2, Meta: PK1.')
 
@@ -195,7 +195,7 @@ class RowOpTest(APITestBase):
         table_options = TableOptions()
         self.client_test.create_table(table_meta, table_options, reserved_throughput)
         self.wait_for_partition_load(table_name)
- 
+
         wrong_pk = [('PK2',123)]
         self._check_all_row_op_with_exception_meta_not_match(table_name, wrong_pk, 'Validate PK name fail. Input: PK2, Meta: PK1.')
 
@@ -210,7 +210,7 @@ class RowOpTest(APITestBase):
         table_options = TableOptions()
         self.client_test.create_table(table_meta, table_options, reserved_throughput)
         self.wait_for_partition_load(table_name)
- 
+
         wrong_pk = [('PK1','blah')]
         self._check_all_row_op_with_exception_meta_not_match(table_name, wrong_pk, 'Validate PK size fail. Input: 1, Meta: 2.')
 
@@ -228,7 +228,7 @@ class RowOpTest(APITestBase):
         table_options = TableOptions()
         self.client_test.create_table(table_meta, table_options, reserved_throughput)
         self.wait_for_partition_load(table_name)
- 
+
         pks = [('PK2', 123), ('PK1', 'blah')]
         try:
             self._check_all_row_op_without_exception(table_name, pks, [('C1', 'V')])
@@ -247,7 +247,7 @@ class RowOpTest(APITestBase):
         table_options = TableOptions()
         self.client_test.create_table(table_meta, table_options, reserved_throughput)
         self.wait_for_partition_load(table_name)
- 
+
         pks = [('PK1' , 'blah'), ('PK2' , 123)]
         cols = [('C1' , 'blah'), ('C2' , 123), ('C3' , True), ('C4' , False), ('C5' , 3.14), ('C6' , bytearray(1))]
         self._check_all_row_op_without_exception(table_name, pks, cols)
@@ -263,7 +263,7 @@ class RowOpTest(APITestBase):
         table_options = TableOptions()
         self.client_test.create_table(table_meta, table_options, reserved_throughput)
         self.wait_for_partition_load(table_name)
- 
+
         pks = [('PK1', bytearray(3)), ('PK2' , bytearray(2))]
         cols = [('C1' , 'blah'), ('C2' , 123), ('C3' , True), ('C4' , False), ('C5' , 3.14), ('C6' , bytearray(1))]
         self._check_all_row_op_without_exception(table_name, pks, cols)
@@ -275,7 +275,7 @@ class RowOpTest(APITestBase):
         table_meta_a = TableMeta(table_name_a, [('PK1', 'STRING'), ('PK2', 'INTEGER')])
         table_meta_b = TableMeta(table_name_b, [('PK1', 'STRING'), ('PK2', 'INTEGER')])
         reserved_throughput = ReservedThroughput(CapacityUnit(
-            restriction.MinReadWriteCapacityUnit, 
+            restriction.MinReadWriteCapacityUnit,
             restriction.MinReadWriteCapacityUnit
         ))
         table_options = TableOptions()
@@ -283,7 +283,7 @@ class RowOpTest(APITestBase):
         self.client_test.create_table(table_meta_b, table_options, reserved_throughput)
         self.wait_for_partition_load(table_name_a)
         self.wait_for_partition_load(table_name_b)
-        
+
         pks0 = [('PK1', '0'), ('PK2', 123)]
         pks1 = [('PK1', '1'), ('PK2', 123)]
         cols = [('C1', 'blah'), ('C2', 123), ('C3', True), ('C4', False), ('C5', 3.14), ('C6', bytearray(1))]
@@ -305,7 +305,7 @@ class RowOpTest(APITestBase):
 
         cu, rrow, token = self.client_test.get_row(table_name_a, pks0, ['blah'], max_version=1)
         self.assert_equal(rrow, None)
-        
+
         request = BatchGetRowRequest()
         request.add(TableInBatchGetRowItem(table_name_a, [pks0, pks1], [], None, 1))
         request.add(TableInBatchGetRowItem(table_name_b, [pks0, pks1], [], None, 1))
@@ -332,7 +332,7 @@ class RowOpTest(APITestBase):
         request.add(TableInBatchGetRowItem(table_name_a, [pks0, pks1], ['C1'], None, 1))
         request.add(TableInBatchGetRowItem(table_name_b, [pks0, pks1], ['C1'], None, 1))
         response = self.client_test.batch_get_row(request)
-        
+
         self.assertTrue(response.is_all_succeed())
         table_result_0 = response.get_result_by_table(table_name_a)
         self.assert_equal(2, len(table_result_0))
@@ -363,8 +363,8 @@ class RowOpTest(APITestBase):
         self.assert_equal(True, table_result_0[1].is_ok)
         self.assert_equal(None, table_result_0[1].row)
 
-        cu, next_pks, rows,token = self.client_test.get_range(table_name_a, 'FORWARD', 
-                [('PK1', INF_MIN), ('PK2', INF_MIN)], 
+        cu, next_pks, rows,token = self.client_test.get_range(table_name_a, 'FORWARD',
+                [('PK1', INF_MIN), ('PK2', INF_MIN)],
                 [('PK1', INF_MAX), ('PK2', INF_MAX)],
                 [], max_version=2
         )
@@ -373,8 +373,8 @@ class RowOpTest(APITestBase):
         self.assert_equal(pks0, row.primary_key)
         self.assert_columns(cols, row.attribute_columns)
 
-        cu, next_pks, rows, token = self.client_test.get_range(table_name_a, 'FORWARD', 
-                [('PK1', INF_MIN), ('PK2',INF_MIN)], 
+        cu, next_pks, rows, token = self.client_test.get_range(table_name_a, 'FORWARD',
+                [('PK1', INF_MIN), ('PK2',INF_MIN)],
                 [('PK1', INF_MAX), ('PK2', INF_MAX)],
                 ['C1'],
                 max_version=2
@@ -383,9 +383,9 @@ class RowOpTest(APITestBase):
         self.assert_equal(next_pks, None)
         self.assert_equal(pks0, row.primary_key)
         self.assert_columns([('C1', 'blah')], row.attribute_columns)
-                      
-        cu, next_pks, rows,token = self.client_test.get_range(table_name_a, 'FORWARD', 
-                [('PK1', INF_MIN), ('PK2', INF_MIN)], 
+
+        cu, next_pks, rows,token = self.client_test.get_range(table_name_a, 'FORWARD',
+                [('PK1', INF_MIN), ('PK2', INF_MIN)],
                 [('PK1', INF_MAX), ('PK2', INF_MAX)],
                 ['blah'],
                 max_version=1
@@ -426,7 +426,7 @@ class RowOpTest(APITestBase):
         cu, rrow, token = self.client_test.get_row(table_name, pks, ['C2'], max_version=1)
         self.assert_equal(rrow.primary_key, pks)
         self.assert_columns(rrow.attribute_columns, [('C2', 'X' * 512)])
-        
+
     def test_get_row_miss(self):
         """GetRow读一个不存在的行, 期望返回为空, 验证消耗CU(1, 0)"""
         table_name = 'XXI' + self.get_python_version()
@@ -438,8 +438,8 @@ class RowOpTest(APITestBase):
         table_options = TableOptions()
         self.client_test.create_table(table_meta, table_options, reserved_throughput)
         self.wait_for_partition_load(table_name)
-        
-        cu_expect = CapacityUnit(1, 0)
+
+        cu_expect = CapacityUnit(0, 0)
         cu, rrow, token = self.client_test.get_row(table_name, [('PK1', 'b')], max_version=1)
         self.assert_equal(rrow, None)
 
@@ -472,7 +472,7 @@ class RowOpTest(APITestBase):
         cu, rrow, token = self.client_test.get_row(table_name, pks, max_version=1)
         self.assert_equal(rrow.primary_key, pks)
         self.assert_columns(rrow.attribute_columns, [('C0', 'V' * 2048), ('C1', 'B' * 2048), ('C2', 'V' * 2048), ('C3', 'B' * 2048)])
-        
+
         #EXIST+DELETE
         cu, rrow = self.client_test.update_row(table_name, Row(pks, { 'delete_all' : [('C0'), ('C1')]}), Condition(RowExistenceExpectation.EXPECT_EXIST))
         cu, rrow, token = self.client_test.get_row(table_name, pks, max_version=1)
@@ -759,7 +759,7 @@ class RowOpTest(APITestBase):
         reserved_throughput = ReservedThroughput(CapacityUnit(restriction.MinReadWriteCapacityUnit, restriction.MinReadWriteCapacityUnit))
         self.client_test.create_table(table_meta, table_options, reserved_throughput)
         self.wait_for_partition_load(table_name)
-        
+
         remained_size = restriction.MaxColumnDataSizeForRow - restriction.MaxPKColumnNum * (restriction.MaxColumnNameLength + restriction.MaxPKStringValueLength)
         remained_column_cnt = restriction.MaxColumnCountForRow - restriction.MaxPKColumnNum
 
@@ -791,7 +791,7 @@ class RowOpTest(APITestBase):
         #binary
         for i in range(int(remained_size / (restriction.MaxColumnNameLength + restriction.MaxBinaryValueLength))):
             binary_columns.append((col_key_tmp%i,  bytearray(restriction.MaxBinaryValueLength)))
-        
+
         for col in [integer_columns, string_columns, bool_columns, binary_columns, double_columns]:
             self._valid_column_name_test(table_name, pk, col)
 
@@ -801,14 +801,14 @@ class RowOpTest(APITestBase):
         table_meta = TableMeta(table_name, [('PK0', 'STRING'), ('PK1', 'INTEGER')])
         pk_dict = [('PK0','a'), ('PK1',1)]
         column_dict = [('col1', 'M' * 500)]
-        reserved_throughput = ReservedThroughput(CapacityUnit(10, 10))
+        reserved_throughput = ReservedThroughput(CapacityUnit(0, 0))
         table_options = TableOptions()
 
         self.client_test.create_table(table_meta, table_options, reserved_throughput)
         self.wait_for_partition_load('table_test_batch_get_on_the_same_row')
 
         consumed,rrow = self.client_test.put_row(table_name, Row(pk_dict, column_dict), Condition(RowExistenceExpectation.IGNORE))
-        consumed_expect = CapacityUnit(0, 1)
+        consumed_expect = CapacityUnit(0, 0)
 
         try:
             request = BatchGetRowRequest()
@@ -832,7 +832,7 @@ class RowOpTest(APITestBase):
         pk_dict = [('PK0','a'), ('PK1',1)]
         pk_dict_2 = [('PK0','a'), ('PK1',2)]
         column_dict = [('col1', 'M')]
-        reserved_throughput = ReservedThroughput(CapacityUnit(100, 100))
+        reserved_throughput = ReservedThroughput(CapacityUnit(0, 0))
         table_options = TableOptions()
 
         self.client_test.create_table(table_meta, table_options, reserved_throughput)
@@ -846,7 +846,7 @@ class RowOpTest(APITestBase):
         for items in test_batch_write_row_list:
             try:
                 request = BatchWriteRowRequest()
-                request.add(TableInBatchWriteRowItem(table_name, items))                
+                request.add(TableInBatchWriteRowItem(table_name, items))
                 write_response = self.client_test.batch_write_row(request)
             except OTSServiceError as e:
                 self.assert_false()
@@ -857,7 +857,7 @@ class RowOpTest(APITestBase):
         table_name = 'table_test_no_item_in_batch_ops' + self.get_python_version()
         table_meta = TableMeta(table_name, [('PK0', 'STRING'), ('PK1', 'INTEGER')])
         table_options = TableOptions()
-        reserved_throughput = ReservedThroughput(CapacityUnit(100, 100))
+        reserved_throughput = ReservedThroughput(CapacityUnit(0, 0))
 
         self.client_test.create_table(table_meta, table_options, reserved_throughput)
         self.wait_for_partition_load('table_test_no_item_in_batch_ops')
@@ -883,7 +883,7 @@ class RowOpTest(APITestBase):
         table_name = 'table_test_no_item_in_batch_ops' + self.get_python_version()
         table_meta = TableMeta(table_name, [('PK0', 'STRING'), ('PK1', 'INTEGER')])
         table_options = TableOptions()
-        reserved_throughput = ReservedThroughput(CapacityUnit(100, 100))
+        reserved_throughput = ReservedThroughput(CapacityUnit(0, 0))
 
         self.client_test.create_table(table_meta, table_options, reserved_throughput)
         self.wait_for_partition_load('table_test_no_item_in_batch_ops')
@@ -908,7 +908,7 @@ class RowOpTest(APITestBase):
         table_meta_string = TableMeta(table_name_string, [('PK0', 'STRING')])
         table_name_integer = 'table_test_get_range_when_direction_integer' + self.get_python_version()
         table_meta_integer = TableMeta(table_name_integer, [('PK0', 'INTEGER')])
-        reserved_throughput = ReservedThroughput(CapacityUnit(100, 100))
+        reserved_throughput = ReservedThroughput(CapacityUnit(0, 0))
         table_options = TableOptions()
 
         self.client_test.create_table(table_meta_string, table_options, reserved_throughput)
@@ -942,7 +942,7 @@ class RowOpTest(APITestBase):
                 table_name = raw_table_name + first_pk_type + second_pk_type
                 table_meta = TableMeta(table_name, [('PK0', first_pk_type), ('PK1', second_pk_type)])
                 table_options = TableOptions()
-                self.client_test.create_table(table_meta, table_options, ReservedThroughput(CapacityUnit(100, 100)))
+                self.client_test.create_table(table_meta, table_options, ReservedThroughput(CapacityUnit(0, 0)))
                 self.wait_for_partition_load(table_name)
 
                 if first_pk_type == 'STRING':
@@ -955,7 +955,7 @@ class RowOpTest(APITestBase):
                 else:
                     x, y = 1, 2
 
-                #pk_list = [{'PK0': 'a', 'PK1': 1}, {'PK0': 'a', 'PK1': 2}, {'PK0': 'b', 'PK1': 1}, 
+                #pk_list = [{'PK0': 'a', 'PK1': 1}, {'PK0': 'a', 'PK1': 2}, {'PK0': 'b', 'PK1': 1},
                 #           {'PK0': 'b', 'PK1': 2}, {'PK0': 'c', 'PK1': 1}, {'PK0': 'c', 'PK1': 2}]
                 #
                 row_list = []
@@ -969,7 +969,7 @@ class RowOpTest(APITestBase):
                     return [[('PK0' , begin_pk0), ('PK1' , begin_pk1)], [('PK0' , end_pk0), ('PK1' , end_pk1)]]
 
                 range_list = [
-                    # range                             是否正常 期望rows        
+                    # range                             是否正常 期望rows
                     (get_range(b, x,       a, x),       False,   row_list[0:1]          ),
                     (get_range(a, x,       a, y),       True,    row_list[0:2]  ),
                     (get_range(a, x,       c, x),       True,    row_list[0:5]),
@@ -1008,7 +1008,7 @@ class RowOpTest(APITestBase):
         table_name = 'table_test_4_PK_range' + self.get_python_version()
         table_meta = TableMeta(table_name, [('PK0', 'STRING'), ('PK1', 'STRING'), ('PK2', 'INTEGER'), ('PK3', 'INTEGER')])
         table_options = TableOptions()
-        pk_dict_list = [[('PK0','A'), ('PK1','A'), ('PK2',9), ('PK3',9)], 
+        pk_dict_list = [[('PK0','A'), ('PK1','A'), ('PK2',9), ('PK3',9)],
                    [('PK0','A'), ('PK1','A'), ('PK2',10), ('PK3',1)],
                    [('PK0','A'), ('PK1','A'), ('PK2',10), ('PK3',9)],
                    [('PK0','A'), ('PK1','A'), ('PK2',11), ('PK3',9)]]
@@ -1018,7 +1018,7 @@ class RowOpTest(APITestBase):
             row = Row(pk_dict, [('col',5)])
             putrow_list.append(PutRowItem(row, Condition(RowExistenceExpectation.IGNORE)))
             row_list.append((pk_dict, [('col', 5)]))
-        reserved_throughput = ReservedThroughput(CapacityUnit(100, 100))
+        reserved_throughput = ReservedThroughput(CapacityUnit(0, 0))
         self.client_test.create_table(table_meta, table_options, reserved_throughput)
         self.wait_for_partition_load('table_test_4_PK_range')
 
@@ -1041,9 +1041,9 @@ class RowOpTest(APITestBase):
 
     def test_empty_range(self):
         """分别测试PK个数为1，2，3，4的4个表，range中包含的row个数为0的情况，期望返回为空，CU消耗为(1, 0)"""
-        table_name_list = ['table_test_empty_range_0' + self.get_python_version(), 
-                           'table_test_empty_range_1' + self.get_python_version(), 
-                           'table_test_empty_range_2' + self.get_python_version(), 
+        table_name_list = ['table_test_empty_range_0' + self.get_python_version(),
+                           'table_test_empty_range_1' + self.get_python_version(),
+                           'table_test_empty_range_2' + self.get_python_version(),
                            'table_test_empty_range_3' + self.get_python_version()]
         pk_schema0, pk_dict0_exclusive = self.get_primary_keys(1, 'STRING', 'PK', INF_MAX)
         pk_schema1, pk_dict1_exclusive = self.get_primary_keys(2, 'STRING', 'PK', INF_MAX)
@@ -1056,7 +1056,7 @@ class RowOpTest(APITestBase):
         pk_schema_list = [pk_schema0, pk_schema1, pk_schema2, pk_schema3]
         pk_dict_inclusive_list = [pk_dict0_inclusive, pk_dict1_inclusive, pk_dict2_inclusive, pk_dict3_inclusive]
         pk_dict_exclusive_list = [pk_dict0_exclusive, pk_dict1_exclusive, pk_dict2_exclusive, pk_dict3_exclusive]
-        reserved_throughput = ReservedThroughput(CapacityUnit(10, 9))
+        reserved_throughput = ReservedThroughput(CapacityUnit(0, 0))
 
         for i in range(len(table_name_list)):
             table_meta = TableMeta(table_name_list[i], pk_schema_list[i])
@@ -1066,13 +1066,13 @@ class RowOpTest(APITestBase):
             consumed, next_start_primary_keys, rows, next_token = self.client_test.get_range(table_name_list[i], 'FORWARD',  pk_dict_inclusive_list[i], pk_dict_exclusive_list[i], max_version=1)
             self.assert_equal(next_start_primary_keys, None)
             self.assert_columns(rows, [])
-            
+
     def test_get_range_limit_invalid(self):
         """测试get_range的limit为0或-1，期望返回错误OTSInvalidPK"""
         table_name = 'table_test_get_range_limit_invalid' + self.get_python_version()
         table_meta = TableMeta(table_name, [('PK0', 'STRING')])
         table_options = TableOptions()
-        reserved_throughput = ReservedThroughput(CapacityUnit(10, 10))
+        reserved_throughput = ReservedThroughput(CapacityUnit(0, 0))
 
         self.client_test.create_table(table_meta, table_options, reserved_throughput)
         self.wait_for_partition_load('table_test_get_range_limit_invalid')
@@ -1092,20 +1092,17 @@ class RowOpTest(APITestBase):
             self.assert_equal(expect_row[0], row.primary_key)
             self.assert_columns(expect_row[1], row.attribute_columns)
 
-            row_size_sum = row_size_sum + self.get_row_size(row.primary_key, row.attribute_columns) 
+            row_size_sum = row_size_sum + self.get_row_size(row.primary_key, row.attribute_columns)
             count = count + 1
         self.assert_equal(count, len(expect_rows))
-        cu_read = int(math.ceil(row_size_sum * 1.0 / 4096))
-        if cu_read == 0:
-            cu_read = 1
-        consumed_expect = CapacityUnit(cu_read, 0)
+        consumed_expect = CapacityUnit(0, 0)
 
     def test_all_item_in_batch_write_row_failed(self):
         """当batch write row里的所有item全部后端失败时，期望每个item都返回具体的错误，而整个操作返回正常"""
-    
+
         table1 = "table1" + self.get_python_version()
         table_meta1 = TableMeta(table1, [("PK", "INTEGER")])
-        reserved_throughput = ReservedThroughput(CapacityUnit(50, 50))
+        reserved_throughput = ReservedThroughput(CapacityUnit(0, 0))
         table_options = TableOptions()
         self.client_test.create_table(table_meta1, table_options, reserved_throughput)
 
@@ -1114,7 +1111,7 @@ class RowOpTest(APITestBase):
         update_table1 = UpdateRowItem(Row([("PK", 12)], {"put" : [("COL", "table1_12")]}), Condition(RowExistenceExpectation.EXPECT_EXIST))
         delete_table1 = DeleteRowItem(Row([("PK", 13)]), Condition(RowExistenceExpectation.EXPECT_EXIST))
 
-        
+
         row_items = [put_table1, update_table1, delete_table1]
         request = BatchWriteRowRequest()
         request.add(TableInBatchWriteRowItem(table1, row_items))
@@ -1146,20 +1143,20 @@ class RowOpTest(APITestBase):
         table_name = 'TA' + self.get_python_version()
 
         table_meta = TableMeta(table_name, [("PK", "INTEGER")])
-        reserved_throughput = ReservedThroughput(CapacityUnit(50, 50))
+        reserved_throughput = ReservedThroughput(CapacityUnit(0, 0))
         table_options = TableOptions()
         self.client_test.create_table(table_meta, table_options, reserved_throughput)
         self.wait_for_partition_load(table_name)
 
         cu,rrow = self.client_test.update_row(table_name, Row([("PK" , 11)], {"delete_all" : [("Col0")]}), Condition(RowExistenceExpectation.IGNORE))
-        
+
     def test_all_delete_in_update(self):
         """当一行为空时，进行一个UpdateRow，并且包含128个Delete操作"""
-        
+
         table_name = 'TB' + self.get_python_version()
 
         table_meta = TableMeta(table_name, [("PK", "INTEGER")])
-        reserved_throughput = ReservedThroughput(CapacityUnit(50, 50))
+        reserved_throughput = ReservedThroughput(CapacityUnit(0, 0))
         table_options = TableOptions()
         self.client_test.create_table(table_meta, table_options, reserved_throughput)
         self.wait_for_partition_load(table_name)
@@ -1169,19 +1166,19 @@ class RowOpTest(APITestBase):
             columns_to_delete.append(('Col' + str(i)))
 
             cu,rrow = self.client_test.update_row(table_name, Row([("PK" , 11)], {"delete_all" : columns_to_delete}), Condition(RowExistenceExpectation.IGNORE))
-    
+
         cu, rrow,token = self.client_test.get_row(table_name, [("PK" , 11)], max_version=1)
         self.assert_equal(rrow, None)
 
-        
+
     def test_one_delete_in_update_of_batch_write(self):
         """当一行为空时，进行一个BatchWriteRow的UpdateRow，并且仅包含一个Delete操作"""
-        
+
         table_name = 'TC' + self.get_python_version()
 
         table_meta = TableMeta(table_name, [("PK", "INTEGER")])
         table_options = TableOptions()
-        reserved_throughput = ReservedThroughput(CapacityUnit(50, 50))
+        reserved_throughput = ReservedThroughput(CapacityUnit(0, 0))
         self.client_test.create_table(table_meta, table_options, reserved_throughput)
         self.wait_for_partition_load(table_name)
 
@@ -1197,33 +1194,33 @@ class RowOpTest(APITestBase):
         self.assert_equal(0, len(put_failed))
         self.assert_equal(None, put_succ[0].error_code)
         self.assert_equal(None, put_succ[0].error_message)
-    
+
         cu, rrow, token = self.client_test.get_row(table_name, [("PK" , 12)], max_version=1)
         self.assert_equal(rrow, None)
 
-    
+
     def test_all_delete_in_update_of_batch_write(self):
         """当一行为空时，进行一个BatchWriteRow的UpdateRow，并且包含128个Delete操作"""
-        
+
         table_name = 'TD' + self.get_python_version()
 
         table_meta = TableMeta(table_name, [("PK", "INTEGER")])
-        reserved_throughput = ReservedThroughput(CapacityUnit(50, 50))
+        reserved_throughput = ReservedThroughput(CapacityUnit(0, 0))
         table_options = TableOptions()
         self.client_test.create_table(table_meta, table_options, reserved_throughput)
         self.wait_for_partition_load(table_name)
-    
+
         columns_to_delete = []
         for i in range(restriction.MaxColumnCountForRow):
             columns_to_delete.append('Col' + str(i))
-    
+
         update_item = UpdateRowItem(Row([("PK", 12)], {"delete_all" : columns_to_delete}), Condition(RowExistenceExpectation.IGNORE))
         request = BatchWriteRowRequest()
         request.add(TableInBatchWriteRowItem(table_name, [update_item]))
-        
+
         response = self.client_test.batch_write_row(request)
         self.assertTrue(response.is_all_succeed())
-    
+
         cu, rrow, token = self.client_test.get_row(table_name, [("PK" , 12)], max_version=1)
         self.assert_equal(rrow, None)
 
@@ -1235,30 +1232,30 @@ class RowOpTest(APITestBase):
         reserved_throughput = ReservedThroughput(CapacityUnit(0, 0))
         table_options = TableOptions()
         self.client_test.create_table(table_meta, table_options, reserved_throughput)
-        self.wait_for_partition_load(table_name) 
+        self.wait_for_partition_load(table_name)
 
         # Put
-        primary_key = [('PK1', bytearray([1,23,45,101,33])), ('PK2', bytearray("武汉"))]
-        attribute_columns = [('address', bytearray([238,180,225,242,32])), ('age', 29.7), 
+        primary_key = [('PK1', bytearray([1,23,45,101,33])), ('PK2', bytearray("武汉", 'utf-8'))]
+        attribute_columns = [('address', bytearray([238,180,225,242,32])), ('age', 29.7),
                              ('female', False), ('mobile',15100000000), ('name','萧峰')]
         row = Row(primary_key, attribute_columns)
 
         consumed, return_row = self.client_test.put_row(table_name, row, None)
-        
+
         # Read
         consumed, return_row, next_token = self.client_test.get_row(table_name, primary_key, [], None, 1)
         self.assert_equal(return_row.primary_key, primary_key)
-        self.assert_columns(return_row.attribute_columns, attribute_columns)        
+        self.assert_columns(return_row.attribute_columns, attribute_columns)
 
         # Update
         update_of_attribute_columns = {
             'PUT' : [('address', bytearray([2,9,0,199,12]))],
             }
         row = Row(primary_key, update_of_attribute_columns)
-        consumed, return_row = self.client_test.update_row(table_name, row, None) 
+        consumed, return_row = self.client_test.update_row(table_name, row, None)
 
         # Read
-        attribute_columns = [('address', bytearray([2,9,0,199,12])), ('age', 29.7), 
+        attribute_columns = [('address', bytearray([2,9,0,199,12])), ('age', 29.7),
                               ('female', False), ('mobile',15100000000), ('name','萧峰')]
         consumed, return_row, next_token = self.client_test.get_row(table_name, primary_key, [], None, 1)
         self.assert_equal(return_row.primary_key, primary_key)
@@ -1266,13 +1263,13 @@ class RowOpTest(APITestBase):
 
         # Batch Write
         put_row_items = []
-        primary_key1 = [('PK1',bytearray([1,1,1])), ('PK2',bytearray("西安"))]
+        primary_key1 = [('PK1',bytearray([1,1,1])), ('PK2',bytearray("西安", 'utf-8'))]
         attribute_columns1 = [("address", bytearray([10,10])), ('age',1)]
         row1 = Row(primary_key1, attribute_columns1)
         item1 = PutRowItem(row1, None)
-        put_row_items.append(item1) 
+        put_row_items.append(item1)
 
-        primary_key2 = [('PK1',bytearray([2,2,2])), ('PK2',bytearray("西安"))]
+        primary_key2 = [('PK1',bytearray([2,2,2])), ('PK2',bytearray("西安", 'utf-8'))]
         attribute_columns2 = {'put': [('address', bytearray([20, 20]))]}
         row2 = Row(primary_key2, attribute_columns2)
         item2 = UpdateRowItem(row2, None)
@@ -1289,24 +1286,24 @@ class RowOpTest(APITestBase):
 
         # Batch Read
         rows_to_get = []
-        rows_to_get.append([('PK1',bytearray([1,1,1])), ('PK2',bytearray("西安"))])
-        rows_to_get.append([('PK1',bytearray([2,2,2])), ('PK2',bytearray("西安"))])
+        rows_to_get.append([('PK1',bytearray([1,1,1])), ('PK2',bytearray("西安", 'utf-8'))])
+        rows_to_get.append([('PK1',bytearray([2,2,2])), ('PK2',bytearray("西安", 'utf-8'))])
 
         request = BatchGetRowRequest()
         request.add(TableInBatchGetRowItem(table_name, rows_to_get, [], None, 1))
 
         result = self.client_test.batch_get_row(request)
-        
+
         table_result = result.get_result_by_table(table_name)
         self.assert_equal(2, len(table_result))
-        self.assert_equal([('PK1',bytearray([1,1,1])), ('PK2',bytearray("西安"))], table_result[0].row.primary_key)
+        self.assert_equal([('PK1',bytearray([1,1,1])), ('PK2',bytearray("西安", 'utf-8'))], table_result[0].row.primary_key)
         self.assert_columns(attribute_columns1, table_result[0].row.attribute_columns)
 
-        self.assert_equal([('PK1',bytearray([2,2,2])), ('PK2',bytearray("西安"))], table_result[1].row.primary_key)
+        self.assert_equal([('PK1',bytearray([2,2,2])), ('PK2',bytearray("西安", 'utf-8'))], table_result[1].row.primary_key)
         self.assert_columns(attribute_columns2['put'], table_result[1].row.attribute_columns)
 
         # Delete
-        primary_key3 = [('PK1',bytearray([1,1,1])), ('PK2',bytearray("西安"))]
+        primary_key3 = [('PK1',bytearray([1,1,1])), ('PK2',bytearray("西安", 'utf-8'))]
         self.client_test.delete_row(table_name, Row(primary_key3), None)
 
         # Read

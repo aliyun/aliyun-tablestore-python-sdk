@@ -8,8 +8,8 @@ import calendar
 import logging
 import sys
 import platform
-import datetime 
-from email.utils import parsedate 
+import datetime
+from email.utils import parsedate
 
 try:
     from urlparse import urlparse, parse_qsl
@@ -53,7 +53,12 @@ class OTSProtocol(object):
         'DeleteRow',
         'BatchGetRow',
         'BatchWriteRow',
-        'GetRange'
+        'GetRange',
+        'ListSearchIndex',
+        'CreateSearchIndex',
+        'DeleteSearchIndex',
+        'DescribeSearchIndex',
+        'Search'
     ]
 
     def __init__(self, user_id, user_key, sts_token, instance_name, encoding, logger):
@@ -101,7 +106,7 @@ class OTSProtocol(object):
 
 
         date = datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.000Z')
-        
+
         headers = {
             'x-ots-date' : date,
             'x-ots-apiversion' : self.api_version,
@@ -115,7 +120,7 @@ class OTSProtocol(object):
 
         signature = self._make_request_signature(query, headers)
         headers['x-ots-signature'] = signature
-        headers['User-Agent'] = self.user_agent 
+        headers['User-Agent'] = self.user_agent
         return headers
 
     def _make_response_signature(self, query, headers):
@@ -128,8 +133,8 @@ class OTSProtocol(object):
 
     def _convert_urllib3_headers(self, headers):
         """
-        old urllib3 headers: {'header1':'value1', 'header2':'value2'} 
-        new urllib3 headers: {'header1':('header1', 'value1'), 'header2':('header2', 'value2')} 
+        old urllib3 headers: {'header1':'value1', 'header2':'value2'}
+        new urllib3 headers: {'header1':('header1', 'value1'), 'header2':('header2', 'value2')}
         """
         std_headers = {}
         for k,v in headers.items():
@@ -145,9 +150,9 @@ class OTSProtocol(object):
 
         # 1, make sure we have all headers
         header_names = [
-            'x-ots-contentmd5', 
-            'x-ots-requestid', 
-            'x-ots-date', 
+            'x-ots-contentmd5',
+            'x-ots-requestid',
+            'x-ots-date',
             'x-ots-contenttype',
         ]
 
@@ -163,13 +168,13 @@ class OTSProtocol(object):
             if md5 != headers['x-ots-contentmd5']:
                 raise OTSClientError('MD5 mismatch in response.')
 
-        # 3, check date 
+        # 3, check date
         if 'x-ots-date' in headers:
             try:
                 server_time = datetime.datetime.strptime(headers['x-ots-date'], "%Y-%m-%dT%H:%M:%S.%fZ")
             except ValueError:
                 raise OTSClientError('Invalid date format in response.')
-        
+
             # 4, check date range
             server_unix_time = time.mktime(server_time.timetuple())
             now_unix_time = time.mktime(datetime.datetime.utcnow().timetuple())
@@ -204,14 +209,14 @@ class OTSProtocol(object):
 
         proto = self.encoder.encode_request(api_name, *args, **kwargs)
         body = proto.SerializeToString()
-            
+
         query = '/' + api_name
         headers = self._make_headers(body, query)
 
         if self.logger.level <= logging.DEBUG:
-            # prevent to generate formatted message which is time consuming 
+            # prevent to generate formatted message which is time consuming
             self.logger.debug("OTS request, API: %s, Headers: %s, Protobuf: %s" % (
-                api_name, headers, 
+                api_name, headers,
                 text_format.MessageToString(proto, as_utf8=True, as_one_line=True)
             ))
 
@@ -239,10 +244,10 @@ class OTSProtocol(object):
             raise OTSClientError(error_message, status)
 
         if self.logger.level <= logging.DEBUG:
-            # prevent to generate formatted message which is time consuming 
+            # prevent to generate formatted message which is time consuming
             request_id = self._get_request_id_string(headers)
             self.logger.debug("OTS response, API: %s, RequestID: %s, Protobuf: %s." % (
-                api_name, request_id, 
+                api_name, request_id,
                 text_format.MessageToString(proto, as_utf8=True, as_one_line=True)
             ))
         return ret
@@ -252,7 +257,7 @@ class OTSProtocol(object):
         std_headers = self._convert_urllib3_headers(headers)
 
         if self.logger.level <= logging.DEBUG:
-            # prevent to generate formatted message which is time consuming 
+            # prevent to generate formatted message which is time consuming
             self.logger.debug("OTS response, API: %s, Status: %s, Reason: %s, " \
                 "Headers: %s" % (api_name, status, reason, std_headers))
 
@@ -268,7 +273,7 @@ class OTSProtocol(object):
             e.http_status = status
             e.message += " HTTP status: %s." % status
             raise e
-        
+
         if status >= 200 and status < 300:
             return
         else:
