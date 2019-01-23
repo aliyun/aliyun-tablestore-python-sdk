@@ -78,6 +78,8 @@ __all__ = [
     'ColumnsToGet',
     'ColumnReturnType',
     'FieldValueFactor',
+    'GeoDistanceType',
+    'NestedFilter'
 ]
 
 

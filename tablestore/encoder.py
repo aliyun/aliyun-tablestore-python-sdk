@@ -402,10 +402,10 @@ class OTSProtoBufferEncoder(object):
                 proto.field_sort.mode = self._get_enum(sorter.sort_mode)
 
             if sorter.nested_filter is not None:
-                proto.field_sort.nested_filter = self._encode_nested_filter(sorter.nested_filter) 
+                self._make_nested_filter(proto.field_sort.nested_filter, sorter.nested_filter)
         elif isinstance(sorter, GeoDistanceSort):
             proto.geo_distance_sort.field_name = sorter.field_name
-            proto.geo_distance_sort.points = sorter.points
+            proto.geo_distance_sort.points.extend(sorter.points)
 
             if sorter.sort_order is not None:
                 proto.geo_distance_sort.order = self._get_enum(sorter.sort_order)
@@ -417,7 +417,7 @@ class OTSProtoBufferEncoder(object):
                 proto.geo_distance_sort.distance_type = self._get_enum(sorter.geo_distance_type)
 
             if sorter.nested_filter is not None:
-                proto.geo_distance_sort.nested_filter = self._encode_nested_filter(sorter.nested_filter)
+                self._make_nested_filter(proto.geo_distance_sort.nested_filter, sorter.nested_filter) 
         elif isinstance(sorter, ScoreSort):
             proto.score_sort.order = self._get_enum(sorter.sort_order)
         else:
@@ -828,12 +828,9 @@ class OTSProtoBufferEncoder(object):
 
         return proto
 
-    def _encode_nested_filter(self, nested_filter):
-        nested_filter_proto = None
-        if nested_filter:
-            # TODO encode nested filter
-            pass
-        return nested_filter_proto
+    def _make_nested_filter(self, proto, nested_filter):
+        proto.path = nested_filter.path
+        self._make_query(proto.filter, nested_filter.query_filter)
 
     def _encode_search(self, table_name, index_name, search_query, columns_to_get, routing_keys):
         proto = search_pb2.SearchRequest()

@@ -59,9 +59,9 @@ def term_query(table_name, index_name):
     _print_rows(rows, total_count)
 
 def range_query(table_name, index_name):
-    query = RangeQuery('k', 'key100', 'key200', include_lower=False, include_upper=False)
+    query = RangeQuery('k', 'key100', 'key500', include_lower=False, include_upper=False)
     rows, next_token, total_count, is_all_succeed = client.search(
-        table_name, index_name, SearchQuery(query, limit=100, get_total_count=True), ColumnsToGet(return_type=ColumnReturnType.ALL)
+        table_name, index_name, SearchQuery(query, offset=100, limit=100, get_total_count=True), ColumnsToGet(return_type=ColumnReturnType.ALL)
     )
 
     _print_rows(rows, total_count)
@@ -121,8 +121,11 @@ def bool_query(table_name, index_name):
 
 def geo_distance_query(table_name, index_name):
     query = GeoDistanceQuery('g', '32.5,116.5', 300000)
+    sort = Sort(sorters=[
+            GeoDistanceSort('g', ['32.5,116.5', '32.0,116.0'], sort_order=SortOrder.DESC, sort_mode=SortMode.MAX)
+        ])
     rows, next_token, total_count, is_all_succeed = client.search(
-        table_name, index_name, SearchQuery(query, limit=100, get_total_count=True), ColumnsToGet(return_type=ColumnReturnType.ALL)
+        table_name, index_name, SearchQuery(query, limit=100, get_total_count=True, sort=sort), ColumnsToGet(return_type=ColumnReturnType.ALL)
     )
 
     _print_rows(rows, total_count)
@@ -144,10 +147,13 @@ def geo_polygon_query(table_name, index_name):
     _print_rows(rows, total_count)
 
 def nested_query(table_name, index_name):
-    nested_query = RangeQuery('n.nl', range_from=100, range_to=300, include_lower=True, include_upper=True)
+    nested_query = RangeQuery('n.nl', range_from=110, range_to=200, include_lower=True, include_upper=True)
     query = NestedQuery('n', nested_query)
+    sort = Sort(
+        sorters = [FieldSort('n.nl', sort_order=SortOrder.ASC, nested_filter=NestedFilter('n', RangeQuery('n.nl', range_from=150, range_to=200)))]
+    )
     rows, next_token, total_count, is_all_succeed = client.search(
-        table_name, index_name, SearchQuery(query, limit=100, get_total_count=True), ColumnsToGet(return_type=ColumnReturnType.ALL)
+        table_name, index_name, SearchQuery(query, limit=100, get_total_count=True, sort=sort), ColumnsToGet(return_type=ColumnReturnType.ALL)
     )
 
     _print_rows(rows, total_count)
@@ -244,7 +250,7 @@ if __name__ == '__main__':
     #describe_search_index()
 
     # perform queries
-    match_all_query(table_name, index_name)
+    #match_all_query(table_name, index_name)
     #match_query(table_name, index_name)
     #match_phrase_query(table_name, index_name)
     #term_query(table_name, index_name)
@@ -256,6 +262,6 @@ if __name__ == '__main__':
     #geo_distance_query(table_name, index_name)
     #geo_bounding_box_query(table_name, index_name)
     #geo_polygon_query(table_name, index_name)
-    #nested_query(table_name, nested_index_name)
+    nested_query(table_name, nested_index_name)
     #function_score_query(table_name, nested_index_name)
 

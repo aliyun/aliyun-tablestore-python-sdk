@@ -79,6 +79,8 @@ __all__ = [
     'SyncPhase',
     'ColumnsToGet',
     'ColumnReturnType',
+    'GeoDistanceType',
+    'NestedFilter'
 ]
 
 
