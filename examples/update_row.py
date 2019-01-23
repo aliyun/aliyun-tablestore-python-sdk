@@ -32,15 +32,16 @@ def update_row(client):
         'PUT' : [('name','David'), ('address','Hongkong')],
         'DELETE' : [('address', None, 1488436949003)],
         'DELETE_ALL' : [('mobile'), ('age')],
+        'INCREMENT' : [('counter', -1)]
     }
     row = Row(primary_key, update_of_attribute_columns)
     condition = Condition(RowExistenceExpectation.IGNORE, SingleColumnCondition("age", 20, ComparatorType.EQUAL)) # update row only when this row is exist
-    consumed, return_row = client.update_row(table_name, row, condition) 
+    consumed, return_row = client.update_row(table_name, row, condition)
     print ('Update succeed, consume %s write cu.' % consumed.write)
 
 def get_row(client):
     primary_key = [('gid',1), ('uid','101')]
-    columns_to_get = ['name', 'address', 'age'] # given a list of columns to get, or empty list if you want to get entire row.
+    columns_to_get = ['name', 'address', 'age', 'counter'] # given a list of columns to get, or empty list if you want to get entire row.
     consumed, return_row, next_token = client.get_row(table_name, primary_key, columns_to_get, None, 1)
     print ('Read succeed, consume %s read cu.' % consumed.read)
 
@@ -49,18 +50,20 @@ def get_row(client):
 
 if __name__ == '__main__':
     client = OTSClient(OTS_ENDPOINT, OTS_ID, OTS_SECRET, OTS_INSTANCE)
+    '''
     try:
         delete_table(client)
     except:
         pass
     create_table(client)
+    '''
 
-    time.sleep(3) # wait for table ready
-    put_row(client)
+    #time.sleep(3) # wait for table ready
+    #put_row(client)
     print ('#### row before update ####')
     get_row(client)
     update_row(client)
     print ('#### row after update ####')
     get_row(client)
-    delete_table(client)
+    #delete_table(client)
 

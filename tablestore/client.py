@@ -339,7 +339,8 @@ class OTSClient(object):
             update_of_attribute_columns = {
                 'put' : [('name','张三丰'), ('address','中国B地')],
                 'delete' : [('mobile', 1493725896147)],
-                'delete_all' : [('age')]
+                'delete_all' : [('age')],
+                'increment' : [('counter', 1)]
             }
             row = Row(primary_key, update_of_attribute_columns)
             condition = Condition('EXPECT_EXIST')
@@ -656,8 +657,8 @@ class OTSClient(object):
                 [
                     FieldSchema('nk', FieldType.KEYWORD, index=True, enable_sort_and_agg=True, store=True),
                     FieldSchema('nt', FieldType.TEXT, index=True, store=True, analyzer=AnalyzerType.SINGLEWORD),
-                   FieldSchema('ng', FieldType.GEOPOINT, index=True, store=True, enable_sort_and_agg=True)
-                    ])
+                    FieldSchema('ng', FieldType.GEOPOINT, index=True, store=True, enable_sort_and_agg=True)
+                ])
            fields = [field_a, field_b, field_c, field_d, nested_field]
 
            index_meta = IndexMeta(fields, index_setting=None, index_sort=None)

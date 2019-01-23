@@ -263,6 +263,7 @@ class UpdateType(object):
     PUT = "PUT"
     DELETE = "DELETE"
     DELETE_ALL = "DELETE_ALL"
+    INCREMENT = "INCREMENT"
 
 class UpdateTableResponse(object):
 

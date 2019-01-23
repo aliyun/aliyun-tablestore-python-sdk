@@ -516,6 +516,20 @@ class RowOpTest(APITestBase):
         self.assert_equal(rrow.primary_key, pks)
         self.assert_columns(rrow.attribute_columns, [('C0', 'V' * 2048), ('C2', 'V' * 2048), ('C3', 'B' * 2048)])
 
+        #IGNORE+INCREMENT
+        cu,rrow = self.client_test.update_row(table_name, Row(pks, {'increment':[('counter', 10)]}), Condition(RowExistenceExpectation.IGNORE))
+        cu, rrow,token = self.client_test.get_row(table_name, pks, max_version=1)
+        self.assert_equal(rrow.primary_key, pks)
+        self.assert_columns(rrow.attribute_columns, [('C0', 'V' * 2048), ('C2', 'V' * 2048), ('C3', 'B' * 2048), ('counter', 10)])
+        cu,rrow = self.client_test.update_row(table_name, Row(pks, {'increment':[('counter', 10)]}), Condition(RowExistenceExpectation.IGNORE))
+        cu, rrow,token = self.client_test.get_row(table_name, pks, max_version=1)
+        self.assert_equal(rrow.primary_key, pks)
+        self.assert_columns(rrow.attribute_columns, [('C0', 'V' * 2048), ('C2', 'V' * 2048), ('C3', 'B' * 2048), ('counter', 20)])
+        cu,rrow = self.client_test.update_row(table_name, Row(pks, {'increment':[('counter', -30)]}), Condition(RowExistenceExpectation.IGNORE))
+        cu, rrow,token = self.client_test.get_row(table_name, pks, max_version=1)
+        self.assert_equal(rrow.primary_key, pks)
+        self.assert_columns(rrow.attribute_columns, [('C0', 'V' * 2048), ('C2', 'V' * 2048), ('C3', 'B' * 2048), ('counter', -10)])
+
     def test_update_row_when_value_type_changed(self):
         """原有的行包含max个列，值分别为INTEGER, DOUBLE, STRING(8 byte), BOOLEAN, BINARY(8 byte)，测试PutRow包含max个列，值分别为INTEGER, DOUBLE, STRING(8 byte), BOOLEAN, BINARY(8 byte)，每次GetRow检查数据，并验证CU消耗正常。"""
         table_name = 'XXX' + self.get_python_version()

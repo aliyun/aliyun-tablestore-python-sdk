@@ -20,6 +20,7 @@ const.TAG_CELL_CHECKSUM = 0x0A
 # cell op type
 const.DELETE_ALL_VERSION = 0x1
 const.DELETE_ONE_VERSION = 0x3
+const.INCREMENT = 0x4
 
 # variant type
 const.VT_INTEGER = 0x0

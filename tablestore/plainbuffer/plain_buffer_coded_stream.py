@@ -418,6 +418,9 @@ class PlainBufferCodedOutputStream(object):
         elif update_type == UpdateType.DELETE_ALL:
             self.write_tag(TAG_CELL_TYPE)
             self.output_stream.write_raw_byte(const.DELETE_ALL_VERSION)
+        elif update_type == UpdateType.INCREMENT:
+            self.write_tag(TAG_CELL_TYPE)
+            self.output_stream.write_raw_byte(const.INCREMENT)
 
         if timestamp is not None:
             self.write_tag(TAG_CELL_TIMESTAMP)
@@ -429,6 +432,8 @@ class PlainBufferCodedOutputStream(object):
             cell_check_sum = PlainBufferCrc8.crc_int8(cell_check_sum, const.DELETE_ONE_VERSION)
         if update_type == UpdateType.DELETE_ALL:
             cell_check_sum = PlainBufferCrc8.crc_int8(cell_check_sum, const.DELETE_ALL_VERSION)
+        if update_type == UpdateType.INCREMENT:
+            cell_check_sum = PlainBufferCrc8.crc_int8(cell_check_sum, const.INCREMENT)
 
         self.write_tag(TAG_CELL_CHECKSUM)
         self.output_stream.write_raw_byte(cell_check_sum)
