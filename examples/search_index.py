@@ -211,7 +211,7 @@ def prepare_index(index_name, with_nested=False):
         fields.append(field_n)
     index_setting = IndexSetting(routing_fields=['PK1'])
     index_sort = Sort(sorters=[PrimaryKeySort(SortOrder.ASC)]) if not with_nested else None
-    index_meta = IndexMeta(fields, index_setting=index_setting, index_sort=index_sort) # default with index sort
+    index_meta = SearchIndexMeta(fields, index_setting=index_setting, index_sort=index_sort) # default with index sort
     client.create_search_index(table_name, index_name, index_meta)
 
 def list_search_index():

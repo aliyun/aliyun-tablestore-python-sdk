@@ -42,12 +42,12 @@ __all__ = [
     'ColumnCondition',
     'CompositeColumnCondition',
     'SingleColumnCondition',
-    'RowExistenceExpectation', 
+    'RowExistenceExpectation',
     'IndexSetting',
     'AnalyzerType',
     'FieldType',
     'FieldSchema',
-    'IndexMeta',
+    'SearchIndexMeta',
     'Sort',
     'Sorter',
     'PrimaryKeySort',
@@ -80,16 +80,20 @@ __all__ = [
     'ColumnsToGet',
     'ColumnReturnType',
     'GeoDistanceType',
-    'NestedFilter'
+    'NestedFilter',
+    'DefinedColumnSchema',
+    'SecondaryIndexMeta',
+    'SecondaryIndexType',
 ]
 
 
 class TableMeta(object):
 
-    def __init__(self, table_name, schema_of_primary_key):
+    def __init__(self, table_name, schema_of_primary_key, defined_columns=[]):
         # schema_of_primary_key: [('PK0', 'STRING'), ('PK1', 'INTEGER'), ...]
         self.table_name = table_name
         self.schema_of_primary_key = schema_of_primary_key
+        self.defined_columns = defined_columns
 
 class TableOptions(object):
     def __init__(self, time_to_live = -1, max_version = 1, max_time_deviation = 86400):
@@ -111,7 +115,7 @@ class ReservedThroughput(object):
 
 
 class ReservedThroughputDetails(object):
-    
+
     def __init__(self, capacity_unit, last_increase_time, last_decrease_time):
         self.capacity_unit = capacity_unit
         self.last_increase_time = last_increase_time
@@ -128,8 +132,8 @@ class FieldType(Enum):
     GEOPOINT = search_pb2.GEO_POINT
 
 class AnalyzerType(object):
-    SINGLEWORD = "single_word" 
-    MAXWORD = "max_word" 
+    SINGLEWORD = "single_word"
+    MAXWORD = "max_word"
 
 class ScoreMode(Enum):
     NONE = search_pb2.SCORE_MODE_NONE
@@ -191,13 +195,13 @@ class Sort(object):
 class IndexSetting(object):
 
     def __init__(self, routing_fields=[]):
-        self.routing_fields = routing_fields 
+        self.routing_fields = routing_fields
 
 
 class FieldSchema(object):
 
-    def __init__(self, field_name, field_type, index=None, 
-        store=None, is_array=None, enable_sort_and_agg=None, 
+    def __init__(self, field_name, field_type, index=None,
+        store=None, is_array=None, enable_sort_and_agg=None,
         analyzer=None, sub_field_schemas=[]):
         self.field_name = field_name
         self.field_type = field_type
@@ -210,7 +214,7 @@ class FieldSchema(object):
 
 class SyncPhase(Enum):
     FULL = 0
-    INCR = 1 
+    INCR = 1
 
 class SyncStat(object):
 
@@ -218,11 +222,30 @@ class SyncStat(object):
         self.sync_phase = sync_phase
         self.current_sync_timestamp = current_sync_timestamp
 
-class IndexMeta(object):
+class SearchIndexMeta(object):
+
     def __init__(self, fields, index_setting=None, index_sort=None):
         self.fields = fields
         self.index_setting = index_setting
         self.index_sort = index_sort
+
+class DefinedColumnSchema(object):
+
+    def __init__(self, name, column_type):
+        self.name = name
+        self.column_type = column_type
+
+class SecondaryIndexType(Enum):
+    GLOBAL_INDEX = 0
+    LOCAL_INDEX = 1
+
+class SecondaryIndexMeta(object):
+
+    def __init__(self, index_name, primary_key_names, defined_column_names, index_type=SecondaryIndexType.GLOBAL_INDEX):
+        self.index_name = index_name
+        self.primary_key_names = primary_key_names
+        self.defined_column_names = defined_column_names
+        self.index_type = index_type
 
 class ColumnType(object):
     STRING = "STRING"
@@ -274,10 +297,11 @@ class UpdateTableResponse(object):
 
 class DescribeTableResponse(object):
 
-    def __init__(self, table_meta, table_options, reserved_throughput_details):
+    def __init__(self, table_meta, table_options, reserved_throughput_details, secondary_indexes=[]):
         self.table_meta = table_meta
         self.table_options = table_options
         self.reserved_throughput_details = reserved_throughput_details
+        self.secondary_indexes = secondary_indexes
 
 
 class RowDataItem(object):
@@ -346,10 +370,10 @@ class ColumnConditionType(object):
     SINGLE_COLUMN_CONDITION = 1
 
 class ColumnCondition(object):
-    pass    
+    pass
 
 class CompositeColumnCondition(ColumnCondition):
-    
+
     def __init__(self, combinator):
         self.sub_conditions = []
         self.set_combinator(combinator)
@@ -373,14 +397,14 @@ class CompositeColumnCondition(ColumnCondition):
                 "The input condition should be an instance of ColumnCondition, not %s"%
                 condition.__class__.__name__
             )
- 
+
         self.sub_conditions.append(condition)
 
     def clear_sub_condition(self):
         self.sub_conditions = []
 
 class SingleColumnCondition(ColumnCondition):
-   
+
     def __init__(self, column_name, column_value, comparator, pass_if_missing = True, latest_version_only = True):
         self.column_name = column_name
         self.column_value = column_value
@@ -452,7 +476,7 @@ class SingleColumnCondition(ColumnCondition):
     def set_comparator(self, comparator):
         if comparator not in ComparatorType.__values__:
             raise OTSClientError(
-                "Expect input comparator of SingleColumnCondition should be one of %s, but '%s'" % 
+                "Expect input comparator of SingleColumnCondition should be one of %s, but '%s'" %
                 (str(ComparatorType.__members__), comparator)
             )
         self.comparator = comparator
@@ -494,9 +518,9 @@ class Condition(object):
             )
 
         self.row_existence_expectation = row_existence_expectation
-        
+
     def get_row_existence_expectation(self):
-        return self.row_existence_expectation 
+        return self.row_existence_expectation
 
     def set_column_condition(self, column_condition):
         if not isinstance(column_condition, ColumnCondition):
@@ -540,7 +564,7 @@ class DeleteRowItem(RowItem):
 
 class TableInBatchGetRowItem(object):
 
-    def __init__(self, table_name, primary_keys, columns_to_get=None, 
+    def __init__(self, table_name, primary_keys, columns_to_get=None,
                  column_filter=None, max_version=None, time_range=None,
                  start_column=None, end_column=None, token=None):
         self.table_name = table_name
@@ -624,7 +648,7 @@ class TableInBatchWriteRowItem(object):
     def __init__(self, table_name, row_items):
         self.table_name = table_name
         self.row_items = row_items
-        
+
 
 class BatchWriteRowRequest(object):
 
@@ -651,7 +675,7 @@ class BatchWriteRowResponse(object):
         self.table_of_put = {}
         self.table_of_update = {}
         self.table_of_delete = {}
-        
+
         for table_name in list(response.keys()):
             put_list = []
             update_list = []
@@ -775,7 +799,7 @@ class PK_AUTO_INCR(object):
 
 class QueryType(Enum):
     MATCH_QUERY = search_pb2.MATCH_QUERY
-    MATCH_PHRASE_QUERY = search_pb2.MATCH_PHRASE_QUERY 
+    MATCH_PHRASE_QUERY = search_pb2.MATCH_PHRASE_QUERY
     TERM_QUERY = search_pb2.TERM_QUERY
     RANGE_QUERY = search_pb2.RANGE_QUERY
     PREFIX_QUERY = search_pb2.PREFIX_QUERY
@@ -912,7 +936,7 @@ class FunctionScoreQuery(Query):
 
 class SearchQuery(object):
 
-    def __init__(self, query, sort=None, 
+    def __init__(self, query, sort=None,
         get_total_count=False, next_token=None,
         offset=None, limit=None):
         self.query = query

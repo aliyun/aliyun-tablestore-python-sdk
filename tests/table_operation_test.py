@@ -278,5 +278,42 @@ class TableOperationTest(APITestBase):
         describe_response = self.client_test.describe_table(table_name)
         self.assert_DescribeTableResponse(describe_response, reserved_throughput.capacity_unit, table_meta, table_options)
 
+    def _assert_index_meta(self, expect_index, actual_index):
+        self.assert_equal(expect_index.index_name, actual_index.index_name)
+        self.assert_equal(expect_index.primary_key_names, actual_index.primary_key_names)
+        self.assert_equal(expect_index.defined_column_names, actual_index.defined_column_names)
+        self.assert_equal(expect_index.index_type, actual_index.index_type)
+
+    def test_create_table_with_secondary_index(self):
+        time.sleep(1)
+
+        table_name = 'table_with_index' + self.get_python_version()
+        schema_of_primary_key = [('gid', 'INTEGER'), ('uid', 'STRING')]
+        defined_columns = [('i', 'INTEGER'), ('bool', 'BOOLEAN'), ('d', 'DOUBLE'), ('s', 'STRING'), ('b', 'BINARY')]
+        table_meta = TableMeta(table_name, schema_of_primary_key, defined_columns)
+        table_option = TableOptions(-1, 1)
+        reserved_throughput = ReservedThroughput(CapacityUnit(0, 0))
+        secondary_indexes = [
+             SecondaryIndexMeta('index_1', ['i', 's'], ['gid', 'uid', 'bool', 'b', 'd']),
+             ]
+        self.client_test.create_table(table_meta, table_option, reserved_throughput, secondary_indexes)
+
+        index_meta = SecondaryIndexMeta('index_2', ['s', 'b'], ['gid', 'uid', 'i'])
+        self.client_test.create_secondary_index(table_name, index_meta)
+
+        dtr = self.client_test.describe_table(table_name)
+        self.assert_DescribeTableResponse(dtr, reserved_throughput.capacity_unit, table_meta, table_option)
+        self.assert_equal(table_meta.defined_columns, dtr.table_meta.defined_columns)
+
+        self.assert_equal(2, len(dtr.secondary_indexes))
+        self._assert_index_meta(secondary_indexes[0], dtr.secondary_indexes[0])
+        self._assert_index_meta(index_meta, dtr.secondary_indexes[1])
+
+        self.client_test.delete_secondary_index(table_name, 'index_1')
+        dtr = self.client_test.describe_table(table_name)
+        self.assert_equal(1, len(dtr.secondary_indexes))
+        self._assert_index_meta(index_meta, dtr.secondary_indexes[0])
+
 if __name__ == '__main__':
     unittest.main()
+

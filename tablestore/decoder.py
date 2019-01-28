@@ -31,7 +31,9 @@ class OTSProtoBufferDecoder(object):
             'DeleteSearchIndex'   : self._decode_delete_search_index,
             'DescribeSearchIndex' : self._decode_describe_search_index,
             'CreateSearchIndex'   : self._decode_create_search_index,
-            'Search'              : self._decode_search
+            'Search'              : self._decode_search,
+            'CreateIndex'         : self._decode_create_index,
+            'DropIndex'           : self._decode_delete_index,
         }
 
     def _parse_string(self, string):
@@ -58,7 +60,7 @@ class OTSProtoBufferDecoder(object):
         if column_option_enum in reverse_enum_map:
             return reverse_enum_map[column_option_enum]
         else:
-            raise OTSClientError("invalid value for column option: %s" % str(column_option_enum))        
+            raise OTSClientError("invalid value for column option: %s" % str(column_option_enum))
 
     def _parse_value(self, proto):
         if proto.type == pb.INTEGER:
@@ -97,7 +99,7 @@ class OTSProtoBufferDecoder(object):
         )
 
     def _parse_row_list(self, proto):
-        row_list = [] 
+        row_list = []
         for row_item in proto:
             row_list.append(self._parse_row(row_item))
         return row_list
@@ -117,13 +119,13 @@ class OTSProtoBufferDecoder(object):
 
         reserved_throughput_details = ReservedThroughputDetails(
             capacity_unit,
-            proto.last_increase_time, 
+            proto.last_increase_time,
             last_decrease_time
         )
         return reserved_throughput_details
 
     def _parse_table_options(self, proto):
-        time_to_live = proto.time_to_live 
+        time_to_live = proto.time_to_live
         max_versions = proto.max_versions
         max_deviation_time  = proto.deviation_cell_version_in_sec
         return TableOptions(time_to_live, max_versions, max_deviation_time)
@@ -132,7 +134,7 @@ class OTSProtoBufferDecoder(object):
     def _parse_get_row_item(self, proto, table_name):
         row_list = []
         for row_item in proto:
-            primary_key_columns = None 
+            primary_key_columns = None
             attribute_columns = None
 
             if row_item.is_ok:
@@ -158,17 +160,17 @@ class OTSProtoBufferDecoder(object):
                 capacity_unit, primary_key_columns, attribute_columns
             )
             row_list.append(row_data_item)
-        
+
         return row_list
 
     def _parse_batch_get_row(self, proto):
         rows = []
         for table_item in proto:
-            rows.append(self._parse_get_row_item(table_item.rows, table_item.table_name)) 
+            rows.append(self._parse_get_row_item(table_item.rows, table_item.table_name))
         return rows
 
     def _parse_write_row_item(self, row_item):
-        primary_key_columns = None 
+        primary_key_columns = None
         attribute_columns = None
 
         if row_item.is_ok:
@@ -219,7 +221,48 @@ class OTSProtoBufferDecoder(object):
         proto = pb.DeleteTableResponse()
         proto.ParseFromString(body)
         return None, proto
-        
+
+    def _parse_secondary_indexes(self, index_metas):
+        secondary_indexes = []
+        if index_metas:
+            for secondary_index in index_metas:
+                primary_key_names = [name for name in secondary_index.primary_key]
+                defined_column_names = [name for name in secondary_index.defined_column]
+                index_type = SecondaryIndexType.GLOBAL_INDEX if secondary_index.index_type == pb.IT_GLOBAL_INDEX else SecondaryIndexType.LOCAL_INDEX
+                secondary_indexes.append(
+                    SecondaryIndexMeta(
+                        secondary_index.name, 
+                        primary_key_names,
+                        defined_column_names,
+                        index_type    
+                    )
+                )
+        return secondary_indexes
+
+    def _get_defined_column_type(self, column_type):
+        if column_type == pb.DCT_INTEGER:
+            return 'INTEGER'
+        elif column_type == pb.DCT_DOUBLE:
+            return 'DOUBLE'
+        elif column_type == pb.DCT_BOOLEAN:
+            return 'BOOLEAN'
+        elif column_type == pb.DCT_STRING:
+            return 'STRING'
+        elif column_type == pb.DCT_BLOB:
+            return 'BINARY'
+        else:
+            raise OTSClientError(
+                'Unknown defined column type: ' + str(column_type)
+            )
+
+    def _parse_defined_columns(self, defined_columns_proto):
+        defined_columns = []
+
+        for df in defined_columns_proto:
+            defined_columns.append((df.name, self._get_defined_column_type(df.type)))
+
+        return defined_columns
+
     def _decode_describe_table(self, body):
         proto = pb.DescribeTableResponse()
         proto.ParseFromString(body)
@@ -228,12 +271,16 @@ class OTSProtoBufferDecoder(object):
             proto.table_meta.table_name,
             self._parse_schema_list(
                 proto.table_meta.primary_key
+            ),
+            self._parse_defined_columns(
+                proto.table_meta.defined_column
             )
         )
-        
+
         reserved_throughput_details = self._parse_reserved_throughput_details(proto.reserved_throughput_details)
         table_options = self._parse_table_options(proto.table_options)
-        describe_table_response = DescribeTableResponse(table_meta, table_options, reserved_throughput_details)
+        secondary_indexes = self._parse_secondary_indexes(proto.index_metas)
+        describe_table_response = DescribeTableResponse(table_meta, table_options, reserved_throughput_details, secondary_indexes)
         return describe_table_response, proto
 
     def _decode_update_table(self, body):
@@ -284,7 +331,7 @@ class OTSProtoBufferDecoder(object):
         proto.ParseFromString(body)
 
         consumed = self._parse_capacity_unit(proto.consumed.capacity_unit)
-        
+
         return_row = None
 
         if len(proto.row) != 0:
@@ -329,23 +376,23 @@ class OTSProtoBufferDecoder(object):
     def _decode_get_range(self, body):
         proto = pb.GetRangeResponse()
         proto.ParseFromString(body)
-        
+
         capacity_unit = self._parse_capacity_unit(proto.consumed.capacity_unit)
 
         next_start_pk = None
         row_list = []
         if len(proto.next_start_primary_key) != 0:
             inputStream = PlainBufferInputStream(proto.next_start_primary_key)
-            codedInputStream = PlainBufferCodedInputStream(inputStream)            
+            codedInputStream = PlainBufferCodedInputStream(inputStream)
             next_start_pk,att = codedInputStream.read_row()
 
         if len(proto.rows) != 0:
             inputStream = PlainBufferInputStream(proto.rows)
             codedInputStream = PlainBufferCodedInputStream(inputStream)
             row_list = codedInputStream.read_rows()
-        
+
         next_token = proto.next_token
-            
+
         return (capacity_unit, next_start_pk, row_list, next_token), proto
 
     def decode_response(self, api_name, response_body):
@@ -390,12 +437,12 @@ class OTSProtoBufferDecoder(object):
             enable_sort_and_agg=proto.enable_sort_and_agg,
             analyzer=proto.analyzer, sub_field_schemas=sub_field_schemas,
         )
-        
+
         return field_schema
 
     def _parse_sort_order(self, proto):
         if proto is None:
-            return None 
+            return None
 
         return SortOrder.ASC if proto == SortOrder.ASC else SortOrder.DESC
 
@@ -429,8 +476,8 @@ class OTSProtoBufferDecoder(object):
         if proto.HasField('field_sort'):
             sorter = FieldSort(
                 proto.field_sort.field_name, sort_order=self._parse_sort_order(proto.field_sort.order),
-                sort_mode=self._parse_sort_mode(proto.field_sort.mode), 
-                nested_filter=self._parse_nested_filter(proto.field_sort.nested_filter)) 
+                sort_mode=self._parse_sort_mode(proto.field_sort.mode),
+                nested_filter=self._parse_nested_filter(proto.field_sort.nested_filter))
         elif proto.HasField('geo_distance_sort'):
             sorter = GeoDistanceSort(
                 proto.geo_distance_sort.field_name,
@@ -447,7 +494,7 @@ class OTSProtoBufferDecoder(object):
         elif proto.HasField('pk_sort'):
             sorter = PrimaryKeySort(
                 sort_order=self._parse_sort_order(proto.pk_sort.order)
-            ) 
+            )
         else:
             raise OTSClientError(
                 "Can't find any index sorter."
@@ -471,11 +518,11 @@ class OTSProtoBufferDecoder(object):
         index_setting = self._parse_index_setting(proto.index_setting)
         index_sort = self._parse_index_sort(proto.index_sort)
 
-        index_meta = IndexMeta(fields, index_setting, index_sort)
-        return index_meta 
+        index_meta = SearchIndexMeta(fields, index_setting, index_sort)
+        return index_meta
 
     def _parse_sync_stat(self, proto):
-        sync_stat = SyncStat(SyncPhase.FULL if proto.sync_phase == search_pb.FULL else SyncPhase.INCR, proto.current_sync_timestamp) 
+        sync_stat = SyncStat(SyncPhase.FULL if proto.sync_phase == search_pb.FULL else SyncPhase.INCR, proto.current_sync_timestamp)
         return sync_stat
 
     def _decode_list_search_index(self, body):
@@ -492,7 +539,7 @@ class OTSProtoBufferDecoder(object):
         proto.ParseFromString(body)
 
         index_meta = self._parse_index_meta(proto.schema)
-        sync_stat = self._parse_sync_stat(proto.sync_stat) 
+        sync_stat = self._parse_sync_stat(proto.sync_stat)
 
         return (index_meta, sync_stat), proto
 
@@ -500,14 +547,14 @@ class OTSProtoBufferDecoder(object):
         proto = search_pb.CreateSearchIndexResponse()
         proto.ParseFromString(body)
 
-        return None, proto 
+        return None, proto
 
     def _decode_delete_search_index(self, body):
         proto = search_pb.DeleteSearchIndexResponse()
         proto.ParseFromString(body)
 
-        return None, proto 
-    
+        return None, proto
+
     def _decode_search(self, body):
         proto = search_pb.SearchResponse()
         proto.ParseFromString(body)
@@ -520,4 +567,16 @@ class OTSProtoBufferDecoder(object):
         total_count = proto.total_hits
         is_all_succeed = proto.is_all_succeed
 
-        return (rows, proto.next_token, total_count, proto.is_all_succeed), proto 
+        return (rows, proto.next_token, total_count, is_all_succeed), proto
+
+    def _decode_create_index(self, body):
+        proto = pb.CreateIndexResponse()
+        proto.ParseFromString(body)
+
+        return None, proto
+
+    def _decode_delete_index(self, body):
+        proto = pb.DropIndexResponse()
+        proto.ParseFromString(body)
+
+        return None, proto

@@ -164,7 +164,7 @@ class OTSClient(object):
 
         return self.protocol.parse_response(api_name, status, resheaders, resbody)
 
-    def create_table(self, table_meta, table_options, reserved_throughput):
+    def create_table(self, table_meta, table_options, reserved_throughput, secondary_indexes=[]):
         """
         说明：根据表信息创建表。
 
@@ -174,6 +174,7 @@ class OTSClient(object):
         ``table_options``是``tablestore.metadata.TableOptions``类的示例，它包含time_to_live，max_version和
         max_time_deviation三个参数。
         ``reserved_throughput``是``tablestore.metadata.ReservedThroughput``类的实例，表示预留读写吞吐量。
+        ``secondary_indexes``是一个数组，可以包含一个或多个``tablestore.metadata.SecondaryIndexMeta``类的实例，表示要创建的二级索引。
 
         返回：无。
 
@@ -186,7 +187,7 @@ class OTSClient(object):
             client.create_table(table_meta, table_options, reserved_throughput)
         """
 
-        self._request_helper('CreateTable', table_meta, table_options, reserved_throughput)
+        self._request_helper('CreateTable', table_meta, table_options, reserved_throughput, secondary_indexes)
 
     def delete_table(self, table_name):
         """
@@ -645,7 +646,7 @@ class OTSClient(object):
         :type index_name: str
         :param index_name: The name of index.
 
-        :type index_meta: tablestore.metadata.IndexMeta
+        :type index_meta: tablestore.metadata.SearchIndexMeta
         :param index_meta: The definition of index, includes fields' schema, index setting and index pre-sorting configuration.
 
         Example usage:
@@ -661,7 +662,7 @@ class OTSClient(object):
                 ])
            fields = [field_a, field_b, field_c, field_d, nested_field]
 
-           index_meta = IndexMeta(fields, index_setting=None, index_sort=None)
+           index_meta = SearchIndexMeta(fields, index_setting=None, index_sort=None)
            client.create_search_index('table_1', 'index_1', index_meta)
         """
 
@@ -713,3 +714,35 @@ class OTSClient(object):
 
         return self._request_helper('Search', table_name, index_name, search_query, columns_to_get, routing_keys)
 
+    def create_secondary_index(self, table_name, index_meta):
+        """
+        Create a new secondary index. 
+
+        :type table_name: str
+        :param table_name: The name of table.
+
+        :type index_meta: tablestore.metadata.SecondaryIndexMeta 
+        :param index_meta: The definition of index.
+
+        Example usage:
+            index_meta = SecondaryIndexMeta('index1', ['i', 's'], ['gid', 'uid', 'bool', 'b', 'd'])
+            client.create_secondary_index(table_name, index_meta)
+        """
+
+        return self._request_helper('CreateIndex', table_name, index_meta) 
+
+    def delete_secondary_index(self, table_name, index_name):
+        """
+        Delete the secondary index. 
+
+        :type table_name: str
+        :param table_name: The name of table.
+
+        :type index_name: str
+        :param index_name: The name of index.
+
+        Example usage:
+            client.delete_secondary_index(table_name, index_name)
+        """
+
+        return self._request_helper('DropIndex', table_name, index_name) 

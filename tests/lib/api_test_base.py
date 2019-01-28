@@ -53,6 +53,7 @@ class APITestBase(TestCase):
             if table_name.find(self.get_python_version()) != -1:
                 for table_name, index_name in self.client_test.list_search_index(table_name):
                     self.client_test.delete_search_index(table_name, index_name)
+
                 self.client_test.delete_table(table_name)
 
     def tearDown(self):

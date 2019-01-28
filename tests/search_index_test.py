@@ -78,26 +78,26 @@ class SearchIndexTest(APITestBase):
         # search index 1: simple schema
         fields = [field_a, field_b, field_c, field_d]
         index_name_1 = 'search_index_1'
-        index_meta_1 = IndexMeta(fields, index_setting=None, index_sort=None)
+        index_meta_1 = SearchIndexMeta(fields, index_setting=None, index_sort=None)
         self.client_test.create_search_index(table_name, index_name_1, index_meta_1)
 
         # search index 2: with sort
         index_sort = Sort([PrimaryKeySort(sort_order=SortOrder.DESC)])
-        index_meta_2 = IndexMeta(fields, index_setting=None, index_sort=index_sort)
+        index_meta_2 = SearchIndexMeta(fields, index_setting=None, index_sort=index_sort)
         index_name_2 = 'search_index_2'
         self.client_test.create_search_index(table_name, index_name_2, index_meta_2)
 
         # search index 3: with nested
         fields = [field_a, field_b, field_c, field_d, nested_field]
         index_name_3 = 'search_index_3'
-        index_meta_3 = IndexMeta(fields, index_setting=None, index_sort=None)
+        index_meta_3 = SearchIndexMeta(fields, index_setting=None, index_sort=None)
         self.client_test.create_search_index(table_name, index_name_3, index_meta_3)
 
         # search index 4: with routing keys
         index_setting = IndexSetting(routing_fields=['PK2'])
         fields = [field_a, field_b, field_c, field_d]
         index_name_4 = 'search_index_4'
-        index_meta_4 = IndexMeta(fields, index_setting=index_setting, index_sort=None)
+        index_meta_4 = SearchIndexMeta(fields, index_setting=index_setting, index_sort=None)
         self.client_test.create_search_index(table_name, index_name_4, index_meta_4)
 
         search_indexes = self.client_test.list_search_index(table_name)
@@ -533,7 +533,7 @@ class SearchIndexTest(APITestBase):
             fields.append(field_n)
         index_setting = IndexSetting(routing_fields=['PK1'])
         index_sort = Sort(sorters=[PrimaryKeySort(SortOrder.ASC)]) if not with_nested else None
-        index_meta = IndexMeta(fields, index_setting=index_setting, index_sort=index_sort) # default with index sort
+        index_meta = SearchIndexMeta(fields, index_setting=index_setting, index_sort=index_sort) # default with index sort
         self.client_test.create_search_index(table_name, index_name, index_meta)
 
 if __name__ == '__main__':

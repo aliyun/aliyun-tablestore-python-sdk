@@ -1,4 +1,4 @@
-# -*- coding: utf8 -*-# 
+# -*- coding: utf8 -*-#
 
 import six
 from builtins import int
@@ -60,8 +60,8 @@ class OTSProtoBufferEncoder(object):
         self.encoding = encoding
 
         self.api_encode_map = {
-            'CreateTable'         : self._encode_create_table, 
-            'DeleteTable'         : self._encode_delete_table, 
+            'CreateTable'         : self._encode_create_table,
+            'DeleteTable'         : self._encode_delete_table,
             'ListTable'           : self._encode_list_table,
             'UpdateTable'         : self._encode_update_table,
             'DescribeTable'       : self._encode_describe_table,
@@ -76,7 +76,9 @@ class OTSProtoBufferEncoder(object):
             'CreateSearchIndex'   : self._encode_create_search_index,
             'DescribeSearchIndex' : self._encode_describe_search_index,
             'DeleteSearchIndex'   : self._encode_delete_search_index,
-            'Search'              : self._encode_search
+            'Search'              : self._encode_search,
+            'CreateIndex'         : self._encode_create_index,
+            'DropIndex'           : self._encode_delete_index,
         }
 
     def _get_enum(self, value):
@@ -206,7 +208,7 @@ class OTSProtoBufferEncoder(object):
         enum_map = COMPARATOR_TYPE_MAP
 
         proto.comparator = enum_map.get(condition.comparator)
-        if proto.comparator is None: 
+        if proto.comparator is None:
             raise OTSClientError(
                 "ComparatorType should be one of [%s], not %s" % (
                     ", ".join(list(enum_map.keys())), str(condition.comparator)
@@ -215,7 +217,7 @@ class OTSProtoBufferEncoder(object):
 
         proto.column_name = self._get_unicode(condition.column_name)
         proto.column_value = bytes(PlainBufferBuilder.serialize_column_value(condition.column_value))
-        proto.filter_if_missing = not condition.pass_if_missing 
+        proto.filter_if_missing = not condition.pass_if_missing
         proto.latest_version_only = condition.latest_version_only
 
         return proto.SerializeToString()
@@ -260,12 +262,12 @@ class OTSProtoBufferEncoder(object):
                 "condition should be an instance of Condition, not %s" %
                 condition.__class__.__name__
             )
- 
+
         global ROW_EXISTENCE_EXPECTATION_MAP
         enum_map = ROW_EXISTENCE_EXPECTATION_MAP
 
-        expectation_str = self._get_unicode(condition.row_existence_expectation) 
-        
+        expectation_str = self._get_unicode(condition.row_existence_expectation)
+
         proto.row_existence = enum_map.get(expectation_str)
         if proto.row_existence is None:
             raise OTSClientError(
@@ -317,7 +319,7 @@ class OTSProtoBufferEncoder(object):
             self._make_column_value(item.value, value)
 
     def _make_update_of_attribute_columns_with_dict(self, proto, column_dict):
-    
+
         if not isinstance(column_dict, dict):
             raise OTSClientError(
                 "expect dict for 'update_of_attribute_columns', not %s" % (
@@ -371,12 +373,12 @@ class OTSProtoBufferEncoder(object):
         if field_schema.enable_sort_and_agg is not None:
             proto.enable_sort_and_agg = field_schema.enable_sort_and_agg
 
-        if field_schema.analyzer: 
+        if field_schema.analyzer:
             proto.analyzer = field_schema.analyzer
 
         for sub_field_schema in field_schema.sub_field_schemas:
             sub_field_proto = proto.field_schemas.add()
-            self._make_index_field_schema(sub_field_proto, sub_field_schema) 
+            self._make_index_field_schema(sub_field_proto, sub_field_schema)
 
 
     def _make_index_setting(self, proto, index_setting):
@@ -409,15 +411,15 @@ class OTSProtoBufferEncoder(object):
 
             if sorter.sort_order is not None:
                 proto.geo_distance_sort.order = self._get_enum(sorter.sort_order)
-            
+
             if sorter.sort_mode is not None:
                 proto.geo_distance_sort.mode = sorter.sort_mode
-            
+
             if sorter.geo_distance_type is not None:
                 proto.geo_distance_sort.distance_type = self._get_enum(sorter.geo_distance_type)
 
             if sorter.nested_filter is not None:
-                self._make_nested_filter(proto.geo_distance_sort.nested_filter, sorter.nested_filter) 
+                self._make_nested_filter(proto.geo_distance_sort.nested_filter, sorter.nested_filter)
         elif isinstance(sorter, ScoreSort):
             proto.score_sort.order = self._get_enum(sorter.sort_order)
         else:
@@ -437,9 +439,9 @@ class OTSProtoBufferEncoder(object):
             self._make_index_sorter(proto.sorter.add(), sorter)
 
     def _make_index_meta(self, proto, index_meta):
-        if not isinstance(index_meta, IndexMeta):
+        if not isinstance(index_meta, SearchIndexMeta):
             raise OTSClientError(
-                "index_meta should be an instance of IndexMeta, not %s"
+                "index_meta should be an instance of SearchIndexMeta, not %s"
                 % index_meta.__class__.__name__
             )
 
@@ -453,58 +455,93 @@ class OTSProtoBufferEncoder(object):
         if index_meta.index_sort:
             self._make_index_sort(proto.index_sort, index_meta.index_sort)
 
+    def _get_defined_column_type(self, column_type):
+        if column_type == 'STRING':
+            return pb2.DCT_STRING
+        elif column_type == 'INTEGER':
+            return pb2.DCT_INTEGER
+        elif column_type == 'DOUBLE':
+            return pb2.DCT_DOUBLE
+        elif column_type == 'BOOLEAN':
+            return pb2.DCT_BOOLEAN
+        elif column_type == 'BINARY':
+            return pb2.DCT_BLOB
+        else:
+            raise OTSClientError(
+                "Wrong type for defined column, only support [STRING, INTEGER, DOUBLE, BOOLEAN, BINARY]."
+            )
+
+    def _make_defined_column_schema(self, proto, defined_columns):
+        if defined_columns:
+            for defined_column in defined_columns:
+                if not isinstance(defined_column, tuple):
+                    raise OTSClientError(
+                        "all schemas of primary keys should be tuple, not %s" % (
+                        defined_column.__class__.__name__
+                        )
+                    )
+
+                column_proto = proto.add()
+                column_proto.name = defined_column[0]
+                column_proto.type = self._get_defined_column_type(defined_column[1])
+
     def _make_table_meta(self, proto, table_meta):
         if not isinstance(table_meta, TableMeta):
             raise OTSClientError(
-                "table_meta should be an instance of TableMeta, not %s" 
+                "table_meta should be an instance of TableMeta, not %s"
                 % table_meta.__class__.__name__
             )
 
         proto.table_name = self._get_unicode(table_meta.table_name)
-        
+
         self._make_schemas_with_list(
             proto.primary_key,
             table_meta.schema_of_primary_key,
         )
 
+        self._make_defined_column_schema(
+            proto.defined_column,
+            table_meta.defined_columns
+        )
+
     def _make_table_options(self, proto, table_options):
         if not isinstance(table_options, TableOptions):
             raise OTSClientError(
-                "table_option should be an instance of TableOptions, not %s" 
+                "table_option should be an instance of TableOptions, not %s"
                 % table_options.__class__.__name__
             )
         if table_options.time_to_live is not None:
             if not isinstance(table_options.time_to_live, int):
                 raise OTSClientError(
-                    "time_to_live should be an instance of int, not %s" 
+                    "time_to_live should be an instance of int, not %s"
                     % table_options.time_to_live.__class__.__name__
-                    )   
+                    )
             proto.time_to_live = table_options.time_to_live
 
         if table_options.max_version is not None:
             if not isinstance(table_options.max_version, int):
                 raise OTSClientError(
-                    "max_version should be an instance of int, not %s" 
+                    "max_version should be an instance of int, not %s"
                     % table_options.max_version.__class__.__name__
-                    )   
+                    )
             proto.max_versions = table_options.max_version
 
         if table_options.max_time_deviation is not None:
             if not isinstance(table_options.max_time_deviation, int):
                 raise OTSClientError(
-                    "max_time_deviation should be an instance of TableOptions, not %s" 
+                    "max_time_deviation should be an instance of TableOptions, not %s"
                     % table_options.max_time_deviation.__class__.__name__
-                    )   
+                    )
             proto.deviation_cell_version_in_sec = table_options.max_time_deviation
 
     def _make_capacity_unit(self, proto, capacity_unit):
 
         if not isinstance(capacity_unit, CapacityUnit):
             raise OTSClientError(
-                "capacity_unit should be an instance of CapacityUnit, not %s" 
+                "capacity_unit should be an instance of CapacityUnit, not %s"
                 % capacity_unit.__class__.__name__
             )
-        
+
         if capacity_unit.read is None or capacity_unit.write is None:
             raise OTSClientError("both of read and write of CapacityUnit are required")
         proto.read = self._get_int32(capacity_unit.read)
@@ -514,19 +551,19 @@ class OTSProtoBufferEncoder(object):
 
         if not isinstance(reserved_throughput, ReservedThroughput):
             raise OTSClientError(
-                "reserved_throughput should be an instance of ReservedThroughput, not %s" 
+                "reserved_throughput should be an instance of ReservedThroughput, not %s"
                 % reserved_throughput.__class__.__name__
             )
-        
+
         self._make_capacity_unit(proto.capacity_unit, reserved_throughput.capacity_unit)
 
     def _make_update_capacity_unit(self, proto, capacity_unit):
         if not isinstance(capacity_unit, CapacityUnit):
             raise OTSClientError(
-                "capacity_unit should be an instance of CapacityUnit, not %s" 
+                "capacity_unit should be an instance of CapacityUnit, not %s"
                 % capacity_unit.__class__.__name__
             )
-        
+
         if capacity_unit.read is None and capacity_unit.write is None:
             raise OTSClientError("at least one of read or write of CapacityUnit is required")
         if capacity_unit.read is not None:
@@ -538,10 +575,10 @@ class OTSProtoBufferEncoder(object):
 
         if not isinstance(reserved_throughput, ReservedThroughput):
             raise OTSClientError(
-                "reserved_throughput should be an instance of ReservedThroughput, not %s" 
+                "reserved_throughput should be an instance of ReservedThroughput, not %s"
                 % reserved_throughput.__class__.__name__
             )
-        
+
         self._make_update_capacity_unit(proto.capacity_unit, reserved_throughput.capacity_unit)
 
     def _make_batch_get_row_internal(self, proto, request):
@@ -577,7 +614,7 @@ class OTSProtoBufferEncoder(object):
 
     def _make_batch_get_row(self, proto, request):
         if isinstance(request, BatchGetRowRequest):
-            self._make_batch_get_row_internal(proto, request) 
+            self._make_batch_get_row_internal(proto, request)
         else:
             raise OTSClientError("The request should be a instance of BatchGetRowRequest, not %d"%(len(request.__class__.__name__)))
 
@@ -642,16 +679,30 @@ class OTSProtoBufferEncoder(object):
 
     def _make_batch_write_row(self, proto, request):
         if isinstance(request, BatchWriteRowRequest):
-            self._make_batch_write_row_internal(proto, request) 
+            self._make_batch_write_row_internal(proto, request)
         else:
             raise OTSClientError("The request should be a instance of MultiTableInBatchWriteRowItem, not %d"%(len(request.__class__.__name__)))
-    
-             
-    def _encode_create_table(self, table_meta, table_options, reserved_throughput):
+
+    def _make_secondary_index(self, proto, secondary_index):
+        proto.name = secondary_index.index_name
+        proto.primary_key.extend(secondary_index.primary_key_names)
+        proto.defined_column.extend(secondary_index.defined_column_names)
+        
+        if secondary_index.index_type == SecondaryIndexType.GLOBAL_INDEX:
+            proto.index_type = pb2.IT_GLOBAL_INDEX
+            proto.index_update_mode = pb2.IUM_ASYNC_INDEX
+        elif secondary_index.index_type == SecondaryIndexType.LOCAL_INDEX:
+            proto.index_type = pb2.IT_LOCAL_INDEX
+            proto.index_update_mode = pb2.IUM_SYNC_INDEX
+
+    def _encode_create_table(self, table_meta, table_options, reserved_throughput, secondary_indexes):
         proto = pb2.CreateTableRequest()
         self._make_table_meta(proto.table_meta, table_meta)
         self._make_reserved_throughput(proto.reserved_throughput, reserved_throughput)
         self._make_table_options(proto.table_options, table_options)
+        
+        for secondary_index in secondary_indexes:
+            self._make_secondary_index(proto.index_metas.add(), secondary_index)
         return proto
 
     def _encode_delete_table(self, table_name):
@@ -677,7 +728,7 @@ class OTSProtoBufferEncoder(object):
         proto.table_name = self._get_unicode(table_name)
         return proto
 
-    def _encode_get_row(self, table_name, primary_key, columns_to_get, column_filter, 
+    def _encode_get_row(self, table_name, primary_key, columns_to_get, column_filter,
                         max_version, time_range, start_column, end_column, token):
         proto = pb2.GetRowRequest()
         proto.table_name = self._get_unicode(table_name)
@@ -755,8 +806,8 @@ class OTSProtoBufferEncoder(object):
         self._make_batch_write_row(proto, request)
         return proto
 
-    def _encode_get_range(self, table_name, direction, 
-                inclusive_start_primary_key, exclusive_end_primary_key, 
+    def _encode_get_range(self, table_name, direction,
+                inclusive_start_primary_key, exclusive_end_primary_key,
                 columns_to_get, limit, column_filter,
                 max_version, time_range, start_column,
                 end_column, token):
@@ -782,7 +833,7 @@ class OTSProtoBufferEncoder(object):
                 proto.time_range.start_time = time_range[0]
                 proto.time_range.end_time = time_range[1]
             elif isinstance(time_range, int):
-                proto.time_range.specific_time = time_range 
+                proto.time_range.specific_time = time_range
         if start_column is not None:
             proto.start_column = start_column
         if end_column is not None:
@@ -802,7 +853,7 @@ class OTSProtoBufferEncoder(object):
         proto = search_pb2.ListSearchIndexRequest()
         if table_name:
             proto.table_name = self._get_unicode(table_name)
-        
+
         return proto
 
     def _encode_delete_search_index(self, table_name, index_name):
@@ -818,7 +869,7 @@ class OTSProtoBufferEncoder(object):
         proto.index_name = self._get_unicode(index_name)
 
         return proto
-        
+
 
     def _encode_create_search_index(self, table_name, index_name, index_meta):
         proto = search_pb2.CreateSearchIndexRequest()
@@ -844,7 +895,7 @@ class OTSProtoBufferEncoder(object):
         proto.search_query = self._encode_search_query(search_query)
         if routing_keys is not None:
             for routing_key in routing_keys:
-                proto.routing_values.append(bytes(PlainBufferBuilder.serialize_primary_key(routing_key))) 
+                proto.routing_values.append(bytes(PlainBufferBuilder.serialize_primary_key(routing_key)))
 
         return proto
 
@@ -859,19 +910,19 @@ class OTSProtoBufferEncoder(object):
         if query.operator is not None:
             proto.operator = search_pb2.OR if (query.operator == QueryOperator.OR) else search_pb2.AND
 
-        return proto.SerializeToString() 
+        return proto.SerializeToString()
 
     def _encode_match_phase_query(self, query):
         proto = search_pb2.MatchPhraseQuery()
         proto.field_name = self._get_unicode(query.field_name)
         proto.text = self._get_unicode(query.text)
-        return proto.SerializeToString() 
+        return proto.SerializeToString()
 
     def _encode_term_query(self, query):
         proto = search_pb2.TermQuery()
         proto.field_name = self._get_unicode(query.field_name)
         proto.term = bytes(PlainBufferBuilder.serialize_column_value(query.column_value))
-        return proto.SerializeToString() 
+        return proto.SerializeToString()
 
     def _encode_range_query(self, query):
         proto = search_pb2.RangeQuery()
@@ -887,13 +938,13 @@ class OTSProtoBufferEncoder(object):
 
         if query.include_upper is not None:
             proto.include_upper = query.include_upper
-        return proto.SerializeToString() 
+        return proto.SerializeToString()
 
     def _encode_prefix_query(self, query):
         proto = search_pb2.PrefixQuery()
         proto.field_name = self._get_unicode(query.field_name)
         proto.prefix = self._get_unicode(query.prefix)
-        return proto.SerializeToString() 
+        return proto.SerializeToString()
 
     def _encode_bool_query(self, query):
         proto = search_pb2.BoolQuery()
@@ -916,52 +967,52 @@ class OTSProtoBufferEncoder(object):
 
         if query.minimum_should_match is not None:
             proto.minimum_should_match = query.minimum_should_match
-        return proto.SerializeToString() 
+        return proto.SerializeToString()
 
     def _encode_nested_query(self, query):
         proto = search_pb2.NestedQuery()
         proto.path = query.path
         self._make_query(proto.query, query.query)
         if query.score_mode is not None:
-            proto.score_mode = self._get_enum(query.score_mode) 
-        return proto.SerializeToString() 
+            proto.score_mode = self._get_enum(query.score_mode)
+        return proto.SerializeToString()
 
     def _encode_wildcard_query(self, query):
         proto = search_pb2.WildcardQuery()
         proto.field_name = self._get_unicode(query.field_name)
         proto.value = self._get_unicode(query.value)
-        return proto.SerializeToString() 
+        return proto.SerializeToString()
 
     def _encode_match_all_query(self, query):
         proto = search_pb2.MatchAllQuery()
-        return proto.SerializeToString() 
+        return proto.SerializeToString()
 
     def _encode_geo_bounding_box_query(self, query):
         proto = search_pb2.GeoBoundingBoxQuery()
         proto.field_name = self._get_unicode(query.field_name)
         proto.top_left = self._get_unicode(query.top_left)
         proto.bottom_right = self._get_unicode(query.bottom_right)
-        return proto.SerializeToString() 
+        return proto.SerializeToString()
 
     def _encode_geo_distance_query(self, query):
         proto = search_pb2.GeoDistanceQuery()
         proto.field_name = self._get_unicode(query.field_name)
         proto.center_point = self._get_unicode(query.center_point)
         proto.distance = float(query.distance)
-        return proto.SerializeToString() 
+        return proto.SerializeToString()
 
     def _encode_geo_polygon_query(self, query):
         proto = search_pb2.GeoPolygonQuery()
         proto.field_name = self._get_unicode(query.field_name)
         proto.points.extend(query.points)
-        return proto.SerializeToString() 
+        return proto.SerializeToString()
 
     def _encode_terms_query(self, query):
         proto = search_pb2.TermsQuery()
         proto.field_name = query.field_name
         for column_value in query.column_values:
             proto.terms.append(bytes(PlainBufferBuilder.serialize_column_value(column_value)))
-        return proto.SerializeToString() 
+        return proto.SerializeToString()
 
     def _make_function_value_factor(self, proto, value_factor):
         proto.field_name = self._get_unicode(value_factor.field_name)
@@ -1047,4 +1098,18 @@ class OTSProtoBufferEncoder(object):
         #    self._make_collapse(proto.collapse, search_query.collapse)
 
         return proto.SerializeToString()
-        
+
+    def _encode_create_index(self, table_name, index_meta):
+        proto = pb2.CreateIndexRequest()
+
+        proto.main_table_name = table_name
+        self._make_secondary_index(proto.index_meta, index_meta)
+
+        return proto
+
+    def _encode_delete_index(self, table_name, index_name):
+        proto = pb2.DropIndexRequest()
+        proto.main_table_name = table_name 
+        proto.index_name = index_name
+
+        return proto

@@ -44,7 +44,7 @@ __all__ = [
     'CompositeColumnCondition',
     'SingleColumnCondition',
     'RowExistenceExpectation',
-    'IndexMeta',
+    'SearchIndexMeta',
     'FieldSchema',
     'FieldType',
     'IndexSetting',
@@ -79,7 +79,10 @@ __all__ = [
     'ColumnReturnType',
     'FieldValueFactor',
     'GeoDistanceType',
-    'NestedFilter'
+    'NestedFilter',
+    'DefinedColumnSchema',
+    'SecondaryIndexMeta',
+    'SecondaryIndexType',
 ]
 
 
