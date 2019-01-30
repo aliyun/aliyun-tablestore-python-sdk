@@ -31,7 +31,7 @@ setup(
     long_description=readme,
     packages=['tablestore', 'tablestore.protobuf', 'tablestore.plainbuffer'],
     package_dir={'tablestore.protobuf': 'tablestore/protobuf/' + base_dir},
-    install_requires=['enum34', 'protobuf', 'urllib3>=1.14', 'certifi>=2016.2.28', 'future>=0.16.0', 'six>=1.11.0'],
+    install_requires=['enum34', 'protobuf>=3.6.1', 'urllib3>=1.14', 'certifi>=2016.2.28', 'future>=0.16.0', 'six>=1.11.0'],
     include_package_data=True,
     url='https://cn.aliyun.com/product/ots',
     classifiers=[
