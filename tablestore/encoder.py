@@ -81,8 +81,9 @@ class OTSProtoBufferEncoder(object):
             'DropIndex'           : self._encode_delete_index,
         }
 
-    def _get_enum(self, value):
-        return value if six.PY2 else value.value
+    def _get_enum(self, e):
+        # to compatible with enum and enum34
+        return e.value if hasattr(e, 'value') else e
 
     def _get_unicode(self, value):
         if isinstance(value, six.binary_type):

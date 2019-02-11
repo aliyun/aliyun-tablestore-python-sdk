@@ -251,7 +251,7 @@ if __name__ == '__main__':
 
     # perform queries
     #match_all_query(table_name, index_name)
-    #match_query(table_name, index_name)
+    match_query(table_name, index_name)
     #match_phrase_query(table_name, index_name)
     #term_query(table_name, index_name)
     #range_query(table_name, index_name)
@@ -262,6 +262,6 @@ if __name__ == '__main__':
     #geo_distance_query(table_name, index_name)
     #geo_bounding_box_query(table_name, index_name)
     #geo_polygon_query(table_name, index_name)
-    nested_query(table_name, nested_index_name)
+    #nested_query(table_name, nested_index_name)
     #function_score_query(table_name, nested_index_name)
 
