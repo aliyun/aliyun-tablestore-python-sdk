@@ -16,11 +16,14 @@ def match_all_query(table_name, index_name):
     all_rows = []
     next_token = None
 
-    while not all_rows or next_token:
+    while True:
         rows, next_token, total_count, is_all_succeed = client.search(table_name, index_name,
             SearchQuery(query, next_token=next_token, limit=100, get_total_count=True),
             columns_to_get=ColumnsToGet(['k', 't', 'g', 'ka', 'la'], ColumnReturnType.SPECIFIED))
         all_rows.extend(rows)
+
+        if not next_token: # data all returned
+            break
 
     for row in all_rows:
         print(row)
@@ -185,6 +188,8 @@ def prepare_data(rows_count):
         client.put_row(table_name, Row(pk, cols))
 
     print ('End prepare data.')
+    print ('Wait for data sync to search index.')
+    time.sleep(10)
 
 def prepare_table():
     table_meta = TableMeta(table_name, [('PK1', 'INTEGER'), ('PK2', 'STRING')])
