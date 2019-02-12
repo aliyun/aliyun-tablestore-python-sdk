@@ -414,7 +414,7 @@ class OTSProtoBufferEncoder(object):
                 proto.geo_distance_sort.order = self._get_enum(sorter.sort_order)
 
             if sorter.sort_mode is not None:
-                proto.geo_distance_sort.mode = sorter.sort_mode
+                proto.geo_distance_sort.mode = self._get_enum(sorter.sort_mode)
 
             if sorter.geo_distance_type is not None:
                 proto.geo_distance_sort.distance_type = self._get_enum(sorter.geo_distance_type)

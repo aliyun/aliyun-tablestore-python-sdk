@@ -36,7 +36,7 @@ def describe_table(client):
     print ('table options\'s max version: %s' % describe_response.table_options.max_version)
     print ('table options\'s max_time_deviation: %s' % describe_response.table_options.max_time_deviation)
     print ('End DescribeTable')
-        
+
 def update_table(client):
     print ('Begin UpdateTable')
     table_option = TableOptions(100001, None, None)
@@ -59,7 +59,6 @@ if __name__ == '__main__':
     client = OTSClient(OTS_ENDPOINT, OTS_ID, OTS_SECRET, OTS_INSTANCE)
     try:
         delete_table(client)
-        print 'delete succeeded.'
     except:
         pass
 

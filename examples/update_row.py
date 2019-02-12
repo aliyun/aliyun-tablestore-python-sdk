@@ -50,20 +50,18 @@ def get_row(client):
 
 if __name__ == '__main__':
     client = OTSClient(OTS_ENDPOINT, OTS_ID, OTS_SECRET, OTS_INSTANCE)
-    '''
     try:
         delete_table(client)
     except:
         pass
     create_table(client)
-    '''
 
     #time.sleep(3) # wait for table ready
-    #put_row(client)
+    put_row(client)
     print ('#### row before update ####')
     get_row(client)
     update_row(client)
     print ('#### row after update ####')
     get_row(client)
-    #delete_table(client)
+    delete_table(client)
 

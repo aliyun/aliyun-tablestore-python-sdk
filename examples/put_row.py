@@ -23,7 +23,7 @@ def delete_table(client):
 
 def put_row(client):
     primary_key = [('gid',1), ('uid',101)]
-    attribute_columns = [('name','萧峰'), ('mobile',15100000000), ('address', bytearray('China')), 
+    attribute_columns = [('name','萧峰'), ('mobile',15100000000), ('address', bytearray('China', 'utf-8')),
                          ('female', False), ('age', 29.7)]
     row = Row(primary_key, attribute_columns)
 

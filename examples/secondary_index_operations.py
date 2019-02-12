@@ -6,6 +6,8 @@ import time
 import json
 
 table_name = 'SecondaryIndexOperationExample'
+index_name_1 = 'index1'
+index_name_2 = 'index2'
 
 def create_table(client):
     print ('Begin CreateTable')
@@ -15,14 +17,14 @@ def create_table(client):
     table_option = TableOptions(-1, 1)
     reserved_throughput = ReservedThroughput(CapacityUnit(0, 0))
     secondary_indexes = [
-            SecondaryIndexMeta('index1', ['i', 's'], ['gid', 'uid', 'bool', 'b', 'd']),
+            SecondaryIndexMeta(index_name_1, ['i', 's'], ['bool', 'b', 'd']),
             ]
     client.create_table(table_meta, table_option, reserved_throughput, secondary_indexes)
     print ('Table has been created.')
 
 def create_index(client):
     print ('Begin CreateIndex')
-    index_meta = SecondaryIndexMeta('index2', ['i', 's'], ['gid', 'uid', 'bool', 'b', 'd'])
+    index_meta = SecondaryIndexMeta(index_name_2, ['i', 's'], ['bool', 'b', 'd'])
     client.create_secondary_index(table_name, index_meta)
     print ('Index has been created.')
 
@@ -40,12 +42,14 @@ def describe_table(client):
     print ('table options\'s max_time_deviation: %s' % describe_response.table_options.max_time_deviation)
     print ('Secondary indexes:')
     for secondary_index in describe_response.secondary_indexes:
-        print (json.dumps(secondary_index, default=lambda x:x.__dict__, indent=2))
+        print ('index name: %s' % secondary_index.index_name)
+        print ('primary key names: %s' % str(secondary_index.primary_key_names))
+        print ('defined column names: %s' % str(secondary_index.defined_column_names))
     print ('End DescribeTable')
 
-def delete_index(client):
+def delete_index(client, index_name):
     print ('Begin DeleteIndex')
-    client.delete_secondary_index(table_name, 'index1')
+    client.delete_secondary_index(table_name, index_name)
     print ('End delete index.')
 
 def delete_table(client):
@@ -57,7 +61,6 @@ if __name__ == '__main__':
     client = OTSClient(OTS_ENDPOINT, OTS_ID, OTS_SECRET, OTS_INSTANCE)
     try:
         delete_table(client)
-        print 'delete succeeded.'
     except:
         pass
 
@@ -66,6 +69,8 @@ if __name__ == '__main__':
     #time.sleep(3) # wait for table ready
     create_index(client)
     describe_table(client)
-    delete_index(client)
+    delete_index(client, index_name_1)
     describe_table(client)
+    delete_index(client, index_name_2)
+    delete_table(client)
 

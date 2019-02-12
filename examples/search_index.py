@@ -23,16 +23,16 @@ def match_all_query(table_name, index_name):
         all_rows.extend(rows)
 
     for row in all_rows:
-        print row
+        print(row)
 
-    print 'Total rows:', len(all_rows)
+    print ('Total rows: %d' % len(all_rows))
 
 def _print_rows(rows, total_count):
     for row in rows:
-        print row
+        print(row)
 
-    print 'Rows return:', len(rows)
-    print 'Total count:', total_count
+    print ('Rows return: %d' % len(rows))
+    print ('Total count: %d' % total_count)
 
 def match_query(table_name, index_name):
     query = MatchQuery('t', 'this is 0')
@@ -122,7 +122,7 @@ def bool_query(table_name, index_name):
 def geo_distance_query(table_name, index_name):
     query = GeoDistanceQuery('g', '32.5,116.5', 300000)
     sort = Sort(sorters=[
-            GeoDistanceSort('g', ['32.5,116.5', '32.0,116.0'], sort_order=SortOrder.DESC, sort_mode=SortMode.MAX)
+            GeoDistanceSort('g', ['32.5,116.5', '32.0,116.0'], sort_order=SortOrder.DESC)
         ])
     rows, next_token, total_count, is_all_succeed = client.search(
         table_name, index_name, SearchQuery(query, limit=100, get_total_count=True, sort=sort), ColumnsToGet(return_type=ColumnReturnType.ALL)
@@ -171,6 +171,7 @@ def function_score_query(table_name, index_name):
     _print_rows(rows, total_count)
 
 def prepare_data(rows_count):
+    print ('Begin prepare data: %d' % rows_count)
     for i in range(rows_count):
         pk = [('PK1', i), ('PK2', 'pk_' + str(i % 10))]
         lj = i / 100
@@ -182,6 +183,8 @@ def prepare_data(rows_count):
             ('n', json.dumps([{'nk':'key%03d' % i, 'nl':i, 'nt':'this is in nested ' + str(i)}]))]
 
         client.put_row(table_name, Row(pk, cols))
+
+    print ('End prepare data.')
 
 def prepare_table():
     table_meta = TableMeta(table_name, [('PK1', 'INTEGER'), ('PK2', 'STRING')])
@@ -216,52 +219,64 @@ def prepare_index(index_name, with_nested=False):
 
 def list_search_index():
     for table, index_name in client.list_search_index(table_name):
-        print table, index_name
+        print ('%s, %s' % (table, index_name))
 
 def describe_search_index():
     index_meta, sync_stat = client.describe_search_index(table_name, index_name)
-    print json.dumps(index_meta, default=lambda x:x.__dict__, indent=2)
-    print json.dumps(sync_stat, default=lambda x:x.__dict__, indent=2)
+    print ('sync stat: %s, %d' % (str(sync_stat.sync_phase), sync_stat.current_sync_timestamp))
+    print ('index name: %s' % index_name)
+    print ('index fields:')
+    for field in index_meta.fields:
+        print ('  field name: %s' % field.field_name)
+        print ('  field type: %s' % str(field.field_type))
+        print ('  field indexed: %s' % str(field.index))
+        print ('  field stored: %s' % str(field.store))
+        print ('  field is array: %s' % str(field.is_array))
+        print ('  field allow sort and aggregate: %s' % str(field.enable_sort_and_agg))
+    print ('index routing keys: %s' % str(index_meta.index_setting.routing_fields))
+    print ('index sort: %s' % (index_meta.index_sort.sorters))
 
 def delete_table():
     try:
         client.delete_table(table_name)
-    except Exception,e:
-        print e
+    except:
+        pass
 
 def delete_search_index(index_name):
     try:
         client.delete_search_index(table_name, index_name)
-    except Exception,e:
-        print e
+    except:
+        pass
 
 if __name__ == '__main__':
     client = OTSClient(OTS_ENDPOINT, OTS_ID, OTS_SECRET, OTS_INSTANCE)
-    #delete_search_index(index_name)
-    #delete_search_index(nested_index_name)
-    #delete_table()
+    delete_search_index(index_name)
+    delete_search_index(nested_index_name)
+    delete_table()
 
-    #prepare_table()
-    #prepare_index(index_name, with_nested=False)
-    #prepare_index(nested_index_name, with_nested=True)
-    #prepare_data(1000)
-
-    #list_search_index()
-    #describe_search_index()
+    prepare_table()
+    prepare_index(index_name, with_nested=False)
+    prepare_index(nested_index_name, with_nested=True)
+    prepare_data(1000)
+    list_search_index()
+    describe_search_index()
 
     # perform queries
-    #match_all_query(table_name, index_name)
+    match_all_query(table_name, index_name)
     match_query(table_name, index_name)
-    #match_phrase_query(table_name, index_name)
-    #term_query(table_name, index_name)
-    #range_query(table_name, index_name)
-    #prefix_query(table_name, index_name)
-    #terms_query(table_name, index_name)
-    #bool_query(table_name, index_name)
-    #wildcard_query(table_name, index_name)
-    #geo_distance_query(table_name, index_name)
-    #geo_bounding_box_query(table_name, index_name)
-    #geo_polygon_query(table_name, index_name)
-    #nested_query(table_name, nested_index_name)
-    #function_score_query(table_name, nested_index_name)
+    match_phrase_query(table_name, index_name)
+    term_query(table_name, index_name)
+    range_query(table_name, index_name)
+    prefix_query(table_name, index_name)
+    terms_query(table_name, index_name)
+    bool_query(table_name, index_name)
+    wildcard_query(table_name, index_name)
+    geo_distance_query(table_name, index_name)
+    geo_bounding_box_query(table_name, index_name)
+    geo_polygon_query(table_name, index_name)
+    nested_query(table_name, nested_index_name)
+    function_score_query(table_name, nested_index_name)
 
+    delete_search_index(index_name)
+    delete_search_index(nested_index_name)
+    delete_table()

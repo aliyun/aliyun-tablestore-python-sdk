@@ -20,14 +20,14 @@ def delete_table(client):
 
 def put_row(client):
     for i in range(0, 100):
-        primary_key = [('uid',i), ('gid', bytearray(str(i+1)))]
+        primary_key = [('uid',i), ('gid', bytearray(str(i+1), 'utf-8'))]
         attribute_columns = [('name','John'), ('mobile',i), ('address','China'), ('age',i)]
         row = Row(primary_key, attribute_columns)
         condition = Condition(RowExistenceExpectation.IGNORE) # Expect not exist: put it into table only when this row is not exist.
         consumed, return_row = client.put_row(table_name, row, condition)
         print ('Write succeed, consume %s write cu.' % consumed.write)
 
-def get_range(client): 
+def get_range(client):
     '''
         Scan table to get all the rows.
         It will not return you all once, you should continue read from next start primary key till next start primary key is None.
@@ -42,10 +42,10 @@ def get_range(client):
     cond.add_sub_condition(SingleColumnCondition("age", 50, ComparatorType.LESS_THAN))
 
     consumed, next_start_primary_key, row_list, next_token  = client.get_range(
-                table_name, Direction.FORWARD, 
+                table_name, Direction.FORWARD,
                 inclusive_start_primary_key, exclusive_end_primary_key,
-                columns_to_get, 
-                limit, 
+                columns_to_get,
+                limit,
                 column_filter = cond,
                 max_version = 1
     )
@@ -55,9 +55,9 @@ def get_range(client):
     while next_start_primary_key is not None:
         inclusive_start_primary_key = next_start_primary_key
         consumed, next_start_primary_key, row_list, next_token = client.get_range(
-                table_name, Direction.FORWARD, 
+                table_name, Direction.FORWARD,
                 inclusive_start_primary_key, exclusive_end_primary_key,
-                columns_to_get, limit, 
+                columns_to_get, limit,
                 column_filter = cond,
                 max_version = 1
         )
@@ -79,10 +79,10 @@ def xget_range(client):
     cond = CompositeColumnCondition(LogicalOperator.AND)
     cond.add_sub_condition(SingleColumnCondition("address", 'China', ComparatorType.EQUAL))
     cond.add_sub_condition(SingleColumnCondition("age", 50, ComparatorType.GREATER_EQUAL))
-     
+
     columns_to_get = []
     range_iter = client.xget_range(
-                table_name, Direction.FORWARD, 
+                table_name, Direction.FORWARD,
                 inclusive_start_primary_key, exclusive_end_primary_key,
                 consumed_counter, columns_to_get, 100,
                 column_filter = cond, max_version = 1
