@@ -688,7 +688,7 @@ class OTSProtoBufferEncoder(object):
         proto.name = secondary_index.index_name
         proto.primary_key.extend(secondary_index.primary_key_names)
         proto.defined_column.extend(secondary_index.defined_column_names)
-        
+
         if secondary_index.index_type == SecondaryIndexType.GLOBAL_INDEX:
             proto.index_type = pb2.IT_GLOBAL_INDEX
             proto.index_update_mode = pb2.IUM_ASYNC_INDEX
@@ -701,7 +701,7 @@ class OTSProtoBufferEncoder(object):
         self._make_table_meta(proto.table_meta, table_meta)
         self._make_reserved_throughput(proto.reserved_throughput, reserved_throughput)
         self._make_table_options(proto.table_options, table_options)
-        
+
         for secondary_index in secondary_indexes:
             self._make_secondary_index(proto.index_metas.add(), secondary_index)
         return proto
@@ -1086,7 +1086,7 @@ class OTSProtoBufferEncoder(object):
         if search_query.get_total_count is not None:
             proto.get_total_count = search_query.get_total_count
 
-        if search_query.next_token is not None:
+        if search_query.next_token:
             proto.token = search_query.next_token
 
         if search_query.offset is not None:
@@ -1110,7 +1110,7 @@ class OTSProtoBufferEncoder(object):
 
     def _encode_delete_index(self, table_name, index_name):
         proto = pb2.DropIndexRequest()
-        proto.main_table_name = table_name 
+        proto.main_table_name = table_name
         proto.index_name = index_name
 
         return proto
