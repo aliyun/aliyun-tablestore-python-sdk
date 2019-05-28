@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='com.aliyun.tablestore.protocol',
   syntax='proto2',
   serialized_options=None,
-  serialized_pb=_b('\n\x0csearch.proto\x12\x1e\x63om.aliyun.tablestore.protocol\"\x8d\x01\n\nMatchQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0c\n\x04text\x18\x02 \x01(\t\x12\x1c\n\x14minimum_should_match\x18\x03 \x01(\x05\x12?\n\x08operator\x18\x04 \x01(\x0e\x32-.com.aliyun.tablestore.protocol.QueryOperator\"4\n\x10MatchPhraseQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0c\n\x04text\x18\x02 \x01(\t\"\x0f\n\rMatchAllQuery\"-\n\tTermQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0c\n\x04term\x18\x02 \x01(\x0c\"/\n\nTermsQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\r\n\x05terms\x18\x02 \x03(\x0c\"t\n\nRangeQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x12\n\nrange_from\x18\x02 \x01(\x0c\x12\x10\n\x08range_to\x18\x03 \x01(\x0c\x12\x15\n\rinclude_lower\x18\x04 \x01(\x08\x12\x15\n\rinclude_upper\x18\x05 \x01(\x08\"1\n\x0bPrefixQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0e\n\x06prefix\x18\x02 \x01(\t\"2\n\rWildcardQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"\xa5\x02\n\tBoolQuery\x12;\n\x0cmust_queries\x18\x01 \x03(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12?\n\x10must_not_queries\x18\x02 \x03(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12=\n\x0e\x66ilter_queries\x18\x03 \x03(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12=\n\x0eshould_queries\x18\x04 \x03(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12\x1c\n\x14minimum_should_match\x18\x05 \x01(\x05\"H\n\x0f\x43onstScoreQuery\x12\x35\n\x06\x66ilter\x18\x01 \x01(\x0b\x32%.com.aliyun.tablestore.protocol.Query\"&\n\x10\x46ieldValueFactor\x12\x12\n\nfield_name\x18\x01 \x01(\t\"\x98\x01\n\x12\x46unctionScoreQuery\x12\x34\n\x05query\x18\x01 \x01(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12L\n\x12\x66ield_value_factor\x18\x02 \x01(\x0b\x32\x30.com.aliyun.tablestore.protocol.FieldValueFactor\"\x90\x01\n\x0bNestedQuery\x12\x0c\n\x04path\x18\x01 \x01(\t\x12\x34\n\x05query\x18\x02 \x01(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12=\n\nscore_mode\x18\x03 \x01(\x0e\x32).com.aliyun.tablestore.protocol.ScoreMode\"Q\n\x13GeoBoundingBoxQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x10\n\x08top_left\x18\x02 \x01(\t\x12\x14\n\x0c\x62ottom_right\x18\x03 \x01(\t\"N\n\x10GeoDistanceQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x14\n\x0c\x63\x65nter_point\x18\x02 \x01(\t\x12\x10\n\x08\x64istance\x18\x03 \x01(\x01\"5\n\x0fGeoPolygonQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0e\n\x06points\x18\x02 \x03(\t\"O\n\x05Query\x12\x37\n\x04type\x18\x01 \x01(\x0e\x32).com.aliyun.tablestore.protocol.QueryType\x12\r\n\x05query\x18\x02 \x01(\x0c\"\x1e\n\x08\x43ollapse\x12\x12\n\nfield_name\x18\x01 \x01(\t\"S\n\x0cNestedFilter\x12\x0c\n\x04path\x18\x01 \x01(\t\x12\x35\n\x06\x66ilter\x18\x02 \x01(\x0b\x32%.com.aliyun.tablestore.protocol.Query\"E\n\tScoreSort\x12\x38\n\x05order\x18\x01 \x01(\x0e\x32).com.aliyun.tablestore.protocol.SortOrder\"J\n\x0ePrimaryKeySort\x12\x38\n\x05order\x18\x01 \x01(\x0e\x32).com.aliyun.tablestore.protocol.SortOrder\"\xd6\x01\n\tFieldSort\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x38\n\x05order\x18\x02 \x01(\x0e\x32).com.aliyun.tablestore.protocol.SortOrder\x12\x36\n\x04mode\x18\x03 \x01(\x0e\x32(.com.aliyun.tablestore.protocol.SortMode\x12\x43\n\rnested_filter\x18\x04 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.NestedFilter\"\xb4\x02\n\x0fGeoDistanceSort\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0e\n\x06points\x18\x02 \x03(\t\x12\x38\n\x05order\x18\x03 \x01(\x0e\x32).com.aliyun.tablestore.protocol.SortOrder\x12\x36\n\x04mode\x18\x04 \x01(\x0e\x32(.com.aliyun.tablestore.protocol.SortMode\x12\x46\n\rdistance_type\x18\x05 \x01(\x0e\x32/.com.aliyun.tablestore.protocol.GeoDistanceType\x12\x43\n\rnested_filter\x18\x06 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.NestedFilter\"\x93\x02\n\x06Sorter\x12=\n\nfield_sort\x18\x01 \x01(\x0b\x32).com.aliyun.tablestore.protocol.FieldSort\x12J\n\x11geo_distance_sort\x18\x02 \x01(\x0b\x32/.com.aliyun.tablestore.protocol.GeoDistanceSort\x12=\n\nscore_sort\x18\x03 \x01(\x0b\x32).com.aliyun.tablestore.protocol.ScoreSort\x12?\n\x07pk_sort\x18\x04 \x01(\x0b\x32..com.aliyun.tablestore.protocol.PrimaryKeySort\">\n\x04Sort\x12\x36\n\x06sorter\x18\x01 \x03(\x0b\x32&.com.aliyun.tablestore.protocol.Sorter\"\xfa\x01\n\x0bSearchQuery\x12\x0e\n\x06offset\x18\x01 \x01(\x05\x12\r\n\x05limit\x18\x02 \x01(\x05\x12\x34\n\x05query\x18\x04 \x01(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12:\n\x08\x63ollapse\x18\x05 \x01(\x0b\x32(.com.aliyun.tablestore.protocol.Collapse\x12\x32\n\x04sort\x18\x06 \x01(\x0b\x32$.com.aliyun.tablestore.protocol.Sort\x12\x17\n\x0fget_total_count\x18\x08 \x01(\x08\x12\r\n\x05token\x18\t \x01(\x0c\"k\n\x0c\x43olumnsToGet\x12\x45\n\x0breturn_type\x18\x01 \x01(\x0e\x32\x30.com.aliyun.tablestore.protocol.ColumnReturnType\x12\x14\n\x0c\x63olumn_names\x18\x02 \x03(\t\"\xab\x01\n\rSearchRequest\x12\x12\n\ntable_name\x18\x01 \x01(\t\x12\x12\n\nindex_name\x18\x02 \x01(\t\x12\x44\n\x0e\x63olumns_to_get\x18\x03 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.ColumnsToGet\x12\x14\n\x0csearch_query\x18\x04 \x01(\x0c\x12\x16\n\x0erouting_values\x18\x05 \x03(\x0c\"^\n\x0eSearchResponse\x12\x12\n\ntotal_hits\x18\x01 \x01(\x03\x12\x0c\n\x04rows\x18\x02 \x03(\x0c\x12\x16\n\x0eis_all_succeed\x18\x03 \x01(\x08\x12\x12\n\nnext_token\x18\x06 \x01(\x0c\"\x83\x02\n\x0b\x46ieldSchema\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12=\n\nfield_type\x18\x02 \x01(\x0e\x32).com.aliyun.tablestore.protocol.FieldType\x12\x10\n\x08\x61nalyzer\x18\x04 \x01(\t\x12\r\n\x05index\x18\x05 \x01(\x08\x12\x1b\n\x13\x65nable_sort_and_agg\x18\x06 \x01(\x08\x12\r\n\x05store\x18\x07 \x01(\x08\x12\x42\n\rfield_schemas\x18\x08 \x03(\x0b\x32+.com.aliyun.tablestore.protocol.FieldSchema\x12\x10\n\x08is_array\x18\t \x01(\x08\"\xd0\x01\n\x0bIndexSchema\x12\x42\n\rfield_schemas\x18\x01 \x03(\x0b\x32+.com.aliyun.tablestore.protocol.FieldSchema\x12\x43\n\rindex_setting\x18\x02 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.IndexSetting\x12\x38\n\nindex_sort\x18\x03 \x01(\x0b\x32$.com.aliyun.tablestore.protocol.Sort\"`\n\x0cIndexSetting\x12\x18\n\x10number_of_shards\x18\x01 \x01(\x05\x12\x16\n\x0erouting_fields\x18\x02 \x03(\t\x12\x1e\n\x16routing_partition_size\x18\x03 \x01(\x05\"\x7f\n\x18\x43reateSearchIndexRequest\x12\x12\n\ntable_name\x18\x01 \x02(\t\x12\x12\n\nindex_name\x18\x02 \x02(\t\x12;\n\x06schema\x18\x03 \x01(\x0b\x32+.com.aliyun.tablestore.protocol.IndexSchema\"\x1b\n\x19\x43reateSearchIndexResponse\"3\n\tIndexInfo\x12\x12\n\ntable_name\x18\x01 \x01(\t\x12\x12\n\nindex_name\x18\x02 \x01(\t\",\n\x16ListSearchIndexRequest\x12\x12\n\ntable_name\x18\x01 \x01(\t\"U\n\x17ListSearchIndexResponse\x12:\n\x07indices\x18\x01 \x03(\x0b\x32).com.aliyun.tablestore.protocol.IndexInfo\"B\n\x18\x44\x65leteSearchIndexRequest\x12\x12\n\ntable_name\x18\x01 \x01(\t\x12\x12\n\nindex_name\x18\x02 \x01(\t\"\x1b\n\x19\x44\x65leteSearchIndexResponse\"i\n\x08SyncStat\x12=\n\nsync_phase\x18\x01 \x01(\x0e\x32).com.aliyun.tablestore.protocol.SyncPhase\x12\x1e\n\x16\x63urrent_sync_timestamp\x18\x02 \x01(\x03\"D\n\x1a\x44\x65scribeSearchIndexRequest\x12\x12\n\ntable_name\x18\x01 \x01(\t\x12\x12\n\nindex_name\x18\x02 \x01(\t\"\x97\x01\n\x1b\x44\x65scribeSearchIndexResponse\x12;\n\x06schema\x18\x01 \x01(\x0b\x32+.com.aliyun.tablestore.protocol.IndexSchema\x12;\n\tsync_stat\x18\x02 \x01(\x0b\x32(.com.aliyun.tablestore.protocol.SyncStat*\xbf\x02\n\tQueryType\x12\x0f\n\x0bMATCH_QUERY\x10\x01\x12\x16\n\x12MATCH_PHRASE_QUERY\x10\x02\x12\x0e\n\nTERM_QUERY\x10\x03\x12\x0f\n\x0bRANGE_QUERY\x10\x04\x12\x10\n\x0cPREFIX_QUERY\x10\x05\x12\x0e\n\nBOOL_QUERY\x10\x06\x12\x15\n\x11\x43ONST_SCORE_QUERY\x10\x07\x12\x18\n\x14\x46UNCTION_SCORE_QUERY\x10\x08\x12\x10\n\x0cNESTED_QUERY\x10\t\x12\x12\n\x0eWILDCARD_QUERY\x10\n\x12\x13\n\x0fMATCH_ALL_QUERY\x10\x0b\x12\x1a\n\x16GEO_BOUNDING_BOX_QUERY\x10\x0c\x12\x16\n\x12GEO_DISTANCE_QUERY\x10\r\x12\x15\n\x11GEO_POLYGON_QUERY\x10\x0e\x12\x0f\n\x0bTERMS_QUERY\x10\x0f* \n\rQueryOperator\x12\x06\n\x02OR\x10\x01\x12\x07\n\x03\x41ND\x10\x02*r\n\tScoreMode\x12\x13\n\x0fSCORE_MODE_NONE\x10\x01\x12\x12\n\x0eSCORE_MODE_AVG\x10\x02\x12\x12\n\x0eSCORE_MODE_MAX\x10\x03\x12\x14\n\x10SCORE_MODE_TOTAL\x10\x04\x12\x12\n\x0eSCORE_MODE_MIN\x10\x05*4\n\tSortOrder\x12\x12\n\x0eSORT_ORDER_ASC\x10\x00\x12\x13\n\x0fSORT_ORDER_DESC\x10\x01*C\n\x08SortMode\x12\x11\n\rSORT_MODE_MIN\x10\x00\x12\x11\n\rSORT_MODE_MAX\x10\x01\x12\x11\n\rSORT_MODE_AVG\x10\x02*?\n\x0fGeoDistanceType\x12\x14\n\x10GEO_DISTANCE_ARC\x10\x00\x12\x16\n\x12GEO_DISTANCE_PLANE\x10\x01*I\n\x10\x43olumnReturnType\x12\x0e\n\nRETURN_ALL\x10\x01\x12\x14\n\x10RETURN_SPECIFIED\x10\x02\x12\x0f\n\x0bRETURN_NONE\x10\x03*`\n\tFieldType\x12\x08\n\x04LONG\x10\x01\x12\n\n\x06\x44OUBLE\x10\x02\x12\x0b\n\x07\x42OOLEAN\x10\x03\x12\x0b\n\x07KEYWORD\x10\x04\x12\x08\n\x04TEXT\x10\x05\x12\n\n\x06NESTED\x10\x06\x12\r\n\tGEO_POINT\x10\x07*\x1f\n\tSyncPhase\x12\x08\n\x04\x46ULL\x10\x01\x12\x08\n\x04INCR\x10\x02')
+  serialized_pb=_b('\n\x0csearch.proto\x12\x1e\x63om.aliyun.tablestore.protocol\"\x8d\x01\n\nMatchQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0c\n\x04text\x18\x02 \x01(\t\x12\x1c\n\x14minimum_should_match\x18\x03 \x01(\x05\x12?\n\x08operator\x18\x04 \x01(\x0e\x32-.com.aliyun.tablestore.protocol.QueryOperator\"4\n\x10MatchPhraseQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0c\n\x04text\x18\x02 \x01(\t\"\x0f\n\rMatchAllQuery\"-\n\tTermQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0c\n\x04term\x18\x02 \x01(\x0c\"/\n\nTermsQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\r\n\x05terms\x18\x02 \x03(\x0c\"t\n\nRangeQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x12\n\nrange_from\x18\x02 \x01(\x0c\x12\x10\n\x08range_to\x18\x03 \x01(\x0c\x12\x15\n\rinclude_lower\x18\x04 \x01(\x08\x12\x15\n\rinclude_upper\x18\x05 \x01(\x08\"1\n\x0bPrefixQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0e\n\x06prefix\x18\x02 \x01(\t\"2\n\rWildcardQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"\xa5\x02\n\tBoolQuery\x12;\n\x0cmust_queries\x18\x01 \x03(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12?\n\x10must_not_queries\x18\x02 \x03(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12=\n\x0e\x66ilter_queries\x18\x03 \x03(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12=\n\x0eshould_queries\x18\x04 \x03(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12\x1c\n\x14minimum_should_match\x18\x05 \x01(\x05\"H\n\x0f\x43onstScoreQuery\x12\x35\n\x06\x66ilter\x18\x01 \x01(\x0b\x32%.com.aliyun.tablestore.protocol.Query\"&\n\x10\x46ieldValueFactor\x12\x12\n\nfield_name\x18\x01 \x01(\t\"\x98\x01\n\x12\x46unctionScoreQuery\x12\x34\n\x05query\x18\x01 \x01(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12L\n\x12\x66ield_value_factor\x18\x02 \x01(\x0b\x32\x30.com.aliyun.tablestore.protocol.FieldValueFactor\"\x90\x01\n\x0bNestedQuery\x12\x0c\n\x04path\x18\x01 \x01(\t\x12\x34\n\x05query\x18\x02 \x01(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12=\n\nscore_mode\x18\x03 \x01(\x0e\x32).com.aliyun.tablestore.protocol.ScoreMode\"Q\n\x13GeoBoundingBoxQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x10\n\x08top_left\x18\x02 \x01(\t\x12\x14\n\x0c\x62ottom_right\x18\x03 \x01(\t\"N\n\x10GeoDistanceQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x14\n\x0c\x63\x65nter_point\x18\x02 \x01(\t\x12\x10\n\x08\x64istance\x18\x03 \x01(\x01\"5\n\x0fGeoPolygonQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0e\n\x06points\x18\x02 \x03(\t\"!\n\x0b\x45xistsQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\"O\n\x05Query\x12\x37\n\x04type\x18\x01 \x01(\x0e\x32).com.aliyun.tablestore.protocol.QueryType\x12\r\n\x05query\x18\x02 \x01(\x0c\"\x1e\n\x08\x43ollapse\x12\x12\n\nfield_name\x18\x01 \x01(\t\"S\n\x0cNestedFilter\x12\x0c\n\x04path\x18\x01 \x01(\t\x12\x35\n\x06\x66ilter\x18\x02 \x01(\x0b\x32%.com.aliyun.tablestore.protocol.Query\"E\n\tScoreSort\x12\x38\n\x05order\x18\x01 \x01(\x0e\x32).com.aliyun.tablestore.protocol.SortOrder\"J\n\x0ePrimaryKeySort\x12\x38\n\x05order\x18\x01 \x01(\x0e\x32).com.aliyun.tablestore.protocol.SortOrder\"\xd6\x01\n\tFieldSort\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x38\n\x05order\x18\x02 \x01(\x0e\x32).com.aliyun.tablestore.protocol.SortOrder\x12\x36\n\x04mode\x18\x03 \x01(\x0e\x32(.com.aliyun.tablestore.protocol.SortMode\x12\x43\n\rnested_filter\x18\x04 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.NestedFilter\"\xb4\x02\n\x0fGeoDistanceSort\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0e\n\x06points\x18\x02 \x03(\t\x12\x38\n\x05order\x18\x03 \x01(\x0e\x32).com.aliyun.tablestore.protocol.SortOrder\x12\x36\n\x04mode\x18\x04 \x01(\x0e\x32(.com.aliyun.tablestore.protocol.SortMode\x12\x46\n\rdistance_type\x18\x05 \x01(\x0e\x32/.com.aliyun.tablestore.protocol.GeoDistanceType\x12\x43\n\rnested_filter\x18\x06 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.NestedFilter\"\x93\x02\n\x06Sorter\x12=\n\nfield_sort\x18\x01 \x01(\x0b\x32).com.aliyun.tablestore.protocol.FieldSort\x12J\n\x11geo_distance_sort\x18\x02 \x01(\x0b\x32/.com.aliyun.tablestore.protocol.GeoDistanceSort\x12=\n\nscore_sort\x18\x03 \x01(\x0b\x32).com.aliyun.tablestore.protocol.ScoreSort\x12?\n\x07pk_sort\x18\x04 \x01(\x0b\x32..com.aliyun.tablestore.protocol.PrimaryKeySort\">\n\x04Sort\x12\x36\n\x06sorter\x18\x01 \x03(\x0b\x32&.com.aliyun.tablestore.protocol.Sorter\"\xfa\x01\n\x0bSearchQuery\x12\x0e\n\x06offset\x18\x01 \x01(\x05\x12\r\n\x05limit\x18\x02 \x01(\x05\x12\x34\n\x05query\x18\x04 \x01(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12:\n\x08\x63ollapse\x18\x05 \x01(\x0b\x32(.com.aliyun.tablestore.protocol.Collapse\x12\x32\n\x04sort\x18\x06 \x01(\x0b\x32$.com.aliyun.tablestore.protocol.Sort\x12\x17\n\x0fget_total_count\x18\x08 \x01(\x08\x12\r\n\x05token\x18\t \x01(\x0c\"k\n\x0c\x43olumnsToGet\x12\x45\n\x0breturn_type\x18\x01 \x01(\x0e\x32\x30.com.aliyun.tablestore.protocol.ColumnReturnType\x12\x14\n\x0c\x63olumn_names\x18\x02 \x03(\t\"\xab\x01\n\rSearchRequest\x12\x12\n\ntable_name\x18\x01 \x01(\t\x12\x12\n\nindex_name\x18\x02 \x01(\t\x12\x44\n\x0e\x63olumns_to_get\x18\x03 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.ColumnsToGet\x12\x14\n\x0csearch_query\x18\x04 \x01(\x0c\x12\x16\n\x0erouting_values\x18\x05 \x03(\x0c\"^\n\x0eSearchResponse\x12\x12\n\ntotal_hits\x18\x01 \x01(\x03\x12\x0c\n\x04rows\x18\x02 \x03(\x0c\x12\x16\n\x0eis_all_succeed\x18\x03 \x01(\x08\x12\x12\n\nnext_token\x18\x06 \x01(\x0c\"\x83\x02\n\x0b\x46ieldSchema\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12=\n\nfield_type\x18\x02 \x01(\x0e\x32).com.aliyun.tablestore.protocol.FieldType\x12\x10\n\x08\x61nalyzer\x18\x04 \x01(\t\x12\r\n\x05index\x18\x05 \x01(\x08\x12\x1b\n\x13\x65nable_sort_and_agg\x18\x06 \x01(\x08\x12\r\n\x05store\x18\x07 \x01(\x08\x12\x42\n\rfield_schemas\x18\x08 \x03(\x0b\x32+.com.aliyun.tablestore.protocol.FieldSchema\x12\x10\n\x08is_array\x18\t \x01(\x08\"\xd0\x01\n\x0bIndexSchema\x12\x42\n\rfield_schemas\x18\x01 \x03(\x0b\x32+.com.aliyun.tablestore.protocol.FieldSchema\x12\x43\n\rindex_setting\x18\x02 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.IndexSetting\x12\x38\n\nindex_sort\x18\x03 \x01(\x0b\x32$.com.aliyun.tablestore.protocol.Sort\"`\n\x0cIndexSetting\x12\x18\n\x10number_of_shards\x18\x01 \x01(\x05\x12\x16\n\x0erouting_fields\x18\x02 \x03(\t\x12\x1e\n\x16routing_partition_size\x18\x03 \x01(\x05\"\x7f\n\x18\x43reateSearchIndexRequest\x12\x12\n\ntable_name\x18\x01 \x02(\t\x12\x12\n\nindex_name\x18\x02 \x02(\t\x12;\n\x06schema\x18\x03 \x01(\x0b\x32+.com.aliyun.tablestore.protocol.IndexSchema\"\x1b\n\x19\x43reateSearchIndexResponse\"3\n\tIndexInfo\x12\x12\n\ntable_name\x18\x01 \x01(\t\x12\x12\n\nindex_name\x18\x02 \x01(\t\",\n\x16ListSearchIndexRequest\x12\x12\n\ntable_name\x18\x01 \x01(\t\"U\n\x17ListSearchIndexResponse\x12:\n\x07indices\x18\x01 \x03(\x0b\x32).com.aliyun.tablestore.protocol.IndexInfo\"B\n\x18\x44\x65leteSearchIndexRequest\x12\x12\n\ntable_name\x18\x01 \x01(\t\x12\x12\n\nindex_name\x18\x02 \x01(\t\"\x1b\n\x19\x44\x65leteSearchIndexResponse\"i\n\x08SyncStat\x12=\n\nsync_phase\x18\x01 \x01(\x0e\x32).com.aliyun.tablestore.protocol.SyncPhase\x12\x1e\n\x16\x63urrent_sync_timestamp\x18\x02 \x01(\x03\"D\n\x1a\x44\x65scribeSearchIndexRequest\x12\x12\n\ntable_name\x18\x01 \x01(\t\x12\x12\n\nindex_name\x18\x02 \x01(\t\"\x97\x01\n\x1b\x44\x65scribeSearchIndexResponse\x12;\n\x06schema\x18\x01 \x01(\x0b\x32+.com.aliyun.tablestore.protocol.IndexSchema\x12;\n\tsync_stat\x18\x02 \x01(\x0b\x32(.com.aliyun.tablestore.protocol.SyncStat*\xd1\x02\n\tQueryType\x12\x0f\n\x0bMATCH_QUERY\x10\x01\x12\x16\n\x12MATCH_PHRASE_QUERY\x10\x02\x12\x0e\n\nTERM_QUERY\x10\x03\x12\x0f\n\x0bRANGE_QUERY\x10\x04\x12\x10\n\x0cPREFIX_QUERY\x10\x05\x12\x0e\n\nBOOL_QUERY\x10\x06\x12\x15\n\x11\x43ONST_SCORE_QUERY\x10\x07\x12\x18\n\x14\x46UNCTION_SCORE_QUERY\x10\x08\x12\x10\n\x0cNESTED_QUERY\x10\t\x12\x12\n\x0eWILDCARD_QUERY\x10\n\x12\x13\n\x0fMATCH_ALL_QUERY\x10\x0b\x12\x1a\n\x16GEO_BOUNDING_BOX_QUERY\x10\x0c\x12\x16\n\x12GEO_DISTANCE_QUERY\x10\r\x12\x15\n\x11GEO_POLYGON_QUERY\x10\x0e\x12\x0f\n\x0bTERMS_QUERY\x10\x0f\x12\x10\n\x0c\x45XISTS_QUERY\x10\x10* \n\rQueryOperator\x12\x06\n\x02OR\x10\x01\x12\x07\n\x03\x41ND\x10\x02*r\n\tScoreMode\x12\x13\n\x0fSCORE_MODE_NONE\x10\x01\x12\x12\n\x0eSCORE_MODE_AVG\x10\x02\x12\x12\n\x0eSCORE_MODE_MAX\x10\x03\x12\x14\n\x10SCORE_MODE_TOTAL\x10\x04\x12\x12\n\x0eSCORE_MODE_MIN\x10\x05*4\n\tSortOrder\x12\x12\n\x0eSORT_ORDER_ASC\x10\x00\x12\x13\n\x0fSORT_ORDER_DESC\x10\x01*C\n\x08SortMode\x12\x11\n\rSORT_MODE_MIN\x10\x00\x12\x11\n\rSORT_MODE_MAX\x10\x01\x12\x11\n\rSORT_MODE_AVG\x10\x02*?\n\x0fGeoDistanceType\x12\x14\n\x10GEO_DISTANCE_ARC\x10\x00\x12\x16\n\x12GEO_DISTANCE_PLANE\x10\x01*I\n\x10\x43olumnReturnType\x12\x0e\n\nRETURN_ALL\x10\x01\x12\x14\n\x10RETURN_SPECIFIED\x10\x02\x12\x0f\n\x0bRETURN_NONE\x10\x03*`\n\tFieldType\x12\x08\n\x04LONG\x10\x01\x12\n\n\x06\x44OUBLE\x10\x02\x12\x0b\n\x07\x42OOLEAN\x10\x03\x12\x0b\n\x07KEYWORD\x10\x04\x12\x08\n\x04TEXT\x10\x05\x12\n\n\x06NESTED\x10\x06\x12\r\n\tGEO_POINT\x10\x07*\x1f\n\tSyncPhase\x12\x08\n\x04\x46ULL\x10\x01\x12\x08\n\x04INCR\x10\x02')
 )
 
 _QUERYTYPE = _descriptor.EnumDescriptor(
@@ -89,11 +89,15 @@ _QUERYTYPE = _descriptor.EnumDescriptor(
       name='TERMS_QUERY', index=14, number=15,
       serialized_options=None,
       type=None),
+    _descriptor.EnumValueDescriptor(
+      name='EXISTS_QUERY', index=15, number=16,
+      serialized_options=None,
+      type=None),
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=4701,
-  serialized_end=5020,
+  serialized_start=4736,
+  serialized_end=5073,
 )
 _sym_db.RegisterEnumDescriptor(_QUERYTYPE)
 
@@ -115,8 +119,8 @@ _QUERYOPERATOR = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=5022,
-  serialized_end=5054,
+  serialized_start=5075,
+  serialized_end=5107,
 )
 _sym_db.RegisterEnumDescriptor(_QUERYOPERATOR)
 
@@ -150,8 +154,8 @@ _SCOREMODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=5056,
-  serialized_end=5170,
+  serialized_start=5109,
+  serialized_end=5223,
 )
 _sym_db.RegisterEnumDescriptor(_SCOREMODE)
 
@@ -173,8 +177,8 @@ _SORTORDER = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=5172,
-  serialized_end=5224,
+  serialized_start=5225,
+  serialized_end=5277,
 )
 _sym_db.RegisterEnumDescriptor(_SORTORDER)
 
@@ -200,8 +204,8 @@ _SORTMODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=5226,
-  serialized_end=5293,
+  serialized_start=5279,
+  serialized_end=5346,
 )
 _sym_db.RegisterEnumDescriptor(_SORTMODE)
 
@@ -223,8 +227,8 @@ _GEODISTANCETYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=5295,
-  serialized_end=5358,
+  serialized_start=5348,
+  serialized_end=5411,
 )
 _sym_db.RegisterEnumDescriptor(_GEODISTANCETYPE)
 
@@ -250,8 +254,8 @@ _COLUMNRETURNTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=5360,
-  serialized_end=5433,
+  serialized_start=5413,
+  serialized_end=5486,
 )
 _sym_db.RegisterEnumDescriptor(_COLUMNRETURNTYPE)
 
@@ -293,8 +297,8 @@ _FIELDTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=5435,
-  serialized_end=5531,
+  serialized_start=5488,
+  serialized_end=5584,
 )
 _sym_db.RegisterEnumDescriptor(_FIELDTYPE)
 
@@ -316,8 +320,8 @@ _SYNCPHASE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=5533,
-  serialized_end=5564,
+  serialized_start=5586,
+  serialized_end=5617,
 )
 _sym_db.RegisterEnumDescriptor(_SYNCPHASE)
 
@@ -337,6 +341,7 @@ GEO_BOUNDING_BOX_QUERY = 12
 GEO_DISTANCE_QUERY = 13
 GEO_POLYGON_QUERY = 14
 TERMS_QUERY = 15
+EXISTS_QUERY = 16
 OR = 1
 AND = 2
 SCORE_MODE_NONE = 1
@@ -1023,6 +1028,37 @@ _GEOPOLYGONQUERY = _descriptor.Descriptor(
 )
 
 
+_EXISTSQUERY = _descriptor.Descriptor(
+  name='ExistsQuery',
+  full_name='com.aliyun.tablestore.protocol.ExistsQuery',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='field_name', full_name='com.aliyun.tablestore.protocol.ExistsQuery.field_name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto2',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1510,
+  serialized_end=1543,
+)
+
+
 _QUERY = _descriptor.Descriptor(
   name='Query',
   full_name='com.aliyun.tablestore.protocol.Query',
@@ -1056,8 +1092,8 @@ _QUERY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1510,
-  serialized_end=1589,
+  serialized_start=1545,
+  serialized_end=1624,
 )
 
 
@@ -1087,8 +1123,8 @@ _COLLAPSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1591,
-  serialized_end=1621,
+  serialized_start=1626,
+  serialized_end=1656,
 )
 
 
@@ -1125,8 +1161,8 @@ _NESTEDFILTER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1623,
-  serialized_end=1706,
+  serialized_start=1658,
+  serialized_end=1741,
 )
 
 
@@ -1156,8 +1192,8 @@ _SCORESORT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1708,
-  serialized_end=1777,
+  serialized_start=1743,
+  serialized_end=1812,
 )
 
 
@@ -1187,8 +1223,8 @@ _PRIMARYKEYSORT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1779,
-  serialized_end=1853,
+  serialized_start=1814,
+  serialized_end=1888,
 )
 
 
@@ -1239,8 +1275,8 @@ _FIELDSORT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1856,
-  serialized_end=2070,
+  serialized_start=1891,
+  serialized_end=2105,
 )
 
 
@@ -1305,8 +1341,8 @@ _GEODISTANCESORT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2073,
-  serialized_end=2381,
+  serialized_start=2108,
+  serialized_end=2416,
 )
 
 
@@ -1357,8 +1393,8 @@ _SORTER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2384,
-  serialized_end=2659,
+  serialized_start=2419,
+  serialized_end=2694,
 )
 
 
@@ -1388,8 +1424,8 @@ _SORT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2661,
-  serialized_end=2723,
+  serialized_start=2696,
+  serialized_end=2758,
 )
 
 
@@ -1461,8 +1497,8 @@ _SEARCHQUERY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2726,
-  serialized_end=2976,
+  serialized_start=2761,
+  serialized_end=3011,
 )
 
 
@@ -1499,8 +1535,8 @@ _COLUMNSTOGET = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2978,
-  serialized_end=3085,
+  serialized_start=3013,
+  serialized_end=3120,
 )
 
 
@@ -1558,8 +1594,8 @@ _SEARCHREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3088,
-  serialized_end=3259,
+  serialized_start=3123,
+  serialized_end=3294,
 )
 
 
@@ -1610,8 +1646,8 @@ _SEARCHRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3261,
-  serialized_end=3355,
+  serialized_start=3296,
+  serialized_end=3390,
 )
 
 
@@ -1690,8 +1726,8 @@ _FIELDSCHEMA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3358,
-  serialized_end=3617,
+  serialized_start=3393,
+  serialized_end=3652,
 )
 
 
@@ -1735,8 +1771,8 @@ _INDEXSCHEMA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3620,
-  serialized_end=3828,
+  serialized_start=3655,
+  serialized_end=3863,
 )
 
 
@@ -1780,8 +1816,8 @@ _INDEXSETTING = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3830,
-  serialized_end=3926,
+  serialized_start=3865,
+  serialized_end=3961,
 )
 
 
@@ -1825,8 +1861,8 @@ _CREATESEARCHINDEXREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3928,
-  serialized_end=4055,
+  serialized_start=3963,
+  serialized_end=4090,
 )
 
 
@@ -1849,8 +1885,8 @@ _CREATESEARCHINDEXRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4057,
-  serialized_end=4084,
+  serialized_start=4092,
+  serialized_end=4119,
 )
 
 
@@ -1887,8 +1923,8 @@ _INDEXINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4086,
-  serialized_end=4137,
+  serialized_start=4121,
+  serialized_end=4172,
 )
 
 
@@ -1918,8 +1954,8 @@ _LISTSEARCHINDEXREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4139,
-  serialized_end=4183,
+  serialized_start=4174,
+  serialized_end=4218,
 )
 
 
@@ -1949,8 +1985,8 @@ _LISTSEARCHINDEXRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4185,
-  serialized_end=4270,
+  serialized_start=4220,
+  serialized_end=4305,
 )
 
 
@@ -1987,8 +2023,8 @@ _DELETESEARCHINDEXREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4272,
-  serialized_end=4338,
+  serialized_start=4307,
+  serialized_end=4373,
 )
 
 
@@ -2011,8 +2047,8 @@ _DELETESEARCHINDEXRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4340,
-  serialized_end=4367,
+  serialized_start=4375,
+  serialized_end=4402,
 )
 
 
@@ -2049,8 +2085,8 @@ _SYNCSTAT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4369,
-  serialized_end=4474,
+  serialized_start=4404,
+  serialized_end=4509,
 )
 
 
@@ -2087,8 +2123,8 @@ _DESCRIBESEARCHINDEXREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4476,
-  serialized_end=4544,
+  serialized_start=4511,
+  serialized_end=4579,
 )
 
 
@@ -2125,8 +2161,8 @@ _DESCRIBESEARCHINDEXRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4547,
-  serialized_end=4698,
+  serialized_start=4582,
+  serialized_end=4733,
 )
 
 _MATCHQUERY.fields_by_name['operator'].enum_type = _QUERYOPERATOR
@@ -2186,6 +2222,7 @@ DESCRIPTOR.message_types_by_name['NestedQuery'] = _NESTEDQUERY
 DESCRIPTOR.message_types_by_name['GeoBoundingBoxQuery'] = _GEOBOUNDINGBOXQUERY
 DESCRIPTOR.message_types_by_name['GeoDistanceQuery'] = _GEODISTANCEQUERY
 DESCRIPTOR.message_types_by_name['GeoPolygonQuery'] = _GEOPOLYGONQUERY
+DESCRIPTOR.message_types_by_name['ExistsQuery'] = _EXISTSQUERY
 DESCRIPTOR.message_types_by_name['Query'] = _QUERY
 DESCRIPTOR.message_types_by_name['Collapse'] = _COLLAPSE
 DESCRIPTOR.message_types_by_name['NestedFilter'] = _NESTEDFILTER
@@ -2334,6 +2371,13 @@ GeoPolygonQuery = _reflection.GeneratedProtocolMessageType('GeoPolygonQuery', (_
   # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.GeoPolygonQuery)
   ))
 _sym_db.RegisterMessage(GeoPolygonQuery)
+
+ExistsQuery = _reflection.GeneratedProtocolMessageType('ExistsQuery', (_message.Message,), dict(
+  DESCRIPTOR = _EXISTSQUERY,
+  __module__ = 'search_pb2'
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.ExistsQuery)
+  ))
+_sym_db.RegisterMessage(ExistsQuery)
 
 Query = _reflection.GeneratedProtocolMessageType('Query', (_message.Message,), dict(
   DESCRIPTOR = _QUERY,

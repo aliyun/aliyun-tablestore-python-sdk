@@ -73,6 +73,7 @@ __all__ = [
     'GeoBoundingBoxQuery',
     'GeoPolygonQuery',
     'GeoDistanceQuery',
+    'ExistsQuery',
     'FieldValueFactor',
     'NestedQuery',
     'SyncStat',
@@ -933,6 +934,11 @@ class FunctionScoreQuery(Query):
     def __init__(self, query, field_value_factor):
         self.query = query
         self.field_value_factor = field_value_factor
+
+class ExistsQuery(Query):
+
+    def __init__(self, field_name):
+        self.field_name = field_name
 
 class SearchQuery(object):
 

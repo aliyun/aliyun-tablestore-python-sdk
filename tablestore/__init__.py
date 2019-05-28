@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 
-__version__ = '4.6.1'
+__version__ = '5.0.0'
 __all__ = [
     'OTSClient',
 
@@ -83,6 +83,7 @@ __all__ = [
     'DefinedColumnSchema',
     'SecondaryIndexMeta',
     'SecondaryIndexType',
+    'ExistsQuery',
 ]
 
 

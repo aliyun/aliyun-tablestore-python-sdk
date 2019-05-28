@@ -465,10 +465,42 @@ class SearchIndexTest(APITestBase):
             ColumnsToGet(return_type=ColumnReturnType.ALL), routing_keys=[[('PK1', 0)]]
         ), 100, True, 200)
 
+    def _test_exists_query(self, table_name, index_name):
+        # 'key100' < k <= 'key200' and b is not null and not (150 <= l < 200)
+        bool_query = BoolQuery(
+            must_queries=[
+                RangeQuery('k', range_from='key100', range_to='key200', include_lower=False, include_upper=True),
+                ExistsQuery('b')
+            ],
+            must_not_queries=[
+                RangeQuery('l', 150, 200, include_lower=True, include_upper=False)
+            ]
+        )
+
+        rows = self._check_query_result(self.client_test.search(
+            table_name, index_name, SearchQuery(bool_query, sort=Sort(sorters=[FieldSort('l', SortOrder.DESC)]), limit=100, get_total_count=True), ColumnsToGet(return_type=ColumnReturnType.ALL)
+        ), 50, False, 50)
+
+        # 'key100' < k <= 'key200' and b is null and not (150 <= l < 200)
+        bool_query = BoolQuery(
+            must_queries=[
+                RangeQuery('k', range_from='key100', range_to='key200', include_lower=False, include_upper=True)
+            ],
+            must_not_queries=[
+                RangeQuery('l', 150, 200, include_lower=True, include_upper=False),
+                ExistsQuery('b')
+            ]
+        )
+
+        rows = self._check_query_result(self.client_test.search(
+            table_name, index_name, SearchQuery(bool_query, sort=Sort(sorters=[FieldSort('l', SortOrder.DESC)]), limit=100, get_total_count=True), ColumnsToGet(return_type=ColumnReturnType.ALL)
+        ), 0, False, 0)
+
     def test_queries(self):
         table_name = 'SearchIndexQueryTest_' + self.get_python_version()
         index_name = 'search_index'
         nested_index_name = 'search_index_nested'
+
         self._prepare_table(table_name)
         self._prepare_index(table_name, index_name, with_nested=False)
         self._prepare_index(table_name, nested_index_name, with_nested=True)
@@ -488,6 +520,7 @@ class SearchIndexTest(APITestBase):
         self._test_geo_polygon_query(table_name, index_name)
         self._test_nested_query(table_name, nested_index_name)
         self._test_function_score_query(table_name, index_name)
+        self._test_exists_query(table_name, index_name)
         self._test_sort(table_name, index_name)
         self._test_search_with_routing_keys(table_name, index_name)
 

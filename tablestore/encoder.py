@@ -1024,6 +1024,11 @@ class OTSProtoBufferEncoder(object):
         self._make_function_value_factor(proto.field_value_factor, query.field_value_factor)
         return proto.SerializeToString()
 
+    def _encode_exists_query(self, query):
+        proto = search_pb2.ExistsQuery()
+        proto.field_name = self._get_unicode(query.field_name)
+        return proto.SerializeToString()
+
     def _make_query(self, proto, query):
         if isinstance(query, MatchQuery):
             proto.type = search_pb2.MATCH_QUERY
@@ -1067,6 +1072,9 @@ class OTSProtoBufferEncoder(object):
         elif isinstance(query, FunctionScoreQuery):
             proto.type = search_pb2.FUNCTION_SCORE_QUERY
             proto.query = self._encode_function_score_query(query)
+        elif isinstance(query, ExistsQuery):
+            proto.type = search_pb2.EXISTS_QUERY
+            proto.query = self._encode_exists_query(query)
         else:
             raise OTSClientError(
                 "Invalid query type: %s"
