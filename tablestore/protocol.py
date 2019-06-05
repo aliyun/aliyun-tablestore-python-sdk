@@ -60,7 +60,10 @@ class OTSProtocol(object):
         'DescribeSearchIndex',
         'Search',
         'CreateIndex',
-        'DropIndex'
+        'DropIndex',
+        'StartLocalTransaction',
+        'CommitTransaction',
+        'AbortTransaction'
     ]
 
     def __init__(self, user_id, user_key, sts_token, instance_name, encoding, logger):

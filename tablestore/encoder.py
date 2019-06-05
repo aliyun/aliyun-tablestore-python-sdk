@@ -60,25 +60,28 @@ class OTSProtoBufferEncoder(object):
         self.encoding = encoding
 
         self.api_encode_map = {
-            'CreateTable'         : self._encode_create_table,
-            'DeleteTable'         : self._encode_delete_table,
-            'ListTable'           : self._encode_list_table,
-            'UpdateTable'         : self._encode_update_table,
-            'DescribeTable'       : self._encode_describe_table,
-            'GetRow'              : self._encode_get_row,
-            'PutRow'              : self._encode_put_row,
-            'UpdateRow'           : self._encode_update_row,
-            'DeleteRow'           : self._encode_delete_row,
-            'BatchGetRow'         : self._encode_batch_get_row,
-            'BatchWriteRow'       : self._encode_batch_write_row,
-            'GetRange'            : self._encode_get_range,
-            'ListSearchIndex'     : self._encode_list_search_index,
-            'CreateSearchIndex'   : self._encode_create_search_index,
-            'DescribeSearchIndex' : self._encode_describe_search_index,
-            'DeleteSearchIndex'   : self._encode_delete_search_index,
-            'Search'              : self._encode_search,
-            'CreateIndex'         : self._encode_create_index,
-            'DropIndex'           : self._encode_delete_index,
+            'CreateTable'           : self._encode_create_table,
+            'DeleteTable'           : self._encode_delete_table,
+            'ListTable'             : self._encode_list_table,
+            'UpdateTable'           : self._encode_update_table,
+            'DescribeTable'         : self._encode_describe_table,
+            'GetRow'                : self._encode_get_row,
+            'PutRow'                : self._encode_put_row,
+            'UpdateRow'             : self._encode_update_row,
+            'DeleteRow'             : self._encode_delete_row,
+            'BatchGetRow'           : self._encode_batch_get_row,
+            'BatchWriteRow'         : self._encode_batch_write_row,
+            'GetRange'              : self._encode_get_range,
+            'ListSearchIndex'       : self._encode_list_search_index,
+            'CreateSearchIndex'     : self._encode_create_search_index,
+            'DescribeSearchIndex'   : self._encode_describe_search_index,
+            'DeleteSearchIndex'     : self._encode_delete_search_index,
+            'Search'                : self._encode_search,
+            'CreateIndex'           : self._encode_create_index,
+            'DropIndex'             : self._encode_delete_index,
+            'StartLocalTransaction' : self._encode_start_local_transaction,
+            'CommitTransaction'     : self._encode_commit_transaction,
+            'AbortTransaction'      : self._encode_abort_transaction,
         }
 
     def _get_enum(self, e):
@@ -677,6 +680,8 @@ class OTSProtoBufferEncoder(object):
                     row = table_item.rows.add()
                     self._make_delete_row_item(row, row_item)
 
+        if request.transaction_id is not None:
+            proto.transaction_id = request.transaction_id
 
     def _make_batch_write_row(self, proto, request):
         if isinstance(request, BatchWriteRowRequest):
@@ -730,7 +735,7 @@ class OTSProtoBufferEncoder(object):
         return proto
 
     def _encode_get_row(self, table_name, primary_key, columns_to_get, column_filter,
-                        max_version, time_range, start_column, end_column, token):
+                        max_version, time_range, start_column, end_column, token, transaction_id):
         proto = pb2.GetRowRequest()
         proto.table_name = self._get_unicode(table_name)
         self._make_repeated_column_names(proto.columns_to_get, columns_to_get)
@@ -756,10 +761,12 @@ class OTSProtoBufferEncoder(object):
             proto.end_column = end_column
         if token is not None:
             proto.token = token
+        if transaction_id is not None:
+            proto.transaction_id = transaction_id
 
         return proto
 
-    def _encode_put_row(self, table_name, row, condition, return_type):
+    def _encode_put_row(self, table_name, row, condition, return_type, transaction_id):
         proto = pb2.PutRowRequest()
         proto.table_name = self._get_unicode(table_name)
         if condition is None:
@@ -769,9 +776,12 @@ class OTSProtoBufferEncoder(object):
             proto.return_content.return_type = pb2.RT_PK
 
         proto.row = bytes(PlainBufferBuilder.serialize_for_put_row(row.primary_key, row.attribute_columns))
+        if transaction_id is not None:
+            proto.transaction_id = transaction_id
+
         return proto
 
-    def _encode_update_row(self, table_name, row, condition, return_type):
+    def _encode_update_row(self, table_name, row, condition, return_type, transaction_id):
         proto = pb2.UpdateRowRequest()
         proto.table_name = self._get_unicode(table_name)
         if condition is None:
@@ -782,9 +792,12 @@ class OTSProtoBufferEncoder(object):
             proto.return_content.return_type = pb2.RT_PK
 
         proto.row_change = bytes(PlainBufferBuilder.serialize_for_update_row(row.primary_key, row.attribute_columns))
+        if transaction_id is not None:
+            proto.transaction_id = transaction_id
+
         return proto
 
-    def _encode_delete_row(self, table_name, row, condition, return_type):
+    def _encode_delete_row(self, table_name, row, condition, return_type, transaction_id):
         proto = pb2.DeleteRowRequest()
         proto.table_name = self._get_unicode(table_name)
         if condition is None:
@@ -795,6 +808,9 @@ class OTSProtoBufferEncoder(object):
             proto.return_content.return_type = pb2.RT_PK
 
         proto.primary_key = bytes(PlainBufferBuilder.serialize_for_delete_row(row.primary_key))
+        if transaction_id is not None:
+            proto.transaction_id = transaction_id
+
         return proto
 
     def _encode_batch_get_row(self, request):
@@ -811,7 +827,7 @@ class OTSProtoBufferEncoder(object):
                 inclusive_start_primary_key, exclusive_end_primary_key,
                 columns_to_get, limit, column_filter,
                 max_version, time_range, start_column,
-                end_column, token):
+                end_column, token, transaction_id):
         proto = pb2.GetRangeRequest()
         proto.table_name = self._get_unicode(table_name)
         proto.direction = self._get_direction(direction)
@@ -841,6 +857,8 @@ class OTSProtoBufferEncoder(object):
             proto.end_colun = end_column
         if token is not None:
             proto.token = token
+        if transaction_id is not None:
+            proto.transaction_id = transaction_id
         return proto
 
     def encode_request(self, api_name, *args, **kwargs):
@@ -1120,5 +1138,24 @@ class OTSProtoBufferEncoder(object):
         proto = pb2.DropIndexRequest()
         proto.main_table_name = table_name
         proto.index_name = index_name
+
+        return proto
+
+    def _encode_start_local_transaction(self, table_name, key):
+        proto = pb2.StartLocalTransactionRequest()
+        proto.table_name = table_name
+        proto.key = bytes(PlainBufferBuilder.serialize_primary_key(key))
+
+        return proto
+
+    def _encode_commit_transaction(self, transaction_id):
+        proto = pb2.CommitTransactionRequest()
+        proto.transaction_id = transaction_id
+
+        return proto
+
+    def _encode_abort_transaction(self, transaction_id):
+        proto = pb2.AbortTransactionRequest()
+        proto.transaction_id = transaction_id
 
         return proto

@@ -15,25 +15,28 @@ class OTSProtoBufferDecoder(object):
         self.encoding = encoding
 
         self.api_decode_map = {
-            'CreateTable'         : self._decode_create_table,
-            'ListTable'           : self._decode_list_table,
-            'DeleteTable'         : self._decode_delete_table,
-            'DescribeTable'       : self._decode_describe_table,
-            'UpdateTable'         : self._decode_update_table,
-            'GetRow'              : self._decode_get_row,
-            'PutRow'              : self._decode_put_row,
-            'UpdateRow'           : self._decode_update_row,
-            'DeleteRow'           : self._decode_delete_row,
-            'BatchGetRow'         : self._decode_batch_get_row,
-            'BatchWriteRow'       : self._decode_batch_write_row,
-            'GetRange'            : self._decode_get_range,
-            'ListSearchIndex'     : self._decode_list_search_index,
-            'DeleteSearchIndex'   : self._decode_delete_search_index,
-            'DescribeSearchIndex' : self._decode_describe_search_index,
-            'CreateSearchIndex'   : self._decode_create_search_index,
-            'Search'              : self._decode_search,
-            'CreateIndex'         : self._decode_create_index,
-            'DropIndex'           : self._decode_delete_index,
+            'CreateTable'           : self._decode_create_table,
+            'ListTable'             : self._decode_list_table,
+            'DeleteTable'           : self._decode_delete_table,
+            'DescribeTable'         : self._decode_describe_table,
+            'UpdateTable'           : self._decode_update_table,
+            'GetRow'                : self._decode_get_row,
+            'PutRow'                : self._decode_put_row,
+            'UpdateRow'             : self._decode_update_row,
+            'DeleteRow'             : self._decode_delete_row,
+            'BatchGetRow'           : self._decode_batch_get_row,
+            'BatchWriteRow'         : self._decode_batch_write_row,
+            'GetRange'              : self._decode_get_range,
+            'ListSearchIndex'       : self._decode_list_search_index,
+            'DeleteSearchIndex'     : self._decode_delete_search_index,
+            'DescribeSearchIndex'   : self._decode_describe_search_index,
+            'CreateSearchIndex'     : self._decode_create_search_index,
+            'Search'                : self._decode_search,
+            'CreateIndex'           : self._decode_create_index,
+            'DropIndex'             : self._decode_delete_index,
+            'StartLocalTransaction' : self._decode_start_local_transaction,
+            'CommitTransaction'     : self._decode_commit_transaction,
+            'AbortTransaction'      : self._decode_abort_transaction,
         }
 
     def _parse_string(self, string):
@@ -231,10 +234,10 @@ class OTSProtoBufferDecoder(object):
                 index_type = SecondaryIndexType.GLOBAL_INDEX if secondary_index.index_type == pb.IT_GLOBAL_INDEX else SecondaryIndexType.LOCAL_INDEX
                 secondary_indexes.append(
                     SecondaryIndexMeta(
-                        secondary_index.name, 
+                        secondary_index.name,
                         primary_key_names,
                         defined_column_names,
-                        index_type    
+                        index_type
                     )
                 )
         return secondary_indexes
@@ -577,6 +580,26 @@ class OTSProtoBufferDecoder(object):
 
     def _decode_delete_index(self, body):
         proto = pb.DropIndexResponse()
+        proto.ParseFromString(body)
+
+        return None, proto
+
+    def _decode_start_local_transaction(self, body):
+        proto = pb.StartLocalTransactionResponse()
+        proto.ParseFromString(body)
+
+        transaction_id = proto.transaction_id
+
+        return transaction_id, proto
+
+    def _decode_commit_transaction(self, body):
+        proto = pb.CommitTransactionResponse()
+        proto.ParseFromString(body)
+
+        return None, proto
+
+    def _decode_abort_transaction(self, body):
+        proto = pb.AbortTransactionResponse()
         proto.ParseFromString(body)
 
         return None, proto

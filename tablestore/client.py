@@ -261,7 +261,8 @@ class OTSClient(object):
 
     def get_row(self, table_name, primary_key, columns_to_get=None,
                 column_filter=None, max_version=1, time_range=None,
-                start_column=None, end_column=None, token=None):
+                start_column=None, end_column=None, token=None,
+                transaction_id=None):
         """
         说明：获取一行数据。
 
@@ -288,10 +289,10 @@ class OTSClient(object):
         return self._request_helper(
                     'GetRow', table_name, primary_key, columns_to_get,
                     column_filter, max_version, time_range,
-                    start_column, end_column, token
+                    start_column, end_column, token, transaction_id
         )
 
-    def put_row(self, table_name, row, condition = None, return_type = None):
+    def put_row(self, table_name, row, condition = None, return_type = None, transaction_id = None):
         """
         说明：写入一行数据。返回本次操作消耗的CapacityUnit。
 
@@ -316,10 +317,10 @@ class OTSClient(object):
         """
 
         return self._request_helper(
-                    'PutRow', table_name, row, condition, return_type
+                    'PutRow', table_name, row, condition, return_type, transaction_id
         )
 
-    def update_row(self, table_name, row, condition, return_type = None):
+    def update_row(self, table_name, row, condition, return_type = None, transaction_id = None):
         """
         说明：更新一行数据。
 
@@ -349,10 +350,10 @@ class OTSClient(object):
         """
 
         return self._request_helper(
-                    'UpdateRow', table_name, row, condition, return_type
+                    'UpdateRow', table_name, row, condition, return_type, transaction_id
         )
 
-    def delete_row(self, table_name, row, condition, return_type = None):
+    def delete_row(self, table_name, row, condition, return_type = None, transaction_id = None):
         """
         说明：删除一行数据。
 
@@ -375,7 +376,7 @@ class OTSClient(object):
         """
 
         return self._request_helper(
-                    'DeleteRow', table_name, row, condition, return_type
+                    'DeleteRow', table_name, row, condition, return_type, transaction_id
         )
 
     def batch_get_row(self, request):
@@ -475,7 +476,8 @@ class OTSClient(object):
                   time_range=None,
                   start_column=None,
                   end_column=None,
-                  token = None):
+                  token = None,
+                  transaction_id=None):
         """
         说明：根据范围条件获取多行数据。
 
@@ -517,7 +519,8 @@ class OTSClient(object):
                     columns_to_get, limit,
                     column_filter, max_version,
                     time_range, start_column,
-                    end_column, token
+                    end_column, token,
+                    transaction_id
         )
 
     def xget_range(self, table_name, direction,
@@ -716,12 +719,12 @@ class OTSClient(object):
 
     def create_secondary_index(self, table_name, index_meta):
         """
-        Create a new secondary index. 
+        Create a new secondary index.
 
         :type table_name: str
         :param table_name: The name of table.
 
-        :type index_meta: tablestore.metadata.SecondaryIndexMeta 
+        :type index_meta: tablestore.metadata.SecondaryIndexMeta
         :param index_meta: The definition of index.
 
         Example usage:
@@ -729,11 +732,11 @@ class OTSClient(object):
             client.create_secondary_index(table_name, index_meta)
         """
 
-        return self._request_helper('CreateIndex', table_name, index_meta) 
+        return self._request_helper('CreateIndex', table_name, index_meta)
 
     def delete_secondary_index(self, table_name, index_name):
         """
-        Delete the secondary index. 
+        Delete the secondary index.
 
         :type table_name: str
         :param table_name: The name of table.
@@ -745,4 +748,49 @@ class OTSClient(object):
             client.delete_secondary_index(table_name, index_name)
         """
 
-        return self._request_helper('DropIndex', table_name, index_name) 
+        return self._request_helper('DropIndex', table_name, index_name)
+
+    def start_local_transaction(self, table_name, key):
+        """
+        Start a local transaction and get the transaction id.
+
+        :type table_name: str
+        :param table_name: The name of table.
+
+        :type key: 类型为dict
+        :param key: The partition key.
+
+        Example usage:
+            client.start_local_transaction(table_name, key)
+        """
+
+        return self._request_helper('StartLocalTransaction', table_name, key)
+
+    def commit_transaction(self, transaction_id):
+        """
+        Commit a transaction by id.
+
+        :type transaction_id: str
+        :param transaction_id: The id of transaction.
+
+        Example usage:
+            client.commit_transaction(transaction_id)
+        """
+
+        return self._request_helper('CommitTransaction', transaction_id)
+
+    def abort_transaction(self, transaction_id):
+        """
+        Abort a transaction by id.
+
+        :type transaction_id: str
+        :param transaction_id: The id of transaction.
+
+        :type key: 类型为dict
+        :param key: The partition key.
+
+        Example usage:
+            client.abort_transaction(transaction_id)
+        """
+
+        return self._request_helper('AbortTransaction', transaction_id)

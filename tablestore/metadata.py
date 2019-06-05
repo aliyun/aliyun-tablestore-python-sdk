@@ -655,6 +655,7 @@ class BatchWriteRowRequest(object):
 
     def __init__(self):
         self.items = {}
+        self.transaction_id = None
 
     def add(self, table_item):
         """
@@ -669,6 +670,10 @@ class BatchWriteRowRequest(object):
             )
 
         self.items[table_item.table_name] = table_item
+
+    def set_transaction_id(self, transcation_id):
+        self.transaction_id = transcation_id
+
 
 class BatchWriteRowResponse(object):
 

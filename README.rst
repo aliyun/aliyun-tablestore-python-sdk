@@ -27,7 +27,7 @@ PIP安装
 
 .. code-block:: bash
 
-    $ pip install tablestore 
+    $ pip install tablestore
 
 Github安装
 ------------
@@ -71,6 +71,8 @@ Github安装
 - `主键自增列（主键自动生成一个递增ID） <https://github.com/aliyun/aliyun-tablestore-python-sdk/blob/master/examples/pk_auto_incr.py>`_
 - `多元索引 <https://github.com/aliyun/aliyun-tablestore-python-sdk/blob/master/examples/search_index.py>`_
 - `全局二级索引 <https://github.com/aliyun/aliyun-tablestore-python-sdk/blob/master/examples/secondary_index_operations.py>`_
+- `局部事务（提交事务） <https://github.com/aliyun/aliyun-tablestore-python-sdk/blob/master/examples/transaction_and_commit.py>`_
+- `局部事务（舍弃事务） <https://github.com/aliyun/aliyun-tablestore-python-sdk/blob/master/examples/transaction_and_abort.py>`_
 
 执行测试
 ---------
