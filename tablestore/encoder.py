@@ -5,6 +5,8 @@ from builtins import int
 
 from tablestore.error import *
 from tablestore.metadata import *
+from tablestore.aggregation import *
+from tablestore.group_by import *
 from tablestore.plainbuffer.plain_buffer_builder import *
 import tablestore.protobuf.table_store_pb2 as pb2
 import tablestore.protobuf.table_store_filter_pb2 as filter_pb2
@@ -77,6 +79,8 @@ class OTSProtoBufferEncoder(object):
             'DescribeSearchIndex'   : self._encode_describe_search_index,
             'DeleteSearchIndex'     : self._encode_delete_search_index,
             'Search'                : self._encode_search,
+            'ComputeSplits'         : self._encode_compute_splits,
+            'ParallelScan'          : self._encode_parallel_scan,
             'CreateIndex'           : self._encode_create_index,
             'DropIndex'             : self._encode_delete_index,
             'StartLocalTransaction' : self._encode_start_local_transaction,
@@ -918,6 +922,42 @@ class OTSProtoBufferEncoder(object):
 
         return proto
 
+    def _encode_compute_splits(self, table_name, index_name):
+        if table_name is None:
+            raise OTSClientError("table_name must not be None")
+        
+        proto = search_pb2.ComputeSplitsRequest()
+        proto.table_name = table_name
+
+        if index_name is not None:
+            proto.search_index_splits_options.index_name = index_name
+
+        return proto
+
+    def _encode_parallel_scan(self, table_name, index_name, scan_query, session_id, columns_to_get):
+        proto = search_pb2.ParallelScanRequest()
+
+        if table_name is None:
+            raise OTSClientError("table_name must not be None")
+
+        if index_name is None:
+            raise OTSClientError("index_name must not be None")
+
+        proto.table_name = table_name
+        proto.index_name = index_name
+
+        if columns_to_get is not None:
+            proto.columns_to_get.return_type = self._get_enum(columns_to_get.return_type)
+            self._make_repeated_column_names(proto.columns_to_get.column_names, columns_to_get.column_names)
+
+        if scan_query is not None:
+            proto.scan_query = self._encode_scan_query(scan_query)
+
+        if session_id is not None:
+            proto.session_id = bytes(session_id)
+
+        return proto    
+
     def _encode_match_query(self, query):
         proto = search_pb2.MatchQuery()
         proto.field_name = self._get_unicode(query.field_name)
@@ -1124,7 +1164,78 @@ class OTSProtoBufferEncoder(object):
         #if search_query.collapse is not None:
         #    self._make_collapse(proto.collapse, search_query.collapse)
 
+        if search_query.aggs is not None :
+            self._make_aggs(proto.aggs, search_query.aggs)
+
+        if search_query.group_bys is not None:
+            self._make_group_bys(proto.group_bys, search_query.group_bys)
+
         return proto.SerializeToString()
+
+    def _make_aggs(self, proto, aggs):
+        if isinstance(aggs, list):
+            for agg in aggs:
+                if type(agg) not in [Max, Min, Avg, Sum, Count, DistinctCount, TopRows]:
+                    raise OTSClientError('agg must be one of [Max, Min, Avg, Sum, Count, DistinctCount, TopRows]')
+                        
+                aggregation = proto.aggs.add()
+                aggregation.name = agg.name
+                aggregation.type = agg.type
+                aggregation.body = self._agg_to_pb_str(agg)
+        else:
+            raise OTSClientError('searh_query.aggs type must be list')
+
+    def _make_group_bys(self, proto, group_bys):
+        if isinstance(group_bys, list):
+            for group_by in group_bys:
+                if type(group_by) not in [GroupByField, GroupByRange, GroupByFilter, GroupByGeoDistance]:
+                    raise OTSClientError('group_by must be one of [GroupByField, GroupByRange, GroupByFilter, GroupByGeoDistance]')
+                group_by_proto = proto.group_bys.add()
+                group_by_proto.name = group_by.name
+                group_by_proto.type = group_by.type
+                group_by_proto.body = self._group_by_to_pb_str(group_by)
+        else:
+            raise OTSClientError('searh_query.group_bys type must be list')
+
+    def _agg_to_pb_str(self, agg):
+        if isinstance(agg, TopRows):
+            return agg.to_pb_str(self._make_index_sorter)
+        else:
+            return agg.to_pb_str()
+
+    def _group_by_to_pb_str(self, group_by):
+        return group_by.to_pb_str(self._make_aggs, self._make_group_bys, self._make_query)
+
+    def _encode_scan_query(self, scan_query):
+        proto = search_pb2.ScanQuery()
+        self._make_query(proto.query, scan_query.query)
+
+        if scan_query.limit is not None:
+            proto.limit = scan_query.limit
+
+        if scan_query.next_token is not None:
+            proto.token = bytes(scan_query.next_token)
+
+        alive_time = scan_query.alive_time
+        if alive_time is not None and isinstance(alive_time, int) and alive_time > 0:
+            proto.alive_time = scan_query.alive_time
+        else:
+            raise OTSClientError('alive_time must be integer')
+
+        current_parallel_id = scan_query.current_parallel_id
+        if current_parallel_id is not None and isinstance(current_parallel_id, int) and current_parallel_id >= 0:
+            proto.current_parallel_id = current_parallel_id
+        else:
+            raise OTSClientError('current_parallel_id must be integer')
+
+        max_parallel = scan_query.max_parallel
+        if max_parallel is not None and isinstance(max_parallel, int) and max_parallel >= 1:
+            proto.max_parallel = max_parallel
+        else:
+            raise OTSClientError('max_parallel must be integer')
+
+        return proto.SerializeToString()
+
 
     def _encode_create_index(self, table_name, index_meta):
         proto = pb2.CreateIndexRequest()

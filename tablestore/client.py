@@ -691,6 +691,7 @@ class OTSClient(object):
         """
         Perform search query on search index.
 
+        说明：
         :type table_name: str
         :param table_name: The name of table.
 
@@ -706,16 +707,76 @@ class OTSClient(object):
         :type routing_keys: list
         : param routing_keys: list of routing key.
 
+        返回：查询的结果集。
+
+        ``search_response``表示查询的结果集，包括 search、agg 和 group_by 等的结果，是 tablestore.metadata.SearchResponse 类的实例。
+
         Example usage:
             query = TermQuery('k', 'key000')
-            client.search(
-                table_name, index_name,
-                SearchQuery(query, limit=100),
-                ColumnsToGet(return_type=ColumnReturnType.ALL)
+            search_response = client.search(table_name, index_name,
+                              SearchQuery(query, limit=100),
+                              ColumnsToGet(return_type=ColumnReturnType.ALL)
             )
         """
 
         return self._request_helper('Search', table_name, index_name, search_query, columns_to_get, routing_keys)
+
+    def compute_splits(self, table_name, index_name):
+        """
+        Compute splits on search index.
+
+        :type table_name: str
+        :param table_name: The name of table.
+
+        :type index_name: str
+        :param index_name: The name of index.
+
+        返回：计算并发度的结果。
+
+        ``compute_splits_response``表示并发度计算的结果，是 tablestore.metadata.ComputeSplitsResponse 类的实例。
+
+        Example usage:
+            compute_splits_response = client.compute_splits(table_name, index_name)
+            )
+        """
+        
+        return self._request_helper('ComputeSplits', table_name, index_name)
+
+    def parallel_scan(self, table_name, index_name, scan_query, session_id, columns_to_get=None):
+        """
+        Perform parallel scan on search index.
+
+        :type table_name: str
+        :param table_name: The name of table.
+
+        :type index_name: str
+        :param index_name: The name of index.
+
+        :type scan_query: tablestore.metadata.ScanQuery
+        :param scan_query: The query to perform.
+
+        :type session_id: str
+        :param session_id: The ID of session which get from compute_splits_request's response
+
+        :type columns_to_get: tablestore.metadata.ColumnsToGet
+        :param columns_to_get: columns to return, allow values: RETURN_SPECIFIED/RETURN_NONE/RETURN_ALL_FROM_INDEX
+
+        返回：并发扫描的结果集。
+
+        ``parallel_scan_response``表示并发扫描的结果，是 tablestore.metadata.ParallelScanResponse 类的实例。
+
+
+        Example usage:
+            query = TermQuery('k', 'key000')
+            parallel_scan_response = client.parallel_scan(
+                table_name, index_name,
+                ScanQuery(query, token = token_str, current_parallel_id = 0, max_parallel = 3, limit=100),
+                ColumnsToGet(return_type=ColumnReturnType.RETURN_ALL_FROM_INDEX)
+            )
+        """
+
+        return self._request_helper('ParallelScan', table_name, index_name, scan_query, 
+                                    session_id, columns_to_get)
 
     def create_secondary_index(self, table_name, index_meta):
         """

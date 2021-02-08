@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 
-__version__ = '5.1.0'
+__version__ = '5.2.0'
 __all__ = [
     'OTSClient',
 
@@ -75,6 +75,7 @@ __all__ = [
     'GeoPolygonQuery',
     'TermsQuery',
     'SearchQuery',
+    'ScanQuery',
     'ColumnsToGet',
     'ColumnReturnType',
     'FieldValueFactor',
@@ -84,12 +85,38 @@ __all__ = [
     'SecondaryIndexMeta',
     'SecondaryIndexType',
     'ExistsQuery',
+    'Agg',
+    'Max',
+    'Min',
+    'Avg',
+    'Sum',
+    'Count',
+    'DistinctCount',
+    'TopRows',
+    'AggResult',
+    'GroupKeySort',
+    'RowCountSort',
+    'SubAggSort',
+    'GeoPoint',
+    'BaseGroupBy',
+    'GroupByField',
+    'GroupByRange',
+    'GroupByFilter',
+    'GroupByGeoDistance',
+    'GroupByResult',
+    'BaseGroupByResultItem',
+    'GroupByFieldResultItem',
+    'GroupByRangeResultItem',
+    'GroupByFilterResultItem',
+    'GroupByGeoDistanceResultItem',
 ]
 
 
 from tablestore.client import OTSClient
 
 from tablestore.metadata import *
+from tablestore.aggregation import *
+from tablestore.group_by import *
 from tablestore.error import *
 from tablestore.retry import *
 from tablestore.const import *

@@ -3,6 +3,8 @@
 import google.protobuf.text_format as text_format
 
 from tablestore.metadata import *
+from tablestore.aggregation import *
+from tablestore.group_by import *
 from tablestore.plainbuffer.plain_buffer_builder import *
 
 import tablestore.protobuf.table_store_pb2 as pb
@@ -32,6 +34,8 @@ class OTSProtoBufferDecoder(object):
             'DescribeSearchIndex'   : self._decode_describe_search_index,
             'CreateSearchIndex'     : self._decode_create_search_index,
             'Search'                : self._decode_search,
+            'ComputeSplits'         : self._decode_compute_splits,
+            'ParallelScan'          : self._decode_parallel_scan,
             'CreateIndex'           : self._decode_create_index,
             'DropIndex'             : self._decode_delete_index,
             'StartLocalTransaction' : self._decode_start_local_transaction,
@@ -570,7 +574,161 @@ class OTSProtoBufferDecoder(object):
         total_count = proto.total_hits
         is_all_succeed = proto.is_all_succeed
 
-        return (rows, proto.next_token, total_count, is_all_succeed), proto
+        agg_results = []
+        if proto.aggs is not None and len(proto.aggs) > 0:
+            proto_result = search_pb.AggregationsResult()
+            proto_result.ParseFromString(proto.aggs)
+            self._decode_agg_results(proto_result, agg_results)
+
+        group_by_results = []
+        if proto.group_bys is not None and len(proto.group_bys) > 0:
+            proto_result = search_pb.GroupBysResult()
+            proto_result.ParseFromString(proto.group_bys)
+            self._decode_group_by_results(proto_result, group_by_results)
+
+        search_response = SearchResponse(rows, agg_results, group_by_results, 
+                                         proto.next_token, is_all_succeed, total_count)
+        return (search_response), proto
+
+    def _decode_agg_results(self, proto_result, agg_results):
+        if proto_result is not None:
+            for agg_result in proto_result.agg_results:
+                name = agg_result.name
+                value = self._decode_agg(agg_result.type, agg_result.agg_result)
+                agg_results.append(AggResult(name, value))
+
+    def _decode_group_by_results(self, proto_result, group_by_results):
+        if proto_result is not None:
+            for group_result in proto_result.group_by_results:
+                name = group_result.name
+                items = self._decode_group_by(group_result.type, group_result.group_by_result)
+                group_by_results.append(GroupByResult(name, items))
+
+    def _decode_agg(self, type, body):
+        if search_pb.AGG_AVG == type:
+            proto = search_pb.AvgAggregationResult()
+            proto.ParseFromString(body)
+            return proto.value
+        elif search_pb.AGG_MAX == type:
+            proto = search_pb.MaxAggregationResult()
+            proto.ParseFromString(body)
+            return proto.value
+        elif search_pb.AGG_MIN == type:
+            proto = search_pb.MinAggregationResult()
+            proto.ParseFromString(body)
+            return proto.value
+        elif search_pb.AGG_SUM == type:
+            proto = search_pb.SumAggregationResult()
+            proto.ParseFromString(body)
+            return proto.value
+        elif search_pb.AGG_COUNT == type:
+            proto = search_pb.CountAggregationResult()
+            proto.ParseFromString(body)
+            return proto.value
+        elif search_pb.AGG_DISTINCT_COUNT == type:
+            proto = search_pb.DistinctCountAggregationResult()
+            proto.ParseFromString(body)
+            return proto.value
+        elif search_pb.AGG_TOP_ROWS == type:
+            proto = search_pb.TopRowsAggregationResult()
+            proto.ParseFromString(body)
+            rows = []
+            for row_proto in proto.rows:
+                input_stream = PlainBufferInputStream(row_proto)
+                codedInputStream = PlainBufferCodedInputStream(input_stream)
+                primary_key_columns, attribute_columns = codedInputStream.read_row()
+                rows.append((primary_key_columns, attribute_columns))
+            return rows
+        else:
+            raise OTSClientError('unsupport type:%s' % str(type))
+
+    def _decode_group_by(self, type, body):
+        if search_pb.GROUP_BY_FIELD == type:
+            proto = search_pb.GroupByFieldResult()
+            proto.ParseFromString(body)
+
+            result_items = []
+            for item in proto.group_by_field_result_items:
+                sub_group_by_results = []
+                sub_agg_results = []
+                self._decode_group_by_results(item.sub_group_bys_result, sub_group_by_results)
+                self._decode_agg_results(item.sub_aggs_result, sub_agg_results)
+                
+                result_item = GroupByFieldResultItem(item.key, item.row_count,
+                                                     sub_agg_results, sub_group_by_results)
+                result_items.append(result_item)
+            return result_items
+
+        elif search_pb.GROUP_BY_RANGE == type:
+            proto = search_pb.GroupByRangeResult()
+            proto.ParseFromString(body)
+
+            result_items = []
+            for item in proto.group_by_range_result_items:
+                sub_group_by_results = []
+                sub_agg_results = []
+                self._decode_group_by_results(item.sub_group_bys_result, sub_group_by_results)
+                self._decode_agg_results(item.sub_aggs_result, sub_agg_results)
+                
+                result_item = GroupByRangeResultItem(item.range_from, item.range_to, item.row_count,
+                                                     sub_agg_results, sub_group_by_results)
+                result_items.append(result_item)
+            return result_items
+        elif search_pb.GROUP_BY_FILTER == type:
+            proto = search_pb.GroupByFilterResult()
+            proto.ParseFromString(body)
+
+            result_items = []
+            for item in proto.group_by_filter_result_items:
+                sub_group_by_results = []
+                sub_agg_results = []
+                self._decode_group_by_results(item.sub_group_bys_result, sub_group_by_results)
+                self._decode_agg_results(item.sub_aggs_result, sub_agg_results)
+                
+                result_item = GroupByFilterResultItem(item.row_count,
+                                                      sub_agg_results, sub_group_by_results)
+                result_items.append(result_item)
+            return result_items
+        elif search_pb.GROUP_BY_GEO_DISTANCE == type:
+            proto = search_pb.GroupByGeoDistanceResult()
+            proto.ParseFromString(body)
+
+            result_items = []
+            for item in proto.group_by_geo_distance_result_items:
+                sub_group_by_results = []
+                sub_agg_results = []
+                self._decode_group_by_results(item.sub_group_bys_result, sub_group_by_results)
+                self._decode_agg_results(item.sub_aggs_result, sub_agg_results)
+                
+                result_item = GroupByGeoDistanceResultItem(item.range_from, item.range_to, item.row_count,
+                                                           sub_agg_results, sub_group_by_results)
+                result_items.append(result_item)
+            return result_items
+        else:
+            raise OTSClientError('unsupport type:%s' % str(type))
+
+    def _decode_compute_splits(self, body):
+        proto = search_pb.ComputeSplitsResponse()
+        proto.ParseFromString(body)
+
+        session_id = str(proto.session_id)
+        splits_size = proto.splits_size
+
+        compute_splits_response = ComputeSplitsResponse(session_id, splits_size)
+        return compute_splits_response, proto
+
+    def _decode_parallel_scan(self, body):
+        proto = search_pb.ParallelScanResponse()
+        proto.ParseFromString(body)
+        rows = []
+        for row_proto in proto.rows:
+            input_stream = PlainBufferInputStream(row_proto)
+            codedInputStream = PlainBufferCodedInputStream(input_stream)
+            primary_key_columns, attribute_columns = codedInputStream.read_row()
+            rows.append((primary_key_columns, attribute_columns))
+
+        response = ParallelScanResponse(rows, proto.next_token)
+        return response, proto
 
     def _decode_create_index(self, body):
         proto = pb.CreateIndexResponse()

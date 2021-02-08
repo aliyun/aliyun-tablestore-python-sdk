@@ -135,16 +135,16 @@ class SearchIndexTest(APITestBase):
         next_token = None
 
         while not all_rows or next_token:
-            rows, next_token, total_count, is_all_succeed = self.client_test.search(table_name, index_name,
+            search_response = self.client_test.search(table_name, index_name,
                 SearchQuery(query, next_token=next_token, limit=100, get_total_count=True),
                 columns_to_get=ColumnsToGet(['k', 't', 'g', 'ka', 'la'], ColumnReturnType.SPECIFIED))
-            if next_token:
-                self.assert_equal(len(rows), 100)
-            self.assert_equal(total_count, 1000)
-            self.assertTrue(is_all_succeed)
-            all_rows.extend(rows)
+            if search_response.next_token:
+                self.assert_equal(len(search_response.rows), 100)
+            self.assert_equal(search_response.total_count, 1000)
+            self.assertTrue(search_response.is_all_succeed)
+            all_rows.extend(search_response.rows)
 
-        self.assert_equal(len(all_rows), 1000)
+        self.assert_equal(len(all_rows), 100)
         for i in range(len(all_rows)):
             row = all_rows[i]
             pk = row[0]
@@ -267,14 +267,13 @@ class SearchIndexTest(APITestBase):
             table_name, index_name, SearchQuery(query, limit=100, get_total_count=True), ColumnsToGet(return_type=ColumnReturnType.ALL)
         ), 100, True, 201)
 
-    def _check_query_result(self, result, rows_count, has_next_token, expect_total_count):
-        rows, next_token, total_count, is_all_succeed = result
-        self.assert_equal(len(rows), rows_count)
-        self.assert_equal(is_all_succeed, True)
-        self.assert_equal(len(next_token) > 0, has_next_token)
-        self.assert_equal(total_count, expect_total_count)
+    def _check_query_result(self, search_response, rows_count, has_next_token, expect_total_count):
+        self.assert_equal(len(search_response.rows), rows_count)
+        self.assert_equal(search_response.is_all_succeed, True)
+        self.assert_equal(len(search_response.next_token) > 0, has_next_token)
+        self.assert_equal(search_response.total_count, expect_total_count)
 
-        return rows
+        return search_response.rows
 
     def _test_prefix_query(self, table_name, index_name):
         query = PrefixQuery('k', 'key')

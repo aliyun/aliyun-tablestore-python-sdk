@@ -20,7 +20,7 @@ class SDKParamTest(unittest.TestCase):
                     "[%(filename)s:%(lineno)s]   %(message)s")
         handler.setFormatter(formatter)
         logger.addHandler(handler)
-        logger.setLevel(logging.DEBUG)
+        logger.setLevel(logging.INFO)
 
         OTSClient.connection_pool_class = MockConnection
         self.client = OTSClient(OTS_ENDPOINT, OTS_ID, OTS_SECRET, OTS_INSTANCE)

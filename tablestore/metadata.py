@@ -5,89 +5,6 @@ from tablestore.error import *
 from enum import Enum
 import tablestore.protobuf.search_pb2 as search_pb2
 
-__all__ = [
-    'INF_MIN',
-    'INF_MAX',
-    'PK_AUTO_INCR',
-    'TableMeta',
-    'TableOptions',
-    'CapacityUnit',
-    'ReservedThroughput',
-    'ReservedThroughputDetails',
-    'ColumnType',
-    'ReturnType',
-    'Column',
-    'Direction',
-    'UpdateType',
-    'UpdateTableResponse',
-    'DescribeTableResponse',
-    'RowDataItem',
-    'Condition',
-    'Row',
-    'RowItem',
-    'PutRowItem',
-    'UpdateRowItem',
-    'DeleteRowItem',
-    'BatchGetRowRequest',
-    'TableInBatchGetRowItem',
-    'BatchGetRowResponse',
-    'BatchWriteRowType',
-    'BatchWriteRowRequest',
-    'TableInBatchWriteRowItem',
-    'BatchWriteRowResponse',
-    'BatchWriteRowResponseItem',
-    'LogicalOperator',
-    'ComparatorType',
-    'ColumnConditionType',
-    'ColumnCondition',
-    'CompositeColumnCondition',
-    'SingleColumnCondition',
-    'RowExistenceExpectation',
-    'IndexSetting',
-    'AnalyzerType',
-    'FieldType',
-    'FieldSchema',
-    'SearchIndexMeta',
-    'Sort',
-    'Sorter',
-    'PrimaryKeySort',
-    'GeoDistanceSort',
-    'ScoreSort',
-    'FieldSort',
-    'AnalyzerType',
-    'SortMode',
-    'SortOrder',
-    'ScoreMode',
-    'SearchQuery',
-    'QueryOperator',
-    'MatchQuery',
-    'MatchPhraseQuery',
-    'MatchAllQuery',
-    'TermQuery',
-    'TermsQuery',
-    'RangeQuery',
-    'PrefixQuery',
-    'WildcardQuery',
-    'BoolQuery',
-    'FunctionScoreQuery',
-    'GeoBoundingBoxQuery',
-    'GeoPolygonQuery',
-    'GeoDistanceQuery',
-    'ExistsQuery',
-    'FieldValueFactor',
-    'NestedQuery',
-    'SyncStat',
-    'SyncPhase',
-    'ColumnsToGet',
-    'ColumnReturnType',
-    'GeoDistanceType',
-    'NestedFilter',
-    'DefinedColumnSchema',
-    'SecondaryIndexMeta',
-    'SecondaryIndexType',
-]
-
-
 class TableMeta(object):
 
     def __init__(self, table_name, schema_of_primary_key, defined_columns=[]):
@@ -947,24 +864,61 @@ class ExistsQuery(Query):
 
 class SearchQuery(object):
 
-    def __init__(self, query, sort=None,
-        get_total_count=False, next_token=None,
-        offset=None, limit=None):
+    def __init__(self, query, sort=None, get_total_count=False, 
+                 next_token=None, offset=None, limit=None, 
+                 aggs = None, group_bys = None):
+
         self.query = query
         self.sort = sort
         self.get_total_count = get_total_count
         self.next_token = next_token
         self.offset = offset
         self.limit = limit
+        self.aggs = aggs
+        self.group_bys = group_bys
+
+class ScanQuery(object):
+
+    def __init__(self, query, limit, next_token, current_parallel_id, max_parallel, alive_time = 60):
+        self.query = query
+        self.limit = limit
+        self.next_token = next_token
+        self.current_parallel_id = current_parallel_id
+        self.max_parallel = max_parallel
+        self.alive_time = alive_time
 
 class ColumnReturnType(Enum):
 
     ALL = search_pb2.RETURN_ALL
     SPECIFIED = search_pb2.RETURN_SPECIFIED
     NONE = search_pb2.RETURN_NONE
+    ALL_FROM_INDEX = search_pb2.RETURN_ALL_FROM_INDEX
 
 class ColumnsToGet(object):
 
     def __init__(self, column_names=[], return_type=ColumnReturnType.NONE):
         self.column_names = column_names
         self.return_type = return_type
+
+class SearchResponse(object):
+    
+    def __init__(self, rows, agg_results, group_by_results, next_token, is_all_succeed, total_count):
+        self.rows = rows
+        self.agg_results = agg_results
+        self.group_by_results = group_by_results
+        self.next_token = next_token
+        self.is_all_succeed = is_all_succeed
+        self.total_count = total_count
+
+class ComputeSplitsResponse(object):
+    
+    def __init__(self, session_id, splits_size):
+        self.session_id = session_id
+        self.splits_size = splits_size
+
+
+class ParallelScanResponse(object):
+    
+    def __init__(self, rows, next_token):
+        self.rows = rows
+        self.next_token = next_token

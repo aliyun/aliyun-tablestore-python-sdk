@@ -59,6 +59,8 @@ class OTSProtocol(object):
         'DeleteSearchIndex',
         'DescribeSearchIndex',
         'Search',
+        'ComputeSplits',
+        'ParallelScan',
         'CreateIndex',
         'DropIndex',
         'StartLocalTransaction',
@@ -246,7 +248,8 @@ class OTSProtocol(object):
             error_message = 'Response format is invalid, %s, RequestID: %s, " \
                 "HTTP status: %s, Body: %s.' % (str(e), request_id, status, body)
             self.logger.error(error_message)
-            raise OTSClientError(error_message, status)
+            #raise OTSClientError(error_message, status)
+            raise e
 
         if self.logger.level <= logging.DEBUG:
             # prevent to generate formatted message which is time consuming

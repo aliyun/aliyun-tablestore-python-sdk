@@ -69,7 +69,10 @@ Github安装
 - `批量读（从多张表，一次性读出多行数据） <https://github.com/aliyun/aliyun-tablestore-python-sdk/blob/master/examples/batch_get_row.py>`_
 - `范围扫描（给定一个范围，扫描出该范围内的所有数据） <https://github.com/aliyun/aliyun-tablestore-python-sdk/blob/master/examples/get_range.py>`_
 - `主键自增列（主键自动生成一个递增ID） <https://github.com/aliyun/aliyun-tablestore-python-sdk/blob/master/examples/pk_auto_incr.py>`_
-- `多元索引 <https://github.com/aliyun/aliyun-tablestore-python-sdk/blob/master/examples/search_index.py>`_
+- `Search <https://github.com/aliyun/aliyun-tablestore-python-sdk/blob/master/examples/search_index.py>`_
+- `Parallel Scan <https://github.com/aliyun/aliyun-tablestore-python-sdk/blob/master/examples/parallel_scan.py>`_
+- `Max/Min/Sum/Avg/Count/DistinctCount <https://github.com/aliyun/aliyun-tablestore-python-sdk/blob/master/examples/agg.py>`_
+- `GroupBy <https://github.com/aliyun/aliyun-tablestore-python-sdk/blob/master/examples/group_by.py>`_
 - `全局二级索引 <https://github.com/aliyun/aliyun-tablestore-python-sdk/blob/master/examples/secondary_index_operations.py>`_
 - `局部事务（提交事务） <https://github.com/aliyun/aliyun-tablestore-python-sdk/blob/master/examples/transaction_and_commit.py>`_
 - `局部事务（舍弃事务） <https://github.com/aliyun/aliyun-tablestore-python-sdk/blob/master/examples/transaction_and_abort.py>`_

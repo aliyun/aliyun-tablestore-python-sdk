@@ -3,6 +3,13 @@ TableStore SDK for Python 版本记录
 
 Python SDK的版本号遵循 `Semantic Versioning <http://semver.org/>`_ 规则。
 
+Version 5.2.0
+-------------
+
+- Support ParallelScan API
+- Support Max/Min/Avg/Sum/Count/DistinctCount
+- Support GroupBy API
+
 Version 4.3.5
 -------------
 

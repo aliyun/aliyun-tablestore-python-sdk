@@ -11,7 +11,7 @@ from google.protobuf import descriptor_pb2
 DESCRIPTOR = descriptor.FileDescriptor(
   name='search.proto',
   package='com.aliyun.tablestore.protocol',
-  serialized_pb='\n\x0csearch.proto\x12\x1e\x63om.aliyun.tablestore.protocol\"\x8d\x01\n\nMatchQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0c\n\x04text\x18\x02 \x01(\t\x12\x1c\n\x14minimum_should_match\x18\x03 \x01(\x05\x12?\n\x08operator\x18\x04 \x01(\x0e\x32-.com.aliyun.tablestore.protocol.QueryOperator\"4\n\x10MatchPhraseQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0c\n\x04text\x18\x02 \x01(\t\"\x0f\n\rMatchAllQuery\"-\n\tTermQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0c\n\x04term\x18\x02 \x01(\x0c\"/\n\nTermsQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\r\n\x05terms\x18\x02 \x03(\x0c\"t\n\nRangeQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x12\n\nrange_from\x18\x02 \x01(\x0c\x12\x10\n\x08range_to\x18\x03 \x01(\x0c\x12\x15\n\rinclude_lower\x18\x04 \x01(\x08\x12\x15\n\rinclude_upper\x18\x05 \x01(\x08\"1\n\x0bPrefixQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0e\n\x06prefix\x18\x02 \x01(\t\"2\n\rWildcardQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"\xa5\x02\n\tBoolQuery\x12;\n\x0cmust_queries\x18\x01 \x03(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12?\n\x10must_not_queries\x18\x02 \x03(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12=\n\x0e\x66ilter_queries\x18\x03 \x03(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12=\n\x0eshould_queries\x18\x04 \x03(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12\x1c\n\x14minimum_should_match\x18\x05 \x01(\x05\"H\n\x0f\x43onstScoreQuery\x12\x35\n\x06\x66ilter\x18\x01 \x01(\x0b\x32%.com.aliyun.tablestore.protocol.Query\"&\n\x10\x46ieldValueFactor\x12\x12\n\nfield_name\x18\x01 \x01(\t\"\x98\x01\n\x12\x46unctionScoreQuery\x12\x34\n\x05query\x18\x01 \x01(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12L\n\x12\x66ield_value_factor\x18\x02 \x01(\x0b\x32\x30.com.aliyun.tablestore.protocol.FieldValueFactor\"\x90\x01\n\x0bNestedQuery\x12\x0c\n\x04path\x18\x01 \x01(\t\x12\x34\n\x05query\x18\x02 \x01(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12=\n\nscore_mode\x18\x03 \x01(\x0e\x32).com.aliyun.tablestore.protocol.ScoreMode\"Q\n\x13GeoBoundingBoxQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x10\n\x08top_left\x18\x02 \x01(\t\x12\x14\n\x0c\x62ottom_right\x18\x03 \x01(\t\"N\n\x10GeoDistanceQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x14\n\x0c\x63\x65nter_point\x18\x02 \x01(\t\x12\x10\n\x08\x64istance\x18\x03 \x01(\x01\"5\n\x0fGeoPolygonQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0e\n\x06points\x18\x02 \x03(\t\"!\n\x0b\x45xistsQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\"O\n\x05Query\x12\x37\n\x04type\x18\x01 \x01(\x0e\x32).com.aliyun.tablestore.protocol.QueryType\x12\r\n\x05query\x18\x02 \x01(\x0c\"\x1e\n\x08\x43ollapse\x12\x12\n\nfield_name\x18\x01 \x01(\t\"S\n\x0cNestedFilter\x12\x0c\n\x04path\x18\x01 \x01(\t\x12\x35\n\x06\x66ilter\x18\x02 \x01(\x0b\x32%.com.aliyun.tablestore.protocol.Query\"E\n\tScoreSort\x12\x38\n\x05order\x18\x01 \x01(\x0e\x32).com.aliyun.tablestore.protocol.SortOrder\"J\n\x0ePrimaryKeySort\x12\x38\n\x05order\x18\x01 \x01(\x0e\x32).com.aliyun.tablestore.protocol.SortOrder\"\xd6\x01\n\tFieldSort\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x38\n\x05order\x18\x02 \x01(\x0e\x32).com.aliyun.tablestore.protocol.SortOrder\x12\x36\n\x04mode\x18\x03 \x01(\x0e\x32(.com.aliyun.tablestore.protocol.SortMode\x12\x43\n\rnested_filter\x18\x04 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.NestedFilter\"\xb4\x02\n\x0fGeoDistanceSort\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0e\n\x06points\x18\x02 \x03(\t\x12\x38\n\x05order\x18\x03 \x01(\x0e\x32).com.aliyun.tablestore.protocol.SortOrder\x12\x36\n\x04mode\x18\x04 \x01(\x0e\x32(.com.aliyun.tablestore.protocol.SortMode\x12\x46\n\rdistance_type\x18\x05 \x01(\x0e\x32/.com.aliyun.tablestore.protocol.GeoDistanceType\x12\x43\n\rnested_filter\x18\x06 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.NestedFilter\"\x93\x02\n\x06Sorter\x12=\n\nfield_sort\x18\x01 \x01(\x0b\x32).com.aliyun.tablestore.protocol.FieldSort\x12J\n\x11geo_distance_sort\x18\x02 \x01(\x0b\x32/.com.aliyun.tablestore.protocol.GeoDistanceSort\x12=\n\nscore_sort\x18\x03 \x01(\x0b\x32).com.aliyun.tablestore.protocol.ScoreSort\x12?\n\x07pk_sort\x18\x04 \x01(\x0b\x32..com.aliyun.tablestore.protocol.PrimaryKeySort\">\n\x04Sort\x12\x36\n\x06sorter\x18\x01 \x03(\x0b\x32&.com.aliyun.tablestore.protocol.Sorter\"\xfa\x01\n\x0bSearchQuery\x12\x0e\n\x06offset\x18\x01 \x01(\x05\x12\r\n\x05limit\x18\x02 \x01(\x05\x12\x34\n\x05query\x18\x04 \x01(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12:\n\x08\x63ollapse\x18\x05 \x01(\x0b\x32(.com.aliyun.tablestore.protocol.Collapse\x12\x32\n\x04sort\x18\x06 \x01(\x0b\x32$.com.aliyun.tablestore.protocol.Sort\x12\x17\n\x0fget_total_count\x18\x08 \x01(\x08\x12\r\n\x05token\x18\t \x01(\x0c\"k\n\x0c\x43olumnsToGet\x12\x45\n\x0breturn_type\x18\x01 \x01(\x0e\x32\x30.com.aliyun.tablestore.protocol.ColumnReturnType\x12\x14\n\x0c\x63olumn_names\x18\x02 \x03(\t\"\xab\x01\n\rSearchRequest\x12\x12\n\ntable_name\x18\x01 \x01(\t\x12\x12\n\nindex_name\x18\x02 \x01(\t\x12\x44\n\x0e\x63olumns_to_get\x18\x03 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.ColumnsToGet\x12\x14\n\x0csearch_query\x18\x04 \x01(\x0c\x12\x16\n\x0erouting_values\x18\x05 \x03(\x0c\"^\n\x0eSearchResponse\x12\x12\n\ntotal_hits\x18\x01 \x01(\x03\x12\x0c\n\x04rows\x18\x02 \x03(\x0c\x12\x16\n\x0eis_all_succeed\x18\x03 \x01(\x08\x12\x12\n\nnext_token\x18\x06 \x01(\x0c\"\x83\x02\n\x0b\x46ieldSchema\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12=\n\nfield_type\x18\x02 \x01(\x0e\x32).com.aliyun.tablestore.protocol.FieldType\x12\x10\n\x08\x61nalyzer\x18\x04 \x01(\t\x12\r\n\x05index\x18\x05 \x01(\x08\x12\x1b\n\x13\x65nable_sort_and_agg\x18\x06 \x01(\x08\x12\r\n\x05store\x18\x07 \x01(\x08\x12\x42\n\rfield_schemas\x18\x08 \x03(\x0b\x32+.com.aliyun.tablestore.protocol.FieldSchema\x12\x10\n\x08is_array\x18\t \x01(\x08\"\xd0\x01\n\x0bIndexSchema\x12\x42\n\rfield_schemas\x18\x01 \x03(\x0b\x32+.com.aliyun.tablestore.protocol.FieldSchema\x12\x43\n\rindex_setting\x18\x02 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.IndexSetting\x12\x38\n\nindex_sort\x18\x03 \x01(\x0b\x32$.com.aliyun.tablestore.protocol.Sort\"`\n\x0cIndexSetting\x12\x18\n\x10number_of_shards\x18\x01 \x01(\x05\x12\x16\n\x0erouting_fields\x18\x02 \x03(\t\x12\x1e\n\x16routing_partition_size\x18\x03 \x01(\x05\"\x7f\n\x18\x43reateSearchIndexRequest\x12\x12\n\ntable_name\x18\x01 \x02(\t\x12\x12\n\nindex_name\x18\x02 \x02(\t\x12;\n\x06schema\x18\x03 \x01(\x0b\x32+.com.aliyun.tablestore.protocol.IndexSchema\"\x1b\n\x19\x43reateSearchIndexResponse\"3\n\tIndexInfo\x12\x12\n\ntable_name\x18\x01 \x01(\t\x12\x12\n\nindex_name\x18\x02 \x01(\t\",\n\x16ListSearchIndexRequest\x12\x12\n\ntable_name\x18\x01 \x01(\t\"U\n\x17ListSearchIndexResponse\x12:\n\x07indices\x18\x01 \x03(\x0b\x32).com.aliyun.tablestore.protocol.IndexInfo\"B\n\x18\x44\x65leteSearchIndexRequest\x12\x12\n\ntable_name\x18\x01 \x01(\t\x12\x12\n\nindex_name\x18\x02 \x01(\t\"\x1b\n\x19\x44\x65leteSearchIndexResponse\"i\n\x08SyncStat\x12=\n\nsync_phase\x18\x01 \x01(\x0e\x32).com.aliyun.tablestore.protocol.SyncPhase\x12\x1e\n\x16\x63urrent_sync_timestamp\x18\x02 \x01(\x03\"D\n\x1a\x44\x65scribeSearchIndexRequest\x12\x12\n\ntable_name\x18\x01 \x01(\t\x12\x12\n\nindex_name\x18\x02 \x01(\t\"\x97\x01\n\x1b\x44\x65scribeSearchIndexResponse\x12;\n\x06schema\x18\x01 \x01(\x0b\x32+.com.aliyun.tablestore.protocol.IndexSchema\x12;\n\tsync_stat\x18\x02 \x01(\x0b\x32(.com.aliyun.tablestore.protocol.SyncStat*\xd1\x02\n\tQueryType\x12\x0f\n\x0bMATCH_QUERY\x10\x01\x12\x16\n\x12MATCH_PHRASE_QUERY\x10\x02\x12\x0e\n\nTERM_QUERY\x10\x03\x12\x0f\n\x0bRANGE_QUERY\x10\x04\x12\x10\n\x0cPREFIX_QUERY\x10\x05\x12\x0e\n\nBOOL_QUERY\x10\x06\x12\x15\n\x11\x43ONST_SCORE_QUERY\x10\x07\x12\x18\n\x14\x46UNCTION_SCORE_QUERY\x10\x08\x12\x10\n\x0cNESTED_QUERY\x10\t\x12\x12\n\x0eWILDCARD_QUERY\x10\n\x12\x13\n\x0fMATCH_ALL_QUERY\x10\x0b\x12\x1a\n\x16GEO_BOUNDING_BOX_QUERY\x10\x0c\x12\x16\n\x12GEO_DISTANCE_QUERY\x10\r\x12\x15\n\x11GEO_POLYGON_QUERY\x10\x0e\x12\x0f\n\x0bTERMS_QUERY\x10\x0f\x12\x10\n\x0c\x45XISTS_QUERY\x10\x10* \n\rQueryOperator\x12\x06\n\x02OR\x10\x01\x12\x07\n\x03\x41ND\x10\x02*r\n\tScoreMode\x12\x13\n\x0fSCORE_MODE_NONE\x10\x01\x12\x12\n\x0eSCORE_MODE_AVG\x10\x02\x12\x12\n\x0eSCORE_MODE_MAX\x10\x03\x12\x14\n\x10SCORE_MODE_TOTAL\x10\x04\x12\x12\n\x0eSCORE_MODE_MIN\x10\x05*4\n\tSortOrder\x12\x12\n\x0eSORT_ORDER_ASC\x10\x00\x12\x13\n\x0fSORT_ORDER_DESC\x10\x01*C\n\x08SortMode\x12\x11\n\rSORT_MODE_MIN\x10\x00\x12\x11\n\rSORT_MODE_MAX\x10\x01\x12\x11\n\rSORT_MODE_AVG\x10\x02*?\n\x0fGeoDistanceType\x12\x14\n\x10GEO_DISTANCE_ARC\x10\x00\x12\x16\n\x12GEO_DISTANCE_PLANE\x10\x01*I\n\x10\x43olumnReturnType\x12\x0e\n\nRETURN_ALL\x10\x01\x12\x14\n\x10RETURN_SPECIFIED\x10\x02\x12\x0f\n\x0bRETURN_NONE\x10\x03*`\n\tFieldType\x12\x08\n\x04LONG\x10\x01\x12\n\n\x06\x44OUBLE\x10\x02\x12\x0b\n\x07\x42OOLEAN\x10\x03\x12\x0b\n\x07KEYWORD\x10\x04\x12\x08\n\x04TEXT\x10\x05\x12\n\n\x06NESTED\x10\x06\x12\r\n\tGEO_POINT\x10\x07*\x1f\n\tSyncPhase\x12\x08\n\x04\x46ULL\x10\x01\x12\x08\n\x04INCR\x10\x02')
+  serialized_pb='\n\x0csearch.proto\x12\x1e\x63om.aliyun.tablestore.protocol\"\x8d\x01\n\nMatchQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0c\n\x04text\x18\x02 \x01(\t\x12\x1c\n\x14minimum_should_match\x18\x03 \x01(\x05\x12?\n\x08operator\x18\x04 \x01(\x0e\x32-.com.aliyun.tablestore.protocol.QueryOperator\"4\n\x10MatchPhraseQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0c\n\x04text\x18\x02 \x01(\t\"\x0f\n\rMatchAllQuery\"-\n\tTermQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0c\n\x04term\x18\x02 \x01(\x0c\"/\n\nTermsQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\r\n\x05terms\x18\x02 \x03(\x0c\"t\n\nRangeQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x12\n\nrange_from\x18\x02 \x01(\x0c\x12\x10\n\x08range_to\x18\x03 \x01(\x0c\x12\x15\n\rinclude_lower\x18\x04 \x01(\x08\x12\x15\n\rinclude_upper\x18\x05 \x01(\x08\"1\n\x0bPrefixQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0e\n\x06prefix\x18\x02 \x01(\t\"2\n\rWildcardQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"\xa5\x02\n\tBoolQuery\x12;\n\x0cmust_queries\x18\x01 \x03(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12?\n\x10must_not_queries\x18\x02 \x03(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12=\n\x0e\x66ilter_queries\x18\x03 \x03(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12=\n\x0eshould_queries\x18\x04 \x03(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12\x1c\n\x14minimum_should_match\x18\x05 \x01(\x05\"H\n\x0f\x43onstScoreQuery\x12\x35\n\x06\x66ilter\x18\x01 \x01(\x0b\x32%.com.aliyun.tablestore.protocol.Query\"&\n\x10\x46ieldValueFactor\x12\x12\n\nfield_name\x18\x01 \x01(\t\"\x98\x01\n\x12\x46unctionScoreQuery\x12\x34\n\x05query\x18\x01 \x01(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12L\n\x12\x66ield_value_factor\x18\x02 \x01(\x0b\x32\x30.com.aliyun.tablestore.protocol.FieldValueFactor\"\x90\x01\n\x0bNestedQuery\x12\x0c\n\x04path\x18\x01 \x01(\t\x12\x34\n\x05query\x18\x02 \x01(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12=\n\nscore_mode\x18\x03 \x01(\x0e\x32).com.aliyun.tablestore.protocol.ScoreMode\"Q\n\x13GeoBoundingBoxQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x10\n\x08top_left\x18\x02 \x01(\t\x12\x14\n\x0c\x62ottom_right\x18\x03 \x01(\t\"N\n\x10GeoDistanceQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x14\n\x0c\x63\x65nter_point\x18\x02 \x01(\t\x12\x10\n\x08\x64istance\x18\x03 \x01(\x01\"5\n\x0fGeoPolygonQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0e\n\x06points\x18\x02 \x03(\t\"!\n\x0b\x45xistsQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\"O\n\x05Query\x12\x37\n\x04type\x18\x01 \x01(\x0e\x32).com.aliyun.tablestore.protocol.QueryType\x12\r\n\x05query\x18\x02 \x01(\x0c\"\x1e\n\x08\x43ollapse\x12\x12\n\nfield_name\x18\x01 \x01(\t\"S\n\x0cNestedFilter\x12\x0c\n\x04path\x18\x01 \x01(\t\x12\x35\n\x06\x66ilter\x18\x02 \x01(\x0b\x32%.com.aliyun.tablestore.protocol.Query\"E\n\tScoreSort\x12\x38\n\x05order\x18\x01 \x01(\x0e\x32).com.aliyun.tablestore.protocol.SortOrder\"J\n\x0ePrimaryKeySort\x12\x38\n\x05order\x18\x01 \x01(\x0e\x32).com.aliyun.tablestore.protocol.SortOrder\"\xd6\x01\n\tFieldSort\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x38\n\x05order\x18\x02 \x01(\x0e\x32).com.aliyun.tablestore.protocol.SortOrder\x12\x36\n\x04mode\x18\x03 \x01(\x0e\x32(.com.aliyun.tablestore.protocol.SortMode\x12\x43\n\rnested_filter\x18\x04 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.NestedFilter\"\xb4\x02\n\x0fGeoDistanceSort\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0e\n\x06points\x18\x02 \x03(\t\x12\x38\n\x05order\x18\x03 \x01(\x0e\x32).com.aliyun.tablestore.protocol.SortOrder\x12\x36\n\x04mode\x18\x04 \x01(\x0e\x32(.com.aliyun.tablestore.protocol.SortMode\x12\x46\n\rdistance_type\x18\x05 \x01(\x0e\x32/.com.aliyun.tablestore.protocol.GeoDistanceType\x12\x43\n\rnested_filter\x18\x06 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.NestedFilter\"\x93\x02\n\x06Sorter\x12=\n\nfield_sort\x18\x01 \x01(\x0b\x32).com.aliyun.tablestore.protocol.FieldSort\x12J\n\x11geo_distance_sort\x18\x02 \x01(\x0b\x32/.com.aliyun.tablestore.protocol.GeoDistanceSort\x12=\n\nscore_sort\x18\x03 \x01(\x0b\x32).com.aliyun.tablestore.protocol.ScoreSort\x12?\n\x07pk_sort\x18\x04 \x01(\x0b\x32..com.aliyun.tablestore.protocol.PrimaryKeySort\">\n\x04Sort\x12\x36\n\x06sorter\x18\x01 \x03(\x0b\x32&.com.aliyun.tablestore.protocol.Sorter\"h\n\x0b\x41ggregation\x12\x0c\n\x04name\x18\x01 \x01(\t\x12=\n\x04type\x18\x02 \x01(\x0e\x32/.com.aliyun.tablestore.protocol.AggregationType\x12\x0c\n\x04\x62ody\x18\x03 \x01(\x0c\"I\n\x0c\x41ggregations\x12\x39\n\x04\x61ggs\x18\x01 \x03(\x0b\x32+.com.aliyun.tablestore.protocol.Aggregation\"5\n\x0e\x41vgAggregation\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0f\n\x07missing\x18\x02 \x01(\x0c\"5\n\x0eMaxAggregation\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0f\n\x07missing\x18\x02 \x01(\x0c\"5\n\x0eMinAggregation\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0f\n\x07missing\x18\x02 \x01(\x0c\"5\n\x0eSumAggregation\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0f\n\x07missing\x18\x02 \x01(\x0c\"&\n\x10\x43ountAggregation\x12\x12\n\nfield_name\x18\x01 \x01(\t\"?\n\x18\x44istinctCountAggregation\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0f\n\x07missing\x18\x02 \x01(\x0c\"W\n\x12TopRowsAggregation\x12\r\n\x05limit\x18\x01 \x01(\x05\x12\x32\n\x04sort\x18\x02 \x01(\x0b\x32$.com.aliyun.tablestore.protocol.Sort\"%\n\x14\x41vgAggregationResult\x12\r\n\x05value\x18\x01 \x01(\x01\"(\n\x18TopRowsAggregationResult\x12\x0c\n\x04rows\x18\x01 \x03(\x0c\"/\n\x1e\x44istinctCountAggregationResult\x12\r\n\x05value\x18\x01 \x01(\x03\"%\n\x14MaxAggregationResult\x12\r\n\x05value\x18\x01 \x01(\x01\"%\n\x14MinAggregationResult\x12\r\n\x05value\x18\x01 \x01(\x01\"%\n\x14SumAggregationResult\x12\r\n\x05value\x18\x01 \x01(\x01\"\'\n\x16\x43ountAggregationResult\x12\r\n\x05value\x18\x01 \x01(\x03\"t\n\x11\x41ggregationResult\x12\x0c\n\x04name\x18\x01 \x01(\t\x12=\n\x04type\x18\x02 \x01(\x0e\x32/.com.aliyun.tablestore.protocol.AggregationType\x12\x12\n\nagg_result\x18\x03 \x01(\x0c\"\\\n\x12\x41ggregationsResult\x12\x46\n\x0b\x61gg_results\x18\x01 \x03(\x0b\x32\x31.com.aliyun.tablestore.protocol.AggregationResult\"`\n\x07GroupBy\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x39\n\x04type\x18\x02 \x01(\x0e\x32+.com.aliyun.tablestore.protocol.GroupByType\x12\x0c\n\x04\x62ody\x18\x03 \x01(\x0c\"F\n\x08GroupBys\x12:\n\tgroup_bys\x18\x01 \x03(\x0b\x32\'.com.aliyun.tablestore.protocol.GroupBy\"H\n\x0cGroupKeySort\x12\x38\n\x05order\x18\x01 \x01(\x0e\x32).com.aliyun.tablestore.protocol.SortOrder\"H\n\x0cRowCountSort\x12\x38\n\x05order\x18\x01 \x01(\x0e\x32).com.aliyun.tablestore.protocol.SortOrder\"\\\n\nSubAggSort\x12\x14\n\x0csub_agg_name\x18\x01 \x01(\t\x12\x38\n\x05order\x18\x02 \x01(\x0e\x32).com.aliyun.tablestore.protocol.SortOrder\"\xdd\x01\n\rGroupBySorter\x12\x44\n\x0egroup_key_sort\x18\x01 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.GroupKeySort\x12\x44\n\x0erow_count_sort\x18\x02 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.RowCountSort\x12@\n\x0csub_agg_sort\x18\x03 \x01(\x0b\x32*.com.aliyun.tablestore.protocol.SubAggSort\"M\n\x0bGroupBySort\x12>\n\x07sorters\x18\x01 \x03(\x0b\x32-.com.aliyun.tablestore.protocol.GroupBySorter\"\xec\x01\n\x0cGroupByField\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0c\n\x04size\x18\x02 \x01(\x05\x12\x39\n\x04sort\x18\x03 \x01(\x0b\x32+.com.aliyun.tablestore.protocol.GroupBySort\x12>\n\x08sub_aggs\x18\x04 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.Aggregations\x12?\n\rsub_group_bys\x18\x05 \x01(\x0b\x32(.com.aliyun.tablestore.protocol.GroupBys\"#\n\x05Range\x12\r\n\x05\x62\x65gin\x18\x01 \x01(\x01\x12\x0b\n\x03\x65nd\x18\x02 \x01(\x01\"\xda\x01\n\x0cGroupByRange\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x35\n\x06ranges\x18\x02 \x03(\x0b\x32%.com.aliyun.tablestore.protocol.Range\x12>\n\x08sub_aggs\x18\x03 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.Aggregations\x12?\n\rsub_group_bys\x18\x04 \x01(\x0b\x32(.com.aliyun.tablestore.protocol.GroupBys\"\xc8\x01\n\rGroupByFilter\x12\x36\n\x07\x66ilters\x18\x01 \x03(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12>\n\x08sub_aggs\x18\x02 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.Aggregations\x12?\n\rsub_group_bys\x18\x03 \x01(\x0b\x32(.com.aliyun.tablestore.protocol.GroupBys\"$\n\x08GeoPoint\x12\x0b\n\x03lat\x18\x01 \x01(\x01\x12\x0b\n\x03lon\x18\x02 \x01(\x01\"\x9a\x02\n\x12GroupByGeoDistance\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x38\n\x06origin\x18\x02 \x01(\x0b\x32(.com.aliyun.tablestore.protocol.GeoPoint\x12\x35\n\x06ranges\x18\x03 \x03(\x0b\x32%.com.aliyun.tablestore.protocol.Range\x12>\n\x08sub_aggs\x18\x04 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.Aggregations\x12?\n\rsub_group_bys\x18\x05 \x01(\x0b\x32(.com.aliyun.tablestore.protocol.GroupBys\"\xd3\x01\n\x16GroupByFieldResultItem\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x11\n\trow_count\x18\x02 \x01(\x03\x12K\n\x0fsub_aggs_result\x18\x03 \x01(\x0b\x32\x32.com.aliyun.tablestore.protocol.AggregationsResult\x12L\n\x14sub_group_bys_result\x18\x04 \x01(\x0b\x32..com.aliyun.tablestore.protocol.GroupBysResult\"q\n\x12GroupByFieldResult\x12[\n\x1bgroup_by_field_result_items\x18\x01 \x03(\x0b\x32\x36.com.aliyun.tablestore.protocol.GroupByFieldResultItem\"\xec\x01\n\x16GroupByRangeResultItem\x12\x12\n\nrange_from\x18\x01 \x01(\x01\x12\x10\n\x08range_to\x18\x02 \x01(\x01\x12\x11\n\trow_count\x18\x03 \x01(\x03\x12K\n\x0fsub_aggs_result\x18\x04 \x01(\x0b\x32\x32.com.aliyun.tablestore.protocol.AggregationsResult\x12L\n\x14sub_group_bys_result\x18\x05 \x01(\x0b\x32..com.aliyun.tablestore.protocol.GroupBysResult\"q\n\x12GroupByRangeResult\x12[\n\x1bgroup_by_range_result_items\x18\x01 \x03(\x0b\x32\x36.com.aliyun.tablestore.protocol.GroupByRangeResultItem\"\xf2\x01\n\x1cGroupByGeoDistanceResultItem\x12\x12\n\nrange_from\x18\x01 \x01(\x01\x12\x10\n\x08range_to\x18\x02 \x01(\x01\x12\x11\n\trow_count\x18\x03 \x01(\x03\x12K\n\x0fsub_aggs_result\x18\x04 \x01(\x0b\x32\x32.com.aliyun.tablestore.protocol.AggregationsResult\x12L\n\x14sub_group_bys_result\x18\x05 \x01(\x0b\x32..com.aliyun.tablestore.protocol.GroupBysResult\"\x84\x01\n\x18GroupByGeoDistanceResult\x12h\n\"group_by_geo_distance_result_items\x18\x01 \x03(\x0b\x32<.com.aliyun.tablestore.protocol.GroupByGeoDistanceResultItem\"\xc7\x01\n\x17GroupByFilterResultItem\x12\x11\n\trow_count\x18\x01 \x01(\x03\x12K\n\x0fsub_aggs_result\x18\x02 \x01(\x0b\x32\x32.com.aliyun.tablestore.protocol.AggregationsResult\x12L\n\x14sub_group_bys_result\x18\x03 \x01(\x0b\x32..com.aliyun.tablestore.protocol.GroupBysResult\"t\n\x13GroupByFilterResult\x12]\n\x1cgroup_by_filter_result_items\x18\x01 \x03(\x0b\x32\x37.com.aliyun.tablestore.protocol.GroupByFilterResultItem\"q\n\rGroupByResult\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x39\n\x04type\x18\x02 \x01(\x0e\x32+.com.aliyun.tablestore.protocol.GroupByType\x12\x17\n\x0fgroup_by_result\x18\x03 \x01(\x0c\"Y\n\x0eGroupBysResult\x12G\n\x10group_by_results\x18\x01 \x03(\x0b\x32-.com.aliyun.tablestore.protocol.GroupByResult\"\xf3\x02\n\x0bSearchQuery\x12\x0e\n\x06offset\x18\x01 \x01(\x05\x12\r\n\x05limit\x18\x02 \x01(\x05\x12\x34\n\x05query\x18\x04 \x01(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12:\n\x08\x63ollapse\x18\x05 \x01(\x0b\x32(.com.aliyun.tablestore.protocol.Collapse\x12\x32\n\x04sort\x18\x06 \x01(\x0b\x32$.com.aliyun.tablestore.protocol.Sort\x12\x17\n\x0fget_total_count\x18\x08 \x01(\x08\x12\r\n\x05token\x18\t \x01(\x0c\x12:\n\x04\x61ggs\x18\n \x01(\x0b\x32,.com.aliyun.tablestore.protocol.Aggregations\x12;\n\tgroup_bys\x18\x0b \x01(\x0b\x32(.com.aliyun.tablestore.protocol.GroupBys\"k\n\x0c\x43olumnsToGet\x12\x45\n\x0breturn_type\x18\x01 \x01(\x0e\x32\x30.com.aliyun.tablestore.protocol.ColumnReturnType\x12\x14\n\x0c\x63olumn_names\x18\x02 \x03(\t\"\xab\x01\n\rSearchRequest\x12\x12\n\ntable_name\x18\x01 \x01(\t\x12\x12\n\nindex_name\x18\x02 \x01(\t\x12\x44\n\x0e\x63olumns_to_get\x18\x03 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.ColumnsToGet\x12\x14\n\x0csearch_query\x18\x04 \x01(\x0c\x12\x16\n\x0erouting_values\x18\x05 \x03(\x0c\"\x7f\n\x0eSearchResponse\x12\x12\n\ntotal_hits\x18\x01 \x01(\x03\x12\x0c\n\x04rows\x18\x02 \x03(\x0c\x12\x16\n\x0eis_all_succeed\x18\x03 \x01(\x08\x12\x12\n\nnext_token\x18\x06 \x01(\x0c\x12\x0c\n\x04\x61ggs\x18\x07 \x01(\x0c\x12\x11\n\tgroup_bys\x18\x08 \x01(\x0c\"\x83\x02\n\x0b\x46ieldSchema\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12=\n\nfield_type\x18\x02 \x01(\x0e\x32).com.aliyun.tablestore.protocol.FieldType\x12\x10\n\x08\x61nalyzer\x18\x04 \x01(\t\x12\r\n\x05index\x18\x05 \x01(\x08\x12\x1b\n\x13\x65nable_sort_and_agg\x18\x06 \x01(\x08\x12\r\n\x05store\x18\x07 \x01(\x08\x12\x42\n\rfield_schemas\x18\x08 \x03(\x0b\x32+.com.aliyun.tablestore.protocol.FieldSchema\x12\x10\n\x08is_array\x18\t \x01(\x08\"\xd0\x01\n\x0bIndexSchema\x12\x42\n\rfield_schemas\x18\x01 \x03(\x0b\x32+.com.aliyun.tablestore.protocol.FieldSchema\x12\x43\n\rindex_setting\x18\x02 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.IndexSetting\x12\x38\n\nindex_sort\x18\x03 \x01(\x0b\x32$.com.aliyun.tablestore.protocol.Sort\"`\n\x0cIndexSetting\x12\x18\n\x10number_of_shards\x18\x01 \x01(\x05\x12\x16\n\x0erouting_fields\x18\x02 \x03(\t\x12\x1e\n\x16routing_partition_size\x18\x03 \x01(\x05\"\x7f\n\x18\x43reateSearchIndexRequest\x12\x12\n\ntable_name\x18\x01 \x02(\t\x12\x12\n\nindex_name\x18\x02 \x02(\t\x12;\n\x06schema\x18\x03 \x01(\x0b\x32+.com.aliyun.tablestore.protocol.IndexSchema\"\x1b\n\x19\x43reateSearchIndexResponse\"3\n\tIndexInfo\x12\x12\n\ntable_name\x18\x01 \x01(\t\x12\x12\n\nindex_name\x18\x02 \x01(\t\",\n\x16ListSearchIndexRequest\x12\x12\n\ntable_name\x18\x01 \x01(\t\"U\n\x17ListSearchIndexResponse\x12:\n\x07indices\x18\x01 \x03(\x0b\x32).com.aliyun.tablestore.protocol.IndexInfo\"B\n\x18\x44\x65leteSearchIndexRequest\x12\x12\n\ntable_name\x18\x01 \x01(\t\x12\x12\n\nindex_name\x18\x02 \x01(\t\"\x1b\n\x19\x44\x65leteSearchIndexResponse\"i\n\x08SyncStat\x12=\n\nsync_phase\x18\x01 \x01(\x0e\x32).com.aliyun.tablestore.protocol.SyncPhase\x12\x1e\n\x16\x63urrent_sync_timestamp\x18\x02 \x01(\x03\"D\n\x1a\x44\x65scribeSearchIndexRequest\x12\x12\n\ntable_name\x18\x01 \x01(\t\x12\x12\n\nindex_name\x18\x02 \x01(\t\"\x97\x01\n\x1b\x44\x65scribeSearchIndexResponse\x12;\n\x06schema\x18\x01 \x01(\x0b\x32+.com.aliyun.tablestore.protocol.IndexSchema\x12;\n\tsync_stat\x18\x02 \x01(\x0b\x32(.com.aliyun.tablestore.protocol.SyncStat\"\x89\x01\n\x14\x43omputeSplitsRequest\x12\x12\n\ntable_name\x18\x01 \x01(\t\x12]\n\x1bsearch_index_splits_options\x18\x02 \x01(\x0b\x32\x38.com.aliyun.tablestore.protocol.SearchIndexSplitsOptions\".\n\x18SearchIndexSplitsOptions\x12\x12\n\nindex_name\x18\x01 \x01(\t\"@\n\x15\x43omputeSplitsResponse\x12\x12\n\nsession_id\x18\x01 \x01(\x0c\x12\x13\n\x0bsplits_size\x18\x02 \x01(\x05\"0\n\tSessionId\x12\x0f\n\x07version\x18\x01 \x01(\x05\x12\x12\n\nsession_id\x18\x02 \x01(\x0c\"\xa6\x01\n\tScanQuery\x12\x34\n\x05query\x18\x01 \x01(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12\r\n\x05limit\x18\x02 \x01(\x05\x12\x12\n\nalive_time\x18\x03 \x01(\x05\x12\r\n\x05token\x18\x04 \x01(\x0c\x12\x1b\n\x13\x63urrent_parallel_id\x18\x05 \x01(\x05\x12\x14\n\x0cmax_parallel\x18\x06 \x01(\x05\"\xbf\x01\n\x13ParallelScanRequest\x12\x12\n\ntable_name\x18\x01 \x01(\t\x12\x12\n\nindex_name\x18\x02 \x01(\t\x12\x44\n\x0e\x63olumns_to_get\x18\x03 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.ColumnsToGet\x12\x12\n\nsession_id\x18\x04 \x01(\x0c\x12\x12\n\nscan_query\x18\x05 \x01(\x0c\x12\x12\n\ntimeout_ms\x18\x06 \x01(\x05\"8\n\x14ParallelScanResponse\x12\x0c\n\x04rows\x18\x01 \x03(\x0c\x12\x12\n\nnext_token\x18\x02 \x01(\x0c*\xd1\x02\n\tQueryType\x12\x0f\n\x0bMATCH_QUERY\x10\x01\x12\x16\n\x12MATCH_PHRASE_QUERY\x10\x02\x12\x0e\n\nTERM_QUERY\x10\x03\x12\x0f\n\x0bRANGE_QUERY\x10\x04\x12\x10\n\x0cPREFIX_QUERY\x10\x05\x12\x0e\n\nBOOL_QUERY\x10\x06\x12\x15\n\x11\x43ONST_SCORE_QUERY\x10\x07\x12\x18\n\x14\x46UNCTION_SCORE_QUERY\x10\x08\x12\x10\n\x0cNESTED_QUERY\x10\t\x12\x12\n\x0eWILDCARD_QUERY\x10\n\x12\x13\n\x0fMATCH_ALL_QUERY\x10\x0b\x12\x1a\n\x16GEO_BOUNDING_BOX_QUERY\x10\x0c\x12\x16\n\x12GEO_DISTANCE_QUERY\x10\r\x12\x15\n\x11GEO_POLYGON_QUERY\x10\x0e\x12\x0f\n\x0bTERMS_QUERY\x10\x0f\x12\x10\n\x0c\x45XISTS_QUERY\x10\x10* \n\rQueryOperator\x12\x06\n\x02OR\x10\x01\x12\x07\n\x03\x41ND\x10\x02*r\n\tScoreMode\x12\x13\n\x0fSCORE_MODE_NONE\x10\x01\x12\x12\n\x0eSCORE_MODE_AVG\x10\x02\x12\x12\n\x0eSCORE_MODE_MAX\x10\x03\x12\x14\n\x10SCORE_MODE_TOTAL\x10\x04\x12\x12\n\x0eSCORE_MODE_MIN\x10\x05*4\n\tSortOrder\x12\x12\n\x0eSORT_ORDER_ASC\x10\x00\x12\x13\n\x0fSORT_ORDER_DESC\x10\x01*C\n\x08SortMode\x12\x11\n\rSORT_MODE_MIN\x10\x00\x12\x11\n\rSORT_MODE_MAX\x10\x01\x12\x11\n\rSORT_MODE_AVG\x10\x02*?\n\x0fGeoDistanceType\x12\x14\n\x10GEO_DISTANCE_ARC\x10\x00\x12\x16\n\x12GEO_DISTANCE_PLANE\x10\x01*~\n\x0f\x41ggregationType\x12\x0b\n\x07\x41GG_AVG\x10\x01\x12\x0b\n\x07\x41GG_MAX\x10\x02\x12\x0b\n\x07\x41GG_MIN\x10\x03\x12\x0b\n\x07\x41GG_SUM\x10\x04\x12\r\n\tAGG_COUNT\x10\x05\x12\x16\n\x12\x41GG_DISTINCT_COUNT\x10\x06\x12\x10\n\x0c\x41GG_TOP_ROWS\x10\x07*e\n\x0bGroupByType\x12\x12\n\x0eGROUP_BY_FIELD\x10\x01\x12\x12\n\x0eGROUP_BY_RANGE\x10\x02\x12\x13\n\x0fGROUP_BY_FILTER\x10\x03\x12\x19\n\x15GROUP_BY_GEO_DISTANCE\x10\x04*d\n\x10\x43olumnReturnType\x12\x0e\n\nRETURN_ALL\x10\x01\x12\x14\n\x10RETURN_SPECIFIED\x10\x02\x12\x0f\n\x0bRETURN_NONE\x10\x03\x12\x19\n\x15RETURN_ALL_FROM_INDEX\x10\x04*`\n\tFieldType\x12\x08\n\x04LONG\x10\x01\x12\n\n\x06\x44OUBLE\x10\x02\x12\x0b\n\x07\x42OOLEAN\x10\x03\x12\x0b\n\x07KEYWORD\x10\x04\x12\x08\n\x04TEXT\x10\x05\x12\n\n\x06NESTED\x10\x06\x12\r\n\tGEO_POINT\x10\x07*\x1f\n\tSyncPhase\x12\x08\n\x04\x46ULL\x10\x01\x12\x08\n\x04INCR\x10\x02')
 
 _QUERYTYPE = descriptor.EnumDescriptor(
   name='QueryType',
@@ -86,8 +86,8 @@ _QUERYTYPE = descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=4736,
-  serialized_end=5073,
+  serialized_start=10037,
+  serialized_end=10374,
 )
 
 
@@ -108,8 +108,8 @@ _QUERYOPERATOR = descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=5075,
-  serialized_end=5107,
+  serialized_start=10376,
+  serialized_end=10408,
 )
 
 
@@ -142,8 +142,8 @@ _SCOREMODE = descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=5109,
-  serialized_end=5223,
+  serialized_start=10410,
+  serialized_end=10524,
 )
 
 
@@ -164,8 +164,8 @@ _SORTORDER = descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=5225,
-  serialized_end=5277,
+  serialized_start=10526,
+  serialized_end=10578,
 )
 
 
@@ -190,8 +190,8 @@ _SORTMODE = descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=5279,
-  serialized_end=5346,
+  serialized_start=10580,
+  serialized_end=10647,
 )
 
 
@@ -212,8 +212,80 @@ _GEODISTANCETYPE = descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=5348,
-  serialized_end=5411,
+  serialized_start=10649,
+  serialized_end=10712,
+)
+
+
+_AGGREGATIONTYPE = descriptor.EnumDescriptor(
+  name='AggregationType',
+  full_name='com.aliyun.tablestore.protocol.AggregationType',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    descriptor.EnumValueDescriptor(
+      name='AGG_AVG', index=0, number=1,
+      options=None,
+      type=None),
+    descriptor.EnumValueDescriptor(
+      name='AGG_MAX', index=1, number=2,
+      options=None,
+      type=None),
+    descriptor.EnumValueDescriptor(
+      name='AGG_MIN', index=2, number=3,
+      options=None,
+      type=None),
+    descriptor.EnumValueDescriptor(
+      name='AGG_SUM', index=3, number=4,
+      options=None,
+      type=None),
+    descriptor.EnumValueDescriptor(
+      name='AGG_COUNT', index=4, number=5,
+      options=None,
+      type=None),
+    descriptor.EnumValueDescriptor(
+      name='AGG_DISTINCT_COUNT', index=5, number=6,
+      options=None,
+      type=None),
+    descriptor.EnumValueDescriptor(
+      name='AGG_TOP_ROWS', index=6, number=7,
+      options=None,
+      type=None),
+  ],
+  containing_type=None,
+  options=None,
+  serialized_start=10714,
+  serialized_end=10840,
+)
+
+
+_GROUPBYTYPE = descriptor.EnumDescriptor(
+  name='GroupByType',
+  full_name='com.aliyun.tablestore.protocol.GroupByType',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    descriptor.EnumValueDescriptor(
+      name='GROUP_BY_FIELD', index=0, number=1,
+      options=None,
+      type=None),
+    descriptor.EnumValueDescriptor(
+      name='GROUP_BY_RANGE', index=1, number=2,
+      options=None,
+      type=None),
+    descriptor.EnumValueDescriptor(
+      name='GROUP_BY_FILTER', index=2, number=3,
+      options=None,
+      type=None),
+    descriptor.EnumValueDescriptor(
+      name='GROUP_BY_GEO_DISTANCE', index=3, number=4,
+      options=None,
+      type=None),
+  ],
+  containing_type=None,
+  options=None,
+  serialized_start=10842,
+  serialized_end=10943,
 )
 
 
@@ -235,11 +307,15 @@ _COLUMNRETURNTYPE = descriptor.EnumDescriptor(
       name='RETURN_NONE', index=2, number=3,
       options=None,
       type=None),
+    descriptor.EnumValueDescriptor(
+      name='RETURN_ALL_FROM_INDEX', index=3, number=4,
+      options=None,
+      type=None),
   ],
   containing_type=None,
   options=None,
-  serialized_start=5413,
-  serialized_end=5486,
+  serialized_start=10945,
+  serialized_end=11045,
 )
 
 
@@ -280,8 +356,8 @@ _FIELDTYPE = descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=5488,
-  serialized_end=5584,
+  serialized_start=11047,
+  serialized_end=11143,
 )
 
 
@@ -302,8 +378,8 @@ _SYNCPHASE = descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=5586,
-  serialized_end=5617,
+  serialized_start=11145,
+  serialized_end=11176,
 )
 
 
@@ -337,9 +413,21 @@ SORT_MODE_MAX = 1
 SORT_MODE_AVG = 2
 GEO_DISTANCE_ARC = 0
 GEO_DISTANCE_PLANE = 1
+AGG_AVG = 1
+AGG_MAX = 2
+AGG_MIN = 3
+AGG_SUM = 4
+AGG_COUNT = 5
+AGG_DISTINCT_COUNT = 6
+AGG_TOP_ROWS = 7
+GROUP_BY_FIELD = 1
+GROUP_BY_RANGE = 2
+GROUP_BY_FILTER = 3
+GROUP_BY_GEO_DISTANCE = 4
 RETURN_ALL = 1
 RETURN_SPECIFIED = 2
 RETURN_NONE = 3
+RETURN_ALL_FROM_INDEX = 4
 LONG = 1
 DOUBLE = 2
 BOOLEAN = 3
@@ -1332,6 +1420,1469 @@ _SORT = descriptor.Descriptor(
 )
 
 
+_AGGREGATION = descriptor.Descriptor(
+  name='Aggregation',
+  full_name='com.aliyun.tablestore.protocol.Aggregation',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='name', full_name='com.aliyun.tablestore.protocol.Aggregation.name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='type', full_name='com.aliyun.tablestore.protocol.Aggregation.type', index=1,
+      number=2, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=1,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='body', full_name='com.aliyun.tablestore.protocol.Aggregation.body', index=2,
+      number=3, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value="",
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=2760,
+  serialized_end=2864,
+)
+
+
+_AGGREGATIONS = descriptor.Descriptor(
+  name='Aggregations',
+  full_name='com.aliyun.tablestore.protocol.Aggregations',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='aggs', full_name='com.aliyun.tablestore.protocol.Aggregations.aggs', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=2866,
+  serialized_end=2939,
+)
+
+
+_AVGAGGREGATION = descriptor.Descriptor(
+  name='AvgAggregation',
+  full_name='com.aliyun.tablestore.protocol.AvgAggregation',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='field_name', full_name='com.aliyun.tablestore.protocol.AvgAggregation.field_name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='missing', full_name='com.aliyun.tablestore.protocol.AvgAggregation.missing', index=1,
+      number=2, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value="",
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=2941,
+  serialized_end=2994,
+)
+
+
+_MAXAGGREGATION = descriptor.Descriptor(
+  name='MaxAggregation',
+  full_name='com.aliyun.tablestore.protocol.MaxAggregation',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='field_name', full_name='com.aliyun.tablestore.protocol.MaxAggregation.field_name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='missing', full_name='com.aliyun.tablestore.protocol.MaxAggregation.missing', index=1,
+      number=2, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value="",
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=2996,
+  serialized_end=3049,
+)
+
+
+_MINAGGREGATION = descriptor.Descriptor(
+  name='MinAggregation',
+  full_name='com.aliyun.tablestore.protocol.MinAggregation',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='field_name', full_name='com.aliyun.tablestore.protocol.MinAggregation.field_name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='missing', full_name='com.aliyun.tablestore.protocol.MinAggregation.missing', index=1,
+      number=2, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value="",
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=3051,
+  serialized_end=3104,
+)
+
+
+_SUMAGGREGATION = descriptor.Descriptor(
+  name='SumAggregation',
+  full_name='com.aliyun.tablestore.protocol.SumAggregation',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='field_name', full_name='com.aliyun.tablestore.protocol.SumAggregation.field_name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='missing', full_name='com.aliyun.tablestore.protocol.SumAggregation.missing', index=1,
+      number=2, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value="",
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=3106,
+  serialized_end=3159,
+)
+
+
+_COUNTAGGREGATION = descriptor.Descriptor(
+  name='CountAggregation',
+  full_name='com.aliyun.tablestore.protocol.CountAggregation',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='field_name', full_name='com.aliyun.tablestore.protocol.CountAggregation.field_name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=3161,
+  serialized_end=3199,
+)
+
+
+_DISTINCTCOUNTAGGREGATION = descriptor.Descriptor(
+  name='DistinctCountAggregation',
+  full_name='com.aliyun.tablestore.protocol.DistinctCountAggregation',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='field_name', full_name='com.aliyun.tablestore.protocol.DistinctCountAggregation.field_name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='missing', full_name='com.aliyun.tablestore.protocol.DistinctCountAggregation.missing', index=1,
+      number=2, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value="",
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=3201,
+  serialized_end=3264,
+)
+
+
+_TOPROWSAGGREGATION = descriptor.Descriptor(
+  name='TopRowsAggregation',
+  full_name='com.aliyun.tablestore.protocol.TopRowsAggregation',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='limit', full_name='com.aliyun.tablestore.protocol.TopRowsAggregation.limit', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='sort', full_name='com.aliyun.tablestore.protocol.TopRowsAggregation.sort', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=3266,
+  serialized_end=3353,
+)
+
+
+_AVGAGGREGATIONRESULT = descriptor.Descriptor(
+  name='AvgAggregationResult',
+  full_name='com.aliyun.tablestore.protocol.AvgAggregationResult',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='value', full_name='com.aliyun.tablestore.protocol.AvgAggregationResult.value', index=0,
+      number=1, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=3355,
+  serialized_end=3392,
+)
+
+
+_TOPROWSAGGREGATIONRESULT = descriptor.Descriptor(
+  name='TopRowsAggregationResult',
+  full_name='com.aliyun.tablestore.protocol.TopRowsAggregationResult',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='rows', full_name='com.aliyun.tablestore.protocol.TopRowsAggregationResult.rows', index=0,
+      number=1, type=12, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=3394,
+  serialized_end=3434,
+)
+
+
+_DISTINCTCOUNTAGGREGATIONRESULT = descriptor.Descriptor(
+  name='DistinctCountAggregationResult',
+  full_name='com.aliyun.tablestore.protocol.DistinctCountAggregationResult',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='value', full_name='com.aliyun.tablestore.protocol.DistinctCountAggregationResult.value', index=0,
+      number=1, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=3436,
+  serialized_end=3483,
+)
+
+
+_MAXAGGREGATIONRESULT = descriptor.Descriptor(
+  name='MaxAggregationResult',
+  full_name='com.aliyun.tablestore.protocol.MaxAggregationResult',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='value', full_name='com.aliyun.tablestore.protocol.MaxAggregationResult.value', index=0,
+      number=1, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=3485,
+  serialized_end=3522,
+)
+
+
+_MINAGGREGATIONRESULT = descriptor.Descriptor(
+  name='MinAggregationResult',
+  full_name='com.aliyun.tablestore.protocol.MinAggregationResult',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='value', full_name='com.aliyun.tablestore.protocol.MinAggregationResult.value', index=0,
+      number=1, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=3524,
+  serialized_end=3561,
+)
+
+
+_SUMAGGREGATIONRESULT = descriptor.Descriptor(
+  name='SumAggregationResult',
+  full_name='com.aliyun.tablestore.protocol.SumAggregationResult',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='value', full_name='com.aliyun.tablestore.protocol.SumAggregationResult.value', index=0,
+      number=1, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=3563,
+  serialized_end=3600,
+)
+
+
+_COUNTAGGREGATIONRESULT = descriptor.Descriptor(
+  name='CountAggregationResult',
+  full_name='com.aliyun.tablestore.protocol.CountAggregationResult',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='value', full_name='com.aliyun.tablestore.protocol.CountAggregationResult.value', index=0,
+      number=1, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=3602,
+  serialized_end=3641,
+)
+
+
+_AGGREGATIONRESULT = descriptor.Descriptor(
+  name='AggregationResult',
+  full_name='com.aliyun.tablestore.protocol.AggregationResult',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='name', full_name='com.aliyun.tablestore.protocol.AggregationResult.name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='type', full_name='com.aliyun.tablestore.protocol.AggregationResult.type', index=1,
+      number=2, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=1,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='agg_result', full_name='com.aliyun.tablestore.protocol.AggregationResult.agg_result', index=2,
+      number=3, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value="",
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=3643,
+  serialized_end=3759,
+)
+
+
+_AGGREGATIONSRESULT = descriptor.Descriptor(
+  name='AggregationsResult',
+  full_name='com.aliyun.tablestore.protocol.AggregationsResult',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='agg_results', full_name='com.aliyun.tablestore.protocol.AggregationsResult.agg_results', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=3761,
+  serialized_end=3853,
+)
+
+
+_GROUPBY = descriptor.Descriptor(
+  name='GroupBy',
+  full_name='com.aliyun.tablestore.protocol.GroupBy',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='name', full_name='com.aliyun.tablestore.protocol.GroupBy.name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='type', full_name='com.aliyun.tablestore.protocol.GroupBy.type', index=1,
+      number=2, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=1,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='body', full_name='com.aliyun.tablestore.protocol.GroupBy.body', index=2,
+      number=3, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value="",
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=3855,
+  serialized_end=3951,
+)
+
+
+_GROUPBYS = descriptor.Descriptor(
+  name='GroupBys',
+  full_name='com.aliyun.tablestore.protocol.GroupBys',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='group_bys', full_name='com.aliyun.tablestore.protocol.GroupBys.group_bys', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=3953,
+  serialized_end=4023,
+)
+
+
+_GROUPKEYSORT = descriptor.Descriptor(
+  name='GroupKeySort',
+  full_name='com.aliyun.tablestore.protocol.GroupKeySort',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='order', full_name='com.aliyun.tablestore.protocol.GroupKeySort.order', index=0,
+      number=1, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=4025,
+  serialized_end=4097,
+)
+
+
+_ROWCOUNTSORT = descriptor.Descriptor(
+  name='RowCountSort',
+  full_name='com.aliyun.tablestore.protocol.RowCountSort',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='order', full_name='com.aliyun.tablestore.protocol.RowCountSort.order', index=0,
+      number=1, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=4099,
+  serialized_end=4171,
+)
+
+
+_SUBAGGSORT = descriptor.Descriptor(
+  name='SubAggSort',
+  full_name='com.aliyun.tablestore.protocol.SubAggSort',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='sub_agg_name', full_name='com.aliyun.tablestore.protocol.SubAggSort.sub_agg_name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='order', full_name='com.aliyun.tablestore.protocol.SubAggSort.order', index=1,
+      number=2, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=4173,
+  serialized_end=4265,
+)
+
+
+_GROUPBYSORTER = descriptor.Descriptor(
+  name='GroupBySorter',
+  full_name='com.aliyun.tablestore.protocol.GroupBySorter',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='group_key_sort', full_name='com.aliyun.tablestore.protocol.GroupBySorter.group_key_sort', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='row_count_sort', full_name='com.aliyun.tablestore.protocol.GroupBySorter.row_count_sort', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='sub_agg_sort', full_name='com.aliyun.tablestore.protocol.GroupBySorter.sub_agg_sort', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=4268,
+  serialized_end=4489,
+)
+
+
+_GROUPBYSORT = descriptor.Descriptor(
+  name='GroupBySort',
+  full_name='com.aliyun.tablestore.protocol.GroupBySort',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='sorters', full_name='com.aliyun.tablestore.protocol.GroupBySort.sorters', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=4491,
+  serialized_end=4568,
+)
+
+
+_GROUPBYFIELD = descriptor.Descriptor(
+  name='GroupByField',
+  full_name='com.aliyun.tablestore.protocol.GroupByField',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='field_name', full_name='com.aliyun.tablestore.protocol.GroupByField.field_name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='size', full_name='com.aliyun.tablestore.protocol.GroupByField.size', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='sort', full_name='com.aliyun.tablestore.protocol.GroupByField.sort', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='sub_aggs', full_name='com.aliyun.tablestore.protocol.GroupByField.sub_aggs', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='sub_group_bys', full_name='com.aliyun.tablestore.protocol.GroupByField.sub_group_bys', index=4,
+      number=5, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=4571,
+  serialized_end=4807,
+)
+
+
+_RANGE = descriptor.Descriptor(
+  name='Range',
+  full_name='com.aliyun.tablestore.protocol.Range',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='begin', full_name='com.aliyun.tablestore.protocol.Range.begin', index=0,
+      number=1, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='end', full_name='com.aliyun.tablestore.protocol.Range.end', index=1,
+      number=2, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=4809,
+  serialized_end=4844,
+)
+
+
+_GROUPBYRANGE = descriptor.Descriptor(
+  name='GroupByRange',
+  full_name='com.aliyun.tablestore.protocol.GroupByRange',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='field_name', full_name='com.aliyun.tablestore.protocol.GroupByRange.field_name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='ranges', full_name='com.aliyun.tablestore.protocol.GroupByRange.ranges', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='sub_aggs', full_name='com.aliyun.tablestore.protocol.GroupByRange.sub_aggs', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='sub_group_bys', full_name='com.aliyun.tablestore.protocol.GroupByRange.sub_group_bys', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=4847,
+  serialized_end=5065,
+)
+
+
+_GROUPBYFILTER = descriptor.Descriptor(
+  name='GroupByFilter',
+  full_name='com.aliyun.tablestore.protocol.GroupByFilter',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='filters', full_name='com.aliyun.tablestore.protocol.GroupByFilter.filters', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='sub_aggs', full_name='com.aliyun.tablestore.protocol.GroupByFilter.sub_aggs', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='sub_group_bys', full_name='com.aliyun.tablestore.protocol.GroupByFilter.sub_group_bys', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=5068,
+  serialized_end=5268,
+)
+
+
+_GEOPOINT = descriptor.Descriptor(
+  name='GeoPoint',
+  full_name='com.aliyun.tablestore.protocol.GeoPoint',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='lat', full_name='com.aliyun.tablestore.protocol.GeoPoint.lat', index=0,
+      number=1, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='lon', full_name='com.aliyun.tablestore.protocol.GeoPoint.lon', index=1,
+      number=2, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=5270,
+  serialized_end=5306,
+)
+
+
+_GROUPBYGEODISTANCE = descriptor.Descriptor(
+  name='GroupByGeoDistance',
+  full_name='com.aliyun.tablestore.protocol.GroupByGeoDistance',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='field_name', full_name='com.aliyun.tablestore.protocol.GroupByGeoDistance.field_name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='origin', full_name='com.aliyun.tablestore.protocol.GroupByGeoDistance.origin', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='ranges', full_name='com.aliyun.tablestore.protocol.GroupByGeoDistance.ranges', index=2,
+      number=3, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='sub_aggs', full_name='com.aliyun.tablestore.protocol.GroupByGeoDistance.sub_aggs', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='sub_group_bys', full_name='com.aliyun.tablestore.protocol.GroupByGeoDistance.sub_group_bys', index=4,
+      number=5, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=5309,
+  serialized_end=5591,
+)
+
+
+_GROUPBYFIELDRESULTITEM = descriptor.Descriptor(
+  name='GroupByFieldResultItem',
+  full_name='com.aliyun.tablestore.protocol.GroupByFieldResultItem',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='key', full_name='com.aliyun.tablestore.protocol.GroupByFieldResultItem.key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='row_count', full_name='com.aliyun.tablestore.protocol.GroupByFieldResultItem.row_count', index=1,
+      number=2, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='sub_aggs_result', full_name='com.aliyun.tablestore.protocol.GroupByFieldResultItem.sub_aggs_result', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='sub_group_bys_result', full_name='com.aliyun.tablestore.protocol.GroupByFieldResultItem.sub_group_bys_result', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=5594,
+  serialized_end=5805,
+)
+
+
+_GROUPBYFIELDRESULT = descriptor.Descriptor(
+  name='GroupByFieldResult',
+  full_name='com.aliyun.tablestore.protocol.GroupByFieldResult',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='group_by_field_result_items', full_name='com.aliyun.tablestore.protocol.GroupByFieldResult.group_by_field_result_items', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=5807,
+  serialized_end=5920,
+)
+
+
+_GROUPBYRANGERESULTITEM = descriptor.Descriptor(
+  name='GroupByRangeResultItem',
+  full_name='com.aliyun.tablestore.protocol.GroupByRangeResultItem',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='range_from', full_name='com.aliyun.tablestore.protocol.GroupByRangeResultItem.range_from', index=0,
+      number=1, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='range_to', full_name='com.aliyun.tablestore.protocol.GroupByRangeResultItem.range_to', index=1,
+      number=2, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='row_count', full_name='com.aliyun.tablestore.protocol.GroupByRangeResultItem.row_count', index=2,
+      number=3, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='sub_aggs_result', full_name='com.aliyun.tablestore.protocol.GroupByRangeResultItem.sub_aggs_result', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='sub_group_bys_result', full_name='com.aliyun.tablestore.protocol.GroupByRangeResultItem.sub_group_bys_result', index=4,
+      number=5, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=5923,
+  serialized_end=6159,
+)
+
+
+_GROUPBYRANGERESULT = descriptor.Descriptor(
+  name='GroupByRangeResult',
+  full_name='com.aliyun.tablestore.protocol.GroupByRangeResult',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='group_by_range_result_items', full_name='com.aliyun.tablestore.protocol.GroupByRangeResult.group_by_range_result_items', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=6161,
+  serialized_end=6274,
+)
+
+
+_GROUPBYGEODISTANCERESULTITEM = descriptor.Descriptor(
+  name='GroupByGeoDistanceResultItem',
+  full_name='com.aliyun.tablestore.protocol.GroupByGeoDistanceResultItem',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='range_from', full_name='com.aliyun.tablestore.protocol.GroupByGeoDistanceResultItem.range_from', index=0,
+      number=1, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='range_to', full_name='com.aliyun.tablestore.protocol.GroupByGeoDistanceResultItem.range_to', index=1,
+      number=2, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='row_count', full_name='com.aliyun.tablestore.protocol.GroupByGeoDistanceResultItem.row_count', index=2,
+      number=3, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='sub_aggs_result', full_name='com.aliyun.tablestore.protocol.GroupByGeoDistanceResultItem.sub_aggs_result', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='sub_group_bys_result', full_name='com.aliyun.tablestore.protocol.GroupByGeoDistanceResultItem.sub_group_bys_result', index=4,
+      number=5, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=6277,
+  serialized_end=6519,
+)
+
+
+_GROUPBYGEODISTANCERESULT = descriptor.Descriptor(
+  name='GroupByGeoDistanceResult',
+  full_name='com.aliyun.tablestore.protocol.GroupByGeoDistanceResult',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='group_by_geo_distance_result_items', full_name='com.aliyun.tablestore.protocol.GroupByGeoDistanceResult.group_by_geo_distance_result_items', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=6522,
+  serialized_end=6654,
+)
+
+
+_GROUPBYFILTERRESULTITEM = descriptor.Descriptor(
+  name='GroupByFilterResultItem',
+  full_name='com.aliyun.tablestore.protocol.GroupByFilterResultItem',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='row_count', full_name='com.aliyun.tablestore.protocol.GroupByFilterResultItem.row_count', index=0,
+      number=1, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='sub_aggs_result', full_name='com.aliyun.tablestore.protocol.GroupByFilterResultItem.sub_aggs_result', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='sub_group_bys_result', full_name='com.aliyun.tablestore.protocol.GroupByFilterResultItem.sub_group_bys_result', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=6657,
+  serialized_end=6856,
+)
+
+
+_GROUPBYFILTERRESULT = descriptor.Descriptor(
+  name='GroupByFilterResult',
+  full_name='com.aliyun.tablestore.protocol.GroupByFilterResult',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='group_by_filter_result_items', full_name='com.aliyun.tablestore.protocol.GroupByFilterResult.group_by_filter_result_items', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=6858,
+  serialized_end=6974,
+)
+
+
+_GROUPBYRESULT = descriptor.Descriptor(
+  name='GroupByResult',
+  full_name='com.aliyun.tablestore.protocol.GroupByResult',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='name', full_name='com.aliyun.tablestore.protocol.GroupByResult.name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='type', full_name='com.aliyun.tablestore.protocol.GroupByResult.type', index=1,
+      number=2, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=1,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='group_by_result', full_name='com.aliyun.tablestore.protocol.GroupByResult.group_by_result', index=2,
+      number=3, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value="",
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=6976,
+  serialized_end=7089,
+)
+
+
+_GROUPBYSRESULT = descriptor.Descriptor(
+  name='GroupBysResult',
+  full_name='com.aliyun.tablestore.protocol.GroupBysResult',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='group_by_results', full_name='com.aliyun.tablestore.protocol.GroupBysResult.group_by_results', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=7091,
+  serialized_end=7180,
+)
+
+
 _SEARCHQUERY = descriptor.Descriptor(
   name='SearchQuery',
   full_name='com.aliyun.tablestore.protocol.SearchQuery',
@@ -1388,6 +2939,20 @@ _SEARCHQUERY = descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    descriptor.FieldDescriptor(
+      name='aggs', full_name='com.aliyun.tablestore.protocol.SearchQuery.aggs', index=7,
+      number=10, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='group_bys', full_name='com.aliyun.tablestore.protocol.SearchQuery.group_bys', index=8,
+      number=11, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -1397,8 +2962,8 @@ _SEARCHQUERY = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=2761,
-  serialized_end=3011,
+  serialized_start=7183,
+  serialized_end=7554,
 )
 
 
@@ -1432,8 +2997,8 @@ _COLUMNSTOGET = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=3013,
-  serialized_end=3120,
+  serialized_start=7556,
+  serialized_end=7663,
 )
 
 
@@ -1488,8 +3053,8 @@ _SEARCHREQUEST = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=3123,
-  serialized_end=3294,
+  serialized_start=7666,
+  serialized_end=7837,
 )
 
 
@@ -1528,6 +3093,20 @@ _SEARCHRESPONSE = descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    descriptor.FieldDescriptor(
+      name='aggs', full_name='com.aliyun.tablestore.protocol.SearchResponse.aggs', index=4,
+      number=7, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value="",
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='group_bys', full_name='com.aliyun.tablestore.protocol.SearchResponse.group_bys', index=5,
+      number=8, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value="",
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -1537,8 +3116,8 @@ _SEARCHRESPONSE = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=3296,
-  serialized_end=3390,
+  serialized_start=7839,
+  serialized_end=7966,
 )
 
 
@@ -1614,8 +3193,8 @@ _FIELDSCHEMA = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=3393,
-  serialized_end=3652,
+  serialized_start=7969,
+  serialized_end=8228,
 )
 
 
@@ -1656,8 +3235,8 @@ _INDEXSCHEMA = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=3655,
-  serialized_end=3863,
+  serialized_start=8231,
+  serialized_end=8439,
 )
 
 
@@ -1698,8 +3277,8 @@ _INDEXSETTING = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=3865,
-  serialized_end=3961,
+  serialized_start=8441,
+  serialized_end=8537,
 )
 
 
@@ -1740,8 +3319,8 @@ _CREATESEARCHINDEXREQUEST = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=3963,
-  serialized_end=4090,
+  serialized_start=8539,
+  serialized_end=8666,
 )
 
 
@@ -1761,8 +3340,8 @@ _CREATESEARCHINDEXRESPONSE = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=4092,
-  serialized_end=4119,
+  serialized_start=8668,
+  serialized_end=8695,
 )
 
 
@@ -1796,8 +3375,8 @@ _INDEXINFO = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=4121,
-  serialized_end=4172,
+  serialized_start=8697,
+  serialized_end=8748,
 )
 
 
@@ -1824,8 +3403,8 @@ _LISTSEARCHINDEXREQUEST = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=4174,
-  serialized_end=4218,
+  serialized_start=8750,
+  serialized_end=8794,
 )
 
 
@@ -1852,8 +3431,8 @@ _LISTSEARCHINDEXRESPONSE = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=4220,
-  serialized_end=4305,
+  serialized_start=8796,
+  serialized_end=8881,
 )
 
 
@@ -1887,8 +3466,8 @@ _DELETESEARCHINDEXREQUEST = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=4307,
-  serialized_end=4373,
+  serialized_start=8883,
+  serialized_end=8949,
 )
 
 
@@ -1908,8 +3487,8 @@ _DELETESEARCHINDEXRESPONSE = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=4375,
-  serialized_end=4402,
+  serialized_start=8951,
+  serialized_end=8978,
 )
 
 
@@ -1943,8 +3522,8 @@ _SYNCSTAT = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=4404,
-  serialized_end=4509,
+  serialized_start=8980,
+  serialized_end=9085,
 )
 
 
@@ -1978,8 +3557,8 @@ _DESCRIBESEARCHINDEXREQUEST = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=4511,
-  serialized_end=4579,
+  serialized_start=9087,
+  serialized_end=9155,
 )
 
 
@@ -2013,8 +3592,302 @@ _DESCRIBESEARCHINDEXRESPONSE = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=4582,
-  serialized_end=4733,
+  serialized_start=9158,
+  serialized_end=9309,
+)
+
+
+_COMPUTESPLITSREQUEST = descriptor.Descriptor(
+  name='ComputeSplitsRequest',
+  full_name='com.aliyun.tablestore.protocol.ComputeSplitsRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='table_name', full_name='com.aliyun.tablestore.protocol.ComputeSplitsRequest.table_name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='search_index_splits_options', full_name='com.aliyun.tablestore.protocol.ComputeSplitsRequest.search_index_splits_options', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=9312,
+  serialized_end=9449,
+)
+
+
+_SEARCHINDEXSPLITSOPTIONS = descriptor.Descriptor(
+  name='SearchIndexSplitsOptions',
+  full_name='com.aliyun.tablestore.protocol.SearchIndexSplitsOptions',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='index_name', full_name='com.aliyun.tablestore.protocol.SearchIndexSplitsOptions.index_name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=9451,
+  serialized_end=9497,
+)
+
+
+_COMPUTESPLITSRESPONSE = descriptor.Descriptor(
+  name='ComputeSplitsResponse',
+  full_name='com.aliyun.tablestore.protocol.ComputeSplitsResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='session_id', full_name='com.aliyun.tablestore.protocol.ComputeSplitsResponse.session_id', index=0,
+      number=1, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value="",
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='splits_size', full_name='com.aliyun.tablestore.protocol.ComputeSplitsResponse.splits_size', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=9499,
+  serialized_end=9563,
+)
+
+
+_SESSIONID = descriptor.Descriptor(
+  name='SessionId',
+  full_name='com.aliyun.tablestore.protocol.SessionId',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='version', full_name='com.aliyun.tablestore.protocol.SessionId.version', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='session_id', full_name='com.aliyun.tablestore.protocol.SessionId.session_id', index=1,
+      number=2, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value="",
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=9565,
+  serialized_end=9613,
+)
+
+
+_SCANQUERY = descriptor.Descriptor(
+  name='ScanQuery',
+  full_name='com.aliyun.tablestore.protocol.ScanQuery',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='query', full_name='com.aliyun.tablestore.protocol.ScanQuery.query', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='limit', full_name='com.aliyun.tablestore.protocol.ScanQuery.limit', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='alive_time', full_name='com.aliyun.tablestore.protocol.ScanQuery.alive_time', index=2,
+      number=3, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='token', full_name='com.aliyun.tablestore.protocol.ScanQuery.token', index=3,
+      number=4, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value="",
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='current_parallel_id', full_name='com.aliyun.tablestore.protocol.ScanQuery.current_parallel_id', index=4,
+      number=5, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='max_parallel', full_name='com.aliyun.tablestore.protocol.ScanQuery.max_parallel', index=5,
+      number=6, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=9616,
+  serialized_end=9782,
+)
+
+
+_PARALLELSCANREQUEST = descriptor.Descriptor(
+  name='ParallelScanRequest',
+  full_name='com.aliyun.tablestore.protocol.ParallelScanRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='table_name', full_name='com.aliyun.tablestore.protocol.ParallelScanRequest.table_name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='index_name', full_name='com.aliyun.tablestore.protocol.ParallelScanRequest.index_name', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='columns_to_get', full_name='com.aliyun.tablestore.protocol.ParallelScanRequest.columns_to_get', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='session_id', full_name='com.aliyun.tablestore.protocol.ParallelScanRequest.session_id', index=3,
+      number=4, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value="",
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='scan_query', full_name='com.aliyun.tablestore.protocol.ParallelScanRequest.scan_query', index=4,
+      number=5, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value="",
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='timeout_ms', full_name='com.aliyun.tablestore.protocol.ParallelScanRequest.timeout_ms', index=5,
+      number=6, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=9785,
+  serialized_end=9976,
+)
+
+
+_PARALLELSCANRESPONSE = descriptor.Descriptor(
+  name='ParallelScanResponse',
+  full_name='com.aliyun.tablestore.protocol.ParallelScanResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='rows', full_name='com.aliyun.tablestore.protocol.ParallelScanResponse.rows', index=0,
+      number=1, type=12, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='next_token', full_name='com.aliyun.tablestore.protocol.ParallelScanResponse.next_token', index=1,
+      number=2, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value="",
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=9978,
+  serialized_end=10034,
 )
 
 _MATCHQUERY.fields_by_name['operator'].enum_type = _QUERYOPERATOR
@@ -2043,9 +3916,52 @@ _SORTER.fields_by_name['geo_distance_sort'].message_type = _GEODISTANCESORT
 _SORTER.fields_by_name['score_sort'].message_type = _SCORESORT
 _SORTER.fields_by_name['pk_sort'].message_type = _PRIMARYKEYSORT
 _SORT.fields_by_name['sorter'].message_type = _SORTER
+_AGGREGATION.fields_by_name['type'].enum_type = _AGGREGATIONTYPE
+_AGGREGATIONS.fields_by_name['aggs'].message_type = _AGGREGATION
+_TOPROWSAGGREGATION.fields_by_name['sort'].message_type = _SORT
+_AGGREGATIONRESULT.fields_by_name['type'].enum_type = _AGGREGATIONTYPE
+_AGGREGATIONSRESULT.fields_by_name['agg_results'].message_type = _AGGREGATIONRESULT
+_GROUPBY.fields_by_name['type'].enum_type = _GROUPBYTYPE
+_GROUPBYS.fields_by_name['group_bys'].message_type = _GROUPBY
+_GROUPKEYSORT.fields_by_name['order'].enum_type = _SORTORDER
+_ROWCOUNTSORT.fields_by_name['order'].enum_type = _SORTORDER
+_SUBAGGSORT.fields_by_name['order'].enum_type = _SORTORDER
+_GROUPBYSORTER.fields_by_name['group_key_sort'].message_type = _GROUPKEYSORT
+_GROUPBYSORTER.fields_by_name['row_count_sort'].message_type = _ROWCOUNTSORT
+_GROUPBYSORTER.fields_by_name['sub_agg_sort'].message_type = _SUBAGGSORT
+_GROUPBYSORT.fields_by_name['sorters'].message_type = _GROUPBYSORTER
+_GROUPBYFIELD.fields_by_name['sort'].message_type = _GROUPBYSORT
+_GROUPBYFIELD.fields_by_name['sub_aggs'].message_type = _AGGREGATIONS
+_GROUPBYFIELD.fields_by_name['sub_group_bys'].message_type = _GROUPBYS
+_GROUPBYRANGE.fields_by_name['ranges'].message_type = _RANGE
+_GROUPBYRANGE.fields_by_name['sub_aggs'].message_type = _AGGREGATIONS
+_GROUPBYRANGE.fields_by_name['sub_group_bys'].message_type = _GROUPBYS
+_GROUPBYFILTER.fields_by_name['filters'].message_type = _QUERY
+_GROUPBYFILTER.fields_by_name['sub_aggs'].message_type = _AGGREGATIONS
+_GROUPBYFILTER.fields_by_name['sub_group_bys'].message_type = _GROUPBYS
+_GROUPBYGEODISTANCE.fields_by_name['origin'].message_type = _GEOPOINT
+_GROUPBYGEODISTANCE.fields_by_name['ranges'].message_type = _RANGE
+_GROUPBYGEODISTANCE.fields_by_name['sub_aggs'].message_type = _AGGREGATIONS
+_GROUPBYGEODISTANCE.fields_by_name['sub_group_bys'].message_type = _GROUPBYS
+_GROUPBYFIELDRESULTITEM.fields_by_name['sub_aggs_result'].message_type = _AGGREGATIONSRESULT
+_GROUPBYFIELDRESULTITEM.fields_by_name['sub_group_bys_result'].message_type = _GROUPBYSRESULT
+_GROUPBYFIELDRESULT.fields_by_name['group_by_field_result_items'].message_type = _GROUPBYFIELDRESULTITEM
+_GROUPBYRANGERESULTITEM.fields_by_name['sub_aggs_result'].message_type = _AGGREGATIONSRESULT
+_GROUPBYRANGERESULTITEM.fields_by_name['sub_group_bys_result'].message_type = _GROUPBYSRESULT
+_GROUPBYRANGERESULT.fields_by_name['group_by_range_result_items'].message_type = _GROUPBYRANGERESULTITEM
+_GROUPBYGEODISTANCERESULTITEM.fields_by_name['sub_aggs_result'].message_type = _AGGREGATIONSRESULT
+_GROUPBYGEODISTANCERESULTITEM.fields_by_name['sub_group_bys_result'].message_type = _GROUPBYSRESULT
+_GROUPBYGEODISTANCERESULT.fields_by_name['group_by_geo_distance_result_items'].message_type = _GROUPBYGEODISTANCERESULTITEM
+_GROUPBYFILTERRESULTITEM.fields_by_name['sub_aggs_result'].message_type = _AGGREGATIONSRESULT
+_GROUPBYFILTERRESULTITEM.fields_by_name['sub_group_bys_result'].message_type = _GROUPBYSRESULT
+_GROUPBYFILTERRESULT.fields_by_name['group_by_filter_result_items'].message_type = _GROUPBYFILTERRESULTITEM
+_GROUPBYRESULT.fields_by_name['type'].enum_type = _GROUPBYTYPE
+_GROUPBYSRESULT.fields_by_name['group_by_results'].message_type = _GROUPBYRESULT
 _SEARCHQUERY.fields_by_name['query'].message_type = _QUERY
 _SEARCHQUERY.fields_by_name['collapse'].message_type = _COLLAPSE
 _SEARCHQUERY.fields_by_name['sort'].message_type = _SORT
+_SEARCHQUERY.fields_by_name['aggs'].message_type = _AGGREGATIONS
+_SEARCHQUERY.fields_by_name['group_bys'].message_type = _GROUPBYS
 _COLUMNSTOGET.fields_by_name['return_type'].enum_type = _COLUMNRETURNTYPE
 _SEARCHREQUEST.fields_by_name['columns_to_get'].message_type = _COLUMNSTOGET
 _FIELDSCHEMA.fields_by_name['field_type'].enum_type = _FIELDTYPE
@@ -2058,6 +3974,9 @@ _LISTSEARCHINDEXRESPONSE.fields_by_name['indices'].message_type = _INDEXINFO
 _SYNCSTAT.fields_by_name['sync_phase'].enum_type = _SYNCPHASE
 _DESCRIBESEARCHINDEXRESPONSE.fields_by_name['schema'].message_type = _INDEXSCHEMA
 _DESCRIBESEARCHINDEXRESPONSE.fields_by_name['sync_stat'].message_type = _SYNCSTAT
+_COMPUTESPLITSREQUEST.fields_by_name['search_index_splits_options'].message_type = _SEARCHINDEXSPLITSOPTIONS
+_SCANQUERY.fields_by_name['query'].message_type = _QUERY
+_PARALLELSCANREQUEST.fields_by_name['columns_to_get'].message_type = _COLUMNSTOGET
 DESCRIPTOR.message_types_by_name['MatchQuery'] = _MATCHQUERY
 DESCRIPTOR.message_types_by_name['MatchPhraseQuery'] = _MATCHPHRASEQUERY
 DESCRIPTOR.message_types_by_name['MatchAllQuery'] = _MATCHALLQUERY
@@ -2084,6 +4003,47 @@ DESCRIPTOR.message_types_by_name['FieldSort'] = _FIELDSORT
 DESCRIPTOR.message_types_by_name['GeoDistanceSort'] = _GEODISTANCESORT
 DESCRIPTOR.message_types_by_name['Sorter'] = _SORTER
 DESCRIPTOR.message_types_by_name['Sort'] = _SORT
+DESCRIPTOR.message_types_by_name['Aggregation'] = _AGGREGATION
+DESCRIPTOR.message_types_by_name['Aggregations'] = _AGGREGATIONS
+DESCRIPTOR.message_types_by_name['AvgAggregation'] = _AVGAGGREGATION
+DESCRIPTOR.message_types_by_name['MaxAggregation'] = _MAXAGGREGATION
+DESCRIPTOR.message_types_by_name['MinAggregation'] = _MINAGGREGATION
+DESCRIPTOR.message_types_by_name['SumAggregation'] = _SUMAGGREGATION
+DESCRIPTOR.message_types_by_name['CountAggregation'] = _COUNTAGGREGATION
+DESCRIPTOR.message_types_by_name['DistinctCountAggregation'] = _DISTINCTCOUNTAGGREGATION
+DESCRIPTOR.message_types_by_name['TopRowsAggregation'] = _TOPROWSAGGREGATION
+DESCRIPTOR.message_types_by_name['AvgAggregationResult'] = _AVGAGGREGATIONRESULT
+DESCRIPTOR.message_types_by_name['TopRowsAggregationResult'] = _TOPROWSAGGREGATIONRESULT
+DESCRIPTOR.message_types_by_name['DistinctCountAggregationResult'] = _DISTINCTCOUNTAGGREGATIONRESULT
+DESCRIPTOR.message_types_by_name['MaxAggregationResult'] = _MAXAGGREGATIONRESULT
+DESCRIPTOR.message_types_by_name['MinAggregationResult'] = _MINAGGREGATIONRESULT
+DESCRIPTOR.message_types_by_name['SumAggregationResult'] = _SUMAGGREGATIONRESULT
+DESCRIPTOR.message_types_by_name['CountAggregationResult'] = _COUNTAGGREGATIONRESULT
+DESCRIPTOR.message_types_by_name['AggregationResult'] = _AGGREGATIONRESULT
+DESCRIPTOR.message_types_by_name['AggregationsResult'] = _AGGREGATIONSRESULT
+DESCRIPTOR.message_types_by_name['GroupBy'] = _GROUPBY
+DESCRIPTOR.message_types_by_name['GroupBys'] = _GROUPBYS
+DESCRIPTOR.message_types_by_name['GroupKeySort'] = _GROUPKEYSORT
+DESCRIPTOR.message_types_by_name['RowCountSort'] = _ROWCOUNTSORT
+DESCRIPTOR.message_types_by_name['SubAggSort'] = _SUBAGGSORT
+DESCRIPTOR.message_types_by_name['GroupBySorter'] = _GROUPBYSORTER
+DESCRIPTOR.message_types_by_name['GroupBySort'] = _GROUPBYSORT
+DESCRIPTOR.message_types_by_name['GroupByField'] = _GROUPBYFIELD
+DESCRIPTOR.message_types_by_name['Range'] = _RANGE
+DESCRIPTOR.message_types_by_name['GroupByRange'] = _GROUPBYRANGE
+DESCRIPTOR.message_types_by_name['GroupByFilter'] = _GROUPBYFILTER
+DESCRIPTOR.message_types_by_name['GeoPoint'] = _GEOPOINT
+DESCRIPTOR.message_types_by_name['GroupByGeoDistance'] = _GROUPBYGEODISTANCE
+DESCRIPTOR.message_types_by_name['GroupByFieldResultItem'] = _GROUPBYFIELDRESULTITEM
+DESCRIPTOR.message_types_by_name['GroupByFieldResult'] = _GROUPBYFIELDRESULT
+DESCRIPTOR.message_types_by_name['GroupByRangeResultItem'] = _GROUPBYRANGERESULTITEM
+DESCRIPTOR.message_types_by_name['GroupByRangeResult'] = _GROUPBYRANGERESULT
+DESCRIPTOR.message_types_by_name['GroupByGeoDistanceResultItem'] = _GROUPBYGEODISTANCERESULTITEM
+DESCRIPTOR.message_types_by_name['GroupByGeoDistanceResult'] = _GROUPBYGEODISTANCERESULT
+DESCRIPTOR.message_types_by_name['GroupByFilterResultItem'] = _GROUPBYFILTERRESULTITEM
+DESCRIPTOR.message_types_by_name['GroupByFilterResult'] = _GROUPBYFILTERRESULT
+DESCRIPTOR.message_types_by_name['GroupByResult'] = _GROUPBYRESULT
+DESCRIPTOR.message_types_by_name['GroupBysResult'] = _GROUPBYSRESULT
 DESCRIPTOR.message_types_by_name['SearchQuery'] = _SEARCHQUERY
 DESCRIPTOR.message_types_by_name['ColumnsToGet'] = _COLUMNSTOGET
 DESCRIPTOR.message_types_by_name['SearchRequest'] = _SEARCHREQUEST
@@ -2101,6 +4061,13 @@ DESCRIPTOR.message_types_by_name['DeleteSearchIndexResponse'] = _DELETESEARCHIND
 DESCRIPTOR.message_types_by_name['SyncStat'] = _SYNCSTAT
 DESCRIPTOR.message_types_by_name['DescribeSearchIndexRequest'] = _DESCRIBESEARCHINDEXREQUEST
 DESCRIPTOR.message_types_by_name['DescribeSearchIndexResponse'] = _DESCRIBESEARCHINDEXRESPONSE
+DESCRIPTOR.message_types_by_name['ComputeSplitsRequest'] = _COMPUTESPLITSREQUEST
+DESCRIPTOR.message_types_by_name['SearchIndexSplitsOptions'] = _SEARCHINDEXSPLITSOPTIONS
+DESCRIPTOR.message_types_by_name['ComputeSplitsResponse'] = _COMPUTESPLITSRESPONSE
+DESCRIPTOR.message_types_by_name['SessionId'] = _SESSIONID
+DESCRIPTOR.message_types_by_name['ScanQuery'] = _SCANQUERY
+DESCRIPTOR.message_types_by_name['ParallelScanRequest'] = _PARALLELSCANREQUEST
+DESCRIPTOR.message_types_by_name['ParallelScanResponse'] = _PARALLELSCANRESPONSE
 
 class MatchQuery(message.Message):
   __metaclass__ = reflection.GeneratedProtocolMessageType
@@ -2258,6 +4225,252 @@ class Sort(message.Message):
   
   # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.Sort)
 
+class Aggregation(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _AGGREGATION
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.Aggregation)
+
+class Aggregations(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _AGGREGATIONS
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.Aggregations)
+
+class AvgAggregation(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _AVGAGGREGATION
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.AvgAggregation)
+
+class MaxAggregation(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _MAXAGGREGATION
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.MaxAggregation)
+
+class MinAggregation(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _MINAGGREGATION
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.MinAggregation)
+
+class SumAggregation(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _SUMAGGREGATION
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.SumAggregation)
+
+class CountAggregation(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _COUNTAGGREGATION
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.CountAggregation)
+
+class DistinctCountAggregation(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _DISTINCTCOUNTAGGREGATION
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.DistinctCountAggregation)
+
+class TopRowsAggregation(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _TOPROWSAGGREGATION
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.TopRowsAggregation)
+
+class AvgAggregationResult(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _AVGAGGREGATIONRESULT
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.AvgAggregationResult)
+
+class TopRowsAggregationResult(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _TOPROWSAGGREGATIONRESULT
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.TopRowsAggregationResult)
+
+class DistinctCountAggregationResult(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _DISTINCTCOUNTAGGREGATIONRESULT
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.DistinctCountAggregationResult)
+
+class MaxAggregationResult(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _MAXAGGREGATIONRESULT
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.MaxAggregationResult)
+
+class MinAggregationResult(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _MINAGGREGATIONRESULT
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.MinAggregationResult)
+
+class SumAggregationResult(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _SUMAGGREGATIONRESULT
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.SumAggregationResult)
+
+class CountAggregationResult(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _COUNTAGGREGATIONRESULT
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.CountAggregationResult)
+
+class AggregationResult(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _AGGREGATIONRESULT
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.AggregationResult)
+
+class AggregationsResult(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _AGGREGATIONSRESULT
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.AggregationsResult)
+
+class GroupBy(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _GROUPBY
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.GroupBy)
+
+class GroupBys(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _GROUPBYS
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.GroupBys)
+
+class GroupKeySort(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _GROUPKEYSORT
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.GroupKeySort)
+
+class RowCountSort(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _ROWCOUNTSORT
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.RowCountSort)
+
+class SubAggSort(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _SUBAGGSORT
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.SubAggSort)
+
+class GroupBySorter(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _GROUPBYSORTER
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.GroupBySorter)
+
+class GroupBySort(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _GROUPBYSORT
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.GroupBySort)
+
+class GroupByField(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _GROUPBYFIELD
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.GroupByField)
+
+class Range(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _RANGE
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.Range)
+
+class GroupByRange(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _GROUPBYRANGE
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.GroupByRange)
+
+class GroupByFilter(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _GROUPBYFILTER
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.GroupByFilter)
+
+class GeoPoint(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _GEOPOINT
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.GeoPoint)
+
+class GroupByGeoDistance(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _GROUPBYGEODISTANCE
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.GroupByGeoDistance)
+
+class GroupByFieldResultItem(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _GROUPBYFIELDRESULTITEM
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.GroupByFieldResultItem)
+
+class GroupByFieldResult(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _GROUPBYFIELDRESULT
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.GroupByFieldResult)
+
+class GroupByRangeResultItem(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _GROUPBYRANGERESULTITEM
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.GroupByRangeResultItem)
+
+class GroupByRangeResult(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _GROUPBYRANGERESULT
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.GroupByRangeResult)
+
+class GroupByGeoDistanceResultItem(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _GROUPBYGEODISTANCERESULTITEM
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.GroupByGeoDistanceResultItem)
+
+class GroupByGeoDistanceResult(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _GROUPBYGEODISTANCERESULT
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.GroupByGeoDistanceResult)
+
+class GroupByFilterResultItem(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _GROUPBYFILTERRESULTITEM
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.GroupByFilterResultItem)
+
+class GroupByFilterResult(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _GROUPBYFILTERRESULT
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.GroupByFilterResult)
+
+class GroupByResult(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _GROUPBYRESULT
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.GroupByResult)
+
+class GroupBysResult(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _GROUPBYSRESULT
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.GroupBysResult)
+
 class SearchQuery(message.Message):
   __metaclass__ = reflection.GeneratedProtocolMessageType
   DESCRIPTOR = _SEARCHQUERY
@@ -2359,5 +4572,47 @@ class DescribeSearchIndexResponse(message.Message):
   DESCRIPTOR = _DESCRIBESEARCHINDEXRESPONSE
   
   # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.DescribeSearchIndexResponse)
+
+class ComputeSplitsRequest(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _COMPUTESPLITSREQUEST
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.ComputeSplitsRequest)
+
+class SearchIndexSplitsOptions(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _SEARCHINDEXSPLITSOPTIONS
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.SearchIndexSplitsOptions)
+
+class ComputeSplitsResponse(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _COMPUTESPLITSRESPONSE
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.ComputeSplitsResponse)
+
+class SessionId(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _SESSIONID
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.SessionId)
+
+class ScanQuery(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _SCANQUERY
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.ScanQuery)
+
+class ParallelScanRequest(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _PARALLELSCANREQUEST
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.ParallelScanRequest)
+
+class ParallelScanResponse(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _PARALLELSCANRESPONSE
+  
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.ParallelScanResponse)
 
 # @@protoc_insertion_point(module_scope)
