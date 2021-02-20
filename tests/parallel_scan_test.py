@@ -90,20 +90,45 @@ class ParallelScanTest(APITestBase):
             self.assert_error(e, 400, "OTSParameterInvalid", "table [not_exist] does not exist")
 
     def test_parallel_scan_normal(self):
-        compute_splits_response = self.client_test.compute_splits(self.table_name, self.index_name)        
+        compute_splits_response = self.client_test.compute_splits(self.table_name, self.index_name)
+
+        self.assert_equal(1, compute_splits_response.splits_size)
+        self.assertTrue(len(compute_splits_response.session_id) > 0)
+
+        self.assert_equal(compute_splits_response.session_id, compute_splits_response.v1_response()[0])
+        self.assert_equal(compute_splits_response.splits_size, compute_splits_response.v1_response()[1])
+
+        pos = 0
+        for item in compute_splits_response:
+            if pos == 0:
+                self.assert_equal(compute_splits_response.session_id, item)
+            elif pos == 1:
+                self.assert_equal(compute_splits_response.splits_size, item)
+            pos += 1
 
         query = TermQuery('d', 0.1)
         scan_query = ScanQuery(query, limit = 70, next_token = None, current_parallel_id = 0, 
                                max_parallel = compute_splits_response.splits_size, alive_time = 30)
         parallel_scan_response = self.client_test.parallel_scan(
             self.table_name, self.index_name, scan_query, compute_splits_response.session_id, 
-            columns_to_get = ColumnsToGet(return_type=ColumnReturnType.ALL_FROM_INDEX))
+            columns_to_get = ColumnsToGet(return_type = ColumnReturnType.ALL_FROM_INDEX))
         
         self.assert_equal(70, len(parallel_scan_response.rows))
         self.assertTrue(parallel_scan_response.next_token is not None)
 
+        self.assert_equal(70, len(parallel_scan_response.v1_response()[0]))
+        self.assertTrue(parallel_scan_response.v1_response()[1] is not None)
+
+        pos = 0
+        for item in parallel_scan_response:
+            if pos == 0:
+                self.assert_equal(70, len(item))
+            elif pos == 1:
+                self.assertTrue(item is not None)
+            pos += 1
+
         scan_query_2 = ScanQuery(query, limit = 70, next_token = parallel_scan_response.next_token, current_parallel_id = 0, 
-                               max_parallel = compute_splits_response.splits_size, alive_time = 30)
+                                 max_parallel = compute_splits_response.splits_size, alive_time = 30)
         parallel_scan_response2 = self.client_test.parallel_scan(
             self.table_name, self.index_name, scan_query_2, compute_splits_response.session_id, 
             columns_to_get = ColumnsToGet(return_type=ColumnReturnType.ALL_FROM_INDEX))

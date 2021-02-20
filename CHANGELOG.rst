@@ -3,6 +3,11 @@ TableStore SDK for Python 版本记录
 
 Python SDK的版本号遵循 `Semantic Versioning <http://semver.org/>`_ 规则。
 
+Version 5.2.1
+-------------
+
+- Opimize SearchResponse
+
 Version 5.2.0
 -------------
 

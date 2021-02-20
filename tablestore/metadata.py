@@ -900,9 +900,25 @@ class ColumnsToGet(object):
         self.column_names = column_names
         self.return_type = return_type
 
-class SearchResponse(object):
+class IterableResponse(object):
+    def __init__(self):
+        self.index = 0
+        self.response = tuple()
+
+    def __iter__(self):
+        return iter(self.response)
+
+    def _add_response(self, *responses):
+        self.response = tuple(responses)
+
+    def v1_response(self):
+        return self.response
+
+class SearchResponse(IterableResponse):
     
     def __init__(self, rows, agg_results, group_by_results, next_token, is_all_succeed, total_count):
+        super(SearchResponse, self).__init__()
+
         self.rows = rows
         self.agg_results = agg_results
         self.group_by_results = group_by_results
@@ -910,15 +926,25 @@ class SearchResponse(object):
         self.is_all_succeed = is_all_succeed
         self.total_count = total_count
 
-class ComputeSplitsResponse(object):
+        self._add_response(self.rows, self.next_token, self.total_count, self.is_all_succeed, 
+                           self.agg_results, self.group_by_results)        
+
+class ComputeSplitsResponse(IterableResponse):
     
     def __init__(self, session_id, splits_size):
+        super(ComputeSplitsResponse, self).__init__()
+
         self.session_id = session_id
         self.splits_size = splits_size
 
+        self._add_response(self.session_id, self.splits_size)
 
-class ParallelScanResponse(object):
+class ParallelScanResponse(IterableResponse):
     
     def __init__(self, rows, next_token):
+        super(ParallelScanResponse, self).__init__()
+
         self.rows = rows
         self.next_token = next_token
+
+        self._add_response(self.rows, self.next_token)

@@ -10,6 +10,23 @@ index_name = 'search_index'
 nested_index_name = 'nested_search_index'
 client = None
 
+def term_query_with_multiple_version_response(table_name, index_name):
+    query = TermQuery('k', 'key000')
+    search_response = client.search(table_name, index_name, 
+                                    SearchQuery(query, limit=100, get_total_count=True), 
+                                    ColumnsToGet(return_type=ColumnReturnType.ALL))
+
+    print ("***** 1.0.0 ~ 5.1.0 version: tuple *****")
+    items = search_response.v1_response()
+    print(items)
+
+    print("***** 1.0.0 ~ 5.1.0 version: iter *****")
+    for item in search_response:
+        print(item)
+
+    print ("***** 5.2.0 version *****")
+    print(search_response.rows)
+
 def match_all_query(table_name, index_name):
     # simple queries: match all query and scan to get all data with next token
     query = MatchAllQuery()
@@ -174,6 +191,7 @@ def function_score_query(table_name, index_name):
 
     _print_rows(search_response.rows, search_response.total_count)
 
+
 def prepare_data(rows_count):
     print ('Begin prepare data: %d' % rows_count)
     for i in range(rows_count):
@@ -268,6 +286,7 @@ if __name__ == '__main__':
     describe_search_index()
 
     # perform queries
+    term_query_with_multiple_version_response(table_name, index_name)
     match_all_query(table_name, index_name)
     match_query(table_name, index_name)
     match_phrase_query(table_name, index_name)

@@ -273,6 +273,23 @@ class SearchIndexTest(APITestBase):
         self.assert_equal(len(search_response.next_token) > 0, has_next_token)
         self.assert_equal(search_response.total_count, expect_total_count)
 
+        self.assert_equal(len(search_response.v1_response()[0]), rows_count)
+        self.assert_equal(search_response.v1_response()[3], True)
+        self.assert_equal(len(search_response.v1_response()[1]) > 0, has_next_token)
+        self.assert_equal(search_response.v1_response()[2], expect_total_count)
+
+        pos = 0
+        for item in search_response:
+            if pos == 0:
+                self.assert_equal(len(item), rows_count)
+            elif pos == 1:
+                self.assert_equal(len(item) > 0, has_next_token)
+            elif pos == 2:
+                self.assert_equal(item, expect_total_count)
+            elif pos == 3:
+                self.assert_equal(item, True)
+            pos += 1
+
         return search_response.rows
 
     def _test_prefix_query(self, table_name, index_name):
