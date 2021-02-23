@@ -520,40 +520,26 @@ class BatchGetRowResponse(object):
     def __init__(self, response):
         self.items = {}
 
-        for rows in response:
-            for row in rows:
-                table_name = row.table_name
-                result_rows = self.items.get(table_name)
-                if result_rows == None:
-                    self.items[table_name] = [row]
-                else:
-                    result_rows.append(row)
+        all_rows = (rows for table in response for rows in table)
+        for item in all_rows:
+            self.items.setdefault(item.table_name, []).extend(item.rows)
 
     def get_failed_rows(self):
-        succ, fail = self.get_result()
-        return fail
+        return [row for row in self.items.values() if not row.is_ok]
 
     def get_succeed_rows(self):
-        succ, fail = self.get_result()
-        return succ
+        return [row for row in self.items.values() if row.is_ok]
 
     def get_result(self):
-        succ = []
-        fail = []
-        for rows in list(self.items.values()):
-            for row in rows:
-                if row.is_ok:
-                    succ.append(row)
-                else:
-                    fail.append(row)
-
+        succ = self.get_succeed_rows()
+        fail = self.get_failed_rows()
         return succ, fail
 
     def get_result_by_table(self, table_name):
         return self.items.get(table_name)
 
     def is_all_succeed(self):
-        return len(self.get_failed_rows()) == 0
+        return self.get_failed_rows() == []
 
 class BatchWriteRowType(object):
     PUT = "put"
