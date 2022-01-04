@@ -858,7 +858,7 @@ class OTSProtoBufferEncoder(object):
         if start_column is not None:
             proto.start_column = start_column
         if end_column is not None:
-            proto.end_colun = end_column
+            proto.end_column = end_column
         if token is not None:
             proto.token = token
         if transaction_id is not None:
