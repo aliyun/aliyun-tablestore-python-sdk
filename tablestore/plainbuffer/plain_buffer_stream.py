@@ -14,7 +14,10 @@ class PlainBufferInputStream(object):
         self.last_tag = chr(0)
 
     def read_tag(self):
-        self.last_tag = self.read_raw_byte()
+        if len(self.buffer) == self.cur_pos:
+            self.last_tag = 0
+        else:
+            self.last_tag = self.read_raw_byte()
 
     def check_last_tag_was(self, tag):
         return self.last_tag == tag
