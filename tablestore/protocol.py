@@ -56,6 +56,7 @@ class OTSProtocol(object):
         'GetRange',
         'ListSearchIndex',
         'CreateSearchIndex',
+        'UpdateSearchIndex',
         'DeleteSearchIndex',
         'DescribeSearchIndex',
         'Search',
@@ -163,7 +164,7 @@ class OTSProtocol(object):
             'x-ots-contenttype',
         ]
 
-        if status >= 200 and status < 300:
+        if 200 <= status < 300:
             for name in header_names:
                 if not name in headers:
                     raise OTSClientError('"%s" is missing in response header.' % name)
@@ -191,7 +192,7 @@ class OTSProtocol(object):
     def _check_authorization(self, query, headers, status=None):
         auth = headers.get('authorization')
         if auth is None:
-            if status >= 200 and status < 300:
+            if 200 <= status < 300:
                 raise OTSClientError('"Authorization" is missing in response header.')
             else:
                 return
@@ -241,22 +242,16 @@ class OTSProtocol(object):
 
         headers = self._convert_urllib3_headers(headers)
 
+        request_id = self._get_request_id_string(headers)
+
         try:
-            ret, proto = self.decoder.decode_response(api_name, body)
+            ret, proto = self.decoder.decode_response(api_name, body, request_id)
         except Exception as e:
-            request_id = self._get_request_id_string(headers)
             error_message = 'Response format is invalid, %s, RequestID: %s, " \
                 "HTTP status: %s, Body: %s.' % (str(e), request_id, status, body)
             self.logger.error(error_message)
             raise e
 
-        if self.logger.level <= logging.DEBUG:
-            # prevent to generate formatted message which is time consuming
-            request_id = self._get_request_id_string(headers)
-            self.logger.debug("OTS response, API: %s, RequestID: %s, Protobuf: %s." % (
-                api_name, request_id,
-                text_format.MessageToString(proto, as_utf8=True, as_one_line=True)
-            ))
         return ret
 
     def handle_error(self, api_name, query, status, reason, headers, body):
@@ -271,7 +266,6 @@ class OTSProtocol(object):
         if api_name not in self.api_list:
             raise OTSClientError('API %s is not supported.' % api_name)
 
-
         try:
             self._check_headers(std_headers, body, status=status)
             if status != 403:
@@ -281,7 +275,7 @@ class OTSProtocol(object):
             e.message += " HTTP status: %s." % status
             raise e
 
-        if status >= 200 and status < 300:
+        if 200 <= status < 300:
             return
         else:
             request_id = self._get_request_id_string(std_headers)

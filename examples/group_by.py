@@ -136,7 +136,22 @@ def group_by_geo_distance(table_name, index_name):
         for item in group_by.items:
             print("range:%.1f~%.1f, count:%d" % (item.range_from, item.range_to, item.row_count))
 
+def group_by_histogram(table_name, index_name):
+    print('**** Begin Sample 8 ****\n')
 
+    query = TermQuery('d', 0.1)
+    group_by = GroupByHistogram(field_name = 'l', interval = 1, field_range = FieldRange(0, 10), missing_value = 5)
+
+    search_response = client.search(table_name, index_name,
+                                    SearchQuery(query, next_token = None, limit=2, group_bys = [group_by]),
+                                    columns_to_get = ColumnsToGet(return_type = ColumnReturnType.ALL_FROM_INDEX))
+
+    for group_by in search_response.group_by_results:
+        print("name:%s" % group_by.name)
+        print("groups:")
+        for item in group_by.items:
+            print("%s:%s" % (item.key, item.value))
+            
 def prepare_data(rows_count):
     print ('Begin prepare data: %d' % rows_count)
     for i in range(rows_count):
@@ -216,6 +231,7 @@ if __name__ == '__main__':
     group_by_range(table_name, index_name)
     group_by_filter(table_name, index_name)
     group_by_geo_distance(table_name, index_name)
+    group_by_histogram(table_name, index_name)
 
     delete_search_index(index_name)
     delete_table()

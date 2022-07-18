@@ -20,7 +20,7 @@ class ParallelScanTest(APITestBase):
         self._prepare_index(self.table_name, self.index_name)
         self._prepare_data(self.table_name, self.rows_count)
 
-        time.sleep(30) 
+        time.sleep(60) 
 
     def _prepare_data(self, table_name, rows_count):
         for i in range(rows_count):

@@ -14,10 +14,11 @@ class TableMeta(object):
         self.defined_columns = defined_columns
 
 class TableOptions(object):
-    def __init__(self, time_to_live = -1, max_version = 1, max_time_deviation = 86400):
+    def __init__(self, time_to_live = -1, max_version = 1, max_time_deviation = 86400, allow_update = None):
         self.time_to_live = time_to_live
         self.max_version = max_version
         self.max_time_deviation = max_time_deviation
+        self.allow_update = allow_update
 
 class CapacityUnit(object):
 
@@ -48,10 +49,28 @@ class FieldType(Enum):
     TEXT = search_pb2.TEXT
     NESTED = search_pb2.NESTED
     GEOPOINT = search_pb2.GEO_POINT
+    DATE = search_pb2.DATE
 
 class AnalyzerType(object):
     SINGLEWORD = "single_word"
     MAXWORD = "max_word"
+    MINWORD = "min_word"
+    FUZZY = "fuzzy"
+    SPLIT = "split"
+
+class SingleWordAnalyzerParameter(object):
+    def __init__(self, case_sensitive = False, delimit_word = False):
+        self.case_sensitive = case_sensitive
+        self.delimit_word = delimit_word
+
+class SplitAnalyzerParameter(object):
+    def __init__(self, delimiter = ' '):
+        self.delimiter = delimiter
+
+class FuzzyAnalyzerParameter(object):
+    def __init__(self, min_chars = 1, max_chars = 7):
+        self.min_chars = min_chars
+        self.max_chars = max_chars
 
 class ScoreMode(Enum):
     NONE = search_pb2.SCORE_MODE_NONE
@@ -118,9 +137,11 @@ class IndexSetting(object):
 
 class FieldSchema(object):
 
-    def __init__(self, field_name, field_type, index=None,
-        store=None, is_array=None, enable_sort_and_agg=None,
-        analyzer=None, sub_field_schemas=[]):
+    def __init__(self, field_name, field_type, index = None,
+                 store = None, is_array = None, enable_sort_and_agg = None,
+                 analyzer = None, sub_field_schemas = [], analyzer_parameter = None, 
+                 date_formats = [], is_virtual_field = False, source_fields = []):
+
         self.field_name = field_name
         self.field_type = field_type
         self.index = index
@@ -128,7 +149,11 @@ class FieldSchema(object):
         self.is_array = is_array
         self.enable_sort_and_agg = enable_sort_and_agg
         self.analyzer = analyzer
+        self.analyzer_parameter = analyzer_parameter
         self.sub_field_schemas = sub_field_schemas
+        self.date_formats = date_formats
+        self.is_virtual_field = is_virtual_field
+        self.source_fields = source_fields
 
 class SyncPhase(Enum):
     FULL = 0
@@ -142,10 +167,11 @@ class SyncStat(object):
 
 class SearchIndexMeta(object):
 
-    def __init__(self, fields, index_setting=None, index_sort=None):
+    def __init__(self, fields, index_setting=None, index_sort=None, time_to_live=-1):
         self.fields = fields
         self.index_setting = index_setting
         self.index_sort = index_sort
+        self.time_to_live = time_to_live
 
 class DefinedColumnSchema(object):
 
@@ -206,14 +232,21 @@ class UpdateType(object):
     DELETE_ALL = "DELETE_ALL"
     INCREMENT = "INCREMENT"
 
-class UpdateTableResponse(object):
+class CommonResponse(object):
+    def __init__(self):
+        self.request_id = ''
+
+    def set_request_id(self, request_id):
+        self.request_id = request_id
+
+class UpdateTableResponse(CommonResponse):
 
     def __init__(self, reserved_throughput_details, table_options):
         self.reserved_throughput_details = reserved_throughput_details
         self.table_options = table_options
 
 
-class DescribeTableResponse(object):
+class DescribeTableResponse(CommonResponse):
 
     def __init__(self, table_meta, table_options, reserved_throughput_details, secondary_indexes=[]):
         self.table_meta = table_meta
@@ -517,35 +550,18 @@ class BatchGetRowRequest(object):
 
 class BatchGetRowResponse(object):
 
-    def __init__(self, response):
-        self.items = {}
-
-        for rows in response:
-            for row in rows:
-                table_name = row.table_name
-                result_rows = self.items.get(table_name)
-                if result_rows == None:
-                    self.items[table_name] = [row]
-                else:
-                    result_rows.append(row)
+    def __init__(self, table_rows):
+        self.items = table_rows
 
     def get_failed_rows(self):
-        succ, fail = self.get_result()
-        return fail
+        return [row for rows in self.items.values() for row in rows if not row.is_ok]
 
     def get_succeed_rows(self):
-        succ, fail = self.get_result()
-        return succ
+        return [row for rows in self.items.values() for row in rows if row.is_ok]
 
     def get_result(self):
-        succ = []
-        fail = []
-        for rows in list(self.items.values()):
-            for row in rows:
-                if row.is_ok:
-                    succ.append(row)
-                else:
-                    fail.append(row)
+        succ = self.get_succeed_rows()
+        fail = self.get_failed_rows()
 
         return succ, fail
 
@@ -553,7 +569,7 @@ class BatchGetRowResponse(object):
         return self.items.get(table_name)
 
     def is_all_succeed(self):
-        return len(self.get_failed_rows()) == 0
+        return self.get_failed_rows() == []
 
 class BatchWriteRowType(object):
     PUT = "put"
@@ -695,7 +711,7 @@ class BatchWriteRowResponse(object):
         return succ
 
     def is_all_succeed(self):
-        return len(self.get_failed_of_put()) == 0 and len(self.get_failed_of_update()) == 0 and len(self.get_failed_of_delete()) == 0
+        return self.get_failed_of_put() == [] and self.get_failed_of_update() == [] and self.get_failed_of_delete() == []
 
 class BatchWriteRowResponseItem(object):
 
@@ -866,7 +882,7 @@ class SearchQuery(object):
 
     def __init__(self, query, sort=None, get_total_count=False, 
                  next_token=None, offset=None, limit=None, 
-                 aggs = None, group_bys = None):
+                 aggs = None, group_bys = None, collapse_field = None):
 
         self.query = query
         self.sort = sort
@@ -876,6 +892,7 @@ class SearchQuery(object):
         self.limit = limit
         self.aggs = aggs
         self.group_bys = group_bys
+        self.collapse = collapse_field
 
 class ScanQuery(object):
 
@@ -900,8 +917,10 @@ class ColumnsToGet(object):
         self.column_names = column_names
         self.return_type = return_type
 
-class IterableResponse(object):
+class IterableResponse(CommonResponse):
     def __init__(self):
+        super(IterableResponse, self).__init__()
+        
         self.index = 0
         self.response = tuple()
 
@@ -927,7 +946,7 @@ class SearchResponse(IterableResponse):
         self.total_count = total_count
 
         self._add_response(self.rows, self.next_token, self.total_count, self.is_all_succeed, 
-                           self.agg_results, self.group_by_results)        
+                           self.agg_results, self.group_by_results)
 
 class ComputeSplitsResponse(IterableResponse):
     

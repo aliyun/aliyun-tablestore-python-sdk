@@ -1,21 +1,24 @@
 # -*- coding: utf8 -*-
 
+import sys
 import platform
 import tablestore.const as const
+
+const.python_version = sys.version_info[0]
 
 const.HEADER = 0x75
 
 # tag type
-const.TAG_ROW_PK = 0x1
-const.TAG_ROW_DATA = 0x2
-const.TAG_CELL = 0x3
-const.TAG_CELL_NAME = 0x4
-const.TAG_CELL_VALUE = 0x5
-const.TAG_CELL_TYPE = 0x6
-const.TAG_CELL_TIMESTAMP = 0x7
-const.TAG_DELETE_ROW_MARKER = 0x8
-const.TAG_ROW_CHECKSUM = 0x9
-const.TAG_CELL_CHECKSUM = 0x0A
+const.TAG_ROW_PK = chr(0x1)
+const.TAG_ROW_DATA = chr(0x2)
+const.TAG_CELL = chr(0x3)
+const.TAG_CELL_NAME = chr(0x4)
+const.TAG_CELL_VALUE = chr(0x5)
+const.TAG_CELL_TYPE = chr(0x6)
+const.TAG_CELL_TIMESTAMP = chr(0x7)
+const.TAG_DELETE_ROW_MARKER = chr(0x8)
+const.TAG_ROW_CHECKSUM = chr(0x9)
+const.TAG_CELL_CHECKSUM = chr(0x0A)
 
 # cell op type
 const.DELETE_ALL_VERSION = 0x1

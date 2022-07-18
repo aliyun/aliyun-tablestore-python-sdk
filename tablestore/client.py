@@ -144,7 +144,7 @@ class OTSClient(object):
 
         retry_times = 0
 
-        while True:
+        while 1:
 
             try:
                 status, reason, resheaders, resbody = self.connection.send_receive(
@@ -605,16 +605,16 @@ class OTSClient(object):
 
 
     def _validate_parameter(self, endpoint, access_key_id, access_key_secret, instance_name):
-        if endpoint is None or len(endpoint) == 0:
+        if endpoint is None or endpoint == '':
             raise OTSClientError('endpoint is None or empty.')
 
-        if access_key_id is None or len(access_key_id) == 0:
+        if access_key_id is None or access_key_id == '':
             raise OTSClientError('access_key_id is None or empty.')
 
-        if access_key_secret is None or len(access_key_secret) == 0:
+        if access_key_secret is None or access_key_secret == '':
             raise OTSClientError('access_key_secret is None or empty.')
 
-        if instance_name is None or len(instance_name) == 0:
+        if instance_name is None or instance_name == '':
             raise OTSClientError('instance_name is None or empty.')
 
     def list_search_index(self, table_name=None):
@@ -650,7 +650,7 @@ class OTSClient(object):
         :param index_name: The name of index.
 
         :type index_meta: tablestore.metadata.SearchIndexMeta
-        :param index_meta: The definition of index, includes fields' schema, index setting and index pre-sorting configuration.
+        :param index_meta: The definition of index, includes fields' schema, index setting, index pre-sorting configuration and TTL.
 
         Example usage:
             field_a = FieldSchema('k', FieldType.KEYWORD, index=True, enable_sort_and_agg=True, store=True)
@@ -670,6 +670,27 @@ class OTSClient(object):
         """
 
         self._request_helper('CreateSearchIndex', table_name, index_name, index_meta)
+
+    def update_search_index(self, table_name, index_name, index_meta):
+        """
+        Update search index.
+
+        :type table_name: str
+        :param table_name: The name of table.
+
+        :type index_name: str
+        :param index_name: The name of index.
+
+        :type index_meta: tablestore.metadata.SearchIndexMeta
+        :param index_meta: The definition of index, includes fields' schema, index setting , index pre-sorting configuration and TTL, Only support TTL in update_search_index
+
+        Example usage:
+           index_meta = SearchIndexMeta(fields=None, index_setting=None, index_sort=None, time_to_live = 94608000)
+           client.update_search_index('table_1', 'index_1', index_meta)
+        """
+
+        self._request_helper('UpdateSearchIndex', table_name, index_name, index_meta)
+
 
     def describe_search_index(self, table_name, index_name):
         """

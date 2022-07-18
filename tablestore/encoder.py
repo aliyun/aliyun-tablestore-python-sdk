@@ -76,6 +76,7 @@ class OTSProtoBufferEncoder(object):
             'GetRange'              : self._encode_get_range,
             'ListSearchIndex'       : self._encode_list_search_index,
             'CreateSearchIndex'     : self._encode_create_search_index,
+            'UpdateSearchIndex'     : self._encode_update_search_index,
             'DescribeSearchIndex'   : self._encode_describe_search_index,
             'DeleteSearchIndex'     : self._encode_delete_search_index,
             'Search'                : self._encode_search,
@@ -381,13 +382,45 @@ class OTSProtoBufferEncoder(object):
         if field_schema.enable_sort_and_agg is not None:
             proto.enable_sort_and_agg = field_schema.enable_sort_and_agg
 
-        if field_schema.analyzer:
+        if field_schema.analyzer is not None:
             proto.analyzer = field_schema.analyzer
+
+            if field_schema.analyzer_parameter is not None:
+                proto.analyzer_parameter = self._make_analyzer_parameter(
+                    field_schema.analyzer, field_schema.analyzer_parameter)
 
         for sub_field_schema in field_schema.sub_field_schemas:
             sub_field_proto = proto.field_schemas.add()
             self._make_index_field_schema(sub_field_proto, sub_field_schema)
 
+        for df in field_schema.date_formats:
+            proto.date_formats.append(df)
+
+        if field_schema.is_virtual_field:
+            proto.is_virtual_field = field_schema.is_virtual_field
+            for source_field in field_schema.source_fields:
+                proto.source_field_names.append(source_field)
+
+    def _make_analyzer_parameter(self, analyzer, analyzer_parameter):
+        if analyzer == AnalyzerType.SINGLEWORD and isinstance(analyzer_parameter, SingleWordAnalyzerParameter):
+            proto_analyzer_param = search_pb2.SingleWordAnalyzerParameter()
+            proto_analyzer_param.case_sensitive = analyzer_parameter.case_sensitive
+            proto_analyzer_param.delimit_word = analyzer_parameter.delimit_word
+            return proto_analyzer_param.SerializeToString()
+        elif analyzer == AnalyzerType.SPLIT and isinstance(analyzer_parameter, SplitAnalyzerParameter):
+            proto_analyzer_param = search_pb2.SplitAnalyzerParameter()
+            proto_analyzer_param.delimiter = analyzer_parameter.delimiter
+            return proto_analyzer_param.SerializeToString()
+        elif analyzer == AnalyzerType.FUZZY and isinstance(analyzer_parameter, FuzzyAnalyzerParameter):
+            proto_analyzer_param = search_pb2.FuzzyAnalyzerParameter()
+            proto_analyzer_param.min_chars = analyzer_parameter.min_chars
+            proto_analyzer_param.max_chars = analyzer_parameter.max_chars
+            return proto_analyzer_param.SerializeToString()
+        else:
+            raise OTSClientError(
+                "analyzer [%s] and analyzer_parameter [%s] is mismatched."
+                % (analyzer, analyzer_parameter.__class__.__name__)
+            )
 
     def _make_index_setting(self, proto, index_setting):
         proto.number_of_shards = 1
@@ -537,10 +570,18 @@ class OTSProtoBufferEncoder(object):
         if table_options.max_time_deviation is not None:
             if not isinstance(table_options.max_time_deviation, int):
                 raise OTSClientError(
-                    "max_time_deviation should be an instance of TableOptions, not %s"
+                    "max_time_deviation should be an instance of int, not %s"
                     % table_options.max_time_deviation.__class__.__name__
                     )
             proto.deviation_cell_version_in_sec = table_options.max_time_deviation
+
+        if table_options.allow_update is not None:
+            if not isinstance(table_options.allow_update, bool):
+                raise OTSClientError(
+                    "allow_update should be an instance of bool, not %s"
+                    % table_options.allow_update.__class__.__name__
+                    )
+            proto.allow_update = table_options.allow_update
 
     def _make_capacity_unit(self, proto, capacity_unit):
 
@@ -881,8 +922,8 @@ class OTSProtoBufferEncoder(object):
 
     def _encode_delete_search_index(self, table_name, index_name):
         proto = search_pb2.DeleteSearchIndexRequest()
-        proto.table_name = table_name
-        proto.index_name = index_name
+        proto.table_name = self._get_unicode(table_name)
+        proto.index_name = self._get_unicode(index_name)
 
         return proto
 
@@ -898,7 +939,16 @@ class OTSProtoBufferEncoder(object):
         proto = search_pb2.CreateSearchIndexRequest()
         proto.table_name = self._get_unicode(table_name)
         proto.index_name = self._get_unicode(index_name)
+        proto.time_to_live = index_meta.time_to_live
         self._make_index_meta(proto.schema, index_meta)
+
+        return proto
+
+    def _encode_update_search_index(self, table_name, index_name, index_meta):
+        proto = search_pb2.UpdateSearchIndexRequest()
+        proto.table_name = self._get_unicode(table_name)
+        proto.index_name = self._get_unicode(index_name)
+        proto.time_to_live = index_meta.time_to_live
 
         return proto
 
@@ -1161,8 +1211,8 @@ class OTSProtoBufferEncoder(object):
         if search_query.limit is not None:
             proto.limit = search_query.limit
 
-        #if search_query.collapse is not None:
-        #    self._make_collapse(proto.collapse, search_query.collapse)
+        if search_query.collapse is not None:
+            self._make_collapse(proto.collapse, search_query.collapse)
 
         if search_query.aggs is not None :
             self._make_aggs(proto.aggs, search_query.aggs)
@@ -1175,8 +1225,8 @@ class OTSProtoBufferEncoder(object):
     def _make_aggs(self, proto, aggs):
         if isinstance(aggs, list):
             for agg in aggs:
-                if type(agg) not in [Max, Min, Avg, Sum, Count, DistinctCount, TopRows]:
-                    raise OTSClientError('agg must be one of [Max, Min, Avg, Sum, Count, DistinctCount, TopRows]')
+                if type(agg) not in [Max, Min, Avg, Sum, Count, DistinctCount, TopRows, Percentiles]:
+                    raise OTSClientError('agg must be one of [Max, Min, Avg, Sum, Count, DistinctCount, TopRows, Percentiles]')
                         
                 aggregation = proto.aggs.add()
                 aggregation.name = agg.name
@@ -1188,8 +1238,8 @@ class OTSProtoBufferEncoder(object):
     def _make_group_bys(self, proto, group_bys):
         if isinstance(group_bys, list):
             for group_by in group_bys:
-                if type(group_by) not in [GroupByField, GroupByRange, GroupByFilter, GroupByGeoDistance]:
-                    raise OTSClientError('group_by must be one of [GroupByField, GroupByRange, GroupByFilter, GroupByGeoDistance]')
+                if type(group_by) not in [GroupByField, GroupByRange, GroupByFilter, GroupByGeoDistance, GroupByHistogram]:
+                    raise OTSClientError('group_by must be one of [GroupByField, GroupByRange, GroupByFilter, GroupByGeoDistance, GroupByHistogram]')
                 group_by_proto = proto.group_bys.add()
                 group_by_proto.name = group_by.name
                 group_by_proto.type = group_by.type
