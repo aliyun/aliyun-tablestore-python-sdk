@@ -15,12 +15,6 @@ class PlainBufferCodedInputStream(object):
     def __init__(self, input_stream):
         self.input_stream = input_stream
 
-    def read_tag(self):
-        return self.input_stream.read_tag()
-
-    def check_last_tag_was(self, tag):
-        return self.input_stream.check_last_tag_was(tag)
-
     def get_last_tag(self):
         return self.input_stream.get_last_tag()
 
@@ -28,74 +22,76 @@ class PlainBufferCodedInputStream(object):
         return self.input_stream.read_int32()
 
     def read_primary_key_value(self, cell_check_sum):
-        if not self.check_last_tag_was(TAG_CELL_VALUE):
-            raise OTSClientError("Expect TAG_CELL_VALUE but it was " + str(self.get_last_tag()))
+        input_stream = self.input_stream
+        if input_stream.last_tag != TAG_CELL_VALUE:
+            raise OTSClientError("Expect TAG_CELL_VALUE but it was " + str(ord(self.get_last_tag())))
 
-        self.input_stream.read_raw_little_endian32()        
-        column_type = ord(self.input_stream.read_raw_byte())
+        input_stream.read_raw_little_endian32()        
+        column_type = ord(input_stream.read_raw_byte())
         if column_type == VT_INTEGER:
-            int64_value = self.input_stream.read_int64()
+            int64_value = input_stream.read_int64()
             cell_check_sum = PlainBufferCrc8.crc_int8(cell_check_sum, VT_INTEGER)
             cell_check_sum = PlainBufferCrc8.crc_int64(cell_check_sum, int64_value)
-            self.read_tag()
+            input_stream.read_tag()
             return (int64_value, cell_check_sum)
         elif column_type == VT_STRING:
-            value_size = self.input_stream.read_int32()
-            string_value = self.input_stream.read_utf_string(value_size)
+            value_size = input_stream.read_int32()
+            string_value = input_stream.read_utf_string(value_size)
             cell_check_sum = PlainBufferCrc8.crc_int8(cell_check_sum, VT_STRING)
             cell_check_sum = PlainBufferCrc8.crc_int32(cell_check_sum, value_size)
             cell_check_sum = PlainBufferCrc8.crc_string(cell_check_sum, string_value)
-            self.read_tag()
+            input_stream.read_tag()
             return (string_value, cell_check_sum)
         elif column_type == VT_BLOB:
-            value_size = self.input_stream.read_int32() 
-            binary_value = self.input_stream.read_bytes(value_size)
+            value_size = input_stream.read_int32() 
+            binary_value = input_stream.read_bytes(value_size)
             cell_check_sum = PlainBufferCrc8.crc_int8(cell_check_sum, VT_BLOB)
             cell_check_sum = PlainBufferCrc8.crc_int32(cell_check_sum, value_size)
             cell_check_sum = PlainBufferCrc8.crc_string(cell_check_sum, binary_value)            
-            self.read_tag()
+            input_stream.read_tag()
             return (bytearray(binary_value), cell_check_sum)
         else:
             raise OTSClientError("Unsupported primary key type:" + str(column_type))
 
     def read_column_value(self, cell_check_sum):
-        if not self.check_last_tag_was(TAG_CELL_VALUE):
-            raise OTSClientError("Expect TAG_CELL_VALUE but it was " + str(self.get_last_tag()))
-        self.input_stream.read_raw_little_endian32()
-        column_type = ord(self.input_stream.read_raw_byte())
+        input_stream = self.input_stream
+        if input_stream.last_tag != TAG_CELL_VALUE:
+            raise OTSClientError("Expect TAG_CELL_VALUE but it was " + str(ord(self.get_last_tag())))
+        input_stream.read_raw_little_endian32()
+        column_type = ord(input_stream.read_raw_byte())
         if column_type == VT_INTEGER:
-            int64_value = self.input_stream.read_int64()
+            int64_value = input_stream.read_int64()
             cell_check_sum = PlainBufferCrc8.crc_int8(cell_check_sum, VT_INTEGER)
             cell_check_sum = PlainBufferCrc8.crc_int64(cell_check_sum, int64_value)
-            self.read_tag()
+            input_stream.read_tag()
             return (int64_value, cell_check_sum)
         elif column_type == VT_STRING:
-            value_size = self.input_stream.read_int32()
-            string_value = self.input_stream.read_utf_string(value_size)
+            value_size = input_stream.read_int32()
+            string_value = input_stream.read_utf_string(value_size)
             cell_check_sum = PlainBufferCrc8.crc_int8(cell_check_sum, VT_STRING)
             cell_check_sum = PlainBufferCrc8.crc_int32(cell_check_sum, value_size)
             cell_check_sum = PlainBufferCrc8.crc_string(cell_check_sum, string_value)
-            self.read_tag()
+            input_stream.read_tag()
             return (string_value, cell_check_sum)
         elif column_type == VT_BLOB:
-            value_size = self.input_stream.read_int32() 
-            binary_value = self.input_stream.read_bytes(value_size)            
+            value_size = input_stream.read_int32() 
+            binary_value = input_stream.read_bytes(value_size)            
             cell_check_sum = PlainBufferCrc8.crc_int8(cell_check_sum, VT_BLOB)
             cell_check_sum = PlainBufferCrc8.crc_int32(cell_check_sum, value_size)
             cell_check_sum = PlainBufferCrc8.crc_string(cell_check_sum, binary_value)            
-            self.read_tag()
+            input_stream.read_tag()
             return (bytearray(binary_value), cell_check_sum)
         elif column_type == VT_BOOLEAN:
-            bool_value = self.input_stream.read_boolean()
+            bool_value = input_stream.read_boolean()
             cell_check_sum = PlainBufferCrc8.crc_int8(cell_check_sum, VT_BOOLEAN)
             cell_check_sum = PlainBufferCrc8.crc_int8(cell_check_sum, bool_value)
-            self.read_tag()
+            input_stream.read_tag()
             return (bool_value, cell_check_sum)
         elif column_type == VT_DOUBLE:
-            double_int = self.input_stream.read_double()
+            double_int = input_stream.read_double()
             cell_check_sum = PlainBufferCrc8.crc_int8(cell_check_sum, VT_DOUBLE)
             cell_check_sum = PlainBufferCrc8.crc_int64(cell_check_sum, double_int)
-            self.read_tag()
+            input_stream.read_tag()
 
             if const.SYS_BITS == 64:
                 double_value, = struct.unpack('d', struct.pack('q', double_int))
@@ -108,29 +104,30 @@ class PlainBufferCodedInputStream(object):
             raise OTSClientError("Unsupported column type: " + str(column_type))
 
     def read_primary_key_column(self, row_check_sum):
-        if not self.check_last_tag_was(TAG_CELL):
-            raise OTSClientError("Expect TAG_CELL but it was " + str(self.get_last_tag()))
-        self.read_tag()
+        input_stream = self.input_stream
+        if input_stream.last_tag != TAG_CELL:
+            raise OTSClientError("Expect TAG_CELL but it was " + str(ord(self.get_last_tag())))
+        input_stream.read_tag()
 
-        if not self.check_last_tag_was(TAG_CELL_NAME):
-            raise OTSClientError("Expect TAG_CELL_NAME but it was " + str(self.get_last_tag()))
+        if input_stream.last_tag != TAG_CELL_NAME:
+            raise OTSClientError("Expect TAG_CELL_NAME but it was " + str(ord(self.get_last_tag())))
         
         cell_check_sum = 0
-        name_size = self.input_stream.read_raw_little_endian32()
-        column_name = self.input_stream.read_utf_string(name_size)
+        name_size = input_stream.read_raw_little_endian32()
+        column_name = input_stream.read_utf_string(name_size)
         cell_check_sum = PlainBufferCrc8.crc_string(cell_check_sum, column_name)
-        self.read_tag()
+        input_stream.read_tag()
         
-        if not self.check_last_tag_was(TAG_CELL_VALUE):
-            raise OTSClientError("Expect TAG_CELL_VALUE but it was " + str(self.get_last_tag()))
+        if input_stream.last_tag != TAG_CELL_VALUE:
+            raise OTSClientError("Expect TAG_CELL_VALUE but it was " + str(ord(self.get_last_tag())))
         
         primary_key_value, cell_check_sum = self.read_primary_key_value(cell_check_sum)
         
         if self.get_last_tag() == TAG_CELL_CHECKSUM:
-            check_sum = ord(self.input_stream.read_raw_byte())
+            check_sum = ord(input_stream.read_raw_byte())
             if check_sum != cell_check_sum:
                 raise OTSClientError("Checksum mismatch. expected:" + str(check_sum) + ",actual:" + str(cell_check_sum))
-            self.read_tag()
+            input_stream.read_tag()
         else:
             raise OTSClientError("Expect TAG_CELL_CHECKSUM but it was " + str(self.get_last_tag()))
         
@@ -138,41 +135,40 @@ class PlainBufferCodedInputStream(object):
         return (column_name, primary_key_value, row_check_sum)
 
     def read_column(self, row_check_sum):
-        if not self.check_last_tag_was(TAG_CELL):
-            raise OTSClientError("Expect TAG_CELL but it was " + str(self.get_last_tag()))
-        self.read_tag()
+        input_stream = self.input_stream
+        self.input_stream.read_tag()
 
-        if not self.check_last_tag_was(TAG_CELL_NAME):
-            raise OTSClientError("Expect TAG_CELL_NAME but it was " + str(self.get_last_tag()))
+        if input_stream.last_tag != TAG_CELL_NAME:
+            raise OTSClientError("Expect TAG_CELL_NAME but it was " + str(ord(self.get_last_tag())))
                    
         cell_check_sum = 0
         column_name = None
         column_value = None
         timestamp = None
-        name_size = self.input_stream.read_raw_little_endian32()
-        column_name = self.input_stream.read_utf_string(name_size)
+        name_size = input_stream.read_raw_little_endian32()
+        column_name = input_stream.read_utf_string(name_size)
         cell_check_sum = PlainBufferCrc8.crc_string(cell_check_sum, column_name)
-        self.read_tag()
+        self.input_stream.read_tag()
     
         if self.get_last_tag() == TAG_CELL_VALUE:
             column_value, cell_check_sum = self.read_column_value(cell_check_sum)
         # skip CELL_TYPE
         if self.get_last_tag() == TAG_CELL_TYPE:
             cell_check_sum = PlainBufferCrc8.crc_int8(cell_check_sum, cell_type)
-            self.read_tag()
+            self.input_stream.read_tag()
         
         if self.get_last_tag() == TAG_CELL_TIMESTAMP:
-            timestamp = self.input_stream.read_int64()
+            timestamp = input_stream.read_int64()
             cell_check_sum = PlainBufferCrc8.crc_int64(cell_check_sum, timestamp)
-            self.read_tag()
+            self.input_stream.read_tag()
 
         if self.get_last_tag() == TAG_CELL_CHECKSUM:
-            check_sum = ord(self.input_stream.read_raw_byte())
+            check_sum = ord(input_stream.read_raw_byte())
             if check_sum != cell_check_sum:                
                 raise OTSClientError("Checksum mismatch. expected:" + str(check_sum) + ",actual:" + str(cell_check_sum))
-            self.read_tag()
+            self.input_stream.read_tag()
         else:
-            raise OTSClientError("Expect TAG_CELL_CHECKSUM but it was " + str(self.get_last_tag()))
+            raise OTSClientError("Expect TAG_CELL_CHECKSUM but it was " + str(ord(self.get_last_tag())))
         
         row_check_sum = PlainBufferCrc8.crc_int8(row_check_sum, cell_check_sum)
         return column_name, column_value, timestamp, row_check_sum
@@ -182,50 +178,51 @@ class PlainBufferCodedInputStream(object):
         primary_key = []
         attributes = []
         
-        if not self.check_last_tag_was(TAG_ROW_PK):
-            raise OTSClientError("Expect TAG_ROW_PK but it was " + str(self.get_last_tag()))
+        input_stream = self.input_stream
+        if input_stream.last_tag != TAG_ROW_PK:
+            raise OTSClientError("Expect TAG_ROW_PK but it was " + str(ord(self.get_last_tag())))
 
-        self.read_tag()
+        self.input_stream.read_tag()
         
-        while self.check_last_tag_was(TAG_CELL):
+        while input_stream.last_tag == TAG_CELL:
             (name, value, row_check_sum) = self.read_primary_key_column(row_check_sum)
             primary_key.append((name, value))
 
-        if self.check_last_tag_was(TAG_ROW_DATA):
-            self.read_tag()
-            while self.check_last_tag_was(TAG_CELL):
+        if input_stream.last_tag == TAG_ROW_DATA:
+            self.input_stream.read_tag()
+            while input_stream.last_tag == TAG_CELL:
                 column_name, column_value, timestamp, row_check_sum = self.read_column(row_check_sum)
                 attributes.append((column_name, column_value, timestamp))
 
-        if self.check_last_tag_was(TAG_DELETE_ROW_MARKER):
-            self.read_tag()
+        if input_stream.last_tag == TAG_DELETE_ROW_MARKER:
+            self.input_stream.read_tag()
             row_check_sum = PlainBufferCrc8.crc_int8(row_check_sum, 1)
         else:
             row_check_sum = PlainBufferCrc8.crc_int8(row_check_sum, 0)
 
-        if self.check_last_tag_was(TAG_ROW_CHECKSUM):
-            check_sum = ord(self.input_stream.read_raw_byte())
+        if input_stream.last_tag == TAG_ROW_CHECKSUM:
+            check_sum = ord(input_stream.read_raw_byte())
             if check_sum != row_check_sum:
                 raise OTSClientError("Checksum is mismatch.")
-            self.read_tag()
+            self.input_stream.read_tag()
         else:
-            raise OTSClientError("Expect TAG_ROW_CHECKSUM but it was " + str(self.get_last_tag()))
+            raise OTSClientError("Expect TAG_ROW_CHECKSUM but it was " + str(ord(self.get_last_tag())))
         
         return primary_key, attributes
 
     def read_row(self):
         if self.read_header() != HEADER:
             raise OTSClientError("Invalid header from plain buffer.")
-        self.read_tag()
+        self.input_stream.read_tag()
         return self.read_row_without_header()
 
     def read_rows(self):
         if self.read_header() != HEADER:
             raise OTSClientError("Invalid header from plain buffer.")
-        self.read_tag()
+        self.input_stream.read_tag()
         
         row_list = []
-        while not self.input_stream.is_at_end():
+        while self.input_stream.len != self.input_stream.cur_pos:
             (pk, attr) = self.read_row_without_header()
             row_list.append(Row(pk, attr))
         return row_list
@@ -238,7 +235,7 @@ class PlainBufferCodedOutputStream(object):
         self.output_stream.write_raw_little_endian32(HEADER)
 
     def write_tag(self, tag):
-        self.output_stream.write_raw_byte(tag)
+        self.output_stream.write_raw_byte(ord(tag))
 
     def write_cell_name(self, name, cell_check_sum):
         self.write_tag(TAG_CELL_NAME)

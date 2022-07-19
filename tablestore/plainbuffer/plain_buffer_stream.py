@@ -4,40 +4,37 @@ import six
 import struct
 from builtins import int
 from tablestore.error import *
+from .plain_buffer_consts import *
 
 class PlainBufferInputStream(object):
     def __init__(self, data_buffer):
         self.buffer = data_buffer
+        self.len = len(self.buffer)
         self.cur_pos = 0
-        self.last_tag = 0
-
-    def is_at_end(self): 
-        return len(self.buffer) == self.cur_pos
+        self.last_tag = chr(0)
 
     def read_tag(self):
-        if self.is_at_end():
+        if len(self.buffer) == self.cur_pos:
             self.last_tag = 0
-            return 0
-
-        self.last_tag = self.read_raw_byte()
-        return ord(self.last_tag)
+        else:
+            self.last_tag = self.read_raw_byte()
 
     def check_last_tag_was(self, tag):
-        return ord(self.last_tag) == tag
+        return self.last_tag == tag
 
     def get_last_tag(self):
-        return ord(self.last_tag)
+        return self.last_tag
 
     def read_raw_byte(self):
-        if self.is_at_end():
-            raise OTSClientError("Read raw byte encountered EOF.")
-
-        pos = self.cur_pos
-        self.cur_pos += 1
-        if isinstance(self.buffer[pos], int):
-            return chr(self.buffer[pos])
+        if self.len != self.cur_pos:
+            pos = self.cur_pos
+            self.cur_pos += 1
+            if const.python_version == 2:
+                return self.buffer[pos]
+            else:
+                return chr(self.buffer[pos])
         else:
-            return self.buffer[pos]
+            raise OTSClientError("Read raw byte encountered EOF.")
 
     def read_raw_little_endian64(self):
         return struct.unpack('<q', self.read_bytes(8))[0]
@@ -58,7 +55,7 @@ class PlainBufferInputStream(object):
         return struct.unpack('<q', self.read_bytes(8))[0]
 
     def read_bytes(self, size):
-        if len(self.buffer) - self.cur_pos < size:
+        if self.len - self.cur_pos < size:
             raise OTSClientError("Read bytes encountered EOF.")
 
         tmp_pos = self.cur_pos
@@ -66,7 +63,7 @@ class PlainBufferInputStream(object):
         return self.buffer[tmp_pos: tmp_pos + size]
 
     def read_utf_string(self, size):
-        if len(self.buffer) - self.cur_pos < size:
+        if self.len - self.cur_pos < size:
             raise OTSClientError("Read UTF string encountered EOF.")
         utf_str = self.buffer[self.cur_pos:self.cur_pos + size]
         self.cur_pos += size

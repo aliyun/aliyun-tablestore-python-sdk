@@ -1,6 +1,7 @@
 # -*- coding: utf8 -*-
 
 from tablestore.metadata import *
+from tablestore.plainbuffer.plain_buffer_builder import * 
 import tablestore.protobuf.search_pb2 as search_pb2
 
 class BaseGroupBy(object):
@@ -176,6 +177,61 @@ class GroupByGeoDistance(BaseGroupBy):
         BaseGroupBy._base_to_pb_str(self, proto, agg_encode_func, group_by_encode_func)
         return proto.SerializeToString()
 
+class FieldRange(object):
+    def __init__(self, min, max):
+        self.min = min
+        self.max = max
+
+class GroupByHistogram(BaseGroupBy):
+    
+    def __init__(self, field_name, interval, field_range, missing_value = None, min_doc_count = None, group_by_sort = None, 
+                 sub_aggs = [], sub_group_bys = [], name = 'group_by_histogram'):
+        BaseGroupBy.__init__(self, field_name, sub_aggs, sub_group_bys, name, search_pb2.GROUP_BY_HISTOGRAM)
+
+        self.interval = interval
+        self.field_range = field_range
+        self.missing_value = missing_value
+        self.min_doc_count = min_doc_count
+        self.group_by_sort = group_by_sort
+
+    def to_pb_str(self, agg_encode_func, group_by_encode_func, query_encode_func):
+        proto = search_pb2.GroupByHistogram()
+
+        if self.interval is not None:
+            proto.interval = bytes(PlainBufferBuilder.serialize_column_value(self.interval))
+
+        if self.missing_value is not None:
+            proto.missing_value = bytes(PlainBufferBuilder.serialize_column_value(self.missing_value))
+
+        if self.min_doc_count is not None :
+            if isinstance(self.min_doc_count, int) or isinstance(self.min_doc_count, long):
+                proto.min_doc_count = self.min_doc_count
+            else:
+                raise OTSClientError('min_doc_count must be integer')
+
+        if self.field_range is not None and self.field_range.min is not None and self.field_range.max is not None:
+            proto.field_range.min = bytes(PlainBufferBuilder.serialize_column_value(self.field_range.min)) 
+            proto.field_range.max = bytes(PlainBufferBuilder.serialize_column_value(self.field_range.max)) 
+        else:
+            raise OTSClientError('field_range(min, max) must not be None')
+
+        if self.group_by_sort is not None and isinstance(self.group_by_sort, list):
+            for sort in self.group_by_sort:
+                if isinstance(sort, GroupKeySort):
+                    sorter = proto.sort.sorters.add()
+                    sorter.group_key_sort.order = self._get_enum(sort.sort_order)
+                elif isinstance(sort, RowCountSort):
+                    sorter = proto.sort.sorters.add()
+                    sorter.row_count_sort.order = self._get_enum(sort.sort_order)
+                elif isinstance(sort, SubAggSort):
+                    sorter = proto.sort.sorters.add()
+                    sorter.sub_agg_sort.order = self._get_enum(sort.sort_order)
+                    sorter.sub_agg_sort.sub_agg_name = sort.sub_agg_name
+                else:
+                    raise OTSClientError('Invalid sort type:%s' % str(type(sort)))
+        
+        BaseGroupBy._base_to_pb_str(self, proto, agg_encode_func, group_by_encode_func)
+        return proto.SerializeToString()
 
 class GroupByResult(object):
     def __init__(self, name, items):
@@ -218,3 +274,10 @@ class GroupByGeoDistanceResultItem(BaseGroupByResultItem):
         self.range_from = range_from
         self.range_to = range_to
         self.row_count = row_count
+
+class GroupByHistogramResultItem(BaseGroupByResultItem):
+    def __init__(self, key, value, sub_aggs, sub_group_bys):
+        BaseGroupByResultItem.__init__(self, sub_aggs, sub_group_bys)
+
+        self.key = key
+        self.value = value

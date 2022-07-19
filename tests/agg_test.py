@@ -20,7 +20,7 @@ class AggTest(APITestBase):
         self._prepare_index()
         self._prepare_data()
 
-        time.sleep(30) 
+        time.sleep(60) 
 
     def _prepare_data(self):
         for i in range(self.rows_count):
@@ -30,7 +30,7 @@ class AggTest(APITestBase):
             cols = [('k', 'key%03d' % i), ('t', 'this is ' + str(i)),
                 ('g', '%f,%f' % (30.0 + 0.05 * lj, 114.0 + 0.05 * li)), ('ka', '["a", "b", "%d"]' % i),
                 ('la', '[-1, %d]' % i), ('l', i),
-                ('b', i % 2 == 0), ('d', 0.1),
+                ('b', i % 2 == 0), ('d', 0.1),('time', '2022-05-%d' % (i%31+1)),
                 ('n', json.dumps([{'nk':'key%03d' % i, 'nl':i, 'nt':'this is in nested ' + str(i)}]))]
 
             self.client_test.put_row(self.table_name, Row(pk, cols))
@@ -52,7 +52,8 @@ class AggTest(APITestBase):
         field_f = FieldSchema('l', FieldType.LONG, index=True, store=True)
         field_g = FieldSchema('b', FieldType.BOOLEAN, index=True, store=True)
         field_h = FieldSchema('d', FieldType.DOUBLE, index=True, store=True)
-        fields = [field_a, field_b, field_c, field_d, field_e, field_f, field_g, field_h]
+        field_t = FieldSchema('time', FieldType.DATE, index=True, store=True, date_formats = ["yyyy-MM-dd"])
+        fields = [field_a, field_b, field_c, field_d, field_e, field_f, field_g, field_h, field_t]
 
         field_n = FieldSchema('n', FieldType.NESTED, sub_field_schemas=[
             FieldSchema('nk', FieldType.KEYWORD, index=True, store=True),
@@ -341,7 +342,7 @@ class AggTest(APITestBase):
         search_response = self.client_test.search(self.table_name, self.index_name, 
             SearchQuery(TermQuery('d', 0.1), limit=100, get_total_count=True, aggs = [DistinctCount('l')]), 
             ColumnsToGet(return_type=ColumnReturnType.NONE))
-        
+                
         self.assertTrue(search_response.is_all_succeed)
         self.assert_equal(1, len(search_response.agg_results))
         self.assert_equal(100, search_response.agg_results[0].value)
@@ -433,8 +434,8 @@ class AggTest(APITestBase):
         self.assertTrue(search_response.is_all_succeed)
         self.assert_equal(1, len(search_response.agg_results))
         self.assert_equal(2, len(search_response.agg_results[0].value))
-        self.assert_equal("([(u'PK1', 0), (u'PK2', u'pk_0')], [])", str(search_response.agg_results[0].value[0]))
-        self.assert_equal("([(u'PK1', 1), (u'PK2', u'pk_1')], [])", str(search_response.agg_results[0].value[1]))
+        self.assert_equal(([('PK1', 0), ('PK2', 'pk_0')], []), search_response.agg_results[0].value[0])
+        self.assert_equal(([('PK1', 1), ('PK2', 'pk_1')], []), search_response.agg_results[0].value[1])
 
     def test_top_rows_with_exception(self):
         try:
@@ -460,6 +461,79 @@ class AggTest(APITestBase):
         self.assert_equal('a2', search_response.agg_results[1].name)
         self.assert_equal(49.5, search_response.agg_results[1].value)
 
+    def test_percentiles_agg_normal(self):
+        # long type
+        search_response = self.client_test.search(self.table_name, self.index_name, 
+            SearchQuery(TermQuery('d', 0.1), limit=100, get_total_count=True, aggs = [Percentiles('l', [90, 50])]), 
+            ColumnsToGet(return_type=ColumnReturnType.NONE))
+        
+        self.assertTrue(search_response.is_all_succeed)
+        self.assert_equal(1, len(search_response.agg_results))
+        self.assert_equal(2, len(search_response.agg_results[0].value))
+        self.assert_equal(50, search_response.agg_results[0].value[0].key)
+        self.assert_equal(49, search_response.agg_results[0].value[0].value)
+        self.assert_equal(90, search_response.agg_results[0].value[1].key)
+        self.assert_equal(89, search_response.agg_results[0].value[1].value)
+
+        
+        # double type
+        search_response = self.client_test.search(self.table_name, self.index_name, 
+            SearchQuery(TermQuery('d', 0.1), limit=100, get_total_count=True, aggs = [Percentiles('d', [90, 50])]), 
+            ColumnsToGet(return_type=ColumnReturnType.NONE))
+        
+        self.assertTrue(search_response.is_all_succeed)
+        self.assert_equal(1, len(search_response.agg_results))
+        self.assert_equal(2, len(search_response.agg_results[0].value))
+        self.assert_equal(50, search_response.agg_results[0].value[0].key)
+        self.assert_equal(0.1, search_response.agg_results[0].value[0].value)
+        self.assert_equal(90, search_response.agg_results[0].value[1].key)
+        self.assert_equal(0.1, search_response.agg_results[0].value[1].value)
+
+        # nested long type
+        search_response = self.client_test.search(self.table_name, self.index_name,
+            SearchQuery(TermQuery('d', 0.1), limit=100, get_total_count=True, aggs = [Percentiles('n.nl', [90, 50])]), 
+            ColumnsToGet(return_type=ColumnReturnType.NONE))
+        
+        self.assertTrue(search_response.is_all_succeed)
+        self.assert_equal(1, len(search_response.agg_results))
+        self.assert_equal(2, len(search_response.agg_results[0].value))
+        self.assert_equal(50, search_response.agg_results[0].value[0].key)
+        self.assert_equal(49, search_response.agg_results[0].value[0].value)
+        self.assert_equal(90, search_response.agg_results[0].value[1].key)
+        self.assert_equal(89, search_response.agg_results[0].value[1].value)
+
+        # array long type
+        search_response = self.client_test.search(self.table_name, self.index_name, 
+            SearchQuery(TermQuery('d', 0.1), limit=100, get_total_count=True, aggs = [Percentiles('la', [90, 50])]), 
+            ColumnsToGet(return_type=ColumnReturnType.NONE))
+        
+        self.assertTrue(search_response.is_all_succeed)
+        self.assert_equal(1, len(search_response.agg_results))
+        self.assert_equal(2, len(search_response.agg_results[0].value))
+        self.assert_equal(50, search_response.agg_results[0].value[0].key)
+        self.assert_equal(0, search_response.agg_results[0].value[0].value)
+        self.assert_equal(90, search_response.agg_results[0].value[1].key)
+        self.assert_equal(79, search_response.agg_results[0].value[1].value)
+
+        # date type
+        search_response = self.client_test.search(self.table_name, self.index_name, 
+            SearchQuery(TermQuery('d', 0.1), limit=100, get_total_count=True, aggs = [Percentiles('time', [90, 50])]), 
+            ColumnsToGet(return_type=ColumnReturnType.NONE))
+        
+        self.assertTrue(search_response.is_all_succeed)
+        self.assert_equal(1, len(search_response.agg_results))
+        self.assert_equal(2, len(search_response.agg_results[0].value))
+        self.assert_equal(50, search_response.agg_results[0].value[0].key)
+        self.assert_equal('2022-05-20', time.strftime('%Y-%m-%d', time.gmtime(search_response.agg_results[0].value[0].value/1000)))
+        self.assert_equal(90, search_response.agg_results[0].value[1].key)
+        self.assert_equal('2022-05-29', time.strftime('%Y-%m-%d', time.gmtime(search_response.agg_results[0].value[1].value/1000)))
+
+    def test_percentile_agg_with_invalid_type(self):
+        self._do_test_agg_with_invalid_type(Percentiles('t', [99.9, 90]), "OTSParameterInvalid")
+        self._do_test_agg_with_invalid_type(Percentiles('k', [99.9, 90]), "OTSParameterInvalid")
+        self._do_test_agg_with_invalid_type(Percentiles('b', [99.9, 90]), "OTSParameterInvalid")
+        self._do_test_agg_with_invalid_type(Percentiles('g', [99.9, 90]), "OTSParameterInvalid")
+        self._do_test_agg_with_invalid_type(Percentiles('n.nt', [99.9, 90]), "OTSParameterInvalid")
 
     def _do_test_agg_with_invalid_type(self, agg, error_code):
         try:

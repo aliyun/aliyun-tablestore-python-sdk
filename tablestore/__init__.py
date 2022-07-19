@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 
-__version__ = '5.2.1'
+__version__ = '5.3.0'
 __all__ = [
     'OTSClient',
 
@@ -48,6 +48,7 @@ __all__ = [
     'FieldSchema',
     'FieldType',
     'IndexSetting',
+    'Collapse',
     'Sort',
     'PrimaryKeySort',
     'ScoreSort',
@@ -56,6 +57,9 @@ __all__ = [
     'SortOrder',
     'SortMode',
     'AnalyzerType',
+    'SingleWordAnalyzerParameter',
+    'SplitAnalyzerParameter',
+    'FuzzyAnalyzerParameter',
     'Sorter',
     'SyncStat',
     'SyncPhase',
@@ -93,22 +97,27 @@ __all__ = [
     'Count',
     'DistinctCount',
     'TopRows',
+    'Percentiles',
     'AggResult',
+    'PercentilesResultItem',
     'GroupKeySort',
     'RowCountSort',
     'SubAggSort',
     'GeoPoint',
+    'FieldRange',
     'BaseGroupBy',
     'GroupByField',
     'GroupByRange',
     'GroupByFilter',
     'GroupByGeoDistance',
+    'GroupByHistogram',
     'GroupByResult',
     'BaseGroupByResultItem',
     'GroupByFieldResultItem',
     'GroupByRangeResultItem',
     'GroupByFilterResultItem',
     'GroupByGeoDistanceResultItem',
+    'GroupByHistogramResultItem',
 ]
 
 

@@ -1,10 +1,14 @@
 Aliyun Tablestore SDK for Python
 ==================================
 
-.. image:: https://img.shields.io/badge/license-apache2-brightgreen.svg
+.. image:: https://badge.fury.io/py/tablestore.svg
+    :target: https://badge.fury.io/py/tablestore
+.. image:: https://img.shields.io/badge/license-mit-brightgreen.svg
     :target: https://travis-ci.org/aliyun/aliyun-tablestore-python-sdk
 .. image:: https://badge.fury.io/gh/aliyun%2Faliyun-tablestore-python-sdk.svg
     :target: https://travis-ci.org/aliyun/aliyun-tablestore-python-sdk
+.. image:: https://coveralls.io/repos/github/aliyun/aliyun-tablestore-python-sdk/badge.svg?branch=master
+    :target: https://coveralls.io/github/aliyun/aliyun-tablestore-python-sdk?branch=master
 .. image:: https://travis-ci.org/aliyun/aliyun-tablestore-python-sdk.svg
     :target: https://travis-ci.org/aliyun/aliyun-tablestore-python-sdk
 
@@ -72,10 +76,11 @@ Github安装
 - `全局二级索引 <https://github.com/aliyun/aliyun-tablestore-python-sdk/blob/master/examples/secondary_index_operations.py>`_
 - `局部事务（提交事务） <https://github.com/aliyun/aliyun-tablestore-python-sdk/blob/master/examples/transaction_and_commit.py>`_
 - `局部事务（舍弃事务） <https://github.com/aliyun/aliyun-tablestore-python-sdk/blob/master/examples/transaction_and_abort.py>`_
+
 - `Search <https://github.com/aliyun/aliyun-tablestore-python-sdk/blob/master/examples/search_index.py>`_
 - `Parallel Scan <https://github.com/aliyun/aliyun-tablestore-python-sdk/blob/master/examples/parallel_scan.py>`_
-- `Max/Min/Sum/Avg/Count/DistinctCount <https://github.com/aliyun/aliyun-tablestore-python-sdk/blob/master/examples/agg.py>`_
-- `GroupBy <https://github.com/aliyun/aliyun-tablestore-python-sdk/blob/master/examples/group_by.py>`_
+- `Max/Min/Sum/Avg/Count/DistinctCount/Percentiles <https://github.com/aliyun/aliyun-tablestore-python-sdk/blob/master/examples/agg.py>`_
+- `GroupBy/Histogram <https://github.com/aliyun/aliyun-tablestore-python-sdk/blob/master/examples/group_by.py>`_
 
 执行测试
 ---------

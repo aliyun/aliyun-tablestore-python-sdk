@@ -183,7 +183,27 @@ def distinct_count_agg(table_name, index_name):
 
 """
 
-Sample 7:
+Sample 7: Percentiles
+
+"""        
+def percentiles_agg(table_name, index_name):
+    print('**** Begin Sample 7 ****\n')
+
+    query = TermQuery('d', 0.1)
+    agg = Percentiles('l', percentiles_list = [50, 90, 95])
+
+    search_response = client.search(table_name, index_name,
+                                    SearchQuery(query, next_token = None, limit=2, aggs=[agg]),
+                                    columns_to_get = ColumnsToGet(return_type = ColumnReturnType.ALL_FROM_INDEX))
+
+    for agg_result in search_response.agg_results:
+        print('percentiles:%s' % agg_result.name)
+        for item in agg_result.value:
+            print('%s:%s' % (str(item.key), str(item.value)))
+
+"""
+
+Sample 8:
 
 SQL: SELECT TOP 3 FROM AggExampleTable.search_index_agg WHERE d = 0.1 
 
@@ -194,7 +214,7 @@ Result:
 
 """    
 def top_rows_agg(table_name, index_name):
-    print('**** Begin Sample 7 ****\n')
+    print('**** Begin Sample 8 ****\n')
 
     query = TermQuery('d', 0.1)
     agg = TopRows(limit = 3, sort = Sort([PrimaryKeySort()]))
@@ -208,7 +228,7 @@ def top_rows_agg(table_name, index_name):
 
 """
 
-Sample 8:
+Sample 9:
 
 SQL: SELECT SUM(l) as s1, SUM(n.nl) as s2, COUNT(l) as c1 FROM AggExampleTable.search_index_agg WHERE d = 0.1 
 
@@ -219,7 +239,7 @@ c1 : 9
 
 """
 def multiple_agg(table_name, index_name):
-    print('**** Begin Sample 8 ****\n')
+    print('**** Begin Sample 9 ****\n')
 
     query = TermQuery('d', 0.1)
     agg1 = Sum('l', name = 's1')
@@ -309,10 +329,11 @@ if __name__ == '__main__':
     # perform queries
     max_agg(table_name, index_name)
     min_agg(table_name, index_name)
-    sum_agg(table_name, index_name)
     avg_agg(table_name, index_name)
+    sum_agg(table_name, index_name)
     count_agg(table_name, index_name)
     distinct_count_agg(table_name, index_name)
+    percentiles_agg(table_name, index_name)
     top_rows_agg(table_name, index_name) 
     multiple_agg(table_name, index_name)
 

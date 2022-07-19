@@ -8,6 +8,11 @@ import copy
 from tablestore.error import *
 import math
 import time
+import sys
+
+if sys.getdefaultencoding() != 'utf-8':
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
 
 class RowOpTest(APITestBase):
 

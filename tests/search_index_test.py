@@ -68,6 +68,7 @@ class SearchIndexTest(APITestBase):
         field_a = FieldSchema('k', FieldType.KEYWORD, index=True, enable_sort_and_agg=True, store=True)
         field_b = FieldSchema('t', FieldType.TEXT, index=True, store=True, analyzer=AnalyzerType.SINGLEWORD)
         field_c = FieldSchema('g', FieldType.GEOPOINT, index=True, store=True)
+        field_t = FieldSchema('time', FieldType.DATE, index=True, store=True, date_formats = ["yyyy-MM-dd"])
         field_d = FieldSchema('ka', FieldType.KEYWORD, index=True, is_array=True, store=True)
         nested_field = FieldSchema('n', FieldType.NESTED, sub_field_schemas=
             [
@@ -76,7 +77,7 @@ class SearchIndexTest(APITestBase):
                 FieldSchema('ng', FieldType.GEOPOINT, index=True, store=True, enable_sort_and_agg=True)
                 ])
         # search index 1: simple schema
-        fields = [field_a, field_b, field_c, field_d]
+        fields = [field_a, field_b, field_c, field_d, field_t]
         index_name_1 = 'search_index_1'
         index_meta_1 = SearchIndexMeta(fields, index_setting=None, index_sort=None)
         self.client_test.create_search_index(table_name, index_name_1, index_meta_1)
@@ -197,7 +198,7 @@ class SearchIndexTest(APITestBase):
         query = MatchQuery('t', 'this is 0', minimum_should_match=1, operator=QueryOperator.AND)
         self._check_query_result(self.client_test.search(
             table_name, index_name, SearchQuery(query, limit=100, get_total_count=True), ColumnsToGet(return_type=ColumnReturnType.ALL)
-        ), 0, False, 0)
+        ), 1, False, 1)
 
     def _test_match_phrase_query(self, table_name, index_name):
         query = MatchPhraseQuery('t', 'this is')
@@ -214,6 +215,13 @@ class SearchIndexTest(APITestBase):
         self._check_query_result(self.client_test.search(
             table_name, index_name, SearchQuery(query, limit=100, get_total_count=True), ColumnsToGet(return_type=ColumnReturnType.ALL)
         ), 1, False, 1)
+
+    def _test_fuzzy_query(self, table_name, index_name):
+        query = MatchPhraseQuery('name', '苏')
+        self._check_query_result(self.client_test.search(
+            table_name, index_name, SearchQuery(query, limit=100, get_total_count=True), ColumnsToGet(return_type=ColumnReturnType.ALL)
+        ), 100, True, 190)
+
 
     def _test_term_query(self, table_name, index_name):
         query = TermQuery('k', 'key000')
@@ -266,6 +274,11 @@ class SearchIndexTest(APITestBase):
         self._check_query_result(self.client_test.search(
             table_name, index_name, SearchQuery(query, limit=100, get_total_count=True), ColumnsToGet(return_type=ColumnReturnType.ALL)
         ), 100, True, 201)
+
+        query = RangeQuery('time', '2022-05-06', '2022-05-12', include_lower=True, include_upper=True)
+        self._check_query_result(self.client_test.search(
+            table_name, index_name, SearchQuery(query, limit=100, get_total_count=True), ColumnsToGet(return_type=ColumnReturnType.ALL)
+        ), 96, False, 96)
 
     def _check_query_result(self, search_response, rows_count, has_next_token, expect_total_count):
         self.assert_equal(len(search_response.rows), rows_count)
@@ -525,6 +538,7 @@ class SearchIndexTest(APITestBase):
         self._test_match_all_query(table_name, index_name)
         self._test_match_query(table_name, index_name)
         self._test_match_phrase_query(table_name, index_name)
+        self._test_fuzzy_query(table_name, index_name)
         self._test_term_query(table_name, index_name)
         self._test_range_query(table_name, index_name)
         self._test_prefix_query(table_name, index_name)
@@ -541,6 +555,7 @@ class SearchIndexTest(APITestBase):
         self._test_search_with_routing_keys(table_name, index_name)
 
     def _prepare_data(self, table_name, rows_count):
+        name_list= u'马尔代夫巴厘岛苏梅岛'
         for i in range(rows_count):
             pk = [('PK1', i), ('PK2', 'pk_' + str(i % 10))]
             lj = int(i / 100)
@@ -548,7 +563,8 @@ class SearchIndexTest(APITestBase):
             cols = [('k', 'key%03d' % i), ('t', 'this is ' + str(i)),
                 ('g', '%f,%f' % (30.0 + 0.05 * lj, 114.0 + 0.05 * li)), ('ka', '["a", "b", "%d"]' % i),
                 ('la', '[-1, %d]' % i), ('l', i),
-                ('b', i % 2 == 0), ('d', 0.1),
+                ('name', name_list[int(i/100)] + name_list[i%10]),
+                ('b', i % 2 == 0), ('d', 0.1), ('time', '2022-05-%d' % (i%31+1)),
                 ('n', json.dumps([{'nk':'key%03d' % i, 'nl':i, 'nt':'this is in nested ' + str(i)}]))]
 
             self.client_test.put_row(table_name, Row(pk, cols))
@@ -570,6 +586,9 @@ class SearchIndexTest(APITestBase):
         field_f = FieldSchema('l', FieldType.LONG, index=True, store=True)
         field_g = FieldSchema('b', FieldType.BOOLEAN, index=True, store=True)
         field_h = FieldSchema('d', FieldType.DOUBLE, index=True, store=True)
+        field_t = FieldSchema('time', FieldType.DATE, index=True, store=True, date_formats = ['yyyy-MM-dd'])
+        field_j = FieldSchema('name', FieldType.TEXT, index=True, store=True, analyzer=AnalyzerType.FUZZY, analyzer_parameter=FuzzyAnalyzerParameter())
+
         if with_nested:
             field_n = FieldSchema('n', FieldType.NESTED, sub_field_schemas=[
                 FieldSchema('nk', FieldType.KEYWORD, index=True, store=True),
@@ -577,7 +596,7 @@ class SearchIndexTest(APITestBase):
                 FieldSchema('nt', FieldType.TEXT, index=True, store=True),
             ])
 
-        fields = [field_a, field_b, field_c, field_d, field_e, field_f, field_g, field_h]
+        fields = [field_a, field_b, field_c, field_d, field_e, field_f, field_g, field_h, field_j, field_t]
         if with_nested:
             fields.append(field_n)
         index_setting = IndexSetting(routing_fields=['PK1'])

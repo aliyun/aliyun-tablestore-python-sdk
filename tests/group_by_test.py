@@ -1,12 +1,13 @@
 # -*- coding: utf8 -*-
 
-import unittest
 from lib.api_test_base import APITestBase
 from tablestore import *
 from tablestore.error import *
+import sys
 import time
 import logging
 import json
+import unittest
 
 class GroupByTest(APITestBase):
     def setUp(self):
@@ -20,7 +21,7 @@ class GroupByTest(APITestBase):
         self._prepare_index()
         self._prepare_data()
 
-        time.sleep(30) 
+        time.sleep(60) 
 
     def _prepare_data(self):
         for i in range(self.rows_count):
@@ -30,7 +31,7 @@ class GroupByTest(APITestBase):
             cols = [('k', 'key%03d' % i), ('t', 'this is ' + str(i)),
                 ('g', '%f,%f' % (30.0 + 0.05 * lj, 114.0 + 0.05 * li)), ('ka', '["a", "b", "%d"]' % i),
                 ('la', '[-1, %d]' % i), ('l', i%3),
-                ('b', i % 2 == 0), ('d', 0.1),
+                ('b', i % 2 == 0), ('d', 0.1), ('time', '2022-05-%d' % (i%31+1)),
                 ('n', json.dumps([{'nk':'key%03d' % i, 'nl':i, 'nt':'this is in nested ' + str(i)}]))]
 
             self.client_test.put_row(self.table_name, Row(pk, cols))
@@ -52,7 +53,8 @@ class GroupByTest(APITestBase):
         field_f = FieldSchema('l', FieldType.LONG, index=True, store=True)
         field_g = FieldSchema('b', FieldType.BOOLEAN, index=True, store=True)
         field_h = FieldSchema('d', FieldType.DOUBLE, index=True, store=True)
-        fields = [field_a, field_b, field_c, field_d, field_e, field_f, field_g, field_h]
+        field_t = FieldSchema('time', FieldType.DATE, index=True, store=True, date_formats = ['yyyy-MM-dd'])
+        fields = [field_a, field_b, field_c, field_d, field_e, field_f, field_g, field_h, field_t]
 
         field_n = FieldSchema('n', FieldType.NESTED, sub_field_schemas=[
             FieldSchema('nk', FieldType.KEYWORD, index=True, store=True),
@@ -73,14 +75,14 @@ class GroupByTest(APITestBase):
             ColumnsToGet(return_type=ColumnReturnType.NONE))
         
         self.assertTrue(search_response.is_all_succeed)
-        self.assert_equal(1, len(group_by_results))
-        self.assert_equal(3, len(group_by_results[0].items))
-        self.assert_equal('0', group_by_results[0].items[0].key)
-        self.assert_equal(34, group_by_results[0].items[0].row_count)
-        self.assert_equal('1', group_by_results[0].items[1].key)
-        self.assert_equal(33, group_by_results[0].items[1].row_count)
-        self.assert_equal('2', group_by_results[0].items[2].key)
-        self.assert_equal(33, group_by_results[0].items[2].row_count)
+        self.assert_equal(1, len(search_response.group_by_results))
+        self.assert_equal(3, len(search_response.group_by_results[0].items))
+        self.assert_equal('0', search_response.group_by_results[0].items[0].key)
+        self.assert_equal(34, search_response.group_by_results[0].items[0].row_count)
+        self.assert_equal('1', search_response.group_by_results[0].items[1].key)
+        self.assert_equal(33, search_response.group_by_results[0].items[1].row_count)
+        self.assert_equal('2', search_response.group_by_results[0].items[2].key)
+        self.assert_equal(33, search_response.group_by_results[0].items[2].row_count)
 
         # group by l
         group_by = GroupByField('l', size = 2, group_by_sort = [RowCountSort(sort_order=SortOrder.ASC)])
@@ -89,12 +91,12 @@ class GroupByTest(APITestBase):
             ColumnsToGet(return_type=ColumnReturnType.NONE))
         
         self.assertTrue(search_response.is_all_succeed)
-        self.assert_equal(1, len(group_by_results))
-        self.assert_equal(2, len(group_by_results[0].items))
-        self.assert_equal('1', group_by_results[0].items[0].key)
-        self.assert_equal(33, group_by_results[0].items[0].row_count)
-        self.assert_equal('2', group_by_results[0].items[1].key)
-        self.assert_equal(33, group_by_results[0].items[1].row_count)
+        self.assert_equal(1, len(search_response.group_by_results))
+        self.assert_equal(2, len(search_response.group_by_results[0].items))
+        self.assert_equal('1', search_response.group_by_results[0].items[0].key)
+        self.assert_equal(33, search_response.group_by_results[0].items[0].row_count)
+        self.assert_equal('2', search_response.group_by_results[0].items[1].key)
+        self.assert_equal(33, search_response.group_by_results[0].items[1].row_count)
 
         # group by l
         sort = RowCountSort(sort_order = SortOrder.ASC)
@@ -113,12 +115,12 @@ class GroupByTest(APITestBase):
         self.assert_equal(1, len(search_response.group_by_results[0].items[0].sub_aggs))
         self.assert_equal('t1', search_response.group_by_results[0].items[0].sub_aggs[0].name)
         self.assert_equal(3, len(search_response.group_by_results[0].items[0].sub_aggs[0].value))
-        self.assert_equal("([(u'PK1', 97), (u'PK2', u'pk_7')], [])", 
-                          str(search_response.group_by_results[0].items[0].sub_aggs[0].value[0]))
-        self.assert_equal("([(u'PK1', 94), (u'PK2', u'pk_4')], [])", 
-                          str(search_response.group_by_results[0].items[0].sub_aggs[0].value[1]))
-        self.assert_equal("([(u'PK1', 91), (u'PK2', u'pk_1')], [])", 
-                          str(search_response.group_by_results[0].items[0].sub_aggs[0].value[2]))
+        self.assert_equal(([('PK1', 97), ('PK2', 'pk_7')], []), 
+                          search_response.group_by_results[0].items[0].sub_aggs[0].value[0])
+        self.assert_equal(([('PK1', 94), ('PK2', 'pk_4')], []), 
+                          search_response.group_by_results[0].items[0].sub_aggs[0].value[1])
+        self.assert_equal(([('PK1', 91), ('PK2', 'pk_1')], []), 
+                          search_response.group_by_results[0].items[0].sub_aggs[0].value[2])
 
         self.assert_equal('2', search_response.group_by_results[0].items[1].key)
         self.assert_equal(33, search_response.group_by_results[0].items[1].row_count)
@@ -176,9 +178,40 @@ class GroupByTest(APITestBase):
         self.assert_equal(1000000, search_response.group_by_results[0].items[1].range_to)
         self.assert_equal(1, search_response.group_by_results[0].items[1].row_count)
 
+    def test_group_by_histogram(self):
+        # group by long type
+        group_by = GroupByHistogram(field_name = 'l', interval = 2, field_range=FieldRange(0,3))
+        search_response = self.client_test.search(self.table_name, self.index_name, 
+            SearchQuery(TermQuery('d', 0.1), limit=100, get_total_count=True, group_bys = [group_by]), 
+            ColumnsToGet(return_type=ColumnReturnType.NONE))
+        
+        self.assertTrue(search_response.is_all_succeed)
+        self.assert_equal(1, len(search_response.group_by_results))
+        self.assert_equal(2, len(search_response.group_by_results[0].items))
+        self.assert_equal(0, search_response.group_by_results[0].items[0].key)
+        self.assert_equal(67, search_response.group_by_results[0].items[0].value)
+        self.assert_equal(2, search_response.group_by_results[0].items[1].key)
+        self.assert_equal(33, search_response.group_by_results[0].items[1].value)
+
+        # group by double type
+        group_by = GroupByHistogram(field_name = 'd', interval = 2.0, field_range=FieldRange(0.0,3.0))
+        search_response = self.client_test.search(self.table_name, self.index_name, 
+            SearchQuery(TermQuery('d', 0.1), limit=100, get_total_count=True, group_bys = [group_by]), 
+            ColumnsToGet(return_type=ColumnReturnType.NONE))
+        
+        self.assertTrue(search_response.is_all_succeed)
+        self.assert_equal(1, len(search_response.group_by_results))
+        self.assert_equal(1, len(search_response.group_by_results[0].items))
+        self.assert_equal(0, search_response.group_by_results[0].items[0].key)
+        self.assert_equal(100, search_response.group_by_results[0].items[0].value)
+
     def test_group_by_exception(self):
-        self._do_test_group_by_exception(GroupByField('l', group_by_sort=[444]), 
-                                         "Invalid sort type:<type 'int'>")
+        if sys.version_info[0]==2:
+            self._do_test_group_by_exception(GroupByField('l', group_by_sort=[444]), 
+                                             "Invalid sort type:<type 'int'>")
+        elif sys.version_info[0]==3:
+            self._do_test_group_by_exception(GroupByField('l', group_by_sort=[444]), 
+                                             "Invalid sort type:<class 'int'>")            
         self._do_test_group_by_exception(GroupByRange('l', ranges=[('a',11),(34.5,True)]), 
                                          "range.begin and range.end must be integer or float")
         self._do_test_group_by_exception(GroupByRange('l', ranges=[(1,11,34),(34.5)]), 
@@ -189,7 +222,6 @@ class GroupByTest(APITestBase):
                                          "GroupByGeoDistance:origin must not be None and must be GeoPoint")
         self._do_test_group_by_exception(GroupByGeoDistance('g', origin = GeoPoint(31, 115), ranges=[1000]), 
                                          "GroupByGeoDistance:range must be tuple, and length must equal 2")
-
 
     def _do_test_group_by_exception(self, group_by, error_message):
         try:

@@ -49,12 +49,17 @@ class APITestBase(TestCase):
 
         time.sleep(1) # to avoid too frequent table operations
         #return # for test, skip delete
-        for table_name in self.client_test.list_table():
-            if table_name.find(self.get_python_version()) != -1:
-                for table_name, index_name in self.client_test.list_search_index(table_name):
-                    self.client_test.delete_search_index(table_name, index_name)
 
-                self.client_test.delete_table(table_name)
+        try:
+            for table_name in self.client_test.list_table():
+                if table_name.find(self.get_python_version()) != -1:
+                    for table_name, index_name in self.client_test.list_search_index(table_name):
+                        self.client_test.delete_search_index(table_name, index_name)
+                        time.sleep(2)
+
+                    self.client_test.delete_table(table_name)
+        except:
+            pass
 
     def tearDown(self):
         pass
@@ -350,3 +355,5 @@ class APITestBase(TestCase):
         return python_version
 
 
+    def timestamp_ms_to_date(self, time_format, timestamp):
+        return time.strftime(time_format, time.gmtime(timestamp))

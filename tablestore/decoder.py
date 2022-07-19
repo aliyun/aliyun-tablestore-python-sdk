@@ -33,6 +33,7 @@ class OTSProtoBufferDecoder(object):
             'DeleteSearchIndex'     : self._decode_delete_search_index,
             'DescribeSearchIndex'   : self._decode_describe_search_index,
             'CreateSearchIndex'     : self._decode_create_search_index,
+            'UpdateSearchIndex'     : self._decode_update_search_index,
             'Search'                : self._decode_search,
             'ComputeSplits'         : self._decode_compute_splits,
             'ParallelScan'          : self._decode_parallel_scan,
@@ -135,7 +136,11 @@ class OTSProtoBufferDecoder(object):
         time_to_live = proto.time_to_live
         max_versions = proto.max_versions
         max_deviation_time  = proto.deviation_cell_version_in_sec
-        return TableOptions(time_to_live, max_versions, max_deviation_time)
+
+        allow_update = True
+        if proto.HasField('allow_update'):
+            allow_update = proto.allow_update
+        return TableOptions(time_to_live, max_versions, max_deviation_time, allow_update)
 
 
     def _parse_get_row_item(self, proto, table_name):
@@ -171,9 +176,9 @@ class OTSProtoBufferDecoder(object):
         return row_list
 
     def _parse_batch_get_row(self, proto):
-        rows = []
+        rows = {}
         for table_item in proto:
-            rows.append(self._parse_get_row_item(table_item.rows, table_item.table_name))
+            rows[table_item.table_name] = self._parse_get_row_item(table_item.rows, table_item.table_name)
         return rows
 
     def _parse_write_row_item(self, row_item):
@@ -213,18 +218,18 @@ class OTSProtoBufferDecoder(object):
                 result_list[table_name].append(row)
         return result_list
 
-    def _decode_create_table(self, body):
+    def _decode_create_table(self, body, request_id):
         proto = pb.CreateTableResponse()
         proto.ParseFromString(body)
         return None, proto
 
-    def _decode_list_table(self, body):
+    def _decode_list_table(self, body, request_id):
         proto = pb.ListTableResponse()
         proto.ParseFromString(body)
         names = tuple(proto.table_names)
         return names, proto
 
-    def _decode_delete_table(self, body):
+    def _decode_delete_table(self, body, request_id):
         proto = pb.DeleteTableResponse()
         proto.ParseFromString(body)
         return None, proto
@@ -270,7 +275,7 @@ class OTSProtoBufferDecoder(object):
 
         return defined_columns
 
-    def _decode_describe_table(self, body):
+    def _decode_describe_table(self, body, request_id):
         proto = pb.DescribeTableResponse()
         proto.ParseFromString(body)
 
@@ -288,19 +293,21 @@ class OTSProtoBufferDecoder(object):
         table_options = self._parse_table_options(proto.table_options)
         secondary_indexes = self._parse_secondary_indexes(proto.index_metas)
         describe_table_response = DescribeTableResponse(table_meta, table_options, reserved_throughput_details, secondary_indexes)
+        describe_table_response.set_request_id(request_id)
         return describe_table_response, proto
 
-    def _decode_update_table(self, body):
+    def _decode_update_table(self, body, request_id):
         proto = pb.UpdateTableResponse()
         proto.ParseFromString(body)
 
         reserved_throughput_details = self._parse_reserved_throughput_details(proto.reserved_throughput_details)
         table_options = self._parse_table_options(proto.table_options)
         update_table_response = UpdateTableResponse(reserved_throughput_details, table_options)
+        update_table_response.set_request_id(request_id)
 
         return update_table_response, proto
 
-    def _decode_get_row(self, body):
+    def _decode_get_row(self, body, request_id):
         proto = pb.GetRowResponse()
         proto.ParseFromString(body)
 
@@ -317,7 +324,7 @@ class OTSProtoBufferDecoder(object):
 
         return (consumed, return_row, next_token), proto
 
-    def _decode_put_row(self, body):
+    def _decode_put_row(self, body, request_id):
         proto = pb.PutRowResponse()
         proto.ParseFromString(body)
 
@@ -333,7 +340,7 @@ class OTSProtoBufferDecoder(object):
 
         return (consumed, return_row), proto
 
-    def _decode_update_row(self, body):
+    def _decode_update_row(self, body, request_id):
         proto = pb.UpdateRowResponse()
         proto.ParseFromString(body)
 
@@ -349,7 +356,7 @@ class OTSProtoBufferDecoder(object):
 
         return (consumed, return_row), proto
 
-    def _decode_delete_row(self, body):
+    def _decode_delete_row(self, body, request_id):
         proto = pb.DeleteRowResponse()
         proto.ParseFromString(body)
 
@@ -366,21 +373,21 @@ class OTSProtoBufferDecoder(object):
         return (consumed, return_row), proto
 
 
-    def _decode_batch_get_row(self, body):
+    def _decode_batch_get_row(self, body, request_id):
         proto = pb.BatchGetRowResponse()
         proto.ParseFromString(body)
 
         rows = self._parse_batch_get_row(proto.tables)
         return rows, proto
 
-    def _decode_batch_write_row(self, body):
+    def _decode_batch_write_row(self, body, request_id):
         proto = pb.BatchWriteRowResponse()
         proto.ParseFromString(body)
 
         rows = self._parse_batch_write_row(proto.tables)
         return rows, proto
 
-    def _decode_get_range(self, body):
+    def _decode_get_range(self, body, request_id):
         proto = pb.GetRangeResponse()
         proto.ParseFromString(body)
 
@@ -402,12 +409,12 @@ class OTSProtoBufferDecoder(object):
 
         return (capacity_unit, next_start_pk, row_list, next_token), proto
 
-    def decode_response(self, api_name, response_body):
+    def decode_response(self, api_name, response_body, request_id):
         if api_name not in self.api_decode_map:
             raise OTSClientError("No PB decode method for API %s" % api_name)
 
         handler = self.api_decode_map[api_name]
-        return handler(response_body)
+        return handler(response_body, request_id)
 
     def _parse_index_info(self, proto):
         return (proto.table_name, proto.index_name)
@@ -428,8 +435,8 @@ class OTSProtoBufferDecoder(object):
             field_type = FieldType.NESTED
         elif proto == search_pb.GEO_POINT:
             field_type = FieldType.GEOPOINT
-        else:
-            raise OTSClientError("Unknown field type: %d" % proto)
+        elif proto == search_pb.DATE:
+            field_type = FieldType.DATE
 
         return field_type
 
@@ -438,14 +445,54 @@ class OTSProtoBufferDecoder(object):
         for sub_field_schema_proto in proto.field_schemas:
             sub_field_schemas.append(self._parse_field_schema(sub_field_schema_proto))
 
+        date_formats = []
+        for df in proto.date_formats:
+            date_formats.append(df)
+
+        is_virtual_field = False
+        source_fields = []
+
+        if proto.HasField('is_virtual_field'):
+            is_virtual_field = proto.is_virtual_field
+
+            for source_field in proto.source_field_names:
+                source_fields.append(source_field)
+
+        analyzer_parameter = None
+        if proto.HasField('analyzer_parameter') and len(proto.analyzer_parameter) > 0:
+            analyzer_parameter = self._parse_analyzer_parameter(proto.analyzer, proto.analyzer_parameter)
+
         field_schema = FieldSchema(
             proto.field_name, self._parse_field_type(proto.field_type),
             index=proto.index, store=proto.store, is_array=proto.is_array,
             enable_sort_and_agg=proto.enable_sort_and_agg,
             analyzer=proto.analyzer, sub_field_schemas=sub_field_schemas,
+            analyzer_parameter=analyzer_parameter, date_formats=date_formats,
+            is_virtual_field = is_virtual_field, source_fields = source_fields
         )
 
         return field_schema
+
+    def _parse_analyzer_parameter(self, analyzer, analyzer_parameter):
+        try:
+            if analyzer == AnalyzerType.SINGLEWORD:
+                parameter = search_pb.SingleWordAnalyzerParameter()
+                parameter.ParseFromString(analyzer_parameter)
+                return SingleWordAnalyzerParameter(parameter.case_sensitive, parameter.delimit_word)
+            elif analyzer == AnalyzerType.SPLIT:
+                parameter = search_pb.SplitAnalyzerParameter()
+                parameter.ParseFromString(analyzer_parameter)
+                return SplitAnalyzerParameter(parameter.delimiter)
+            elif analyzer == AnalyzerType.FUZZY:
+                parameter = search_pb.FuzzyAnalyzerParameter()
+                parameter.ParseFromString(analyzer_parameter)
+                return FuzzyAnalyzerParameter(parameter.min_chars, parameter.max_chars)
+            else:
+                return None
+        except Exception as e:
+            error_message = 'parse analyzer_parameter failed, please contact tablestore, exception:%s, request_id: %s.' % (str(e), request_id)
+            self.logger.error(error_message)
+            raise e
 
     def _parse_sort_order(self, proto):
         if proto is None:
@@ -532,7 +579,7 @@ class OTSProtoBufferDecoder(object):
         sync_stat = SyncStat(SyncPhase.FULL if proto.sync_phase == search_pb.FULL else SyncPhase.INCR, proto.current_sync_timestamp)
         return sync_stat
 
-    def _decode_list_search_index(self, body):
+    def _decode_list_search_index(self, body, request_id):
         proto = search_pb.ListSearchIndexResponse()
         proto.ParseFromString(body)
 
@@ -541,28 +588,35 @@ class OTSProtoBufferDecoder(object):
             indices.append(self._parse_index_info(index))
         return indices, proto
 
-    def _decode_describe_search_index(self, body):
+    def _decode_describe_search_index(self, body, request_id):
         proto = search_pb.DescribeSearchIndexResponse()
         proto.ParseFromString(body)
 
         index_meta = self._parse_index_meta(proto.schema)
         sync_stat = self._parse_sync_stat(proto.sync_stat)
+        index_meta.time_to_live = proto.time_to_live
 
         return (index_meta, sync_stat), proto
 
-    def _decode_create_search_index(self, body):
+    def _decode_create_search_index(self, body, request_id):
         proto = search_pb.CreateSearchIndexResponse()
         proto.ParseFromString(body)
 
         return None, proto
 
-    def _decode_delete_search_index(self, body):
+    def _decode_update_search_index(self, body, request_id):
+        proto = search_pb.UpdateSearchIndexResponse()
+        proto.ParseFromString(body)
+
+        return None, proto
+
+    def _decode_delete_search_index(self, body, request_id):
         proto = search_pb.DeleteSearchIndexResponse()
         proto.ParseFromString(body)
 
         return None, proto
 
-    def _decode_search(self, body):
+    def _decode_search(self, body, request_id):
         proto = search_pb.SearchResponse()
         proto.ParseFromString(body)
         rows = []
@@ -588,6 +642,7 @@ class OTSProtoBufferDecoder(object):
 
         search_response = SearchResponse(rows, agg_results, group_by_results, 
                                          proto.next_token, is_all_succeed, total_count)
+        search_response.set_request_id(request_id)
         return (search_response), proto
 
     def _decode_agg_results(self, proto_result, agg_results):
@@ -604,32 +659,32 @@ class OTSProtoBufferDecoder(object):
                 items = self._decode_group_by(group_result.type, group_result.group_by_result)
                 group_by_results.append(GroupByResult(name, items))
 
-    def _decode_agg(self, type, body):
-        if search_pb.AGG_AVG == type:
+    def _decode_agg(self, agg_type, body):
+        if search_pb.AGG_AVG == agg_type:
             proto = search_pb.AvgAggregationResult()
             proto.ParseFromString(body)
             return proto.value
-        elif search_pb.AGG_MAX == type:
+        elif search_pb.AGG_MAX == agg_type:
             proto = search_pb.MaxAggregationResult()
             proto.ParseFromString(body)
             return proto.value
-        elif search_pb.AGG_MIN == type:
+        elif search_pb.AGG_MIN == agg_type:
             proto = search_pb.MinAggregationResult()
             proto.ParseFromString(body)
             return proto.value
-        elif search_pb.AGG_SUM == type:
+        elif search_pb.AGG_SUM == agg_type:
             proto = search_pb.SumAggregationResult()
             proto.ParseFromString(body)
             return proto.value
-        elif search_pb.AGG_COUNT == type:
+        elif search_pb.AGG_COUNT == agg_type:
             proto = search_pb.CountAggregationResult()
             proto.ParseFromString(body)
             return proto.value
-        elif search_pb.AGG_DISTINCT_COUNT == type:
+        elif search_pb.AGG_DISTINCT_COUNT == agg_type:
             proto = search_pb.DistinctCountAggregationResult()
             proto.ParseFromString(body)
             return proto.value
-        elif search_pb.AGG_TOP_ROWS == type:
+        elif search_pb.AGG_TOP_ROWS == agg_type:
             proto = search_pb.TopRowsAggregationResult()
             proto.ParseFromString(body)
             rows = []
@@ -639,11 +694,18 @@ class OTSProtoBufferDecoder(object):
                 primary_key_columns, attribute_columns = codedInputStream.read_row()
                 rows.append((primary_key_columns, attribute_columns))
             return rows
+        elif search_pb.AGG_PERCENTILES == agg_type:
+            proto = search_pb.PercentilesAggregationResult()
+            proto.ParseFromString(body)
+            percentiles = []
+            for percentile in proto.percentiles_aggregation_items:
+                percentiles.append(PercentilesResultItem(percentile.key, self._decode_column_value(percentile.value)))
+            return percentiles
         else:
-            raise OTSClientError('unsupport type:%s' % str(type))
+            raise OTSClientError('unsupport aggregation type:%s' % str(agg_type))
 
-    def _decode_group_by(self, type, body):
-        if search_pb.GROUP_BY_FIELD == type:
+    def _decode_group_by(self, groupby_type, body):
+        if search_pb.GROUP_BY_FIELD == groupby_type:
             proto = search_pb.GroupByFieldResult()
             proto.ParseFromString(body)
 
@@ -659,7 +721,7 @@ class OTSProtoBufferDecoder(object):
                 result_items.append(result_item)
             return result_items
 
-        elif search_pb.GROUP_BY_RANGE == type:
+        elif search_pb.GROUP_BY_RANGE == groupby_type:
             proto = search_pb.GroupByRangeResult()
             proto.ParseFromString(body)
 
@@ -674,7 +736,7 @@ class OTSProtoBufferDecoder(object):
                                                      sub_agg_results, sub_group_by_results)
                 result_items.append(result_item)
             return result_items
-        elif search_pb.GROUP_BY_FILTER == type:
+        elif search_pb.GROUP_BY_FILTER == groupby_type:
             proto = search_pb.GroupByFilterResult()
             proto.ParseFromString(body)
 
@@ -689,7 +751,7 @@ class OTSProtoBufferDecoder(object):
                                                       sub_agg_results, sub_group_by_results)
                 result_items.append(result_item)
             return result_items
-        elif search_pb.GROUP_BY_GEO_DISTANCE == type:
+        elif search_pb.GROUP_BY_GEO_DISTANCE == groupby_type:
             proto = search_pb.GroupByGeoDistanceResult()
             proto.ParseFromString(body)
 
@@ -704,10 +766,42 @@ class OTSProtoBufferDecoder(object):
                                                            sub_agg_results, sub_group_by_results)
                 result_items.append(result_item)
             return result_items
-        else:
-            raise OTSClientError('unsupport type:%s' % str(type))
+        elif search_pb.GROUP_BY_HISTOGRAM == groupby_type:
+            proto = search_pb.GroupByHistogramResult()
+            proto.ParseFromString(body)
 
-    def _decode_compute_splits(self, body):
+            result_items = []
+            for item in proto.group_by_histogra_items:
+                sub_group_by_results = []
+                sub_agg_results = []
+                self._decode_group_by_results(item.sub_group_bys_result, sub_group_by_results)
+                self._decode_agg_results(item.sub_aggs_result, sub_agg_results)
+                
+                result_item = GroupByHistogramResultItem(self._decode_column_value(item.key), item.value,
+                                                         sub_agg_results, sub_group_by_results)
+                result_items.append(result_item)
+            return result_items
+        else:
+            raise OTSClientError('unsupport group by type:%s' % str(groupby_type))
+
+    def _decode_column_value(self, value):
+        if len(value) == 0:
+            raise OTSClientError('value length is 0')
+
+        cell_type = value[0]
+        if python_version == 2:
+            cell_type = ord(cell_type)
+
+        if cell_type == VT_INTEGER:
+            return struct.unpack('<q', value[1:9])[0]
+        elif cell_type == VT_DOUBLE:
+            return struct.unpack('d', value[1:9])[0]
+        elif cell_type == VT_BOOLEAN:
+            return struct.unpack('<?', value[1:2])[0]
+        else:
+            return value[1:]
+
+    def _decode_compute_splits(self, body, request_id):
         proto = search_pb.ComputeSplitsResponse()
         proto.ParseFromString(body)
 
@@ -715,9 +809,10 @@ class OTSProtoBufferDecoder(object):
         splits_size = proto.splits_size
 
         compute_splits_response = ComputeSplitsResponse(session_id, splits_size)
+        compute_splits_response.set_request_id(request_id)
         return compute_splits_response, proto
 
-    def _decode_parallel_scan(self, body):
+    def _decode_parallel_scan(self, body, request_id):
         proto = search_pb.ParallelScanResponse()
         proto.ParseFromString(body)
         rows = []
@@ -728,21 +823,22 @@ class OTSProtoBufferDecoder(object):
             rows.append((primary_key_columns, attribute_columns))
 
         response = ParallelScanResponse(rows, proto.next_token)
+        response.set_request_id(request_id)
         return response, proto
 
-    def _decode_create_index(self, body):
+    def _decode_create_index(self, body, request_id):
         proto = pb.CreateIndexResponse()
         proto.ParseFromString(body)
 
         return None, proto
 
-    def _decode_delete_index(self, body):
+    def _decode_delete_index(self, body, request_id):
         proto = pb.DropIndexResponse()
         proto.ParseFromString(body)
 
         return None, proto
 
-    def _decode_start_local_transaction(self, body):
+    def _decode_start_local_transaction(self, body, request_id):
         proto = pb.StartLocalTransactionResponse()
         proto.ParseFromString(body)
 
@@ -750,13 +846,13 @@ class OTSProtoBufferDecoder(object):
 
         return transaction_id, proto
 
-    def _decode_commit_transaction(self, body):
+    def _decode_commit_transaction(self, body, request_id):
         proto = pb.CommitTransactionResponse()
         proto.ParseFromString(body)
 
         return None, proto
 
-    def _decode_abort_transaction(self, body):
+    def _decode_abort_transaction(self, body, request_id):
         proto = pb.AbortTransactionResponse()
         proto.ParseFromString(body)
 

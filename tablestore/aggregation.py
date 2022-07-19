@@ -19,7 +19,7 @@ class Agg(object):
         if self.missing is not None:
             agg.missing = bytes(PlainBufferBuilder.serialize_column_value(self.missing))
 
-        return agg.SerializeToString()        
+        return agg.SerializeToString()
 
 class Max(Agg):
 
@@ -74,6 +74,24 @@ class DistinctCount(Agg):
     def to_pb_str(self):
         return Agg.to_pb_str(self, search_pb2.DistinctCountAggregation())
 
+class Percentiles(Agg):
+
+    def __init__(self, field, percentiles_list, missing_value = None, name = 'percentiles'):
+        Agg.__init__(self, field, missing_value, name, search_pb2.AGG_PERCENTILES)
+        self.percentiles_list = percentiles_list
+
+    def to_pb_str(self):
+        agg = search_pb2.PercentilesAggregation()
+        agg.field_name = self.field
+
+        if self.missing is not None:
+            agg.missing = bytes(PlainBufferBuilder.serialize_column_value(self.missing))
+
+        for percentile in self.percentiles_list:
+            agg.percentiles.append(percentile)
+
+        return agg.SerializeToString()
+
 
 """
 TopRows: used in group_by
@@ -104,8 +122,15 @@ AggreagtionType    ValueType
    Count             int64
    DistinctCount     int64
    TopRows           [Row]
+   Percentiles       [(key1, value1), (key2, value2)....]
 """
 class AggResult(object):
     def __init__(self, name, value):
         self.name = name
         self.value = value
+
+class PercentilesResultItem(object):
+    def __init__(self, key, value):
+        self.key = key
+        self.value = value
+
