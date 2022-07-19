@@ -48,6 +48,7 @@ __all__ = [
     'FieldSchema',
     'FieldType',
     'IndexSetting',
+    'Collapse',
     'Sort',
     'PrimaryKeySort',
     'ScoreSort',

@@ -109,6 +109,18 @@ def term_query(table_name, index_name):
 
     print('********** End TermQuery **********\n')
 
+def collapse_query(table_name, index_name):
+    print('********** Begin Collapse **********')
+
+    query = MatchAllQuery()
+    search_response = client.search(table_name, index_name, 
+                                    SearchQuery(query, limit=100, get_total_count=True, collapse_field = Collapse('k2')), 
+                                    ColumnsToGet(return_type=ColumnReturnType.ALL))
+
+    _print_rows(search_response.request_id, search_response.rows, search_response.total_count)
+
+    print('********** End Collapse **********\n')
+
 def range_query(table_name, index_name):
     print('********** Begin RangeQuery **********')
 
@@ -280,7 +292,7 @@ def prepare_data(rows_count):
         pk = [('PK1', i), ('PK2', 'pk_' + str(i % 10))]
         lj = i / 100
         li = i % 100
-        cols = [('k', 'key%03d' % i), ('t', 'this is ' + str(i)),
+        cols = [('k', 'key%03d' % i), ('t', 'this is ' + str(i)), ('k2', '%d' % (i/10)),
                 ('g', '%f,%f' % (30.0 + 0.05 * lj, 114.0 + 0.05 * li)), ('ka', '["a", "b", "%d"]' % i),
                 ('la', '[-1, %d]' % i), ('l', i), ('phone', '177712345%d78' %(i%10)),
                 ('b', i % 2 == 0), ('d', 0.1), ('time', '2022-05-%d' % (i%31+1)),
@@ -301,6 +313,7 @@ def prepare_table():
 
 def prepare_index(index_name, with_nested=False):
     field_a = FieldSchema('k', FieldType.KEYWORD, index=True, enable_sort_and_agg=True, store=True)
+    field_a2 = FieldSchema('k2', FieldType.KEYWORD, index=True, enable_sort_and_agg=True, store=True)
     field_b = FieldSchema('t', FieldType.TEXT, index=True, store=True, analyzer=AnalyzerType.SINGLEWORD)
     field_c = FieldSchema('g', FieldType.GEOPOINT, index=True, store=True)
     field_d = FieldSchema('ka', FieldType.KEYWORD, index=True, is_array=True, store=True)
@@ -319,7 +332,7 @@ def prepare_index(index_name, with_nested=False):
             FieldSchema('nt', FieldType.TEXT, index=True, store=True),
         ])
 
-    fields = [field_a, field_b, field_c, field_d, field_e, field_f, field_g, field_h, field_i, field_j, field_vl]
+    fields = [field_a, field_a2, field_b, field_c, field_d, field_e, field_f, field_g, field_h, field_i, field_j, field_vl]
     if with_nested:
         fields.append(field_n)
     index_setting = IndexSetting(routing_fields=['PK1'])
@@ -393,6 +406,7 @@ if __name__ == '__main__':
     function_score_query(table_name, nested_index_name)
     range_time_query(table_name, index_name)
     fuzzy_query(table_name, index_name)
+    collapse_query(table_name, index_name)
 
     delete_search_index(index_name)
     delete_search_index(nested_index_name)
