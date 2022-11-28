@@ -3,6 +3,11 @@ TableStore SDK for Python 版本记录
 
 Python SDK的版本号遵循 `Semantic Versioning <http://semver.org/>`_ 规则。
 
+Version 5.4.0
+-------------
+
+- Support SQL
+
 Version 5.3.0
 -------------
 

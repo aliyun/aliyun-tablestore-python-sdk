@@ -87,6 +87,7 @@ class OTSProtoBufferEncoder(object):
             'StartLocalTransaction' : self._encode_start_local_transaction,
             'CommitTransaction'     : self._encode_commit_transaction,
             'AbortTransaction'      : self._encode_abort_transaction,
+            'SQLQuery'              : self._encode_exe_sql_query
         }
 
     def _get_enum(self, e):
@@ -1004,7 +1005,7 @@ class OTSProtoBufferEncoder(object):
             proto.scan_query = self._encode_scan_query(scan_query)
 
         if session_id is not None:
-            proto.session_id = bytes(session_id)
+            proto.session_id = bytes(session_id.encode('utf-8'))
 
         return proto    
 
@@ -1320,3 +1321,11 @@ class OTSProtoBufferEncoder(object):
         proto.transaction_id = transaction_id
 
         return proto
+    
+    def _encode_exe_sql_query(self,query):
+        proto = pb2.SQLQueryRequest()
+        proto.query = query
+        proto.version = 2
+        return proto
+
+        

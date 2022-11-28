@@ -11,6 +11,9 @@ import tablestore.protobuf.table_store_pb2 as pb
 import tablestore.protobuf.table_store_filter_pb2 as filter_pb
 import tablestore.protobuf.search_pb2 as search_pb
 
+from tablestore.flatbuffer.dataprotocol.SQLResponseColumns import *
+from tablestore.flatbuffer.flat_buffer_decoder import *
+
 class OTSProtoBufferDecoder(object):
 
     def __init__(self, encoding):
@@ -42,6 +45,7 @@ class OTSProtoBufferDecoder(object):
             'StartLocalTransaction' : self._decode_start_local_transaction,
             'CommitTransaction'     : self._decode_commit_transaction,
             'AbortTransaction'      : self._decode_abort_transaction,
+            'SQLQuery'              : self._decode_exe_sql_query
         }
 
     def _parse_string(self, string):
@@ -805,7 +809,8 @@ class OTSProtoBufferDecoder(object):
         proto = search_pb.ComputeSplitsResponse()
         proto.ParseFromString(body)
 
-        session_id = str(proto.session_id)
+        session_id = proto.session_id.decode('utf-8')
+        
         splits_size = proto.splits_size
 
         compute_splits_response = ComputeSplitsResponse(session_id, splits_size)
@@ -857,3 +862,32 @@ class OTSProtoBufferDecoder(object):
         proto.ParseFromString(body)
 
         return None, proto
+
+    def _decode_exe_sql_query(self, body, request_id):
+        proto = pb.SQLQueryResponse()
+        proto.ParseFromString(body)
+
+        table_capacity_units = []
+        table_consumes_list = []
+        if len(proto.consumes) != 0:
+            table_consumes_list.extend(proto.consumes)
+        for table_consume in table_consumes_list:
+            capacity_unit = self._parse_capacity_unit(table_consume.consumed.capacity_unit)
+            table_capacity_unit = (table_consume.table_name,capacity_unit)
+            table_capacity_units.append(table_capacity_unit)
+        
+        search_capacity_units = []
+        search_consumes_list = []
+        if len(proto.search_consumes) != 0:
+            search_consumes_list.extend(proto.search_consumes)
+        for search_consume in search_consumes_list:
+            capacity_unit = self._parse_capacity_unit(search_consume.consumed.capacity_unit)
+            search_capacity_unit = (search_consume.table_name,capacity_unit)
+            search_capacity_units.append(search_capacity_unit)
+        
+        rows = []
+        if len(proto.rows) != 0:
+            columns = flat_buffer_decoder.format_flat_buffer_columns(SQLResponseColumns.GetRootAsSQLResponseColumns(proto.rows))
+            rows = flat_buffer_decoder.columns_to_rows(columns)
+        return (rows,table_capacity_units,search_capacity_units),proto
+    

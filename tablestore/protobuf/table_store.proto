@@ -484,6 +484,52 @@ message ComputeSplitPointsBySizeResponse {
      }
      repeated SplitLocation locations = 4;
 }
+
+/* SQLQuery */
+enum SQLPayloadVersion {
+    SQL_PLAIN_BUFFER = 1;
+    SQL_FLAT_BUFFERS = 2;
+}
+
+enum SQLStatementType {
+    SQL_SELECT = 1;
+    SQL_CREATE_TABLE = 2;
+    SQL_SHOW_TABLE = 3;
+    SQL_DESCRIBE_TABLE = 4;
+    SQL_DROP_TABLE = 5;
+    SQL_ALTER_TABLE = 6;
+}
+
+message SQLQueryRequest {
+    required string query = 1;
+    optional SQLPayloadVersion version = 2;
+}
+
+message TableConsumedCapacity {
+    optional string table_name = 1;
+    optional ConsumedCapacity consumed = 2;
+    optional ReservedThroughput reserved_throughput = 3;
+    optional bool is_timeseries_meta = 4;
+}
+
+message SearchConsumedCapacity {
+    optional string table_name = 1;
+    optional string index_name = 2;
+    optional ConsumedCapacity consumed = 3;
+    optional ReservedThroughput reserved_throughput = 4;
+}
+
+message SQLQueryResponse {
+    repeated TableConsumedCapacity consumes = 1;
+    optional bytes rows = 2;
+    optional SQLPayloadVersion version = 3;
+    optional SQLStatementType type = 4;
+    repeated SearchConsumedCapacity search_consumes = 5;
+}
+
+
+
+
 /* -------------------------------------- */
 
 

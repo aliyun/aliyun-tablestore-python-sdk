@@ -378,6 +378,26 @@ class OTSClient(object):
         return self._request_helper(
                     'DeleteRow', table_name, row, condition, return_type, transaction_id
         )
+    
+    def exe_sql_query(self,query):
+        """
+        说明：执行sql query
+
+        ``query``query是需要执行的query。
+        
+        (rows,table_capacity_units,search_capacity_units)
+
+        返回：
+        ``table_capacity_units``  本次操作消耗的每张table对应的CapacityUnit
+        ``search_capacity_units`` 本次操作消耗的每个search的CapacityUnit
+        ``rows``                  返回的数据
+        
+        示例：
+        row_list,table_comsume_list,search_comsume_list = client.exe_sql_query(query)
+        """
+        return self._request_helper(
+                    'SQLQuery', query
+        )
 
     def batch_get_row(self, request):
         """

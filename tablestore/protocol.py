@@ -66,7 +66,8 @@ class OTSProtocol(object):
         'DropIndex',
         'StartLocalTransaction',
         'CommitTransaction',
-        'AbortTransaction'
+        'AbortTransaction',
+        'SQLQuery'
     ]
 
     def __init__(self, user_id, user_key, sts_token, instance_name, encoding, logger):

@@ -81,6 +81,8 @@ Github安装
 - `Parallel Scan <https://github.com/aliyun/aliyun-tablestore-python-sdk/blob/master/examples/parallel_scan.py>`_
 - `Max/Min/Sum/Avg/Count/DistinctCount/Percentiles <https://github.com/aliyun/aliyun-tablestore-python-sdk/blob/master/examples/agg.py>`_
 - `GroupBy/Histogram <https://github.com/aliyun/aliyun-tablestore-python-sdk/blob/master/examples/group_by.py>`_
+- `SQL <https://github.com/aliyun/aliyun-tablestore-python-sdk/blob/master/examples/sql_query.py>`_
+
 
 执行测试
 ---------
