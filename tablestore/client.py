@@ -70,6 +70,8 @@ class OTSClient(object):
 
         ``retry_policy``定义了重试策略，默认的重试策略为 DefaultRetryPolicy。你可以继承 RetryPolicy 来实现自己的重试策略，请参考 DefaultRetryPolicy 的代码。
 
+        ``ssl_version``定义了https连接使用的TLS版本，默认为None。
+
 
         示例：创建一个OTSClient实例
 
@@ -92,6 +94,8 @@ class OTSClient(object):
         self.max_connection = kwargs.get('max_connection')
         if self.max_connection is None:
             self.max_connection = OTSClient.DEFAULT_MAX_CONNECTION
+
+        self.ssl_version = kwargs.get('ssl_version')
 
         # initialize logger
         logger_name = kwargs.get('logger_name')
@@ -127,7 +131,7 @@ class OTSClient(object):
 
         # initialize connection via user configuration
         self.connection = self.connection_pool_class(
-            host, path, timeout=self.socket_timeout, maxsize=self.max_connection,
+            host, path, timeout=self.socket_timeout, maxsize=self.max_connection, client_ssl_version=self.ssl_version
         )
 
         # initialize the retry policy
