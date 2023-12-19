@@ -121,6 +121,18 @@ def collapse_query(table_name, index_name):
 
     print('********** End Collapse **********\n')
 
+def knn_vector_query(table_name, index_name):
+    print('********** Begin KNN Vector Query **********')
+
+    query = KnnVectorQuery(field_name='vq', top_k=10, float32_query_vector=[5, -5, 10, -10], filter=MatchAllQuery())
+    sort = Sort(sorters=[ScoreSort(sort_order=SortOrder.DESC)])
+    search_response = client.search(table_name, index_name,
+                                    SearchQuery(query, limit=10, get_total_count=False, sort=sort),
+                                    ColumnsToGet(return_type=ColumnReturnType.ALL_FROM_INDEX))
+    _print_rows(search_response.request_id, search_response.rows, search_response.total_count)
+
+    print('********** End KNN Vector Query **********')
+
 def range_query(table_name, index_name):
     print('********** Begin RangeQuery **********')
 
@@ -296,7 +308,8 @@ def prepare_data(rows_count):
                 ('g', '%f,%f' % (30.0 + 0.05 * lj, 114.0 + 0.05 * li)), ('ka', '["a", "b", "%d"]' % i),
                 ('la', '[-1, %d]' % i), ('l', i), ('phone', '177712345%d78' %(i%10)),
                 ('b', i % 2 == 0), ('d', 0.1), ('time', '2022-05-%d' % (i%31+1)),
-                ('n', json.dumps([{'nk':'key%03d' % i, 'nl':i, 'nt':'this is in nested ' + str(i)}]))]
+                ('n', json.dumps([{'nk':'key%03d' % i, 'nl':i, 'nt':'this is in nested ' + str(i)}])),
+                ('vq', '[%d, %d, %d, %d]' % (i+5, i-5, i+10, i-10))]
 
         client.put_row(table_name, Row(pk, cols))
 
@@ -324,6 +337,9 @@ def prepare_index(index_name, with_nested=False):
     field_i = FieldSchema('time', FieldType.DATE, index=True, store=True, date_formats = ["yyyy-MM-dd"])
     field_j = FieldSchema('phone', FieldType.TEXT, index=True, store=True, analyzer=AnalyzerType.FUZZY, analyzer_parameter=FuzzyAnalyzerParameter(1, 6))
     field_vl = FieldSchema('vl', FieldType.KEYWORD, index=True, store=True, is_virtual_field = True, source_fields = ['l'])
+    field_vq = FieldSchema("vq", FieldType.VECTOR, vector_options=VectorOptions(
+        data_type=VectorDataType.VD_FLOAT_32, metric_type=VectorMetricType.VM_COSINE, index_type=VectorIndexType.VI_HNSW, index_parameter=HNSWIndexParameter(
+            m=8, ef_construction=16), dimension=4))
     
     if with_nested:
         field_n = FieldSchema('n', FieldType.NESTED, sub_field_schemas=[
@@ -332,7 +348,7 @@ def prepare_index(index_name, with_nested=False):
             FieldSchema('nt', FieldType.TEXT, index=True, store=True),
         ])
 
-    fields = [field_a, field_a2, field_b, field_c, field_d, field_e, field_f, field_g, field_h, field_i, field_j, field_vl]
+    fields = [field_a, field_a2, field_b, field_c, field_d, field_e, field_f, field_g, field_h, field_i, field_j, field_vl, field_vq]
     if with_nested:
         fields.append(field_n)
     index_setting = IndexSetting(routing_fields=['PK1'])
@@ -407,6 +423,7 @@ if __name__ == '__main__':
     range_time_query(table_name, index_name)
     fuzzy_query(table_name, index_name)
     collapse_query(table_name, index_name)
+    knn_vector_query(table_name, index_name)
 
     delete_search_index(index_name)
     delete_search_index(nested_index_name)

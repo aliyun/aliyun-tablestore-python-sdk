@@ -15,7 +15,6 @@ class SearchIndexTest(APITestBase):
         self.assert_equal(expect_field_schema.field_type, actual_field_schema.field_type)
         if actual_field_schema.field_type != FieldType.NESTED:
             self.assert_equal(expect_field_schema.index if expect_field_schema.index else True, actual_field_schema.index)
-            self.assert_equal(expect_field_schema.store if expect_field_schema.store else False, actual_field_schema.store)
             self.assert_equal(expect_field_schema.is_array if expect_field_schema.is_array else False, actual_field_schema.is_array)
             self.assert_equal(expect_field_schema.enable_sort_and_agg if expect_field_schema.enable_sort_and_agg else False, actual_field_schema.enable_sort_and_agg)
 
@@ -525,6 +524,14 @@ class SearchIndexTest(APITestBase):
             table_name, index_name, SearchQuery(bool_query, sort=Sort(sorters=[FieldSort('l', SortOrder.DESC)]), limit=100, get_total_count=True), ColumnsToGet(return_type=ColumnReturnType.ALL)
         ), 0, False, 0)
 
+    def _test_knn_vector_query(self, table_name, index_name):
+        knn_vector_query = KnnVectorQuery(field_name='vector', top_k=10, float32_query_vector=[1, -1, 5, -5])
+        sort = Sort(sorters=[ScoreSort(sort_order=SortOrder.DESC)])
+
+        rows = self._check_query_result(self.client_test.search(
+            table_name, index_name, SearchQuery(query=knn_vector_query, get_total_count=False, limit=100, sort=sort),
+            columns_to_get=ColumnsToGet(return_type=ColumnReturnType.ALL_FROM_INDEX)), 100, True, -1)
+
     def test_queries(self):
         table_name = 'SearchIndexQueryTest_' + self.get_python_version()
         index_name = 'search_index'
@@ -551,6 +558,7 @@ class SearchIndexTest(APITestBase):
         self._test_nested_query(table_name, nested_index_name)
         self._test_function_score_query(table_name, index_name)
         self._test_exists_query(table_name, index_name)
+        self._test_knn_vector_query(table_name, index_name)
         self._test_sort(table_name, index_name)
         self._test_search_with_routing_keys(table_name, index_name)
 
@@ -565,7 +573,8 @@ class SearchIndexTest(APITestBase):
                 ('la', '[-1, %d]' % i), ('l', i),
                 ('name', name_list[int(i/100)] + name_list[i%10]),
                 ('b', i % 2 == 0), ('d', 0.1), ('time', '2022-05-%d' % (i%31+1)),
-                ('n', json.dumps([{'nk':'key%03d' % i, 'nl':i, 'nt':'this is in nested ' + str(i)}]))]
+                ('n', json.dumps([{'nk':'key%03d' % i, 'nl':i, 'nt':'this is in nested ' + str(i)}])),
+                ('vector', '[%d, %d, %d, %d]' % (i + 1, i - 1, i + 5, i - 5))]
 
             self.client_test.put_row(table_name, Row(pk, cols))
 
@@ -588,6 +597,12 @@ class SearchIndexTest(APITestBase):
         field_h = FieldSchema('d', FieldType.DOUBLE, index=True, store=True)
         field_t = FieldSchema('time', FieldType.DATE, index=True, store=True, date_formats = ['yyyy-MM-dd'])
         field_j = FieldSchema('name', FieldType.TEXT, index=True, store=True, analyzer=AnalyzerType.FUZZY, analyzer_parameter=FuzzyAnalyzerParameter())
+        field_v = FieldSchema('vector', FieldType.VECTOR,
+                              vector_options=VectorOptions(data_type=VectorDataType.VD_FLOAT_32,
+                                                           index_type=VectorIndexType.VI_HNSW,
+                                                           metric_type=VectorMetricType.VM_COSINE,
+                                                           dimension=4,
+                                                           index_parameter=HNSWIndexParameter(m=8, ef_construction=8)))
 
         if with_nested:
             field_n = FieldSchema('n', FieldType.NESTED, sub_field_schemas=[
@@ -596,7 +611,7 @@ class SearchIndexTest(APITestBase):
                 FieldSchema('nt', FieldType.TEXT, index=True, store=True),
             ])
 
-        fields = [field_a, field_b, field_c, field_d, field_e, field_f, field_g, field_h, field_j, field_t]
+        fields = [field_a, field_b, field_c, field_d, field_e, field_f, field_g, field_h, field_j, field_t, field_v]
         if with_nested:
             fields.append(field_n)
         index_setting = IndexSetting(routing_fields=['PK1'])

@@ -12,6 +12,8 @@ import tablestore.protobuf.table_store_pb2 as pb2
 import tablestore.protobuf.table_store_filter_pb2 as filter_pb2
 import tablestore.protobuf.search_pb2 as search_pb2
 
+INT8_MAX = 127
+INT8_MIN = -128
 INT32_MAX = 2147483647
 INT32_MIN = -2147483648
 
@@ -115,6 +117,34 @@ class OTSProtoBufferEncoder(object):
                 "expect int or long for the value, not %s"
                 % int32.__class__.__name__
             )
+
+    def _make_repeated_int8(self, int8_query_vector):
+        if int8_query_vector is None:
+            return None
+
+        if not isinstance(int8_query_vector, list):
+            raise OTSClientError(
+                "expect list for int8_query_vector, not %s"
+                % int8_query_vector.__class__.__name__
+            )
+
+        byte_array = bytearray(0)
+        for value in int8_query_vector:
+            if not isinstance(value, int) or (value > INT8_MAX or value < INT8_MIN):
+                raise OTSClientError(
+                    "expect int8 for int8_query_vector element, not %s"
+                    % value.__class__.__name__
+                )
+            else:
+                if value < 0:
+                    byte_array.append(value + 256)
+                else:
+                    byte_array.append(value)
+
+        if len(byte_array) != 0:
+            return bytes(byte_array)
+
+        return None
 
     def _make_repeated_column_names(self, proto, columns_to_get):
         if columns_to_get is None:
@@ -401,6 +431,37 @@ class OTSProtoBufferEncoder(object):
             proto.is_virtual_field = field_schema.is_virtual_field
             for source_field in field_schema.source_fields:
                 proto.source_field_names.append(source_field)
+
+        if field_schema.vector_options is not None:
+            self._make_vector_options(proto.vector_options, field_schema.vector_options)
+
+    def _make_vector_options(self, proto_vector_options, vector_options):
+        if vector_options.data_type is not None:
+            proto_vector_options.data_type = self._get_enum(vector_options.data_type)
+
+        if vector_options.metric_type is not None:
+            proto_vector_options.metric_type = self._get_enum(vector_options.metric_type)
+
+        if vector_options.index_type is not None:
+            proto_vector_options.index_type = self._get_enum(vector_options.index_type)
+            if vector_options.index_parameter is not None:
+                proto_vector_options.index_parameter = \
+                    self._make_index_parameter(vector_options.index_type, vector_options.index_parameter)
+
+        if vector_options.dimension is not None:
+            proto_vector_options.dimension = vector_options.dimension
+
+    def _make_index_parameter(self, index_type, index_parameter):
+        if index_type == VectorIndexType.VI_HNSW and isinstance(index_parameter, HNSWIndexParameter):
+            proto_index_parameter = search_pb2.HNSWIndexParameter()
+            proto_index_parameter.m = index_parameter.m
+            proto_index_parameter.ef_construction = index_parameter.ef_construction
+            return proto_index_parameter.SerializeToString()
+        else:
+            raise OTSClientError(
+                "vector_index_type [%s] and vector_index_parameter [%s] is mismatched."
+                % (index_type, index_parameter.__class__.__name__)
+            )
 
     def _make_analyzer_parameter(self, analyzer, analyzer_parameter):
         if analyzer == AnalyzerType.SINGLEWORD and isinstance(analyzer_parameter, SingleWordAnalyzerParameter):
@@ -976,7 +1037,7 @@ class OTSProtoBufferEncoder(object):
     def _encode_compute_splits(self, table_name, index_name):
         if table_name is None:
             raise OTSClientError("table_name must not be None")
-        
+
         proto = search_pb2.ComputeSplitsRequest()
         proto.table_name = table_name
 
@@ -1007,7 +1068,7 @@ class OTSProtoBufferEncoder(object):
         if session_id is not None:
             proto.session_id = bytes(session_id.encode('utf-8'))
 
-        return proto    
+        return proto
 
     def _encode_match_query(self, query):
         proto = search_pb2.MatchQuery()
@@ -1138,6 +1199,22 @@ class OTSProtoBufferEncoder(object):
         proto.field_name = self._get_unicode(query.field_name)
         return proto.SerializeToString()
 
+    def _encode_knn_vector_query(self, query):
+        proto = search_pb2.KnnVectorQuery()
+        proto.field_name = self._get_unicode(query.field_name)
+        proto.top_k = self._get_int32(query.top_k)
+
+        if query.int8_query_vector is not None:
+            proto.int8_query_vector = self._make_repeated_int8(query.int8_query_vector)
+
+        if query.float32_query_vector is not None:
+            proto.float32_query_vector.extend(query.float32_query_vector)
+
+        if query.filter is not None:
+            self._make_query(proto.filter, query.filter)
+
+        return proto.SerializeToString()
+
     def _make_query(self, proto, query):
         if isinstance(query, MatchQuery):
             proto.type = search_pb2.MATCH_QUERY
@@ -1184,6 +1261,9 @@ class OTSProtoBufferEncoder(object):
         elif isinstance(query, ExistsQuery):
             proto.type = search_pb2.EXISTS_QUERY
             proto.query = self._encode_exists_query(query)
+        elif isinstance(query, KnnVectorQuery):
+            proto.type = search_pb2.KNN_VECTOR_QUERY
+            proto.query = self._encode_knn_vector_query(query)
         else:
             raise OTSClientError(
                 "Invalid query type: %s"
@@ -1228,7 +1308,7 @@ class OTSProtoBufferEncoder(object):
             for agg in aggs:
                 if type(agg) not in [Max, Min, Avg, Sum, Count, DistinctCount, TopRows, Percentiles]:
                     raise OTSClientError('agg must be one of [Max, Min, Avg, Sum, Count, DistinctCount, TopRows, Percentiles]')
-                        
+
                 aggregation = proto.aggs.add()
                 aggregation.name = agg.name
                 aggregation.type = agg.type
@@ -1321,11 +1401,11 @@ class OTSProtoBufferEncoder(object):
         proto.transaction_id = transaction_id
 
         return proto
-    
+
     def _encode_exe_sql_query(self,query):
         proto = pb2.SQLQueryRequest()
         proto.query = query
         proto.version = 2
         return proto
 
-        
+

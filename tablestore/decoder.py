@@ -466,16 +466,47 @@ class OTSProtoBufferDecoder(object):
         if proto.HasField('analyzer_parameter') and len(proto.analyzer_parameter) > 0:
             analyzer_parameter = self._parse_analyzer_parameter(proto.analyzer, proto.analyzer_parameter)
 
+        vector_options = None
+        if proto.HasField("vector_options"):
+            vector_options = self._parse_vector_options(proto.vector_options)
+
         field_schema = FieldSchema(
             proto.field_name, self._parse_field_type(proto.field_type),
             index=proto.index, store=proto.store, is_array=proto.is_array,
             enable_sort_and_agg=proto.enable_sort_and_agg,
             analyzer=proto.analyzer, sub_field_schemas=sub_field_schemas,
             analyzer_parameter=analyzer_parameter, date_formats=date_formats,
-            is_virtual_field = is_virtual_field, source_fields = source_fields
+            is_virtual_field=is_virtual_field, source_fields=source_fields, vector_options=vector_options
         )
 
         return field_schema
+
+    def _parse_vector_options(self, proto_vector_options):
+        if proto_vector_options is None:
+            return None
+
+        index_parameter = None
+        if proto_vector_options.HasField("index_parameter"):
+            index_parameter = self._parse_index_parameter(proto_vector_options.index_type,
+                                                          proto_vector_options.index_parameter)
+
+        return VectorOptions(data_type=proto_vector_options.data_type, metric_type=proto_vector_options.metric_type,
+                             index_type=proto_vector_options.index_type,
+                             index_parameter=index_parameter, dimension=proto_vector_options.dimension)
+
+    def _parse_index_parameter(self, proto_index_type, proto_index_parameter):
+        try:
+            if proto_index_type == VectorIndexType.VI_HNSW:
+                index_parameter = search_pb.HNSWIndexParameter()
+                index_parameter.ParseFromString(proto_index_parameter)
+                return HNSWIndexParameter(index_parameter.m, index_parameter.ef_construction)
+            else:
+                return None
+        except Exception as e:
+            error_message = 'parse analyzer_parameter failed, please contact tablestore, exception:%s, request_id: %s.' % (
+                str(e), request_id)
+            self.logger.error(error_message)
+            raise e
 
     def _parse_analyzer_parameter(self, analyzer, analyzer_parameter):
         try:
@@ -719,7 +750,7 @@ class OTSProtoBufferDecoder(object):
                 sub_agg_results = []
                 self._decode_group_by_results(item.sub_group_bys_result, sub_group_by_results)
                 self._decode_agg_results(item.sub_aggs_result, sub_agg_results)
-                
+
                 result_item = GroupByFieldResultItem(item.key, item.row_count,
                                                      sub_agg_results, sub_group_by_results)
                 result_items.append(result_item)
