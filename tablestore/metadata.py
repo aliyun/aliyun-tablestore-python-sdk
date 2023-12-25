@@ -917,7 +917,7 @@ class ExistsQuery(Query):
 
 class KnnVectorQuery(Query):
 
-    def __init__(self, field_name, top_k=None, int8_query_vector=[], float32_query_vector=[], filter=None):
+    def __init__(self, field_name, top_k=None, int8_query_vector=None, float32_query_vector=None, filter=None):
         self.field_name = field_name
         self.top_k = top_k
         self.int8_query_vector = int8_query_vector
