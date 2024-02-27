@@ -402,6 +402,19 @@ class OTSProtoBufferEncoder(object):
             for source_field in field_schema.source_fields:
                 proto.source_field_names.append(source_field)
 
+        if field_schema.vector_options is not None:
+            self._make_vector_options(proto.vector_options, field_schema.vector_options)
+
+    def _make_vector_options(self, proto_vector_options, vector_options):
+        if vector_options.data_type is not None:
+            proto_vector_options.data_type = self._get_enum(vector_options.data_type)
+
+        if vector_options.metric_type is not None:
+            proto_vector_options.metric_type = self._get_enum(vector_options.metric_type)
+
+        if vector_options.dimension is not None:
+            proto_vector_options.dimension = vector_options.dimension
+
     def _make_analyzer_parameter(self, analyzer, analyzer_parameter):
         if analyzer == AnalyzerType.SINGLEWORD and isinstance(analyzer_parameter, SingleWordAnalyzerParameter):
             proto_analyzer_param = search_pb2.SingleWordAnalyzerParameter()
@@ -976,7 +989,7 @@ class OTSProtoBufferEncoder(object):
     def _encode_compute_splits(self, table_name, index_name):
         if table_name is None:
             raise OTSClientError("table_name must not be None")
-        
+
         proto = search_pb2.ComputeSplitsRequest()
         proto.table_name = table_name
 
@@ -1007,7 +1020,7 @@ class OTSProtoBufferEncoder(object):
         if session_id is not None:
             proto.session_id = bytes(session_id.encode('utf-8'))
 
-        return proto    
+        return proto
 
     def _encode_match_query(self, query):
         proto = search_pb2.MatchQuery()
@@ -1138,6 +1151,19 @@ class OTSProtoBufferEncoder(object):
         proto.field_name = self._get_unicode(query.field_name)
         return proto.SerializeToString()
 
+    def _encode_knn_vector_query(self, query):
+        proto = search_pb2.KnnVectorQuery()
+        proto.field_name = self._get_unicode(query.field_name)
+        proto.top_k = self._get_int32(query.top_k)
+
+        if query.float32_query_vector is not None:
+            proto.float32_query_vector.extend(query.float32_query_vector)
+
+        if query.filter is not None:
+            self._make_query(proto.filter, query.filter)
+
+        return proto.SerializeToString()
+
     def _make_query(self, proto, query):
         if isinstance(query, MatchQuery):
             proto.type = search_pb2.MATCH_QUERY
@@ -1184,6 +1210,9 @@ class OTSProtoBufferEncoder(object):
         elif isinstance(query, ExistsQuery):
             proto.type = search_pb2.EXISTS_QUERY
             proto.query = self._encode_exists_query(query)
+        elif isinstance(query, KnnVectorQuery):
+            proto.type = search_pb2.KNN_VECTOR_QUERY
+            proto.query = self._encode_knn_vector_query(query)
         else:
             raise OTSClientError(
                 "Invalid query type: %s"
@@ -1228,7 +1257,7 @@ class OTSProtoBufferEncoder(object):
             for agg in aggs:
                 if type(agg) not in [Max, Min, Avg, Sum, Count, DistinctCount, TopRows, Percentiles]:
                     raise OTSClientError('agg must be one of [Max, Min, Avg, Sum, Count, DistinctCount, TopRows, Percentiles]')
-                        
+
                 aggregation = proto.aggs.add()
                 aggregation.name = agg.name
                 aggregation.type = agg.type
@@ -1321,11 +1350,11 @@ class OTSProtoBufferEncoder(object):
         proto.transaction_id = transaction_id
 
         return proto
-    
+
     def _encode_exe_sql_query(self,query):
         proto = pb2.SQLQueryRequest()
         proto.query = query
         proto.version = 2
         return proto
 
-        
+

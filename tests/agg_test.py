@@ -20,7 +20,7 @@ class AggTest(APITestBase):
         self._prepare_index()
         self._prepare_data()
 
-        time.sleep(60) 
+        time.sleep(60)
 
     def _prepare_data(self):
         for i in range(self.rows_count):
@@ -28,10 +28,10 @@ class AggTest(APITestBase):
             lj = int(i / 100)
             li = i % 100
             cols = [('k', 'key%03d' % i), ('t', 'this is ' + str(i)),
-                ('g', '%f,%f' % (30.0 + 0.05 * lj, 114.0 + 0.05 * li)), ('ka', '["a", "b", "%d"]' % i),
-                ('la', '[-1, %d]' % i), ('l', i),
-                ('b', i % 2 == 0), ('d', 0.1),('time', '2022-05-%d' % (i%31+1)),
-                ('n', json.dumps([{'nk':'key%03d' % i, 'nl':i, 'nt':'this is in nested ' + str(i)}]))]
+                    ('g', '%f,%f' % (30.0 + 0.05 * lj, 114.0 + 0.05 * li)), ('ka', '["a", "b", "%d"]' % i),
+                    ('la', '[-1, %d]' % i), ('l', i),
+                    ('b', i % 2 == 0), ('d', 0.1), ('time', '2022-05-%d' % (i % 31 + 1)),
+                    ('n', json.dumps([{'nk': 'key%03d' % i, 'nl': i, 'nt': 'this is in nested ' + str(i)}]))]
 
             self.client_test.put_row(self.table_name, Row(pk, cols))
 

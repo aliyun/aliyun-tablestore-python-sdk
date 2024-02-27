@@ -159,7 +159,7 @@ class ColumnValues(object):
             x = self._tab.Vector(o)
             x += flatbuffers.number_types.UOffsetTFlags.py_type(j) * 4
             x = self._tab.Indirect(x)
-            from tablestore.flatbuffer.dataprotocol.BytesValue import BytesValue
+            from dataprotocol.BytesValue import BytesValue
             obj = BytesValue()
             obj.Init(self._tab.Bytes, x)
             return obj
@@ -182,7 +182,7 @@ class ColumnValues(object):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
         if o != 0:
             x = self._tab.Indirect(o + self._tab.Pos)
-            from tablestore.flatbuffer.dataprotocol.RLEStringValues import RLEStringValues
+            from dataprotocol.RLEStringValues import RLEStringValues
             obj = RLEStringValues()
             obj.Init(self._tab.Bytes, x)
             return obj
@@ -233,8 +233,8 @@ def AddRleStringValues(builder, rleStringValues):
 def ColumnValuesEnd(builder): return builder.EndObject()
 def End(builder):
     return ColumnValuesEnd(builder)
-import tablestore.flatbuffer.dataprotocol.BytesValue
-import tablestore.flatbuffer.dataprotocol.RLEStringValues
+import dataprotocol.BytesValue
+import dataprotocol.RLEStringValues
 try:
     from typing import List, Optional
 except:
@@ -254,10 +254,14 @@ class ColumnValuesT(object):
 
     @classmethod
     def InitFromBuf(cls, buf, pos):
-        n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, 0)
         columnValues = ColumnValues()
-        columnValues.Init(buf, pos+n)
+        columnValues.Init(buf, pos)
         return cls.InitFromObj(columnValues)
+
+    @classmethod
+    def InitFromPackedBuf(cls, buf, pos=0):
+        n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, pos)
+        return cls.InitFromBuf(buf, pos+n)
 
     @classmethod
     def InitFromObj(cls, columnValues):

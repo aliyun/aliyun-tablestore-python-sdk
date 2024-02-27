@@ -31,8 +31,7 @@ class SQLResponseColumns(object):
             x = self._tab.Vector(o)
             x += flatbuffers.number_types.UOffsetTFlags.py_type(j) * 4
             x = self._tab.Indirect(x)
-            
-            from tablestore.flatbuffer.dataprotocol.SQLResponseColumn import SQLResponseColumn
+            from dataprotocol.SQLResponseColumn import SQLResponseColumn
             obj = SQLResponseColumn()
             obj.Init(self._tab.Bytes, x)
             return obj
@@ -72,7 +71,7 @@ def AddRowCount(builder, rowCount):
 def SQLResponseColumnsEnd(builder): return builder.EndObject()
 def End(builder):
     return SQLResponseColumnsEnd(builder)
-import tablestore.flatbuffer.dataprotocol.SQLResponseColumn
+import dataprotocol.SQLResponseColumn
 try:
     from typing import List
 except:
@@ -87,10 +86,14 @@ class SQLResponseColumnsT(object):
 
     @classmethod
     def InitFromBuf(cls, buf, pos):
-        n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, 0)
         sqlresponseColumns = SQLResponseColumns()
-        sqlresponseColumns.Init(buf, pos+n)
+        sqlresponseColumns.Init(buf, pos)
         return cls.InitFromObj(sqlresponseColumns)
+
+    @classmethod
+    def InitFromPackedBuf(cls, buf, pos=0):
+        n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, pos)
+        return cls.InitFromBuf(buf, pos+n)
 
     @classmethod
     def InitFromObj(cls, sqlresponseColumns):

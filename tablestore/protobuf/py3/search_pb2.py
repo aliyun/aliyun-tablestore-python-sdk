@@ -8,7 +8,6 @@ from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
 from google.protobuf import reflection as _reflection
 from google.protobuf import symbol_database as _symbol_database
-from google.protobuf import descriptor_pb2
 # @@protoc_insertion_point(imports)
 
 _sym_db = _symbol_database.Default()
@@ -20,9 +19,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='search.proto',
   package='com.aliyun.tablestore.protocol',
   syntax='proto2',
-  serialized_pb=_b('\n\x0csearch.proto\x12\x1e\x63om.aliyun.tablestore.protocol\"\x8d\x01\n\nMatchQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0c\n\x04text\x18\x02 \x01(\t\x12\x1c\n\x14minimum_should_match\x18\x03 \x01(\x05\x12?\n\x08operator\x18\x04 \x01(\x0e\x32-.com.aliyun.tablestore.protocol.QueryOperator\"4\n\x10MatchPhraseQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0c\n\x04text\x18\x02 \x01(\t\"\x0f\n\rMatchAllQuery\"-\n\tTermQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0c\n\x04term\x18\x02 \x01(\x0c\"/\n\nTermsQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\r\n\x05terms\x18\x02 \x03(\x0c\"t\n\nRangeQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x12\n\nrange_from\x18\x02 \x01(\x0c\x12\x10\n\x08range_to\x18\x03 \x01(\x0c\x12\x15\n\rinclude_lower\x18\x04 \x01(\x08\x12\x15\n\rinclude_upper\x18\x05 \x01(\x08\"1\n\x0bPrefixQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0e\n\x06prefix\x18\x02 \x01(\t\"2\n\rWildcardQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"\xa5\x02\n\tBoolQuery\x12;\n\x0cmust_queries\x18\x01 \x03(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12?\n\x10must_not_queries\x18\x02 \x03(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12=\n\x0e\x66ilter_queries\x18\x03 \x03(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12=\n\x0eshould_queries\x18\x04 \x03(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12\x1c\n\x14minimum_should_match\x18\x05 \x01(\x05\"H\n\x0f\x43onstScoreQuery\x12\x35\n\x06\x66ilter\x18\x01 \x01(\x0b\x32%.com.aliyun.tablestore.protocol.Query\"&\n\x10\x46ieldValueFactor\x12\x12\n\nfield_name\x18\x01 \x01(\t\"\x98\x01\n\x12\x46unctionScoreQuery\x12\x34\n\x05query\x18\x01 \x01(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12L\n\x12\x66ield_value_factor\x18\x02 \x01(\x0b\x32\x30.com.aliyun.tablestore.protocol.FieldValueFactor\"\x90\x01\n\x0bNestedQuery\x12\x0c\n\x04path\x18\x01 \x01(\t\x12\x34\n\x05query\x18\x02 \x01(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12=\n\nscore_mode\x18\x03 \x01(\x0e\x32).com.aliyun.tablestore.protocol.ScoreMode\"Q\n\x13GeoBoundingBoxQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x10\n\x08top_left\x18\x02 \x01(\t\x12\x14\n\x0c\x62ottom_right\x18\x03 \x01(\t\"N\n\x10GeoDistanceQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x14\n\x0c\x63\x65nter_point\x18\x02 \x01(\t\x12\x10\n\x08\x64istance\x18\x03 \x01(\x01\"5\n\x0fGeoPolygonQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0e\n\x06points\x18\x02 \x03(\t\"!\n\x0b\x45xistsQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\"O\n\x05Query\x12\x37\n\x04type\x18\x01 \x01(\x0e\x32).com.aliyun.tablestore.protocol.QueryType\x12\r\n\x05query\x18\x02 \x01(\x0c\"\x1e\n\x08\x43ollapse\x12\x12\n\nfield_name\x18\x01 \x01(\t\"S\n\x0cNestedFilter\x12\x0c\n\x04path\x18\x01 \x01(\t\x12\x35\n\x06\x66ilter\x18\x02 \x01(\x0b\x32%.com.aliyun.tablestore.protocol.Query\"E\n\tScoreSort\x12\x38\n\x05order\x18\x01 \x01(\x0e\x32).com.aliyun.tablestore.protocol.SortOrder\"J\n\x0ePrimaryKeySort\x12\x38\n\x05order\x18\x01 \x01(\x0e\x32).com.aliyun.tablestore.protocol.SortOrder\"\xd6\x01\n\tFieldSort\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x38\n\x05order\x18\x02 \x01(\x0e\x32).com.aliyun.tablestore.protocol.SortOrder\x12\x36\n\x04mode\x18\x03 \x01(\x0e\x32(.com.aliyun.tablestore.protocol.SortMode\x12\x43\n\rnested_filter\x18\x04 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.NestedFilter\"\xb4\x02\n\x0fGeoDistanceSort\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0e\n\x06points\x18\x02 \x03(\t\x12\x38\n\x05order\x18\x03 \x01(\x0e\x32).com.aliyun.tablestore.protocol.SortOrder\x12\x36\n\x04mode\x18\x04 \x01(\x0e\x32(.com.aliyun.tablestore.protocol.SortMode\x12\x46\n\rdistance_type\x18\x05 \x01(\x0e\x32/.com.aliyun.tablestore.protocol.GeoDistanceType\x12\x43\n\rnested_filter\x18\x06 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.NestedFilter\"\x93\x02\n\x06Sorter\x12=\n\nfield_sort\x18\x01 \x01(\x0b\x32).com.aliyun.tablestore.protocol.FieldSort\x12J\n\x11geo_distance_sort\x18\x02 \x01(\x0b\x32/.com.aliyun.tablestore.protocol.GeoDistanceSort\x12=\n\nscore_sort\x18\x03 \x01(\x0b\x32).com.aliyun.tablestore.protocol.ScoreSort\x12?\n\x07pk_sort\x18\x04 \x01(\x0b\x32..com.aliyun.tablestore.protocol.PrimaryKeySort\">\n\x04Sort\x12\x36\n\x06sorter\x18\x01 \x03(\x0b\x32&.com.aliyun.tablestore.protocol.Sorter\"h\n\x0b\x41ggregation\x12\x0c\n\x04name\x18\x01 \x01(\t\x12=\n\x04type\x18\x02 \x01(\x0e\x32/.com.aliyun.tablestore.protocol.AggregationType\x12\x0c\n\x04\x62ody\x18\x03 \x01(\x0c\"I\n\x0c\x41ggregations\x12\x39\n\x04\x61ggs\x18\x01 \x03(\x0b\x32+.com.aliyun.tablestore.protocol.Aggregation\"5\n\x0e\x41vgAggregation\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0f\n\x07missing\x18\x02 \x01(\x0c\"5\n\x0eMaxAggregation\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0f\n\x07missing\x18\x02 \x01(\x0c\"5\n\x0eMinAggregation\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0f\n\x07missing\x18\x02 \x01(\x0c\"5\n\x0eSumAggregation\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0f\n\x07missing\x18\x02 \x01(\x0c\"&\n\x10\x43ountAggregation\x12\x12\n\nfield_name\x18\x01 \x01(\t\"?\n\x18\x44istinctCountAggregation\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0f\n\x07missing\x18\x02 \x01(\x0c\"W\n\x12TopRowsAggregation\x12\r\n\x05limit\x18\x01 \x01(\x05\x12\x32\n\x04sort\x18\x02 \x01(\x0b\x32$.com.aliyun.tablestore.protocol.Sort\"X\n\x16PercentilesAggregation\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x13\n\x0bpercentiles\x18\x02 \x03(\x01\x12\x15\n\rmissing_value\x18\x03 \x01(\x0c\"%\n\x14\x41vgAggregationResult\x12\r\n\x05value\x18\x01 \x01(\x01\"(\n\x18TopRowsAggregationResult\x12\x0c\n\x04rows\x18\x01 \x03(\x0c\"/\n\x1e\x44istinctCountAggregationResult\x12\r\n\x05value\x18\x01 \x01(\x03\"%\n\x14MaxAggregationResult\x12\r\n\x05value\x18\x01 \x01(\x01\"%\n\x14MinAggregationResult\x12\r\n\x05value\x18\x01 \x01(\x01\"%\n\x14SumAggregationResult\x12\r\n\x05value\x18\x01 \x01(\x01\"\'\n\x16\x43ountAggregationResult\x12\r\n\x05value\x18\x01 \x01(\x03\"8\n\x1aPercentilesAggregationItem\x12\x0b\n\x03key\x18\x01 \x01(\x01\x12\r\n\x05value\x18\x02 \x01(\x0c\"\x81\x01\n\x1cPercentilesAggregationResult\x12\x61\n\x1dpercentiles_aggregation_items\x18\x01 \x03(\x0b\x32:.com.aliyun.tablestore.protocol.PercentilesAggregationItem\"t\n\x11\x41ggregationResult\x12\x0c\n\x04name\x18\x01 \x01(\t\x12=\n\x04type\x18\x02 \x01(\x0e\x32/.com.aliyun.tablestore.protocol.AggregationType\x12\x12\n\nagg_result\x18\x03 \x01(\x0c\"\\\n\x12\x41ggregationsResult\x12\x46\n\x0b\x61gg_results\x18\x01 \x03(\x0b\x32\x31.com.aliyun.tablestore.protocol.AggregationResult\"`\n\x07GroupBy\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x39\n\x04type\x18\x02 \x01(\x0e\x32+.com.aliyun.tablestore.protocol.GroupByType\x12\x0c\n\x04\x62ody\x18\x03 \x01(\x0c\"F\n\x08GroupBys\x12:\n\tgroup_bys\x18\x01 \x03(\x0b\x32\'.com.aliyun.tablestore.protocol.GroupBy\"H\n\x0cGroupKeySort\x12\x38\n\x05order\x18\x01 \x01(\x0e\x32).com.aliyun.tablestore.protocol.SortOrder\"H\n\x0cRowCountSort\x12\x38\n\x05order\x18\x01 \x01(\x0e\x32).com.aliyun.tablestore.protocol.SortOrder\"\\\n\nSubAggSort\x12\x14\n\x0csub_agg_name\x18\x01 \x01(\t\x12\x38\n\x05order\x18\x02 \x01(\x0e\x32).com.aliyun.tablestore.protocol.SortOrder\"\xdd\x01\n\rGroupBySorter\x12\x44\n\x0egroup_key_sort\x18\x01 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.GroupKeySort\x12\x44\n\x0erow_count_sort\x18\x02 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.RowCountSort\x12@\n\x0csub_agg_sort\x18\x03 \x01(\x0b\x32*.com.aliyun.tablestore.protocol.SubAggSort\"M\n\x0bGroupBySort\x12>\n\x07sorters\x18\x01 \x03(\x0b\x32-.com.aliyun.tablestore.protocol.GroupBySorter\"\xec\x01\n\x0cGroupByField\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0c\n\x04size\x18\x02 \x01(\x05\x12\x39\n\x04sort\x18\x03 \x01(\x0b\x32+.com.aliyun.tablestore.protocol.GroupBySort\x12>\n\x08sub_aggs\x18\x04 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.Aggregations\x12?\n\rsub_group_bys\x18\x05 \x01(\x0b\x32(.com.aliyun.tablestore.protocol.GroupBys\"#\n\x05Range\x12\r\n\x05\x62\x65gin\x18\x01 \x01(\x01\x12\x0b\n\x03\x65nd\x18\x02 \x01(\x01\"\xda\x01\n\x0cGroupByRange\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x35\n\x06ranges\x18\x02 \x03(\x0b\x32%.com.aliyun.tablestore.protocol.Range\x12>\n\x08sub_aggs\x18\x03 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.Aggregations\x12?\n\rsub_group_bys\x18\x04 \x01(\x0b\x32(.com.aliyun.tablestore.protocol.GroupBys\"\xc8\x01\n\rGroupByFilter\x12\x36\n\x07\x66ilters\x18\x01 \x03(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12>\n\x08sub_aggs\x18\x02 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.Aggregations\x12?\n\rsub_group_bys\x18\x03 \x01(\x0b\x32(.com.aliyun.tablestore.protocol.GroupBys\"$\n\x08GeoPoint\x12\x0b\n\x03lat\x18\x01 \x01(\x01\x12\x0b\n\x03lon\x18\x02 \x01(\x01\"\x9a\x02\n\x12GroupByGeoDistance\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x38\n\x06origin\x18\x02 \x01(\x0b\x32(.com.aliyun.tablestore.protocol.GeoPoint\x12\x35\n\x06ranges\x18\x03 \x03(\x0b\x32%.com.aliyun.tablestore.protocol.Range\x12>\n\x08sub_aggs\x18\x04 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.Aggregations\x12?\n\rsub_group_bys\x18\x05 \x01(\x0b\x32(.com.aliyun.tablestore.protocol.GroupBys\"&\n\nFieldRange\x12\x0b\n\x03min\x18\x01 \x01(\x0c\x12\x0b\n\x03max\x18\x02 \x01(\x0c\"\xe3\x02\n\x10GroupByHistogram\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x10\n\x08interval\x18\x02 \x01(\x0c\x12\x15\n\rmissing_value\x18\x03 \x01(\x0c\x12\x15\n\rmin_doc_count\x18\x04 \x01(\x03\x12\x39\n\x04sort\x18\x05 \x01(\x0b\x32+.com.aliyun.tablestore.protocol.GroupBySort\x12?\n\x0b\x66ield_range\x18\x06 \x01(\x0b\x32*.com.aliyun.tablestore.protocol.FieldRange\x12>\n\x08sub_aggs\x18\x07 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.Aggregations\x12?\n\rsub_group_bys\x18\x08 \x01(\x0b\x32(.com.aliyun.tablestore.protocol.GroupBys\"\xd3\x01\n\x16GroupByFieldResultItem\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x11\n\trow_count\x18\x02 \x01(\x03\x12K\n\x0fsub_aggs_result\x18\x03 \x01(\x0b\x32\x32.com.aliyun.tablestore.protocol.AggregationsResult\x12L\n\x14sub_group_bys_result\x18\x04 \x01(\x0b\x32..com.aliyun.tablestore.protocol.GroupBysResult\"q\n\x12GroupByFieldResult\x12[\n\x1bgroup_by_field_result_items\x18\x01 \x03(\x0b\x32\x36.com.aliyun.tablestore.protocol.GroupByFieldResultItem\"\xec\x01\n\x16GroupByRangeResultItem\x12\x12\n\nrange_from\x18\x01 \x01(\x01\x12\x10\n\x08range_to\x18\x02 \x01(\x01\x12\x11\n\trow_count\x18\x03 \x01(\x03\x12K\n\x0fsub_aggs_result\x18\x04 \x01(\x0b\x32\x32.com.aliyun.tablestore.protocol.AggregationsResult\x12L\n\x14sub_group_bys_result\x18\x05 \x01(\x0b\x32..com.aliyun.tablestore.protocol.GroupBysResult\"q\n\x12GroupByRangeResult\x12[\n\x1bgroup_by_range_result_items\x18\x01 \x03(\x0b\x32\x36.com.aliyun.tablestore.protocol.GroupByRangeResultItem\"\xf2\x01\n\x1cGroupByGeoDistanceResultItem\x12\x12\n\nrange_from\x18\x01 \x01(\x01\x12\x10\n\x08range_to\x18\x02 \x01(\x01\x12\x11\n\trow_count\x18\x03 \x01(\x03\x12K\n\x0fsub_aggs_result\x18\x04 \x01(\x0b\x32\x32.com.aliyun.tablestore.protocol.AggregationsResult\x12L\n\x14sub_group_bys_result\x18\x05 \x01(\x0b\x32..com.aliyun.tablestore.protocol.GroupBysResult\"\x84\x01\n\x18GroupByGeoDistanceResult\x12h\n\"group_by_geo_distance_result_items\x18\x01 \x03(\x0b\x32<.com.aliyun.tablestore.protocol.GroupByGeoDistanceResultItem\"\xc7\x01\n\x17GroupByFilterResultItem\x12\x11\n\trow_count\x18\x01 \x01(\x03\x12K\n\x0fsub_aggs_result\x18\x02 \x01(\x0b\x32\x32.com.aliyun.tablestore.protocol.AggregationsResult\x12L\n\x14sub_group_bys_result\x18\x03 \x01(\x0b\x32..com.aliyun.tablestore.protocol.GroupBysResult\"t\n\x13GroupByFilterResult\x12]\n\x1cgroup_by_filter_result_items\x18\x01 \x03(\x0b\x32\x37.com.aliyun.tablestore.protocol.GroupByFilterResultItem\"q\n\rGroupByResult\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x39\n\x04type\x18\x02 \x01(\x0e\x32+.com.aliyun.tablestore.protocol.GroupByType\x12\x17\n\x0fgroup_by_result\x18\x03 \x01(\x0c\"Y\n\x0eGroupBysResult\x12G\n\x10group_by_results\x18\x01 \x03(\x0b\x32-.com.aliyun.tablestore.protocol.GroupByResult\"\xcd\x01\n\x14GroupByHistogramItem\x12\x0b\n\x03key\x18\x01 \x01(\x0c\x12\r\n\x05value\x18\x02 \x01(\x03\x12K\n\x0fsub_aggs_result\x18\x03 \x01(\x0b\x32\x32.com.aliyun.tablestore.protocol.AggregationsResult\x12L\n\x14sub_group_bys_result\x18\x04 \x01(\x0b\x32..com.aliyun.tablestore.protocol.GroupBysResult\"o\n\x16GroupByHistogramResult\x12U\n\x17group_by_histogra_items\x18\x01 \x03(\x0b\x32\x34.com.aliyun.tablestore.protocol.GroupByHistogramItem\"\xf3\x02\n\x0bSearchQuery\x12\x0e\n\x06offset\x18\x01 \x01(\x05\x12\r\n\x05limit\x18\x02 \x01(\x05\x12\x34\n\x05query\x18\x04 \x01(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12:\n\x08\x63ollapse\x18\x05 \x01(\x0b\x32(.com.aliyun.tablestore.protocol.Collapse\x12\x32\n\x04sort\x18\x06 \x01(\x0b\x32$.com.aliyun.tablestore.protocol.Sort\x12\x17\n\x0fget_total_count\x18\x08 \x01(\x08\x12\r\n\x05token\x18\t \x01(\x0c\x12:\n\x04\x61ggs\x18\n \x01(\x0b\x32,.com.aliyun.tablestore.protocol.Aggregations\x12;\n\tgroup_bys\x18\x0b \x01(\x0b\x32(.com.aliyun.tablestore.protocol.GroupBys\"k\n\x0c\x43olumnsToGet\x12\x45\n\x0breturn_type\x18\x01 \x01(\x0e\x32\x30.com.aliyun.tablestore.protocol.ColumnReturnType\x12\x14\n\x0c\x63olumn_names\x18\x02 \x03(\t\"\xab\x01\n\rSearchRequest\x12\x12\n\ntable_name\x18\x01 \x01(\t\x12\x12\n\nindex_name\x18\x02 \x01(\t\x12\x44\n\x0e\x63olumns_to_get\x18\x03 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.ColumnsToGet\x12\x14\n\x0csearch_query\x18\x04 \x01(\x0c\x12\x16\n\x0erouting_values\x18\x05 \x03(\x0c\"\x7f\n\x0eSearchResponse\x12\x12\n\ntotal_hits\x18\x01 \x01(\x03\x12\x0c\n\x04rows\x18\x02 \x03(\x0c\x12\x16\n\x0eis_all_succeed\x18\x03 \x01(\x08\x12\x12\n\nnext_token\x18\x06 \x01(\x0c\x12\x0c\n\x04\x61ggs\x18\x07 \x01(\x0c\x12\x11\n\tgroup_bys\x18\x08 \x01(\x0c\"K\n\x1bSingleWordAnalyzerParameter\x12\x16\n\x0e\x63\x61se_sensitive\x18\x01 \x01(\x08\x12\x14\n\x0c\x64\x65limit_word\x18\x02 \x01(\x08\"+\n\x16SplitAnalyzerParameter\x12\x11\n\tdelimiter\x18\x01 \x01(\t\">\n\x16\x46uzzyAnalyzerParameter\x12\x11\n\tmin_chars\x18\x01 \x01(\x05\x12\x11\n\tmax_chars\x18\x02 \x01(\x05\"\xeb\x02\n\x0b\x46ieldSchema\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12=\n\nfield_type\x18\x02 \x01(\x0e\x32).com.aliyun.tablestore.protocol.FieldType\x12\x10\n\x08\x61nalyzer\x18\x04 \x01(\t\x12\r\n\x05index\x18\x05 \x01(\x08\x12\x1b\n\x13\x65nable_sort_and_agg\x18\x06 \x01(\x08\x12\r\n\x05store\x18\x07 \x01(\x08\x12\x42\n\rfield_schemas\x18\x08 \x03(\x0b\x32+.com.aliyun.tablestore.protocol.FieldSchema\x12\x10\n\x08is_array\x18\t \x01(\x08\x12\x1a\n\x12\x61nalyzer_parameter\x18\n \x01(\x0c\x12\x18\n\x10is_virtual_field\x18\x0b \x01(\x08\x12\x1a\n\x12source_field_names\x18\x0c \x03(\t\x12\x14\n\x0c\x64\x61te_formats\x18\r \x03(\t\"\xd0\x01\n\x0bIndexSchema\x12\x42\n\rfield_schemas\x18\x01 \x03(\x0b\x32+.com.aliyun.tablestore.protocol.FieldSchema\x12\x43\n\rindex_setting\x18\x02 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.IndexSetting\x12\x38\n\nindex_sort\x18\x03 \x01(\x0b\x32$.com.aliyun.tablestore.protocol.Sort\"`\n\x0cIndexSetting\x12\x18\n\x10number_of_shards\x18\x01 \x01(\x05\x12\x16\n\x0erouting_fields\x18\x02 \x03(\t\x12\x1e\n\x16routing_partition_size\x18\x03 \x01(\x05\"\x95\x01\n\x18\x43reateSearchIndexRequest\x12\x12\n\ntable_name\x18\x01 \x02(\t\x12\x12\n\nindex_name\x18\x02 \x02(\t\x12;\n\x06schema\x18\x03 \x01(\x0b\x32+.com.aliyun.tablestore.protocol.IndexSchema\x12\x14\n\x0ctime_to_live\x18\x05 \x01(\x05\"\x1b\n\x19\x43reateSearchIndexResponse\"X\n\x18UpdateSearchIndexRequest\x12\x12\n\ntable_name\x18\x01 \x01(\t\x12\x12\n\nindex_name\x18\x02 \x01(\t\x12\x14\n\x0ctime_to_live\x18\x05 \x01(\x05\"\x1b\n\x19UpdateSearchIndexResponse\"3\n\tIndexInfo\x12\x12\n\ntable_name\x18\x01 \x01(\t\x12\x12\n\nindex_name\x18\x02 \x01(\t\",\n\x16ListSearchIndexRequest\x12\x12\n\ntable_name\x18\x01 \x01(\t\"U\n\x17ListSearchIndexResponse\x12:\n\x07indices\x18\x01 \x03(\x0b\x32).com.aliyun.tablestore.protocol.IndexInfo\"B\n\x18\x44\x65leteSearchIndexRequest\x12\x12\n\ntable_name\x18\x01 \x01(\t\x12\x12\n\nindex_name\x18\x02 \x01(\t\"\x1b\n\x19\x44\x65leteSearchIndexResponse\"i\n\x08SyncStat\x12=\n\nsync_phase\x18\x01 \x01(\x0e\x32).com.aliyun.tablestore.protocol.SyncPhase\x12\x1e\n\x16\x63urrent_sync_timestamp\x18\x02 \x01(\x03\"D\n\x1a\x44\x65scribeSearchIndexRequest\x12\x12\n\ntable_name\x18\x01 \x01(\t\x12\x12\n\nindex_name\x18\x02 \x01(\t\"\xc2\x01\n\x1b\x44\x65scribeSearchIndexResponse\x12;\n\x06schema\x18\x01 \x01(\x0b\x32+.com.aliyun.tablestore.protocol.IndexSchema\x12;\n\tsync_stat\x18\x02 \x01(\x0b\x32(.com.aliyun.tablestore.protocol.SyncStat\x12\x13\n\x0b\x63reate_time\x18\x06 \x01(\x03\x12\x14\n\x0ctime_to_live\x18\x07 \x01(\x05\"\x89\x01\n\x14\x43omputeSplitsRequest\x12\x12\n\ntable_name\x18\x01 \x01(\t\x12]\n\x1bsearch_index_splits_options\x18\x02 \x01(\x0b\x32\x38.com.aliyun.tablestore.protocol.SearchIndexSplitsOptions\".\n\x18SearchIndexSplitsOptions\x12\x12\n\nindex_name\x18\x01 \x01(\t\"@\n\x15\x43omputeSplitsResponse\x12\x12\n\nsession_id\x18\x01 \x01(\x0c\x12\x13\n\x0bsplits_size\x18\x02 \x01(\x05\"0\n\tSessionId\x12\x0f\n\x07version\x18\x01 \x01(\x05\x12\x12\n\nsession_id\x18\x02 \x01(\x0c\"\xa6\x01\n\tScanQuery\x12\x34\n\x05query\x18\x01 \x01(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12\r\n\x05limit\x18\x02 \x01(\x05\x12\x12\n\nalive_time\x18\x03 \x01(\x05\x12\r\n\x05token\x18\x04 \x01(\x0c\x12\x1b\n\x13\x63urrent_parallel_id\x18\x05 \x01(\x05\x12\x14\n\x0cmax_parallel\x18\x06 \x01(\x05\"\xbf\x01\n\x13ParallelScanRequest\x12\x12\n\ntable_name\x18\x01 \x01(\t\x12\x12\n\nindex_name\x18\x02 \x01(\t\x12\x44\n\x0e\x63olumns_to_get\x18\x03 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.ColumnsToGet\x12\x12\n\nsession_id\x18\x04 \x01(\x0c\x12\x12\n\nscan_query\x18\x05 \x01(\x0c\x12\x12\n\ntimeout_ms\x18\x06 \x01(\x05\"8\n\x14ParallelScanResponse\x12\x0c\n\x04rows\x18\x01 \x03(\x0c\x12\x12\n\nnext_token\x18\x02 \x01(\x0c*\xd1\x02\n\tQueryType\x12\x0f\n\x0bMATCH_QUERY\x10\x01\x12\x16\n\x12MATCH_PHRASE_QUERY\x10\x02\x12\x0e\n\nTERM_QUERY\x10\x03\x12\x0f\n\x0bRANGE_QUERY\x10\x04\x12\x10\n\x0cPREFIX_QUERY\x10\x05\x12\x0e\n\nBOOL_QUERY\x10\x06\x12\x15\n\x11\x43ONST_SCORE_QUERY\x10\x07\x12\x18\n\x14\x46UNCTION_SCORE_QUERY\x10\x08\x12\x10\n\x0cNESTED_QUERY\x10\t\x12\x12\n\x0eWILDCARD_QUERY\x10\n\x12\x13\n\x0fMATCH_ALL_QUERY\x10\x0b\x12\x1a\n\x16GEO_BOUNDING_BOX_QUERY\x10\x0c\x12\x16\n\x12GEO_DISTANCE_QUERY\x10\r\x12\x15\n\x11GEO_POLYGON_QUERY\x10\x0e\x12\x0f\n\x0bTERMS_QUERY\x10\x0f\x12\x10\n\x0c\x45XISTS_QUERY\x10\x10* \n\rQueryOperator\x12\x06\n\x02OR\x10\x01\x12\x07\n\x03\x41ND\x10\x02*r\n\tScoreMode\x12\x13\n\x0fSCORE_MODE_NONE\x10\x01\x12\x12\n\x0eSCORE_MODE_AVG\x10\x02\x12\x12\n\x0eSCORE_MODE_MAX\x10\x03\x12\x14\n\x10SCORE_MODE_TOTAL\x10\x04\x12\x12\n\x0eSCORE_MODE_MIN\x10\x05*4\n\tSortOrder\x12\x12\n\x0eSORT_ORDER_ASC\x10\x00\x12\x13\n\x0fSORT_ORDER_DESC\x10\x01*C\n\x08SortMode\x12\x11\n\rSORT_MODE_MIN\x10\x00\x12\x11\n\rSORT_MODE_MAX\x10\x01\x12\x11\n\rSORT_MODE_AVG\x10\x02*?\n\x0fGeoDistanceType\x12\x14\n\x10GEO_DISTANCE_ARC\x10\x00\x12\x16\n\x12GEO_DISTANCE_PLANE\x10\x01*\x93\x01\n\x0f\x41ggregationType\x12\x0b\n\x07\x41GG_AVG\x10\x01\x12\x0b\n\x07\x41GG_MAX\x10\x02\x12\x0b\n\x07\x41GG_MIN\x10\x03\x12\x0b\n\x07\x41GG_SUM\x10\x04\x12\r\n\tAGG_COUNT\x10\x05\x12\x16\n\x12\x41GG_DISTINCT_COUNT\x10\x06\x12\x10\n\x0c\x41GG_TOP_ROWS\x10\x07\x12\x13\n\x0f\x41GG_PERCENTILES\x10\x08*}\n\x0bGroupByType\x12\x12\n\x0eGROUP_BY_FIELD\x10\x01\x12\x12\n\x0eGROUP_BY_RANGE\x10\x02\x12\x13\n\x0fGROUP_BY_FILTER\x10\x03\x12\x19\n\x15GROUP_BY_GEO_DISTANCE\x10\x04\x12\x16\n\x12GROUP_BY_HISTOGRAM\x10\x05*d\n\x10\x43olumnReturnType\x12\x0e\n\nRETURN_ALL\x10\x01\x12\x14\n\x10RETURN_SPECIFIED\x10\x02\x12\x0f\n\x0bRETURN_NONE\x10\x03\x12\x19\n\x15RETURN_ALL_FROM_INDEX\x10\x04*j\n\tFieldType\x12\x08\n\x04LONG\x10\x01\x12\n\n\x06\x44OUBLE\x10\x02\x12\x0b\n\x07\x42OOLEAN\x10\x03\x12\x0b\n\x07KEYWORD\x10\x04\x12\x08\n\x04TEXT\x10\x05\x12\n\n\x06NESTED\x10\x06\x12\r\n\tGEO_POINT\x10\x07\x12\x08\n\x04\x44\x41TE\x10\x08*\x1f\n\tSyncPhase\x12\x08\n\x04\x46ULL\x10\x01\x12\x08\n\x04INCR\x10\x02')
+  serialized_options=None,
+  serialized_pb=_b('\n\x0csearch.proto\x12\x1e\x63om.aliyun.tablestore.protocol\"\x8d\x01\n\nMatchQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0c\n\x04text\x18\x02 \x01(\t\x12\x1c\n\x14minimum_should_match\x18\x03 \x01(\x05\x12?\n\x08operator\x18\x04 \x01(\x0e\x32-.com.aliyun.tablestore.protocol.QueryOperator\"4\n\x10MatchPhraseQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0c\n\x04text\x18\x02 \x01(\t\"\x0f\n\rMatchAllQuery\"-\n\tTermQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0c\n\x04term\x18\x02 \x01(\x0c\"/\n\nTermsQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\r\n\x05terms\x18\x02 \x03(\x0c\"t\n\nRangeQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x12\n\nrange_from\x18\x02 \x01(\x0c\x12\x10\n\x08range_to\x18\x03 \x01(\x0c\x12\x15\n\rinclude_lower\x18\x04 \x01(\x08\x12\x15\n\rinclude_upper\x18\x05 \x01(\x08\"1\n\x0bPrefixQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0e\n\x06prefix\x18\x02 \x01(\t\"2\n\rWildcardQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"\xa5\x02\n\tBoolQuery\x12;\n\x0cmust_queries\x18\x01 \x03(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12?\n\x10must_not_queries\x18\x02 \x03(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12=\n\x0e\x66ilter_queries\x18\x03 \x03(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12=\n\x0eshould_queries\x18\x04 \x03(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12\x1c\n\x14minimum_should_match\x18\x05 \x01(\x05\"H\n\x0f\x43onstScoreQuery\x12\x35\n\x06\x66ilter\x18\x01 \x01(\x0b\x32%.com.aliyun.tablestore.protocol.Query\"&\n\x10\x46ieldValueFactor\x12\x12\n\nfield_name\x18\x01 \x01(\t\"\x98\x01\n\x12\x46unctionScoreQuery\x12\x34\n\x05query\x18\x01 \x01(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12L\n\x12\x66ield_value_factor\x18\x02 \x01(\x0b\x32\x30.com.aliyun.tablestore.protocol.FieldValueFactor\"\x90\x01\n\x0bNestedQuery\x12\x0c\n\x04path\x18\x01 \x01(\t\x12\x34\n\x05query\x18\x02 \x01(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12=\n\nscore_mode\x18\x03 \x01(\x0e\x32).com.aliyun.tablestore.protocol.ScoreMode\"Q\n\x13GeoBoundingBoxQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x10\n\x08top_left\x18\x02 \x01(\t\x12\x14\n\x0c\x62ottom_right\x18\x03 \x01(\t\"N\n\x10GeoDistanceQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x14\n\x0c\x63\x65nter_point\x18\x02 \x01(\t\x12\x10\n\x08\x64istance\x18\x03 \x01(\x01\"5\n\x0fGeoPolygonQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0e\n\x06points\x18\x02 \x03(\t\"!\n\x0b\x45xistsQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\"\x88\x01\n\x0eKnnVectorQuery\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\r\n\x05top_k\x18\x02 \x01(\x05\x12\x1c\n\x14\x66loat32_query_vector\x18\x04 \x03(\x02\x12\x35\n\x06\x66ilter\x18\x05 \x01(\x0b\x32%.com.aliyun.tablestore.protocol.Query\"O\n\x05Query\x12\x37\n\x04type\x18\x01 \x01(\x0e\x32).com.aliyun.tablestore.protocol.QueryType\x12\r\n\x05query\x18\x02 \x01(\x0c\"\x1e\n\x08\x43ollapse\x12\x12\n\nfield_name\x18\x01 \x01(\t\"S\n\x0cNestedFilter\x12\x0c\n\x04path\x18\x01 \x01(\t\x12\x35\n\x06\x66ilter\x18\x02 \x01(\x0b\x32%.com.aliyun.tablestore.protocol.Query\"E\n\tScoreSort\x12\x38\n\x05order\x18\x01 \x01(\x0e\x32).com.aliyun.tablestore.protocol.SortOrder\"J\n\x0ePrimaryKeySort\x12\x38\n\x05order\x18\x01 \x01(\x0e\x32).com.aliyun.tablestore.protocol.SortOrder\"\xd6\x01\n\tFieldSort\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x38\n\x05order\x18\x02 \x01(\x0e\x32).com.aliyun.tablestore.protocol.SortOrder\x12\x36\n\x04mode\x18\x03 \x01(\x0e\x32(.com.aliyun.tablestore.protocol.SortMode\x12\x43\n\rnested_filter\x18\x04 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.NestedFilter\"\xb4\x02\n\x0fGeoDistanceSort\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0e\n\x06points\x18\x02 \x03(\t\x12\x38\n\x05order\x18\x03 \x01(\x0e\x32).com.aliyun.tablestore.protocol.SortOrder\x12\x36\n\x04mode\x18\x04 \x01(\x0e\x32(.com.aliyun.tablestore.protocol.SortMode\x12\x46\n\rdistance_type\x18\x05 \x01(\x0e\x32/.com.aliyun.tablestore.protocol.GeoDistanceType\x12\x43\n\rnested_filter\x18\x06 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.NestedFilter\"\x93\x02\n\x06Sorter\x12=\n\nfield_sort\x18\x01 \x01(\x0b\x32).com.aliyun.tablestore.protocol.FieldSort\x12J\n\x11geo_distance_sort\x18\x02 \x01(\x0b\x32/.com.aliyun.tablestore.protocol.GeoDistanceSort\x12=\n\nscore_sort\x18\x03 \x01(\x0b\x32).com.aliyun.tablestore.protocol.ScoreSort\x12?\n\x07pk_sort\x18\x04 \x01(\x0b\x32..com.aliyun.tablestore.protocol.PrimaryKeySort\">\n\x04Sort\x12\x36\n\x06sorter\x18\x01 \x03(\x0b\x32&.com.aliyun.tablestore.protocol.Sorter\"h\n\x0b\x41ggregation\x12\x0c\n\x04name\x18\x01 \x01(\t\x12=\n\x04type\x18\x02 \x01(\x0e\x32/.com.aliyun.tablestore.protocol.AggregationType\x12\x0c\n\x04\x62ody\x18\x03 \x01(\x0c\"I\n\x0c\x41ggregations\x12\x39\n\x04\x61ggs\x18\x01 \x03(\x0b\x32+.com.aliyun.tablestore.protocol.Aggregation\"5\n\x0e\x41vgAggregation\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0f\n\x07missing\x18\x02 \x01(\x0c\"5\n\x0eMaxAggregation\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0f\n\x07missing\x18\x02 \x01(\x0c\"5\n\x0eMinAggregation\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0f\n\x07missing\x18\x02 \x01(\x0c\"5\n\x0eSumAggregation\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0f\n\x07missing\x18\x02 \x01(\x0c\"&\n\x10\x43ountAggregation\x12\x12\n\nfield_name\x18\x01 \x01(\t\"?\n\x18\x44istinctCountAggregation\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0f\n\x07missing\x18\x02 \x01(\x0c\"W\n\x12TopRowsAggregation\x12\r\n\x05limit\x18\x01 \x01(\x05\x12\x32\n\x04sort\x18\x02 \x01(\x0b\x32$.com.aliyun.tablestore.protocol.Sort\"X\n\x16PercentilesAggregation\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x13\n\x0bpercentiles\x18\x02 \x03(\x01\x12\x15\n\rmissing_value\x18\x03 \x01(\x0c\"%\n\x14\x41vgAggregationResult\x12\r\n\x05value\x18\x01 \x01(\x01\"(\n\x18TopRowsAggregationResult\x12\x0c\n\x04rows\x18\x01 \x03(\x0c\"/\n\x1e\x44istinctCountAggregationResult\x12\r\n\x05value\x18\x01 \x01(\x03\"%\n\x14MaxAggregationResult\x12\r\n\x05value\x18\x01 \x01(\x01\"%\n\x14MinAggregationResult\x12\r\n\x05value\x18\x01 \x01(\x01\"%\n\x14SumAggregationResult\x12\r\n\x05value\x18\x01 \x01(\x01\"\'\n\x16\x43ountAggregationResult\x12\r\n\x05value\x18\x01 \x01(\x03\"8\n\x1aPercentilesAggregationItem\x12\x0b\n\x03key\x18\x01 \x01(\x01\x12\r\n\x05value\x18\x02 \x01(\x0c\"\x81\x01\n\x1cPercentilesAggregationResult\x12\x61\n\x1dpercentiles_aggregation_items\x18\x01 \x03(\x0b\x32:.com.aliyun.tablestore.protocol.PercentilesAggregationItem\"t\n\x11\x41ggregationResult\x12\x0c\n\x04name\x18\x01 \x01(\t\x12=\n\x04type\x18\x02 \x01(\x0e\x32/.com.aliyun.tablestore.protocol.AggregationType\x12\x12\n\nagg_result\x18\x03 \x01(\x0c\"\\\n\x12\x41ggregationsResult\x12\x46\n\x0b\x61gg_results\x18\x01 \x03(\x0b\x32\x31.com.aliyun.tablestore.protocol.AggregationResult\"`\n\x07GroupBy\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x39\n\x04type\x18\x02 \x01(\x0e\x32+.com.aliyun.tablestore.protocol.GroupByType\x12\x0c\n\x04\x62ody\x18\x03 \x01(\x0c\"F\n\x08GroupBys\x12:\n\tgroup_bys\x18\x01 \x03(\x0b\x32\'.com.aliyun.tablestore.protocol.GroupBy\"H\n\x0cGroupKeySort\x12\x38\n\x05order\x18\x01 \x01(\x0e\x32).com.aliyun.tablestore.protocol.SortOrder\"H\n\x0cRowCountSort\x12\x38\n\x05order\x18\x01 \x01(\x0e\x32).com.aliyun.tablestore.protocol.SortOrder\"\\\n\nSubAggSort\x12\x14\n\x0csub_agg_name\x18\x01 \x01(\t\x12\x38\n\x05order\x18\x02 \x01(\x0e\x32).com.aliyun.tablestore.protocol.SortOrder\"\xdd\x01\n\rGroupBySorter\x12\x44\n\x0egroup_key_sort\x18\x01 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.GroupKeySort\x12\x44\n\x0erow_count_sort\x18\x02 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.RowCountSort\x12@\n\x0csub_agg_sort\x18\x03 \x01(\x0b\x32*.com.aliyun.tablestore.protocol.SubAggSort\"M\n\x0bGroupBySort\x12>\n\x07sorters\x18\x01 \x03(\x0b\x32-.com.aliyun.tablestore.protocol.GroupBySorter\"\xec\x01\n\x0cGroupByField\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x0c\n\x04size\x18\x02 \x01(\x05\x12\x39\n\x04sort\x18\x03 \x01(\x0b\x32+.com.aliyun.tablestore.protocol.GroupBySort\x12>\n\x08sub_aggs\x18\x04 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.Aggregations\x12?\n\rsub_group_bys\x18\x05 \x01(\x0b\x32(.com.aliyun.tablestore.protocol.GroupBys\"#\n\x05Range\x12\r\n\x05\x62\x65gin\x18\x01 \x01(\x01\x12\x0b\n\x03\x65nd\x18\x02 \x01(\x01\"\xda\x01\n\x0cGroupByRange\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x35\n\x06ranges\x18\x02 \x03(\x0b\x32%.com.aliyun.tablestore.protocol.Range\x12>\n\x08sub_aggs\x18\x03 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.Aggregations\x12?\n\rsub_group_bys\x18\x04 \x01(\x0b\x32(.com.aliyun.tablestore.protocol.GroupBys\"\xc8\x01\n\rGroupByFilter\x12\x36\n\x07\x66ilters\x18\x01 \x03(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12>\n\x08sub_aggs\x18\x02 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.Aggregations\x12?\n\rsub_group_bys\x18\x03 \x01(\x0b\x32(.com.aliyun.tablestore.protocol.GroupBys\"$\n\x08GeoPoint\x12\x0b\n\x03lat\x18\x01 \x01(\x01\x12\x0b\n\x03lon\x18\x02 \x01(\x01\"\x9a\x02\n\x12GroupByGeoDistance\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x38\n\x06origin\x18\x02 \x01(\x0b\x32(.com.aliyun.tablestore.protocol.GeoPoint\x12\x35\n\x06ranges\x18\x03 \x03(\x0b\x32%.com.aliyun.tablestore.protocol.Range\x12>\n\x08sub_aggs\x18\x04 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.Aggregations\x12?\n\rsub_group_bys\x18\x05 \x01(\x0b\x32(.com.aliyun.tablestore.protocol.GroupBys\"&\n\nFieldRange\x12\x0b\n\x03min\x18\x01 \x01(\x0c\x12\x0b\n\x03max\x18\x02 \x01(\x0c\"\xe3\x02\n\x10GroupByHistogram\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12\x10\n\x08interval\x18\x02 \x01(\x0c\x12\x15\n\rmissing_value\x18\x03 \x01(\x0c\x12\x15\n\rmin_doc_count\x18\x04 \x01(\x03\x12\x39\n\x04sort\x18\x05 \x01(\x0b\x32+.com.aliyun.tablestore.protocol.GroupBySort\x12?\n\x0b\x66ield_range\x18\x06 \x01(\x0b\x32*.com.aliyun.tablestore.protocol.FieldRange\x12>\n\x08sub_aggs\x18\x07 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.Aggregations\x12?\n\rsub_group_bys\x18\x08 \x01(\x0b\x32(.com.aliyun.tablestore.protocol.GroupBys\"\xd3\x01\n\x16GroupByFieldResultItem\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x11\n\trow_count\x18\x02 \x01(\x03\x12K\n\x0fsub_aggs_result\x18\x03 \x01(\x0b\x32\x32.com.aliyun.tablestore.protocol.AggregationsResult\x12L\n\x14sub_group_bys_result\x18\x04 \x01(\x0b\x32..com.aliyun.tablestore.protocol.GroupBysResult\"q\n\x12GroupByFieldResult\x12[\n\x1bgroup_by_field_result_items\x18\x01 \x03(\x0b\x32\x36.com.aliyun.tablestore.protocol.GroupByFieldResultItem\"\xec\x01\n\x16GroupByRangeResultItem\x12\x12\n\nrange_from\x18\x01 \x01(\x01\x12\x10\n\x08range_to\x18\x02 \x01(\x01\x12\x11\n\trow_count\x18\x03 \x01(\x03\x12K\n\x0fsub_aggs_result\x18\x04 \x01(\x0b\x32\x32.com.aliyun.tablestore.protocol.AggregationsResult\x12L\n\x14sub_group_bys_result\x18\x05 \x01(\x0b\x32..com.aliyun.tablestore.protocol.GroupBysResult\"q\n\x12GroupByRangeResult\x12[\n\x1bgroup_by_range_result_items\x18\x01 \x03(\x0b\x32\x36.com.aliyun.tablestore.protocol.GroupByRangeResultItem\"\xf2\x01\n\x1cGroupByGeoDistanceResultItem\x12\x12\n\nrange_from\x18\x01 \x01(\x01\x12\x10\n\x08range_to\x18\x02 \x01(\x01\x12\x11\n\trow_count\x18\x03 \x01(\x03\x12K\n\x0fsub_aggs_result\x18\x04 \x01(\x0b\x32\x32.com.aliyun.tablestore.protocol.AggregationsResult\x12L\n\x14sub_group_bys_result\x18\x05 \x01(\x0b\x32..com.aliyun.tablestore.protocol.GroupBysResult\"\x84\x01\n\x18GroupByGeoDistanceResult\x12h\n\"group_by_geo_distance_result_items\x18\x01 \x03(\x0b\x32<.com.aliyun.tablestore.protocol.GroupByGeoDistanceResultItem\"\xc7\x01\n\x17GroupByFilterResultItem\x12\x11\n\trow_count\x18\x01 \x01(\x03\x12K\n\x0fsub_aggs_result\x18\x02 \x01(\x0b\x32\x32.com.aliyun.tablestore.protocol.AggregationsResult\x12L\n\x14sub_group_bys_result\x18\x03 \x01(\x0b\x32..com.aliyun.tablestore.protocol.GroupBysResult\"t\n\x13GroupByFilterResult\x12]\n\x1cgroup_by_filter_result_items\x18\x01 \x03(\x0b\x32\x37.com.aliyun.tablestore.protocol.GroupByFilterResultItem\"q\n\rGroupByResult\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x39\n\x04type\x18\x02 \x01(\x0e\x32+.com.aliyun.tablestore.protocol.GroupByType\x12\x17\n\x0fgroup_by_result\x18\x03 \x01(\x0c\"Y\n\x0eGroupBysResult\x12G\n\x10group_by_results\x18\x01 \x03(\x0b\x32-.com.aliyun.tablestore.protocol.GroupByResult\"\xcd\x01\n\x14GroupByHistogramItem\x12\x0b\n\x03key\x18\x01 \x01(\x0c\x12\r\n\x05value\x18\x02 \x01(\x03\x12K\n\x0fsub_aggs_result\x18\x03 \x01(\x0b\x32\x32.com.aliyun.tablestore.protocol.AggregationsResult\x12L\n\x14sub_group_bys_result\x18\x04 \x01(\x0b\x32..com.aliyun.tablestore.protocol.GroupBysResult\"o\n\x16GroupByHistogramResult\x12U\n\x17group_by_histogra_items\x18\x01 \x03(\x0b\x32\x34.com.aliyun.tablestore.protocol.GroupByHistogramItem\"\xf3\x02\n\x0bSearchQuery\x12\x0e\n\x06offset\x18\x01 \x01(\x05\x12\r\n\x05limit\x18\x02 \x01(\x05\x12\x34\n\x05query\x18\x04 \x01(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12:\n\x08\x63ollapse\x18\x05 \x01(\x0b\x32(.com.aliyun.tablestore.protocol.Collapse\x12\x32\n\x04sort\x18\x06 \x01(\x0b\x32$.com.aliyun.tablestore.protocol.Sort\x12\x17\n\x0fget_total_count\x18\x08 \x01(\x08\x12\r\n\x05token\x18\t \x01(\x0c\x12:\n\x04\x61ggs\x18\n \x01(\x0b\x32,.com.aliyun.tablestore.protocol.Aggregations\x12;\n\tgroup_bys\x18\x0b \x01(\x0b\x32(.com.aliyun.tablestore.protocol.GroupBys\"k\n\x0c\x43olumnsToGet\x12\x45\n\x0breturn_type\x18\x01 \x01(\x0e\x32\x30.com.aliyun.tablestore.protocol.ColumnReturnType\x12\x14\n\x0c\x63olumn_names\x18\x02 \x03(\t\"\xab\x01\n\rSearchRequest\x12\x12\n\ntable_name\x18\x01 \x01(\t\x12\x12\n\nindex_name\x18\x02 \x01(\t\x12\x44\n\x0e\x63olumns_to_get\x18\x03 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.ColumnsToGet\x12\x14\n\x0csearch_query\x18\x04 \x01(\x0c\x12\x16\n\x0erouting_values\x18\x05 \x03(\x0c\"\x7f\n\x0eSearchResponse\x12\x12\n\ntotal_hits\x18\x01 \x01(\x03\x12\x0c\n\x04rows\x18\x02 \x03(\x0c\x12\x16\n\x0eis_all_succeed\x18\x03 \x01(\x08\x12\x12\n\nnext_token\x18\x06 \x01(\x0c\x12\x0c\n\x04\x61ggs\x18\x07 \x01(\x0c\x12\x11\n\tgroup_bys\x18\x08 \x01(\x0c\"K\n\x1bSingleWordAnalyzerParameter\x12\x16\n\x0e\x63\x61se_sensitive\x18\x01 \x01(\x08\x12\x14\n\x0c\x64\x65limit_word\x18\x02 \x01(\x08\"+\n\x16SplitAnalyzerParameter\x12\x11\n\tdelimiter\x18\x01 \x01(\t\">\n\x16\x46uzzyAnalyzerParameter\x12\x11\n\tmin_chars\x18\x01 \x01(\x05\x12\x11\n\tmax_chars\x18\x02 \x01(\x05\"\xb2\x03\n\x0b\x46ieldSchema\x12\x12\n\nfield_name\x18\x01 \x01(\t\x12=\n\nfield_type\x18\x02 \x01(\x0e\x32).com.aliyun.tablestore.protocol.FieldType\x12\x10\n\x08\x61nalyzer\x18\x04 \x01(\t\x12\r\n\x05index\x18\x05 \x01(\x08\x12\x1b\n\x13\x65nable_sort_and_agg\x18\x06 \x01(\x08\x12\r\n\x05store\x18\x07 \x01(\x08\x12\x42\n\rfield_schemas\x18\x08 \x03(\x0b\x32+.com.aliyun.tablestore.protocol.FieldSchema\x12\x10\n\x08is_array\x18\t \x01(\x08\x12\x1a\n\x12\x61nalyzer_parameter\x18\n \x01(\x0c\x12\x18\n\x10is_virtual_field\x18\x0b \x01(\x08\x12\x1a\n\x12source_field_names\x18\x0c \x03(\t\x12\x14\n\x0c\x64\x61te_formats\x18\r \x03(\t\x12\x45\n\x0evector_options\x18\x0f \x01(\x0b\x32-.com.aliyun.tablestore.protocol.VectorOptions\"\xac\x01\n\rVectorOptions\x12\x41\n\tdata_type\x18\x01 \x01(\x0e\x32..com.aliyun.tablestore.protocol.VectorDataType\x12\x11\n\tdimension\x18\x02 \x01(\x05\x12\x45\n\x0bmetric_type\x18\x03 \x01(\x0e\x32\x30.com.aliyun.tablestore.protocol.VectorMetricType\"\xd0\x01\n\x0bIndexSchema\x12\x42\n\rfield_schemas\x18\x01 \x03(\x0b\x32+.com.aliyun.tablestore.protocol.FieldSchema\x12\x43\n\rindex_setting\x18\x02 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.IndexSetting\x12\x38\n\nindex_sort\x18\x03 \x01(\x0b\x32$.com.aliyun.tablestore.protocol.Sort\"`\n\x0cIndexSetting\x12\x18\n\x10number_of_shards\x18\x01 \x01(\x05\x12\x16\n\x0erouting_fields\x18\x02 \x03(\t\x12\x1e\n\x16routing_partition_size\x18\x03 \x01(\x05\"\x95\x01\n\x18\x43reateSearchIndexRequest\x12\x12\n\ntable_name\x18\x01 \x02(\t\x12\x12\n\nindex_name\x18\x02 \x02(\t\x12;\n\x06schema\x18\x03 \x01(\x0b\x32+.com.aliyun.tablestore.protocol.IndexSchema\x12\x14\n\x0ctime_to_live\x18\x05 \x01(\x05\"\x1b\n\x19\x43reateSearchIndexResponse\"X\n\x18UpdateSearchIndexRequest\x12\x12\n\ntable_name\x18\x01 \x01(\t\x12\x12\n\nindex_name\x18\x02 \x01(\t\x12\x14\n\x0ctime_to_live\x18\x05 \x01(\x05\"\x1b\n\x19UpdateSearchIndexResponse\"3\n\tIndexInfo\x12\x12\n\ntable_name\x18\x01 \x01(\t\x12\x12\n\nindex_name\x18\x02 \x01(\t\",\n\x16ListSearchIndexRequest\x12\x12\n\ntable_name\x18\x01 \x01(\t\"U\n\x17ListSearchIndexResponse\x12:\n\x07indices\x18\x01 \x03(\x0b\x32).com.aliyun.tablestore.protocol.IndexInfo\"B\n\x18\x44\x65leteSearchIndexRequest\x12\x12\n\ntable_name\x18\x01 \x01(\t\x12\x12\n\nindex_name\x18\x02 \x01(\t\"\x1b\n\x19\x44\x65leteSearchIndexResponse\"i\n\x08SyncStat\x12=\n\nsync_phase\x18\x01 \x01(\x0e\x32).com.aliyun.tablestore.protocol.SyncPhase\x12\x1e\n\x16\x63urrent_sync_timestamp\x18\x02 \x01(\x03\"D\n\x1a\x44\x65scribeSearchIndexRequest\x12\x12\n\ntable_name\x18\x01 \x01(\t\x12\x12\n\nindex_name\x18\x02 \x01(\t\"\xc2\x01\n\x1b\x44\x65scribeSearchIndexResponse\x12;\n\x06schema\x18\x01 \x01(\x0b\x32+.com.aliyun.tablestore.protocol.IndexSchema\x12;\n\tsync_stat\x18\x02 \x01(\x0b\x32(.com.aliyun.tablestore.protocol.SyncStat\x12\x13\n\x0b\x63reate_time\x18\x06 \x01(\x03\x12\x14\n\x0ctime_to_live\x18\x07 \x01(\x05\"\x89\x01\n\x14\x43omputeSplitsRequest\x12\x12\n\ntable_name\x18\x01 \x01(\t\x12]\n\x1bsearch_index_splits_options\x18\x02 \x01(\x0b\x32\x38.com.aliyun.tablestore.protocol.SearchIndexSplitsOptions\".\n\x18SearchIndexSplitsOptions\x12\x12\n\nindex_name\x18\x01 \x01(\t\"@\n\x15\x43omputeSplitsResponse\x12\x12\n\nsession_id\x18\x01 \x01(\x0c\x12\x13\n\x0bsplits_size\x18\x02 \x01(\x05\"0\n\tSessionId\x12\x0f\n\x07version\x18\x01 \x01(\x05\x12\x12\n\nsession_id\x18\x02 \x01(\x0c\"\xa6\x01\n\tScanQuery\x12\x34\n\x05query\x18\x01 \x01(\x0b\x32%.com.aliyun.tablestore.protocol.Query\x12\r\n\x05limit\x18\x02 \x01(\x05\x12\x12\n\nalive_time\x18\x03 \x01(\x05\x12\r\n\x05token\x18\x04 \x01(\x0c\x12\x1b\n\x13\x63urrent_parallel_id\x18\x05 \x01(\x05\x12\x14\n\x0cmax_parallel\x18\x06 \x01(\x05\"\xbf\x01\n\x13ParallelScanRequest\x12\x12\n\ntable_name\x18\x01 \x01(\t\x12\x12\n\nindex_name\x18\x02 \x01(\t\x12\x44\n\x0e\x63olumns_to_get\x18\x03 \x01(\x0b\x32,.com.aliyun.tablestore.protocol.ColumnsToGet\x12\x12\n\nsession_id\x18\x04 \x01(\x0c\x12\x12\n\nscan_query\x18\x05 \x01(\x0c\x12\x12\n\ntimeout_ms\x18\x06 \x01(\x05\"8\n\x14ParallelScanResponse\x12\x0c\n\x04rows\x18\x01 \x03(\x0c\x12\x12\n\nnext_token\x18\x02 \x01(\x0c*\xe7\x02\n\tQueryType\x12\x0f\n\x0bMATCH_QUERY\x10\x01\x12\x16\n\x12MATCH_PHRASE_QUERY\x10\x02\x12\x0e\n\nTERM_QUERY\x10\x03\x12\x0f\n\x0bRANGE_QUERY\x10\x04\x12\x10\n\x0cPREFIX_QUERY\x10\x05\x12\x0e\n\nBOOL_QUERY\x10\x06\x12\x15\n\x11\x43ONST_SCORE_QUERY\x10\x07\x12\x18\n\x14\x46UNCTION_SCORE_QUERY\x10\x08\x12\x10\n\x0cNESTED_QUERY\x10\t\x12\x12\n\x0eWILDCARD_QUERY\x10\n\x12\x13\n\x0fMATCH_ALL_QUERY\x10\x0b\x12\x1a\n\x16GEO_BOUNDING_BOX_QUERY\x10\x0c\x12\x16\n\x12GEO_DISTANCE_QUERY\x10\r\x12\x15\n\x11GEO_POLYGON_QUERY\x10\x0e\x12\x0f\n\x0bTERMS_QUERY\x10\x0f\x12\x10\n\x0c\x45XISTS_QUERY\x10\x10\x12\x14\n\x10KNN_VECTOR_QUERY\x10\x11* \n\rQueryOperator\x12\x06\n\x02OR\x10\x01\x12\x07\n\x03\x41ND\x10\x02*r\n\tScoreMode\x12\x13\n\x0fSCORE_MODE_NONE\x10\x01\x12\x12\n\x0eSCORE_MODE_AVG\x10\x02\x12\x12\n\x0eSCORE_MODE_MAX\x10\x03\x12\x14\n\x10SCORE_MODE_TOTAL\x10\x04\x12\x12\n\x0eSCORE_MODE_MIN\x10\x05*4\n\tSortOrder\x12\x12\n\x0eSORT_ORDER_ASC\x10\x00\x12\x13\n\x0fSORT_ORDER_DESC\x10\x01*C\n\x08SortMode\x12\x11\n\rSORT_MODE_MIN\x10\x00\x12\x11\n\rSORT_MODE_MAX\x10\x01\x12\x11\n\rSORT_MODE_AVG\x10\x02*?\n\x0fGeoDistanceType\x12\x14\n\x10GEO_DISTANCE_ARC\x10\x00\x12\x16\n\x12GEO_DISTANCE_PLANE\x10\x01*\x93\x01\n\x0f\x41ggregationType\x12\x0b\n\x07\x41GG_AVG\x10\x01\x12\x0b\n\x07\x41GG_MAX\x10\x02\x12\x0b\n\x07\x41GG_MIN\x10\x03\x12\x0b\n\x07\x41GG_SUM\x10\x04\x12\r\n\tAGG_COUNT\x10\x05\x12\x16\n\x12\x41GG_DISTINCT_COUNT\x10\x06\x12\x10\n\x0c\x41GG_TOP_ROWS\x10\x07\x12\x13\n\x0f\x41GG_PERCENTILES\x10\x08*}\n\x0bGroupByType\x12\x12\n\x0eGROUP_BY_FIELD\x10\x01\x12\x12\n\x0eGROUP_BY_RANGE\x10\x02\x12\x13\n\x0fGROUP_BY_FILTER\x10\x03\x12\x19\n\x15GROUP_BY_GEO_DISTANCE\x10\x04\x12\x16\n\x12GROUP_BY_HISTOGRAM\x10\x05*d\n\x10\x43olumnReturnType\x12\x0e\n\nRETURN_ALL\x10\x01\x12\x14\n\x10RETURN_SPECIFIED\x10\x02\x12\x0f\n\x0bRETURN_NONE\x10\x03\x12\x19\n\x15RETURN_ALL_FROM_INDEX\x10\x04*v\n\tFieldType\x12\x08\n\x04LONG\x10\x01\x12\n\n\x06\x44OUBLE\x10\x02\x12\x0b\n\x07\x42OOLEAN\x10\x03\x12\x0b\n\x07KEYWORD\x10\x04\x12\x08\n\x04TEXT\x10\x05\x12\n\n\x06NESTED\x10\x06\x12\r\n\tGEO_POINT\x10\x07\x12\x08\n\x04\x44\x41TE\x10\x08\x12\n\n\x06VECTOR\x10\t*!\n\x0eVectorDataType\x12\x0f\n\x0bVD_FLOAT_32\x10\x02*G\n\x10VectorMetricType\x12\x10\n\x0cVM_EUCLIDEAN\x10\x00\x12\r\n\tVM_COSINE\x10\x01\x12\x12\n\x0eVM_DOT_PRODUCT\x10\x02*\x1f\n\tSyncPhase\x12\x08\n\x04\x46ULL\x10\x01\x12\x08\n\x04INCR\x10\x02')
 )
-_sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 _QUERYTYPE = _descriptor.EnumDescriptor(
   name='QueryType',
@@ -32,73 +31,77 @@ _QUERYTYPE = _descriptor.EnumDescriptor(
   values=[
     _descriptor.EnumValueDescriptor(
       name='MATCH_QUERY', index=0, number=1,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='MATCH_PHRASE_QUERY', index=1, number=2,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='TERM_QUERY', index=2, number=3,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='RANGE_QUERY', index=3, number=4,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='PREFIX_QUERY', index=4, number=5,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='BOOL_QUERY', index=5, number=6,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='CONST_SCORE_QUERY', index=6, number=7,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='FUNCTION_SCORE_QUERY', index=7, number=8,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='NESTED_QUERY', index=8, number=9,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='WILDCARD_QUERY', index=9, number=10,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='MATCH_ALL_QUERY', index=10, number=11,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='GEO_BOUNDING_BOX_QUERY', index=11, number=12,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='GEO_DISTANCE_QUERY', index=12, number=13,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='GEO_POLYGON_QUERY', index=13, number=14,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='TERMS_QUERY', index=14, number=15,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='EXISTS_QUERY', index=15, number=16,
-      options=None,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='KNN_VECTOR_QUERY', index=16, number=17,
+      serialized_options=None,
       type=None),
   ],
   containing_type=None,
-  options=None,
-  serialized_start=11511,
-  serialized_end=11848,
+  serialized_options=None,
+  serialized_start=11896,
+  serialized_end=12255,
 )
 _sym_db.RegisterEnumDescriptor(_QUERYTYPE)
 
@@ -111,17 +114,17 @@ _QUERYOPERATOR = _descriptor.EnumDescriptor(
   values=[
     _descriptor.EnumValueDescriptor(
       name='OR', index=0, number=1,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='AND', index=1, number=2,
-      options=None,
+      serialized_options=None,
       type=None),
   ],
   containing_type=None,
-  options=None,
-  serialized_start=11850,
-  serialized_end=11882,
+  serialized_options=None,
+  serialized_start=12257,
+  serialized_end=12289,
 )
 _sym_db.RegisterEnumDescriptor(_QUERYOPERATOR)
 
@@ -134,29 +137,29 @@ _SCOREMODE = _descriptor.EnumDescriptor(
   values=[
     _descriptor.EnumValueDescriptor(
       name='SCORE_MODE_NONE', index=0, number=1,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='SCORE_MODE_AVG', index=1, number=2,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='SCORE_MODE_MAX', index=2, number=3,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='SCORE_MODE_TOTAL', index=3, number=4,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='SCORE_MODE_MIN', index=4, number=5,
-      options=None,
+      serialized_options=None,
       type=None),
   ],
   containing_type=None,
-  options=None,
-  serialized_start=11884,
-  serialized_end=11998,
+  serialized_options=None,
+  serialized_start=12291,
+  serialized_end=12405,
 )
 _sym_db.RegisterEnumDescriptor(_SCOREMODE)
 
@@ -169,17 +172,17 @@ _SORTORDER = _descriptor.EnumDescriptor(
   values=[
     _descriptor.EnumValueDescriptor(
       name='SORT_ORDER_ASC', index=0, number=0,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='SORT_ORDER_DESC', index=1, number=1,
-      options=None,
+      serialized_options=None,
       type=None),
   ],
   containing_type=None,
-  options=None,
-  serialized_start=12000,
-  serialized_end=12052,
+  serialized_options=None,
+  serialized_start=12407,
+  serialized_end=12459,
 )
 _sym_db.RegisterEnumDescriptor(_SORTORDER)
 
@@ -192,21 +195,21 @@ _SORTMODE = _descriptor.EnumDescriptor(
   values=[
     _descriptor.EnumValueDescriptor(
       name='SORT_MODE_MIN', index=0, number=0,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='SORT_MODE_MAX', index=1, number=1,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='SORT_MODE_AVG', index=2, number=2,
-      options=None,
+      serialized_options=None,
       type=None),
   ],
   containing_type=None,
-  options=None,
-  serialized_start=12054,
-  serialized_end=12121,
+  serialized_options=None,
+  serialized_start=12461,
+  serialized_end=12528,
 )
 _sym_db.RegisterEnumDescriptor(_SORTMODE)
 
@@ -219,17 +222,17 @@ _GEODISTANCETYPE = _descriptor.EnumDescriptor(
   values=[
     _descriptor.EnumValueDescriptor(
       name='GEO_DISTANCE_ARC', index=0, number=0,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='GEO_DISTANCE_PLANE', index=1, number=1,
-      options=None,
+      serialized_options=None,
       type=None),
   ],
   containing_type=None,
-  options=None,
-  serialized_start=12123,
-  serialized_end=12186,
+  serialized_options=None,
+  serialized_start=12530,
+  serialized_end=12593,
 )
 _sym_db.RegisterEnumDescriptor(_GEODISTANCETYPE)
 
@@ -242,41 +245,41 @@ _AGGREGATIONTYPE = _descriptor.EnumDescriptor(
   values=[
     _descriptor.EnumValueDescriptor(
       name='AGG_AVG', index=0, number=1,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='AGG_MAX', index=1, number=2,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='AGG_MIN', index=2, number=3,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='AGG_SUM', index=3, number=4,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='AGG_COUNT', index=4, number=5,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='AGG_DISTINCT_COUNT', index=5, number=6,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='AGG_TOP_ROWS', index=6, number=7,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='AGG_PERCENTILES', index=7, number=8,
-      options=None,
+      serialized_options=None,
       type=None),
   ],
   containing_type=None,
-  options=None,
-  serialized_start=12189,
-  serialized_end=12336,
+  serialized_options=None,
+  serialized_start=12596,
+  serialized_end=12743,
 )
 _sym_db.RegisterEnumDescriptor(_AGGREGATIONTYPE)
 
@@ -289,29 +292,29 @@ _GROUPBYTYPE = _descriptor.EnumDescriptor(
   values=[
     _descriptor.EnumValueDescriptor(
       name='GROUP_BY_FIELD', index=0, number=1,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='GROUP_BY_RANGE', index=1, number=2,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='GROUP_BY_FILTER', index=2, number=3,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='GROUP_BY_GEO_DISTANCE', index=3, number=4,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='GROUP_BY_HISTOGRAM', index=4, number=5,
-      options=None,
+      serialized_options=None,
       type=None),
   ],
   containing_type=None,
-  options=None,
-  serialized_start=12338,
-  serialized_end=12463,
+  serialized_options=None,
+  serialized_start=12745,
+  serialized_end=12870,
 )
 _sym_db.RegisterEnumDescriptor(_GROUPBYTYPE)
 
@@ -324,25 +327,25 @@ _COLUMNRETURNTYPE = _descriptor.EnumDescriptor(
   values=[
     _descriptor.EnumValueDescriptor(
       name='RETURN_ALL', index=0, number=1,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='RETURN_SPECIFIED', index=1, number=2,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='RETURN_NONE', index=2, number=3,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='RETURN_ALL_FROM_INDEX', index=3, number=4,
-      options=None,
+      serialized_options=None,
       type=None),
   ],
   containing_type=None,
-  options=None,
-  serialized_start=12465,
-  serialized_end=12565,
+  serialized_options=None,
+  serialized_start=12872,
+  serialized_end=12972,
 )
 _sym_db.RegisterEnumDescriptor(_COLUMNRETURNTYPE)
 
@@ -355,45 +358,95 @@ _FIELDTYPE = _descriptor.EnumDescriptor(
   values=[
     _descriptor.EnumValueDescriptor(
       name='LONG', index=0, number=1,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='DOUBLE', index=1, number=2,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='BOOLEAN', index=2, number=3,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='KEYWORD', index=3, number=4,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='TEXT', index=4, number=5,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='NESTED', index=5, number=6,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='GEO_POINT', index=6, number=7,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='DATE', index=7, number=8,
-      options=None,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='VECTOR', index=8, number=9,
+      serialized_options=None,
       type=None),
   ],
   containing_type=None,
-  options=None,
-  serialized_start=12567,
-  serialized_end=12673,
+  serialized_options=None,
+  serialized_start=12974,
+  serialized_end=13092,
 )
 _sym_db.RegisterEnumDescriptor(_FIELDTYPE)
 
 FieldType = enum_type_wrapper.EnumTypeWrapper(_FIELDTYPE)
+_VECTORDATATYPE = _descriptor.EnumDescriptor(
+  name='VectorDataType',
+  full_name='com.aliyun.tablestore.protocol.VectorDataType',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='VD_FLOAT_32', index=0, number=2,
+      serialized_options=None,
+      type=None),
+  ],
+  containing_type=None,
+  serialized_options=None,
+  serialized_start=13094,
+  serialized_end=13127,
+)
+_sym_db.RegisterEnumDescriptor(_VECTORDATATYPE)
+
+VectorDataType = enum_type_wrapper.EnumTypeWrapper(_VECTORDATATYPE)
+_VECTORMETRICTYPE = _descriptor.EnumDescriptor(
+  name='VectorMetricType',
+  full_name='com.aliyun.tablestore.protocol.VectorMetricType',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='VM_EUCLIDEAN', index=0, number=0,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='VM_COSINE', index=1, number=1,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='VM_DOT_PRODUCT', index=2, number=2,
+      serialized_options=None,
+      type=None),
+  ],
+  containing_type=None,
+  serialized_options=None,
+  serialized_start=13129,
+  serialized_end=13200,
+)
+_sym_db.RegisterEnumDescriptor(_VECTORMETRICTYPE)
+
+VectorMetricType = enum_type_wrapper.EnumTypeWrapper(_VECTORMETRICTYPE)
 _SYNCPHASE = _descriptor.EnumDescriptor(
   name='SyncPhase',
   full_name='com.aliyun.tablestore.protocol.SyncPhase',
@@ -402,17 +455,17 @@ _SYNCPHASE = _descriptor.EnumDescriptor(
   values=[
     _descriptor.EnumValueDescriptor(
       name='FULL', index=0, number=1,
-      options=None,
+      serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
       name='INCR', index=1, number=2,
-      options=None,
+      serialized_options=None,
       type=None),
   ],
   containing_type=None,
-  options=None,
-  serialized_start=12675,
-  serialized_end=12706,
+  serialized_options=None,
+  serialized_start=13202,
+  serialized_end=13233,
 )
 _sym_db.RegisterEnumDescriptor(_SYNCPHASE)
 
@@ -433,6 +486,7 @@ GEO_DISTANCE_QUERY = 13
 GEO_POLYGON_QUERY = 14
 TERMS_QUERY = 15
 EXISTS_QUERY = 16
+KNN_VECTOR_QUERY = 17
 OR = 1
 AND = 2
 SCORE_MODE_NONE = 1
@@ -472,6 +526,11 @@ TEXT = 5
 NESTED = 6
 GEO_POINT = 7
 DATE = 8
+VECTOR = 9
+VD_FLOAT_32 = 2
+VM_EUCLIDEAN = 0
+VM_COSINE = 1
+VM_DOT_PRODUCT = 2
 FULL = 1
 INCR = 2
 
@@ -490,35 +549,35 @@ _MATCHQUERY = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='text', full_name='com.aliyun.tablestore.protocol.MatchQuery.text', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='minimum_should_match', full_name='com.aliyun.tablestore.protocol.MatchQuery.minimum_should_match', index=2,
       number=3, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='operator', full_name='com.aliyun.tablestore.protocol.MatchQuery.operator', index=3,
       number=4, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=1,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
@@ -542,21 +601,21 @@ _MATCHPHRASEQUERY = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='text', full_name='com.aliyun.tablestore.protocol.MatchPhraseQuery.text', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
@@ -580,7 +639,7 @@ _MATCHALLQUERY = _descriptor.Descriptor(
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
@@ -604,21 +663,21 @@ _TERMQUERY = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='term', full_name='com.aliyun.tablestore.protocol.TermQuery.term', index=1,
       number=2, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
@@ -642,21 +701,21 @@ _TERMSQUERY = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='terms', full_name='com.aliyun.tablestore.protocol.TermsQuery.terms', index=1,
       number=2, type=12, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
@@ -680,42 +739,42 @@ _RANGEQUERY = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='range_from', full_name='com.aliyun.tablestore.protocol.RangeQuery.range_from', index=1,
       number=2, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='range_to', full_name='com.aliyun.tablestore.protocol.RangeQuery.range_to', index=2,
       number=3, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='include_lower', full_name='com.aliyun.tablestore.protocol.RangeQuery.include_lower', index=3,
       number=4, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='include_upper', full_name='com.aliyun.tablestore.protocol.RangeQuery.include_upper', index=4,
       number=5, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
@@ -739,21 +798,21 @@ _PREFIXQUERY = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='prefix', full_name='com.aliyun.tablestore.protocol.PrefixQuery.prefix', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
@@ -777,21 +836,21 @@ _WILDCARDQUERY = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='value', full_name='com.aliyun.tablestore.protocol.WildcardQuery.value', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
@@ -815,42 +874,42 @@ _BOOLQUERY = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='must_not_queries', full_name='com.aliyun.tablestore.protocol.BoolQuery.must_not_queries', index=1,
       number=2, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='filter_queries', full_name='com.aliyun.tablestore.protocol.BoolQuery.filter_queries', index=2,
       number=3, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='should_queries', full_name='com.aliyun.tablestore.protocol.BoolQuery.should_queries', index=3,
       number=4, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='minimum_should_match', full_name='com.aliyun.tablestore.protocol.BoolQuery.minimum_should_match', index=4,
       number=5, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
@@ -874,14 +933,14 @@ _CONSTSCOREQUERY = _descriptor.Descriptor(
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
@@ -905,14 +964,14 @@ _FIELDVALUEFACTOR = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
@@ -936,21 +995,21 @@ _FUNCTIONSCOREQUERY = _descriptor.Descriptor(
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='field_value_factor', full_name='com.aliyun.tablestore.protocol.FunctionScoreQuery.field_value_factor', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
@@ -974,28 +1033,28 @@ _NESTEDQUERY = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='query', full_name='com.aliyun.tablestore.protocol.NestedQuery.query', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='score_mode', full_name='com.aliyun.tablestore.protocol.NestedQuery.score_mode', index=2,
       number=3, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=1,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
@@ -1019,28 +1078,28 @@ _GEOBOUNDINGBOXQUERY = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='top_left', full_name='com.aliyun.tablestore.protocol.GeoBoundingBoxQuery.top_left', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='bottom_right', full_name='com.aliyun.tablestore.protocol.GeoBoundingBoxQuery.bottom_right', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
@@ -1064,28 +1123,28 @@ _GEODISTANCEQUERY = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='center_point', full_name='com.aliyun.tablestore.protocol.GeoDistanceQuery.center_point', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='distance', full_name='com.aliyun.tablestore.protocol.GeoDistanceQuery.distance', index=2,
       number=3, type=1, cpp_type=5, label=1,
-      has_default_value=False, default_value=0,
+      has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
@@ -1109,21 +1168,21 @@ _GEOPOLYGONQUERY = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='points', full_name='com.aliyun.tablestore.protocol.GeoPolygonQuery.points', index=1,
       number=2, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
@@ -1147,14 +1206,14 @@ _EXISTSQUERY = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
@@ -1162,6 +1221,58 @@ _EXISTSQUERY = _descriptor.Descriptor(
   ],
   serialized_start=1510,
   serialized_end=1543,
+)
+
+
+_KNNVECTORQUERY = _descriptor.Descriptor(
+  name='KnnVectorQuery',
+  full_name='com.aliyun.tablestore.protocol.KnnVectorQuery',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='field_name', full_name='com.aliyun.tablestore.protocol.KnnVectorQuery.field_name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='top_k', full_name='com.aliyun.tablestore.protocol.KnnVectorQuery.top_k', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='float32_query_vector', full_name='com.aliyun.tablestore.protocol.KnnVectorQuery.float32_query_vector', index=2,
+      number=4, type=2, cpp_type=6, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='filter', full_name='com.aliyun.tablestore.protocol.KnnVectorQuery.filter', index=3,
+      number=5, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto2',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1546,
+  serialized_end=1682,
 )
 
 
@@ -1178,28 +1289,28 @@ _QUERY = _descriptor.Descriptor(
       has_default_value=False, default_value=1,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='query', full_name='com.aliyun.tablestore.protocol.Query.query', index=1,
       number=2, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1545,
-  serialized_end=1624,
+  serialized_start=1684,
+  serialized_end=1763,
 )
 
 
@@ -1216,21 +1327,21 @@ _COLLAPSE = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1626,
-  serialized_end=1656,
+  serialized_start=1765,
+  serialized_end=1795,
 )
 
 
@@ -1247,28 +1358,28 @@ _NESTEDFILTER = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='filter', full_name='com.aliyun.tablestore.protocol.NestedFilter.filter', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1658,
-  serialized_end=1741,
+  serialized_start=1797,
+  serialized_end=1880,
 )
 
 
@@ -1285,21 +1396,21 @@ _SCORESORT = _descriptor.Descriptor(
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1743,
-  serialized_end=1812,
+  serialized_start=1882,
+  serialized_end=1951,
 )
 
 
@@ -1316,21 +1427,21 @@ _PRIMARYKEYSORT = _descriptor.Descriptor(
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1814,
-  serialized_end=1888,
+  serialized_start=1953,
+  serialized_end=2027,
 )
 
 
@@ -1347,42 +1458,42 @@ _FIELDSORT = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='order', full_name='com.aliyun.tablestore.protocol.FieldSort.order', index=1,
       number=2, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='mode', full_name='com.aliyun.tablestore.protocol.FieldSort.mode', index=2,
       number=3, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='nested_filter', full_name='com.aliyun.tablestore.protocol.FieldSort.nested_filter', index=3,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1891,
-  serialized_end=2105,
+  serialized_start=2030,
+  serialized_end=2244,
 )
 
 
@@ -1399,56 +1510,56 @@ _GEODISTANCESORT = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='points', full_name='com.aliyun.tablestore.protocol.GeoDistanceSort.points', index=1,
       number=2, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='order', full_name='com.aliyun.tablestore.protocol.GeoDistanceSort.order', index=2,
       number=3, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='mode', full_name='com.aliyun.tablestore.protocol.GeoDistanceSort.mode', index=3,
       number=4, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='distance_type', full_name='com.aliyun.tablestore.protocol.GeoDistanceSort.distance_type', index=4,
       number=5, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='nested_filter', full_name='com.aliyun.tablestore.protocol.GeoDistanceSort.nested_filter', index=5,
       number=6, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2108,
-  serialized_end=2416,
+  serialized_start=2247,
+  serialized_end=2555,
 )
 
 
@@ -1465,42 +1576,42 @@ _SORTER = _descriptor.Descriptor(
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='geo_distance_sort', full_name='com.aliyun.tablestore.protocol.Sorter.geo_distance_sort', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='score_sort', full_name='com.aliyun.tablestore.protocol.Sorter.score_sort', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='pk_sort', full_name='com.aliyun.tablestore.protocol.Sorter.pk_sort', index=3,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2419,
-  serialized_end=2694,
+  serialized_start=2558,
+  serialized_end=2833,
 )
 
 
@@ -1517,21 +1628,21 @@ _SORT = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2696,
-  serialized_end=2758,
+  serialized_start=2835,
+  serialized_end=2897,
 )
 
 
@@ -1548,35 +1659,35 @@ _AGGREGATION = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='type', full_name='com.aliyun.tablestore.protocol.Aggregation.type', index=1,
       number=2, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=1,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='body', full_name='com.aliyun.tablestore.protocol.Aggregation.body', index=2,
       number=3, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2760,
-  serialized_end=2864,
+  serialized_start=2899,
+  serialized_end=3003,
 )
 
 
@@ -1593,21 +1704,21 @@ _AGGREGATIONS = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2866,
-  serialized_end=2939,
+  serialized_start=3005,
+  serialized_end=3078,
 )
 
 
@@ -1624,28 +1735,28 @@ _AVGAGGREGATION = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='missing', full_name='com.aliyun.tablestore.protocol.AvgAggregation.missing', index=1,
       number=2, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2941,
-  serialized_end=2994,
+  serialized_start=3080,
+  serialized_end=3133,
 )
 
 
@@ -1662,28 +1773,28 @@ _MAXAGGREGATION = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='missing', full_name='com.aliyun.tablestore.protocol.MaxAggregation.missing', index=1,
       number=2, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2996,
-  serialized_end=3049,
+  serialized_start=3135,
+  serialized_end=3188,
 )
 
 
@@ -1700,28 +1811,28 @@ _MINAGGREGATION = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='missing', full_name='com.aliyun.tablestore.protocol.MinAggregation.missing', index=1,
       number=2, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3051,
-  serialized_end=3104,
+  serialized_start=3190,
+  serialized_end=3243,
 )
 
 
@@ -1738,28 +1849,28 @@ _SUMAGGREGATION = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='missing', full_name='com.aliyun.tablestore.protocol.SumAggregation.missing', index=1,
       number=2, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3106,
-  serialized_end=3159,
+  serialized_start=3245,
+  serialized_end=3298,
 )
 
 
@@ -1776,21 +1887,21 @@ _COUNTAGGREGATION = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3161,
-  serialized_end=3199,
+  serialized_start=3300,
+  serialized_end=3338,
 )
 
 
@@ -1807,28 +1918,28 @@ _DISTINCTCOUNTAGGREGATION = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='missing', full_name='com.aliyun.tablestore.protocol.DistinctCountAggregation.missing', index=1,
       number=2, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3201,
-  serialized_end=3264,
+  serialized_start=3340,
+  serialized_end=3403,
 )
 
 
@@ -1845,28 +1956,28 @@ _TOPROWSAGGREGATION = _descriptor.Descriptor(
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='sort', full_name='com.aliyun.tablestore.protocol.TopRowsAggregation.sort', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3266,
-  serialized_end=3353,
+  serialized_start=3405,
+  serialized_end=3492,
 )
 
 
@@ -1883,35 +1994,35 @@ _PERCENTILESAGGREGATION = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='percentiles', full_name='com.aliyun.tablestore.protocol.PercentilesAggregation.percentiles', index=1,
       number=2, type=1, cpp_type=5, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='missing_value', full_name='com.aliyun.tablestore.protocol.PercentilesAggregation.missing_value', index=2,
       number=3, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3355,
-  serialized_end=3443,
+  serialized_start=3494,
+  serialized_end=3582,
 )
 
 
@@ -1925,24 +2036,24 @@ _AVGAGGREGATIONRESULT = _descriptor.Descriptor(
     _descriptor.FieldDescriptor(
       name='value', full_name='com.aliyun.tablestore.protocol.AvgAggregationResult.value', index=0,
       number=1, type=1, cpp_type=5, label=1,
-      has_default_value=False, default_value=0,
+      has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3445,
-  serialized_end=3482,
+  serialized_start=3584,
+  serialized_end=3621,
 )
 
 
@@ -1959,21 +2070,21 @@ _TOPROWSAGGREGATIONRESULT = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3484,
-  serialized_end=3524,
+  serialized_start=3623,
+  serialized_end=3663,
 )
 
 
@@ -1990,21 +2101,21 @@ _DISTINCTCOUNTAGGREGATIONRESULT = _descriptor.Descriptor(
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3526,
-  serialized_end=3573,
+  serialized_start=3665,
+  serialized_end=3712,
 )
 
 
@@ -2018,24 +2129,24 @@ _MAXAGGREGATIONRESULT = _descriptor.Descriptor(
     _descriptor.FieldDescriptor(
       name='value', full_name='com.aliyun.tablestore.protocol.MaxAggregationResult.value', index=0,
       number=1, type=1, cpp_type=5, label=1,
-      has_default_value=False, default_value=0,
+      has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3575,
-  serialized_end=3612,
+  serialized_start=3714,
+  serialized_end=3751,
 )
 
 
@@ -2049,24 +2160,24 @@ _MINAGGREGATIONRESULT = _descriptor.Descriptor(
     _descriptor.FieldDescriptor(
       name='value', full_name='com.aliyun.tablestore.protocol.MinAggregationResult.value', index=0,
       number=1, type=1, cpp_type=5, label=1,
-      has_default_value=False, default_value=0,
+      has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3614,
-  serialized_end=3651,
+  serialized_start=3753,
+  serialized_end=3790,
 )
 
 
@@ -2080,24 +2191,24 @@ _SUMAGGREGATIONRESULT = _descriptor.Descriptor(
     _descriptor.FieldDescriptor(
       name='value', full_name='com.aliyun.tablestore.protocol.SumAggregationResult.value', index=0,
       number=1, type=1, cpp_type=5, label=1,
-      has_default_value=False, default_value=0,
+      has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3653,
-  serialized_end=3690,
+  serialized_start=3792,
+  serialized_end=3829,
 )
 
 
@@ -2114,21 +2225,21 @@ _COUNTAGGREGATIONRESULT = _descriptor.Descriptor(
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3692,
-  serialized_end=3731,
+  serialized_start=3831,
+  serialized_end=3870,
 )
 
 
@@ -2142,31 +2253,31 @@ _PERCENTILESAGGREGATIONITEM = _descriptor.Descriptor(
     _descriptor.FieldDescriptor(
       name='key', full_name='com.aliyun.tablestore.protocol.PercentilesAggregationItem.key', index=0,
       number=1, type=1, cpp_type=5, label=1,
-      has_default_value=False, default_value=0,
+      has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='value', full_name='com.aliyun.tablestore.protocol.PercentilesAggregationItem.value', index=1,
       number=2, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3733,
-  serialized_end=3789,
+  serialized_start=3872,
+  serialized_end=3928,
 )
 
 
@@ -2183,21 +2294,21 @@ _PERCENTILESAGGREGATIONRESULT = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3792,
-  serialized_end=3921,
+  serialized_start=3931,
+  serialized_end=4060,
 )
 
 
@@ -2214,35 +2325,35 @@ _AGGREGATIONRESULT = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='type', full_name='com.aliyun.tablestore.protocol.AggregationResult.type', index=1,
       number=2, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=1,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='agg_result', full_name='com.aliyun.tablestore.protocol.AggregationResult.agg_result', index=2,
       number=3, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3923,
-  serialized_end=4039,
+  serialized_start=4062,
+  serialized_end=4178,
 )
 
 
@@ -2259,21 +2370,21 @@ _AGGREGATIONSRESULT = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4041,
-  serialized_end=4133,
+  serialized_start=4180,
+  serialized_end=4272,
 )
 
 
@@ -2290,35 +2401,35 @@ _GROUPBY = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='type', full_name='com.aliyun.tablestore.protocol.GroupBy.type', index=1,
       number=2, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=1,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='body', full_name='com.aliyun.tablestore.protocol.GroupBy.body', index=2,
       number=3, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4135,
-  serialized_end=4231,
+  serialized_start=4274,
+  serialized_end=4370,
 )
 
 
@@ -2335,21 +2446,21 @@ _GROUPBYS = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4233,
-  serialized_end=4303,
+  serialized_start=4372,
+  serialized_end=4442,
 )
 
 
@@ -2366,21 +2477,21 @@ _GROUPKEYSORT = _descriptor.Descriptor(
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4305,
-  serialized_end=4377,
+  serialized_start=4444,
+  serialized_end=4516,
 )
 
 
@@ -2397,21 +2508,21 @@ _ROWCOUNTSORT = _descriptor.Descriptor(
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4379,
-  serialized_end=4451,
+  serialized_start=4518,
+  serialized_end=4590,
 )
 
 
@@ -2428,28 +2539,28 @@ _SUBAGGSORT = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='order', full_name='com.aliyun.tablestore.protocol.SubAggSort.order', index=1,
       number=2, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4453,
-  serialized_end=4545,
+  serialized_start=4592,
+  serialized_end=4684,
 )
 
 
@@ -2466,35 +2577,35 @@ _GROUPBYSORTER = _descriptor.Descriptor(
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='row_count_sort', full_name='com.aliyun.tablestore.protocol.GroupBySorter.row_count_sort', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='sub_agg_sort', full_name='com.aliyun.tablestore.protocol.GroupBySorter.sub_agg_sort', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4548,
-  serialized_end=4769,
+  serialized_start=4687,
+  serialized_end=4908,
 )
 
 
@@ -2511,21 +2622,21 @@ _GROUPBYSORT = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4771,
-  serialized_end=4848,
+  serialized_start=4910,
+  serialized_end=4987,
 )
 
 
@@ -2542,49 +2653,49 @@ _GROUPBYFIELD = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='size', full_name='com.aliyun.tablestore.protocol.GroupByField.size', index=1,
       number=2, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='sort', full_name='com.aliyun.tablestore.protocol.GroupByField.sort', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='sub_aggs', full_name='com.aliyun.tablestore.protocol.GroupByField.sub_aggs', index=3,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='sub_group_bys', full_name='com.aliyun.tablestore.protocol.GroupByField.sub_group_bys', index=4,
       number=5, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4851,
-  serialized_end=5087,
+  serialized_start=4990,
+  serialized_end=5226,
 )
 
 
@@ -2598,31 +2709,31 @@ _RANGE = _descriptor.Descriptor(
     _descriptor.FieldDescriptor(
       name='begin', full_name='com.aliyun.tablestore.protocol.Range.begin', index=0,
       number=1, type=1, cpp_type=5, label=1,
-      has_default_value=False, default_value=0,
+      has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='end', full_name='com.aliyun.tablestore.protocol.Range.end', index=1,
       number=2, type=1, cpp_type=5, label=1,
-      has_default_value=False, default_value=0,
+      has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5089,
-  serialized_end=5124,
+  serialized_start=5228,
+  serialized_end=5263,
 )
 
 
@@ -2639,42 +2750,42 @@ _GROUPBYRANGE = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='ranges', full_name='com.aliyun.tablestore.protocol.GroupByRange.ranges', index=1,
       number=2, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='sub_aggs', full_name='com.aliyun.tablestore.protocol.GroupByRange.sub_aggs', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='sub_group_bys', full_name='com.aliyun.tablestore.protocol.GroupByRange.sub_group_bys', index=3,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5127,
-  serialized_end=5345,
+  serialized_start=5266,
+  serialized_end=5484,
 )
 
 
@@ -2691,35 +2802,35 @@ _GROUPBYFILTER = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='sub_aggs', full_name='com.aliyun.tablestore.protocol.GroupByFilter.sub_aggs', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='sub_group_bys', full_name='com.aliyun.tablestore.protocol.GroupByFilter.sub_group_bys', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5348,
-  serialized_end=5548,
+  serialized_start=5487,
+  serialized_end=5687,
 )
 
 
@@ -2733,31 +2844,31 @@ _GEOPOINT = _descriptor.Descriptor(
     _descriptor.FieldDescriptor(
       name='lat', full_name='com.aliyun.tablestore.protocol.GeoPoint.lat', index=0,
       number=1, type=1, cpp_type=5, label=1,
-      has_default_value=False, default_value=0,
+      has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='lon', full_name='com.aliyun.tablestore.protocol.GeoPoint.lon', index=1,
       number=2, type=1, cpp_type=5, label=1,
-      has_default_value=False, default_value=0,
+      has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5550,
-  serialized_end=5586,
+  serialized_start=5689,
+  serialized_end=5725,
 )
 
 
@@ -2774,49 +2885,49 @@ _GROUPBYGEODISTANCE = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='origin', full_name='com.aliyun.tablestore.protocol.GroupByGeoDistance.origin', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='ranges', full_name='com.aliyun.tablestore.protocol.GroupByGeoDistance.ranges', index=2,
       number=3, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='sub_aggs', full_name='com.aliyun.tablestore.protocol.GroupByGeoDistance.sub_aggs', index=3,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='sub_group_bys', full_name='com.aliyun.tablestore.protocol.GroupByGeoDistance.sub_group_bys', index=4,
       number=5, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5589,
-  serialized_end=5871,
+  serialized_start=5728,
+  serialized_end=6010,
 )
 
 
@@ -2833,28 +2944,28 @@ _FIELDRANGE = _descriptor.Descriptor(
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='max', full_name='com.aliyun.tablestore.protocol.FieldRange.max', index=1,
       number=2, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5873,
-  serialized_end=5911,
+  serialized_start=6012,
+  serialized_end=6050,
 )
 
 
@@ -2871,70 +2982,70 @@ _GROUPBYHISTOGRAM = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='interval', full_name='com.aliyun.tablestore.protocol.GroupByHistogram.interval', index=1,
       number=2, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='missing_value', full_name='com.aliyun.tablestore.protocol.GroupByHistogram.missing_value', index=2,
       number=3, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='min_doc_count', full_name='com.aliyun.tablestore.protocol.GroupByHistogram.min_doc_count', index=3,
       number=4, type=3, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='sort', full_name='com.aliyun.tablestore.protocol.GroupByHistogram.sort', index=4,
       number=5, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='field_range', full_name='com.aliyun.tablestore.protocol.GroupByHistogram.field_range', index=5,
       number=6, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='sub_aggs', full_name='com.aliyun.tablestore.protocol.GroupByHistogram.sub_aggs', index=6,
       number=7, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='sub_group_bys', full_name='com.aliyun.tablestore.protocol.GroupByHistogram.sub_group_bys', index=7,
       number=8, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5914,
-  serialized_end=6269,
+  serialized_start=6053,
+  serialized_end=6408,
 )
 
 
@@ -2951,42 +3062,42 @@ _GROUPBYFIELDRESULTITEM = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='row_count', full_name='com.aliyun.tablestore.protocol.GroupByFieldResultItem.row_count', index=1,
       number=2, type=3, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='sub_aggs_result', full_name='com.aliyun.tablestore.protocol.GroupByFieldResultItem.sub_aggs_result', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='sub_group_bys_result', full_name='com.aliyun.tablestore.protocol.GroupByFieldResultItem.sub_group_bys_result', index=3,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6272,
-  serialized_end=6483,
+  serialized_start=6411,
+  serialized_end=6622,
 )
 
 
@@ -3003,21 +3114,21 @@ _GROUPBYFIELDRESULT = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6485,
-  serialized_end=6598,
+  serialized_start=6624,
+  serialized_end=6737,
 )
 
 
@@ -3031,52 +3142,52 @@ _GROUPBYRANGERESULTITEM = _descriptor.Descriptor(
     _descriptor.FieldDescriptor(
       name='range_from', full_name='com.aliyun.tablestore.protocol.GroupByRangeResultItem.range_from', index=0,
       number=1, type=1, cpp_type=5, label=1,
-      has_default_value=False, default_value=0,
+      has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='range_to', full_name='com.aliyun.tablestore.protocol.GroupByRangeResultItem.range_to', index=1,
       number=2, type=1, cpp_type=5, label=1,
-      has_default_value=False, default_value=0,
+      has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='row_count', full_name='com.aliyun.tablestore.protocol.GroupByRangeResultItem.row_count', index=2,
       number=3, type=3, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='sub_aggs_result', full_name='com.aliyun.tablestore.protocol.GroupByRangeResultItem.sub_aggs_result', index=3,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='sub_group_bys_result', full_name='com.aliyun.tablestore.protocol.GroupByRangeResultItem.sub_group_bys_result', index=4,
       number=5, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6601,
-  serialized_end=6837,
+  serialized_start=6740,
+  serialized_end=6976,
 )
 
 
@@ -3093,21 +3204,21 @@ _GROUPBYRANGERESULT = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6839,
-  serialized_end=6952,
+  serialized_start=6978,
+  serialized_end=7091,
 )
 
 
@@ -3121,52 +3232,52 @@ _GROUPBYGEODISTANCERESULTITEM = _descriptor.Descriptor(
     _descriptor.FieldDescriptor(
       name='range_from', full_name='com.aliyun.tablestore.protocol.GroupByGeoDistanceResultItem.range_from', index=0,
       number=1, type=1, cpp_type=5, label=1,
-      has_default_value=False, default_value=0,
+      has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='range_to', full_name='com.aliyun.tablestore.protocol.GroupByGeoDistanceResultItem.range_to', index=1,
       number=2, type=1, cpp_type=5, label=1,
-      has_default_value=False, default_value=0,
+      has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='row_count', full_name='com.aliyun.tablestore.protocol.GroupByGeoDistanceResultItem.row_count', index=2,
       number=3, type=3, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='sub_aggs_result', full_name='com.aliyun.tablestore.protocol.GroupByGeoDistanceResultItem.sub_aggs_result', index=3,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='sub_group_bys_result', full_name='com.aliyun.tablestore.protocol.GroupByGeoDistanceResultItem.sub_group_bys_result', index=4,
       number=5, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6955,
-  serialized_end=7197,
+  serialized_start=7094,
+  serialized_end=7336,
 )
 
 
@@ -3183,21 +3294,21 @@ _GROUPBYGEODISTANCERESULT = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7200,
-  serialized_end=7332,
+  serialized_start=7339,
+  serialized_end=7471,
 )
 
 
@@ -3214,35 +3325,35 @@ _GROUPBYFILTERRESULTITEM = _descriptor.Descriptor(
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='sub_aggs_result', full_name='com.aliyun.tablestore.protocol.GroupByFilterResultItem.sub_aggs_result', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='sub_group_bys_result', full_name='com.aliyun.tablestore.protocol.GroupByFilterResultItem.sub_group_bys_result', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7335,
-  serialized_end=7534,
+  serialized_start=7474,
+  serialized_end=7673,
 )
 
 
@@ -3259,21 +3370,21 @@ _GROUPBYFILTERRESULT = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7536,
-  serialized_end=7652,
+  serialized_start=7675,
+  serialized_end=7791,
 )
 
 
@@ -3290,35 +3401,35 @@ _GROUPBYRESULT = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='type', full_name='com.aliyun.tablestore.protocol.GroupByResult.type', index=1,
       number=2, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=1,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='group_by_result', full_name='com.aliyun.tablestore.protocol.GroupByResult.group_by_result', index=2,
       number=3, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7654,
-  serialized_end=7767,
+  serialized_start=7793,
+  serialized_end=7906,
 )
 
 
@@ -3335,21 +3446,21 @@ _GROUPBYSRESULT = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7769,
-  serialized_end=7858,
+  serialized_start=7908,
+  serialized_end=7997,
 )
 
 
@@ -3366,42 +3477,42 @@ _GROUPBYHISTOGRAMITEM = _descriptor.Descriptor(
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='value', full_name='com.aliyun.tablestore.protocol.GroupByHistogramItem.value', index=1,
       number=2, type=3, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='sub_aggs_result', full_name='com.aliyun.tablestore.protocol.GroupByHistogramItem.sub_aggs_result', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='sub_group_bys_result', full_name='com.aliyun.tablestore.protocol.GroupByHistogramItem.sub_group_bys_result', index=3,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7861,
-  serialized_end=8066,
+  serialized_start=8000,
+  serialized_end=8205,
 )
 
 
@@ -3418,21 +3529,21 @@ _GROUPBYHISTOGRAMRESULT = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8068,
-  serialized_end=8179,
+  serialized_start=8207,
+  serialized_end=8318,
 )
 
 
@@ -3449,77 +3560,77 @@ _SEARCHQUERY = _descriptor.Descriptor(
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='limit', full_name='com.aliyun.tablestore.protocol.SearchQuery.limit', index=1,
       number=2, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='query', full_name='com.aliyun.tablestore.protocol.SearchQuery.query', index=2,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='collapse', full_name='com.aliyun.tablestore.protocol.SearchQuery.collapse', index=3,
       number=5, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='sort', full_name='com.aliyun.tablestore.protocol.SearchQuery.sort', index=4,
       number=6, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='get_total_count', full_name='com.aliyun.tablestore.protocol.SearchQuery.get_total_count', index=5,
       number=8, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='token', full_name='com.aliyun.tablestore.protocol.SearchQuery.token', index=6,
       number=9, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='aggs', full_name='com.aliyun.tablestore.protocol.SearchQuery.aggs', index=7,
       number=10, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='group_bys', full_name='com.aliyun.tablestore.protocol.SearchQuery.group_bys', index=8,
       number=11, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8182,
-  serialized_end=8553,
+  serialized_start=8321,
+  serialized_end=8692,
 )
 
 
@@ -3536,28 +3647,28 @@ _COLUMNSTOGET = _descriptor.Descriptor(
       has_default_value=False, default_value=1,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='column_names', full_name='com.aliyun.tablestore.protocol.ColumnsToGet.column_names', index=1,
       number=2, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8555,
-  serialized_end=8662,
+  serialized_start=8694,
+  serialized_end=8801,
 )
 
 
@@ -3574,49 +3685,49 @@ _SEARCHREQUEST = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='index_name', full_name='com.aliyun.tablestore.protocol.SearchRequest.index_name', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='columns_to_get', full_name='com.aliyun.tablestore.protocol.SearchRequest.columns_to_get', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='search_query', full_name='com.aliyun.tablestore.protocol.SearchRequest.search_query', index=3,
       number=4, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='routing_values', full_name='com.aliyun.tablestore.protocol.SearchRequest.routing_values', index=4,
       number=5, type=12, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8665,
-  serialized_end=8836,
+  serialized_start=8804,
+  serialized_end=8975,
 )
 
 
@@ -3633,56 +3744,56 @@ _SEARCHRESPONSE = _descriptor.Descriptor(
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='rows', full_name='com.aliyun.tablestore.protocol.SearchResponse.rows', index=1,
       number=2, type=12, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='is_all_succeed', full_name='com.aliyun.tablestore.protocol.SearchResponse.is_all_succeed', index=2,
       number=3, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='next_token', full_name='com.aliyun.tablestore.protocol.SearchResponse.next_token', index=3,
       number=6, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='aggs', full_name='com.aliyun.tablestore.protocol.SearchResponse.aggs', index=4,
       number=7, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='group_bys', full_name='com.aliyun.tablestore.protocol.SearchResponse.group_bys', index=5,
       number=8, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8838,
-  serialized_end=8965,
+  serialized_start=8977,
+  serialized_end=9104,
 )
 
 
@@ -3699,28 +3810,28 @@ _SINGLEWORDANALYZERPARAMETER = _descriptor.Descriptor(
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='delimit_word', full_name='com.aliyun.tablestore.protocol.SingleWordAnalyzerParameter.delimit_word', index=1,
       number=2, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8967,
-  serialized_end=9042,
+  serialized_start=9106,
+  serialized_end=9181,
 )
 
 
@@ -3737,21 +3848,21 @@ _SPLITANALYZERPARAMETER = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=9044,
-  serialized_end=9087,
+  serialized_start=9183,
+  serialized_end=9226,
 )
 
 
@@ -3768,28 +3879,28 @@ _FUZZYANALYZERPARAMETER = _descriptor.Descriptor(
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='max_chars', full_name='com.aliyun.tablestore.protocol.FuzzyAnalyzerParameter.max_chars', index=1,
       number=2, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=9089,
-  serialized_end=9151,
+  serialized_start=9228,
+  serialized_end=9290,
 )
 
 
@@ -3806,98 +3917,150 @@ _FIELDSCHEMA = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='field_type', full_name='com.aliyun.tablestore.protocol.FieldSchema.field_type', index=1,
       number=2, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=1,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='analyzer', full_name='com.aliyun.tablestore.protocol.FieldSchema.analyzer', index=2,
       number=4, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='index', full_name='com.aliyun.tablestore.protocol.FieldSchema.index', index=3,
       number=5, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='enable_sort_and_agg', full_name='com.aliyun.tablestore.protocol.FieldSchema.enable_sort_and_agg', index=4,
       number=6, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='store', full_name='com.aliyun.tablestore.protocol.FieldSchema.store', index=5,
       number=7, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='field_schemas', full_name='com.aliyun.tablestore.protocol.FieldSchema.field_schemas', index=6,
       number=8, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='is_array', full_name='com.aliyun.tablestore.protocol.FieldSchema.is_array', index=7,
       number=9, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='analyzer_parameter', full_name='com.aliyun.tablestore.protocol.FieldSchema.analyzer_parameter', index=8,
       number=10, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='is_virtual_field', full_name='com.aliyun.tablestore.protocol.FieldSchema.is_virtual_field', index=9,
       number=11, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='source_field_names', full_name='com.aliyun.tablestore.protocol.FieldSchema.source_field_names', index=10,
       number=12, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='date_formats', full_name='com.aliyun.tablestore.protocol.FieldSchema.date_formats', index=11,
       number=13, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='vector_options', full_name='com.aliyun.tablestore.protocol.FieldSchema.vector_options', index=12,
+      number=15, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=9154,
-  serialized_end=9517,
+  serialized_start=9293,
+  serialized_end=9727,
+)
+
+
+_VECTOROPTIONS = _descriptor.Descriptor(
+  name='VectorOptions',
+  full_name='com.aliyun.tablestore.protocol.VectorOptions',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='data_type', full_name='com.aliyun.tablestore.protocol.VectorOptions.data_type', index=0,
+      number=1, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=2,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='dimension', full_name='com.aliyun.tablestore.protocol.VectorOptions.dimension', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='metric_type', full_name='com.aliyun.tablestore.protocol.VectorOptions.metric_type', index=2,
+      number=3, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto2',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=9730,
+  serialized_end=9902,
 )
 
 
@@ -3914,35 +4077,35 @@ _INDEXSCHEMA = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='index_setting', full_name='com.aliyun.tablestore.protocol.IndexSchema.index_setting', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='index_sort', full_name='com.aliyun.tablestore.protocol.IndexSchema.index_sort', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=9520,
-  serialized_end=9728,
+  serialized_start=9905,
+  serialized_end=10113,
 )
 
 
@@ -3959,35 +4122,35 @@ _INDEXSETTING = _descriptor.Descriptor(
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='routing_fields', full_name='com.aliyun.tablestore.protocol.IndexSetting.routing_fields', index=1,
       number=2, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='routing_partition_size', full_name='com.aliyun.tablestore.protocol.IndexSetting.routing_partition_size', index=2,
       number=3, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=9730,
-  serialized_end=9826,
+  serialized_start=10115,
+  serialized_end=10211,
 )
 
 
@@ -4004,42 +4167,42 @@ _CREATESEARCHINDEXREQUEST = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='index_name', full_name='com.aliyun.tablestore.protocol.CreateSearchIndexRequest.index_name', index=1,
       number=2, type=9, cpp_type=9, label=2,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='schema', full_name='com.aliyun.tablestore.protocol.CreateSearchIndexRequest.schema', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='time_to_live', full_name='com.aliyun.tablestore.protocol.CreateSearchIndexRequest.time_to_live', index=3,
       number=5, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=9829,
-  serialized_end=9978,
+  serialized_start=10214,
+  serialized_end=10363,
 )
 
 
@@ -4056,14 +4219,14 @@ _CREATESEARCHINDEXRESPONSE = _descriptor.Descriptor(
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=9980,
-  serialized_end=10007,
+  serialized_start=10365,
+  serialized_end=10392,
 )
 
 
@@ -4080,35 +4243,35 @@ _UPDATESEARCHINDEXREQUEST = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='index_name', full_name='com.aliyun.tablestore.protocol.UpdateSearchIndexRequest.index_name', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='time_to_live', full_name='com.aliyun.tablestore.protocol.UpdateSearchIndexRequest.time_to_live', index=2,
       number=5, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=10009,
-  serialized_end=10097,
+  serialized_start=10394,
+  serialized_end=10482,
 )
 
 
@@ -4125,14 +4288,14 @@ _UPDATESEARCHINDEXRESPONSE = _descriptor.Descriptor(
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=10099,
-  serialized_end=10126,
+  serialized_start=10484,
+  serialized_end=10511,
 )
 
 
@@ -4149,28 +4312,28 @@ _INDEXINFO = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='index_name', full_name='com.aliyun.tablestore.protocol.IndexInfo.index_name', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=10128,
-  serialized_end=10179,
+  serialized_start=10513,
+  serialized_end=10564,
 )
 
 
@@ -4187,21 +4350,21 @@ _LISTSEARCHINDEXREQUEST = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=10181,
-  serialized_end=10225,
+  serialized_start=10566,
+  serialized_end=10610,
 )
 
 
@@ -4218,21 +4381,21 @@ _LISTSEARCHINDEXRESPONSE = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=10227,
-  serialized_end=10312,
+  serialized_start=10612,
+  serialized_end=10697,
 )
 
 
@@ -4249,28 +4412,28 @@ _DELETESEARCHINDEXREQUEST = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='index_name', full_name='com.aliyun.tablestore.protocol.DeleteSearchIndexRequest.index_name', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=10314,
-  serialized_end=10380,
+  serialized_start=10699,
+  serialized_end=10765,
 )
 
 
@@ -4287,14 +4450,14 @@ _DELETESEARCHINDEXRESPONSE = _descriptor.Descriptor(
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=10382,
-  serialized_end=10409,
+  serialized_start=10767,
+  serialized_end=10794,
 )
 
 
@@ -4311,28 +4474,28 @@ _SYNCSTAT = _descriptor.Descriptor(
       has_default_value=False, default_value=1,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='current_sync_timestamp', full_name='com.aliyun.tablestore.protocol.SyncStat.current_sync_timestamp', index=1,
       number=2, type=3, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=10411,
-  serialized_end=10516,
+  serialized_start=10796,
+  serialized_end=10901,
 )
 
 
@@ -4349,28 +4512,28 @@ _DESCRIBESEARCHINDEXREQUEST = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='index_name', full_name='com.aliyun.tablestore.protocol.DescribeSearchIndexRequest.index_name', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=10518,
-  serialized_end=10586,
+  serialized_start=10903,
+  serialized_end=10971,
 )
 
 
@@ -4387,42 +4550,42 @@ _DESCRIBESEARCHINDEXRESPONSE = _descriptor.Descriptor(
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='sync_stat', full_name='com.aliyun.tablestore.protocol.DescribeSearchIndexResponse.sync_stat', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='create_time', full_name='com.aliyun.tablestore.protocol.DescribeSearchIndexResponse.create_time', index=2,
       number=6, type=3, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='time_to_live', full_name='com.aliyun.tablestore.protocol.DescribeSearchIndexResponse.time_to_live', index=3,
       number=7, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=10589,
-  serialized_end=10783,
+  serialized_start=10974,
+  serialized_end=11168,
 )
 
 
@@ -4439,28 +4602,28 @@ _COMPUTESPLITSREQUEST = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='search_index_splits_options', full_name='com.aliyun.tablestore.protocol.ComputeSplitsRequest.search_index_splits_options', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=10786,
-  serialized_end=10923,
+  serialized_start=11171,
+  serialized_end=11308,
 )
 
 
@@ -4477,21 +4640,21 @@ _SEARCHINDEXSPLITSOPTIONS = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=10925,
-  serialized_end=10971,
+  serialized_start=11310,
+  serialized_end=11356,
 )
 
 
@@ -4508,28 +4671,28 @@ _COMPUTESPLITSRESPONSE = _descriptor.Descriptor(
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='splits_size', full_name='com.aliyun.tablestore.protocol.ComputeSplitsResponse.splits_size', index=1,
       number=2, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=10973,
-  serialized_end=11037,
+  serialized_start=11358,
+  serialized_end=11422,
 )
 
 
@@ -4546,28 +4709,28 @@ _SESSIONID = _descriptor.Descriptor(
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='session_id', full_name='com.aliyun.tablestore.protocol.SessionId.session_id', index=1,
       number=2, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=11039,
-  serialized_end=11087,
+  serialized_start=11424,
+  serialized_end=11472,
 )
 
 
@@ -4584,56 +4747,56 @@ _SCANQUERY = _descriptor.Descriptor(
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='limit', full_name='com.aliyun.tablestore.protocol.ScanQuery.limit', index=1,
       number=2, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='alive_time', full_name='com.aliyun.tablestore.protocol.ScanQuery.alive_time', index=2,
       number=3, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='token', full_name='com.aliyun.tablestore.protocol.ScanQuery.token', index=3,
       number=4, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='current_parallel_id', full_name='com.aliyun.tablestore.protocol.ScanQuery.current_parallel_id', index=4,
       number=5, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='max_parallel', full_name='com.aliyun.tablestore.protocol.ScanQuery.max_parallel', index=5,
       number=6, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=11090,
-  serialized_end=11256,
+  serialized_start=11475,
+  serialized_end=11641,
 )
 
 
@@ -4650,56 +4813,56 @@ _PARALLELSCANREQUEST = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='index_name', full_name='com.aliyun.tablestore.protocol.ParallelScanRequest.index_name', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='columns_to_get', full_name='com.aliyun.tablestore.protocol.ParallelScanRequest.columns_to_get', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='session_id', full_name='com.aliyun.tablestore.protocol.ParallelScanRequest.session_id', index=3,
       number=4, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='scan_query', full_name='com.aliyun.tablestore.protocol.ParallelScanRequest.scan_query', index=4,
       number=5, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='timeout_ms', full_name='com.aliyun.tablestore.protocol.ParallelScanRequest.timeout_ms', index=5,
       number=6, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=11259,
-  serialized_end=11450,
+  serialized_start=11644,
+  serialized_end=11835,
 )
 
 
@@ -4716,28 +4879,28 @@ _PARALLELSCANRESPONSE = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='next_token', full_name='com.aliyun.tablestore.protocol.ParallelScanResponse.next_token', index=1,
       number=2, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=11452,
-  serialized_end=11508,
+  serialized_start=11837,
+  serialized_end=11893,
 )
 
 _MATCHQUERY.fields_by_name['operator'].enum_type = _QUERYOPERATOR
@@ -4750,6 +4913,7 @@ _FUNCTIONSCOREQUERY.fields_by_name['query'].message_type = _QUERY
 _FUNCTIONSCOREQUERY.fields_by_name['field_value_factor'].message_type = _FIELDVALUEFACTOR
 _NESTEDQUERY.fields_by_name['query'].message_type = _QUERY
 _NESTEDQUERY.fields_by_name['score_mode'].enum_type = _SCOREMODE
+_KNNVECTORQUERY.fields_by_name['filter'].message_type = _QUERY
 _QUERY.fields_by_name['type'].enum_type = _QUERYTYPE
 _NESTEDFILTER.fields_by_name['filter'].message_type = _QUERY
 _SCORESORT.fields_by_name['order'].enum_type = _SORTORDER
@@ -4824,6 +4988,9 @@ _COLUMNSTOGET.fields_by_name['return_type'].enum_type = _COLUMNRETURNTYPE
 _SEARCHREQUEST.fields_by_name['columns_to_get'].message_type = _COLUMNSTOGET
 _FIELDSCHEMA.fields_by_name['field_type'].enum_type = _FIELDTYPE
 _FIELDSCHEMA.fields_by_name['field_schemas'].message_type = _FIELDSCHEMA
+_FIELDSCHEMA.fields_by_name['vector_options'].message_type = _VECTOROPTIONS
+_VECTOROPTIONS.fields_by_name['data_type'].enum_type = _VECTORDATATYPE
+_VECTOROPTIONS.fields_by_name['metric_type'].enum_type = _VECTORMETRICTYPE
 _INDEXSCHEMA.fields_by_name['field_schemas'].message_type = _FIELDSCHEMA
 _INDEXSCHEMA.fields_by_name['index_setting'].message_type = _INDEXSETTING
 _INDEXSCHEMA.fields_by_name['index_sort'].message_type = _SORT
@@ -4852,6 +5019,7 @@ DESCRIPTOR.message_types_by_name['GeoBoundingBoxQuery'] = _GEOBOUNDINGBOXQUERY
 DESCRIPTOR.message_types_by_name['GeoDistanceQuery'] = _GEODISTANCEQUERY
 DESCRIPTOR.message_types_by_name['GeoPolygonQuery'] = _GEOPOLYGONQUERY
 DESCRIPTOR.message_types_by_name['ExistsQuery'] = _EXISTSQUERY
+DESCRIPTOR.message_types_by_name['KnnVectorQuery'] = _KNNVECTORQUERY
 DESCRIPTOR.message_types_by_name['Query'] = _QUERY
 DESCRIPTOR.message_types_by_name['Collapse'] = _COLLAPSE
 DESCRIPTOR.message_types_by_name['NestedFilter'] = _NESTEDFILTER
@@ -4917,6 +5085,7 @@ DESCRIPTOR.message_types_by_name['SingleWordAnalyzerParameter'] = _SINGLEWORDANA
 DESCRIPTOR.message_types_by_name['SplitAnalyzerParameter'] = _SPLITANALYZERPARAMETER
 DESCRIPTOR.message_types_by_name['FuzzyAnalyzerParameter'] = _FUZZYANALYZERPARAMETER
 DESCRIPTOR.message_types_by_name['FieldSchema'] = _FIELDSCHEMA
+DESCRIPTOR.message_types_by_name['VectorOptions'] = _VECTOROPTIONS
 DESCRIPTOR.message_types_by_name['IndexSchema'] = _INDEXSCHEMA
 DESCRIPTOR.message_types_by_name['IndexSetting'] = _INDEXSETTING
 DESCRIPTOR.message_types_by_name['CreateSearchIndexRequest'] = _CREATESEARCHINDEXREQUEST
@@ -4948,7 +5117,10 @@ DESCRIPTOR.enum_types_by_name['AggregationType'] = _AGGREGATIONTYPE
 DESCRIPTOR.enum_types_by_name['GroupByType'] = _GROUPBYTYPE
 DESCRIPTOR.enum_types_by_name['ColumnReturnType'] = _COLUMNRETURNTYPE
 DESCRIPTOR.enum_types_by_name['FieldType'] = _FIELDTYPE
+DESCRIPTOR.enum_types_by_name['VectorDataType'] = _VECTORDATATYPE
+DESCRIPTOR.enum_types_by_name['VectorMetricType'] = _VECTORMETRICTYPE
 DESCRIPTOR.enum_types_by_name['SyncPhase'] = _SYNCPHASE
+_sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 MatchQuery = _reflection.GeneratedProtocolMessageType('MatchQuery', (_message.Message,), dict(
   DESCRIPTOR = _MATCHQUERY,
@@ -5068,6 +5240,13 @@ ExistsQuery = _reflection.GeneratedProtocolMessageType('ExistsQuery', (_message.
   # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.ExistsQuery)
   ))
 _sym_db.RegisterMessage(ExistsQuery)
+
+KnnVectorQuery = _reflection.GeneratedProtocolMessageType('KnnVectorQuery', (_message.Message,), dict(
+  DESCRIPTOR = _KNNVECTORQUERY,
+  __module__ = 'search_pb2'
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.KnnVectorQuery)
+  ))
+_sym_db.RegisterMessage(KnnVectorQuery)
 
 Query = _reflection.GeneratedProtocolMessageType('Query', (_message.Message,), dict(
   DESCRIPTOR = _QUERY,
@@ -5523,6 +5702,13 @@ FieldSchema = _reflection.GeneratedProtocolMessageType('FieldSchema', (_message.
   # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.FieldSchema)
   ))
 _sym_db.RegisterMessage(FieldSchema)
+
+VectorOptions = _reflection.GeneratedProtocolMessageType('VectorOptions', (_message.Message,), dict(
+  DESCRIPTOR = _VECTOROPTIONS,
+  __module__ = 'search_pb2'
+  # @@protoc_insertion_point(class_scope:com.aliyun.tablestore.protocol.VectorOptions)
+  ))
+_sym_db.RegisterMessage(VectorOptions)
 
 IndexSchema = _reflection.GeneratedProtocolMessageType('IndexSchema', (_message.Message,), dict(
   DESCRIPTOR = _INDEXSCHEMA,

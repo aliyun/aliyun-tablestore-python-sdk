@@ -50,6 +50,7 @@ class FieldType(Enum):
     NESTED = search_pb2.NESTED
     GEOPOINT = search_pb2.GEO_POINT
     DATE = search_pb2.DATE
+    VECTOR = search_pb2.VECTOR
 
 class AnalyzerType(object):
     SINGLEWORD = "single_word"
@@ -135,12 +136,30 @@ class IndexSetting(object):
         self.routing_fields = routing_fields
 
 
+class VectorDataType(Enum):
+    VD_FLOAT_32 = search_pb2.VD_FLOAT_32
+
+
+class VectorMetricType(Enum):
+    VM_EUCLIDEAN = search_pb2.VM_EUCLIDEAN
+    VM_COSINE = search_pb2.VM_COSINE
+    VM_DOT_PRODUCT = search_pb2.VM_DOT_PRODUCT
+
+
+class VectorOptions(object):
+
+    def __init__(self, data_type, metric_type, dimension):
+        self.data_type = data_type
+        self.metric_type = metric_type
+        self.dimension = dimension
+
+
 class FieldSchema(object):
 
-    def __init__(self, field_name, field_type, index = None,
-                 store = None, is_array = None, enable_sort_and_agg = None,
-                 analyzer = None, sub_field_schemas = [], analyzer_parameter = None, 
-                 date_formats = [], is_virtual_field = False, source_fields = []):
+    def __init__(self, field_name, field_type, index=None,
+                 store=None, is_array=None, enable_sort_and_agg=None,
+                 analyzer=None, sub_field_schemas=[], analyzer_parameter=None,
+                 date_formats=[], is_virtual_field=False, source_fields=[], vector_options=None):
 
         self.field_name = field_name
         self.field_type = field_type
@@ -154,6 +173,8 @@ class FieldSchema(object):
         self.date_formats = date_formats
         self.is_virtual_field = is_virtual_field
         self.source_fields = source_fields
+        self.vector_options = vector_options
+
 
 class SyncPhase(Enum):
     FULL = 0
@@ -622,6 +643,7 @@ class BatchWriteRowResponse(object):
             for index in range(len(response[table_name])):
                 row_item = response[table_name][index]
                 request_row = request.items[table_name].row_items[index]
+                row_item.set_index(index)
                 if request_row.type == BatchWriteRowType.PUT:
                     put_list.append(row_item)
                 elif request_row.type == BatchWriteRowType.UPDATE:
@@ -721,7 +743,8 @@ class BatchWriteRowResponseItem(object):
         self.error_message = error_message
         self.consumed = consumed
         self.row = Row(primary_key)
-
+    def set_index(self, index):
+        self.index = index
 
 class INF_MIN(object):
     # for get_range
@@ -752,6 +775,7 @@ class QueryType(Enum):
     GEO_DISTANCE_QUERY = search_pb2.GEO_DISTANCE_QUERY
     GEO_POLYGON_QUERY = search_pb2.GEO_POLYGON_QUERY
     TERMS_QUERY = search_pb2.TERMS_QUERY
+    KNN_VECTOR_QUERY = search_pb2.KNN_VECTOR_QUERY
 
 class QueryOperator(Enum):
     OR = search_pb2.OR
@@ -878,10 +902,18 @@ class ExistsQuery(Query):
     def __init__(self, field_name):
         self.field_name = field_name
 
+class KnnVectorQuery(Query):
+
+    def __init__(self, field_name, top_k=None, float32_query_vector=None, filter=None):
+        self.field_name = field_name
+        self.top_k = top_k
+        self.float32_query_vector = float32_query_vector
+        self.filter = filter
+
 class SearchQuery(object):
 
-    def __init__(self, query, sort=None, get_total_count=False, 
-                 next_token=None, offset=None, limit=None, 
+    def __init__(self, query, sort=None, get_total_count=False,
+                 next_token=None, offset=None, limit=None,
                  aggs = None, group_bys = None, collapse_field = None):
 
         self.query = query
@@ -920,7 +952,7 @@ class ColumnsToGet(object):
 class IterableResponse(CommonResponse):
     def __init__(self):
         super(IterableResponse, self).__init__()
-        
+
         self.index = 0
         self.response = tuple()
 
@@ -934,7 +966,7 @@ class IterableResponse(CommonResponse):
         return self.response
 
 class SearchResponse(IterableResponse):
-    
+
     def __init__(self, rows, agg_results, group_by_results, next_token, is_all_succeed, total_count):
         super(SearchResponse, self).__init__()
 
@@ -945,11 +977,11 @@ class SearchResponse(IterableResponse):
         self.is_all_succeed = is_all_succeed
         self.total_count = total_count
 
-        self._add_response(self.rows, self.next_token, self.total_count, self.is_all_succeed, 
+        self._add_response(self.rows, self.next_token, self.total_count, self.is_all_succeed,
                            self.agg_results, self.group_by_results)
 
 class ComputeSplitsResponse(IterableResponse):
-    
+
     def __init__(self, session_id, splits_size):
         super(ComputeSplitsResponse, self).__init__()
 
@@ -959,7 +991,7 @@ class ComputeSplitsResponse(IterableResponse):
         self._add_response(self.session_id, self.splits_size)
 
 class ParallelScanResponse(IterableResponse):
-    
+
     def __init__(self, rows, next_token):
         super(ParallelScanResponse, self).__init__()
 

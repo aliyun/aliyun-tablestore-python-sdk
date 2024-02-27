@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 
-__version__ = '5.4.2'
+__version__ = '5.4.3'
 __all__ = [
     'OTSClient',
 
@@ -46,6 +46,9 @@ __all__ = [
     'RowExistenceExpectation',
     'SearchIndexMeta',
     'FieldSchema',
+    'VectorOptions',
+    'VectorDataType',
+    'VectorMetricType',
     'FieldType',
     'IndexSetting',
     'Collapse',
@@ -89,6 +92,7 @@ __all__ = [
     'SecondaryIndexMeta',
     'SecondaryIndexType',
     'ExistsQuery',
+    'KnnVectorQuery',
     'Agg',
     'Max',
     'Min',
