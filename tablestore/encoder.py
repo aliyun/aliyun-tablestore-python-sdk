@@ -1317,10 +1317,11 @@ class OTSProtoBufferEncoder(object):
         return proto.SerializeToString()
 
 
-    def _encode_create_index(self, table_name, index_meta):
+    def _encode_create_index(self, table_name, index_meta, include_base_data):
         proto = pb2.CreateIndexRequest()
 
         proto.main_table_name = table_name
+        proto.include_base_data = include_base_data
         self._make_secondary_index(proto.index_meta, index_meta)
 
         return proto
