@@ -1,6 +1,4 @@
 #*-coding:utf-8-*-
-import subprocess
-
 from . import test_config
 from . import restriction
 from builtins import int
@@ -8,17 +6,24 @@ from unittest import TestCase
 from tablestore import *
 from tablestore.error import *
 from tablestore.retry import *
-import types
+
 import math
 import time
 import traceback
-#import commands
 import sys
 import six
-
-import os
-import inspect
 import logging
+
+
+def get_no_retry_client():
+    no_retry_client = OTSClient(test_config.OTS_ENDPOINT,
+                           test_config.OTS_ID,
+                           test_config.OTS_SECRET,
+                           test_config.OTS_INSTANCE,
+                           logger_name='APITestBase',
+                           retry_policy=NoRetryPolicy())
+    return no_retry_client
+
 
 class APITestBase(TestCase):
 
@@ -37,35 +42,31 @@ class APITestBase(TestCase):
 
         self.logger.addHandler(fh)
 
+    def delete_table_and_index(self):
+        try:
+            for table_name in self.client_test.list_table():
+                if table_name.find(self.get_python_version()) != -1:
+                    for t_name, index_name in self.client_test.list_search_index(table_name):
+                        self.client_test.delete_search_index(t_name, index_name)
+                        time.sleep(1)  # to avoid too frequent table operations
+                    self.client_test.delete_table(table_name)
+        except Exception as e:
+            pass
+
     def setUp(self):
         self.client_test = OTSClient(
             test_config.OTS_ENDPOINT,
             test_config.OTS_ID,
             test_config.OTS_SECRET,
             test_config.OTS_INSTANCE,
-            logger_name = 'APITestBase',
+            logger_name='APITestBase',
             retry_policy=DefaultRetryPolicy(),
         )
-
-        time.sleep(1) # to avoid too frequent table operations
-        #return # for test, skip delete
-
-        try:
-            for table_name in self.client_test.list_table():
-                if table_name.find(self.get_python_version()) != -1:
-                    for table_name, index_name in self.client_test.list_search_index(table_name):
-                        self.client_test.delete_search_index(table_name, index_name)
-                        time.sleep(2)
-
-                    self.client_test.delete_table(table_name)
-        except:
-            pass
+        self.delete_table_and_index()
+        time.sleep(1)  # to avoid too frequent table operations
 
     def tearDown(self):
-        pass
-
-    def case_post_check(self):
-        pass
+        self.delete_table_and_index()
 
     def assert_error(self, error, http_status, error_code, error_message):
         self.assert_equal(error.http_status, http_status)
@@ -83,7 +84,6 @@ class APITestBase(TestCase):
             expect_res = expect_res.decode('utf-8')
 
         if res != expect_res:
-            #self.logger.warn("\nAssertion Failed\nactual: %s\nexpect: %s\n" % (res.decode('utf-8'), expect_res.decode('utf-8')) + "".join(traceback.format_stack()))
             self.assertEqual(res, expect_res)
 
     def try_exhaust_cu(self, func, count, read_cu, write_cu):
@@ -143,34 +143,36 @@ class APITestBase(TestCase):
         columns = []
         column_value_size = 4096
         all_pk_length = self.get_row_size(pk_dict_exist, [])
-        #write
+        # write
         for i in range(write):
-            if i is not 0:
+            if i != 0:
                 columns.append(('X' * i, 'X' * (column_value_size - i)))
             else:
                 columns.append(('col0', 'X' * (column_value_size - all_pk_length - 10)))
-        if write is not 0:
+        if write != 0:
             row = Row(pk_dict_exist, {'put':columns})
-            consumed_update,return_row = self.client_test.update_row(table_name, row, Condition(RowExistenceExpectation.IGNORE))
+            consumed_update, return_row = self.client_test.update_row(
+                table_name, row, Condition(RowExistenceExpectation.IGNORE))
             expect_consumed = CapacityUnit(0, self.sum_CU_from_row(pk_dict_exist, columns))
             self.assert_consumed(consumed_update, expect_consumed)
             self.assert_equal(write, self.sum_CU_from_row(pk_dict_exist, columns))
-        #consume(0, 1)
+        # consume(0, 1)
         if 1 == no_check_flag:
             try:
-                consumed_update,return_row = self.client_test.delete_row(table_name, Row(pk_dict_not_exist), Condition(RowExistenceExpectation.IGNORE))
+                consumed_update, return_row = self.client_test.delete_row(
+                    table_name, Row(pk_dict_not_exist), Condition(RowExistenceExpectation.IGNORE))
             except OTSServiceError as e:
                 self.assert_false()
 
-        #read
+        # read
         while read >= write and write != 0:
             read = read - write
-            consumed_read, return_row, token  = self.client_test.get_row(table_name, pk_dict_exist, max_version = 1)
+            consumed_read, return_row, token  = self.client_test.get_row(table_name, pk_dict_exist, max_version=1)
             expect_consumed = CapacityUnit(self.sum_CU_from_row(pk_dict_exist, columns), 0)
             self.assert_consumed(consumed_read, expect_consumed)
             self.assert_equal(return_row.primary_key, pk_dict_exist)
         for i in range(read + no_check_flag):
-            consumed_read, return_row, token= self.client_test.get_row(table_name, pk_dict_not_exist, max_version = 1)
+            consumed_read, return_row, token= self.client_test.get_row(table_name, pk_dict_not_exist, max_version=1)
             self.assert_consumed(consumed_read, CapacityUnit(1, 0))
             self.assert_equal(return_row, None)
 
@@ -192,11 +194,14 @@ class APITestBase(TestCase):
         if expect_columns is None:
             expect_columns = []
 
-        self.assert_equal(len(columns), len(expect_columns))
-        for index in range(len(columns)):
-            self.assert_equal(columns[index][0], expect_columns[index][0])
-            self.assert_equal(columns[index][1], expect_columns[index][1])
+        expect_dict = {}
+        for expect_column in expect_columns:
+            expect_dict[expect_column[0]] = expect_column[1]
 
+        self.assert_equal(len(columns), len(expect_columns))
+        for column in columns:
+            self.assertTrue(column[0] in expect_dict)
+            self.assert_equal(column[1], expect_dict[column[0]])
 
     def assert_RowDataItem_equal(self, response, expect_response):
         self.assert_equal(len(response), len(expect_response))
@@ -218,9 +223,6 @@ class APITestBase(TestCase):
                     self.assert_consumed(response[i][j].consumed, expect_response[i][j].consumed)
 
     def assert_BatchWriteRowResponseItem(self, response, expect_response):
-
-
-
         self.assert_equal(len(response), len(expect_response))
         item_list = ['put', 'update', 'delete']
         for i in range(len(response)):
@@ -231,7 +233,9 @@ class APITestBase(TestCase):
 
                         for j in range(len(response[i][item])):
                             if expect_response[i][item][j].is_ok and not response[i][item][j].is_ok:
-                                raise Exception("BatchWriteRow failed on at least one row, ErrorCode: %s ErrorMessage: %s" % (response[i][item][j].error_code, response[i][item][j].error_message))
+                                raise Exception(
+                                    "BatchWriteRow failed on at least one row, ErrorCode: %s ErrorMessage: %s" %
+                                    (response[i][item][j].error_code, response[i][item][j].error_message))
                             self.assert_equal(response[i][item][j].is_ok, expect_response[i][item][j].is_ok)
 
                             if expect_response[i][item][j].is_ok:
@@ -271,6 +275,13 @@ class APITestBase(TestCase):
         self.assert_consumed(response.reserved_throughput_details.capacity_unit, expect_capacity_unit)
         self.assert_TableMeta(response.table_meta, expect_table_meta)
         self.assert_TableOptions(response.table_options, expect_options)
+
+    def assert_CreateTableResult(self, table_name, table_meta, table_options, reserved_throughput):
+        self.client_test.create_table(table_meta, table_options, reserved_throughput)
+        describe_response = self.client_test.describe_table(table_name)
+
+        self.assert_DescribeTableResponse(
+            describe_response, reserved_throughput.capacity_unit, table_meta, table_options)
 
     def wait_for_capacity_unit_update(self, table_name):
         time.sleep(5)
