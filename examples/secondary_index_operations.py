@@ -25,7 +25,7 @@ def create_table(client):
 def create_index(client):
     print ('Begin CreateIndex')
     index_meta = SecondaryIndexMeta(index_name_2, ['i', 's'], ['bool', 'b', 'd'])
-    client.create_secondary_index(table_name, index_meta)
+    client.create_secondary_index(table_name, index_meta, False)
     print ('Index has been created.')
 
 def describe_table(client):
