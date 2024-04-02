@@ -1,11 +1,12 @@
 # -*- coding: utf8 -*-
 
 import six
-from tablestore.error import *
 from enum import Enum
-import tablestore.protobuf.search_pb2 as search_pb2
+from tablestore.error import *
+from tablestore.utils import DefaultJsonObject
+from tablestore.protobuf import search_pb2
 
-class TableMeta(object):
+class TableMeta(DefaultJsonObject):
 
     def __init__(self, table_name, schema_of_primary_key, defined_columns=[]):
         # schema_of_primary_key: [('PK0', 'STRING'), ('PK1', 'INTEGER'), ...]
@@ -13,27 +14,27 @@ class TableMeta(object):
         self.schema_of_primary_key = schema_of_primary_key
         self.defined_columns = defined_columns
 
-class TableOptions(object):
-    def __init__(self, time_to_live = -1, max_version = 1, max_time_deviation = 86400, allow_update = None):
+class TableOptions(DefaultJsonObject):
+    def __init__(self, time_to_live=-1, max_version=1, max_time_deviation=86400, allow_update=None):
         self.time_to_live = time_to_live
         self.max_version = max_version
         self.max_time_deviation = max_time_deviation
         self.allow_update = allow_update
 
-class CapacityUnit(object):
+class CapacityUnit(DefaultJsonObject):
 
     def __init__(self, read=0, write=0):
         self.read = read
         self.write = write
 
 
-class ReservedThroughput(object):
+class ReservedThroughput(DefaultJsonObject):
 
     def __init__(self, capacity_unit):
         self.capacity_unit = capacity_unit
 
 
-class ReservedThroughputDetails(object):
+class ReservedThroughputDetails(DefaultJsonObject):
 
     def __init__(self, capacity_unit, last_increase_time, last_decrease_time):
         self.capacity_unit = capacity_unit
@@ -59,17 +60,17 @@ class AnalyzerType(object):
     FUZZY = "fuzzy"
     SPLIT = "split"
 
-class SingleWordAnalyzerParameter(object):
-    def __init__(self, case_sensitive = False, delimit_word = False):
+class SingleWordAnalyzerParameter(DefaultJsonObject):
+    def __init__(self, case_sensitive=False, delimit_word=False):
         self.case_sensitive = case_sensitive
         self.delimit_word = delimit_word
 
-class SplitAnalyzerParameter(object):
-    def __init__(self, delimiter = ' '):
+class SplitAnalyzerParameter(DefaultJsonObject):
+    def __init__(self, delimiter=' '):
         self.delimiter = delimiter
 
-class FuzzyAnalyzerParameter(object):
-    def __init__(self, min_chars = 1, max_chars = 7):
+class FuzzyAnalyzerParameter(DefaultJsonObject):
+    def __init__(self, min_chars=1, max_chars=7):
         self.min_chars = min_chars
         self.max_chars = max_chars
 
@@ -93,7 +94,7 @@ class GeoDistanceType(Enum):
     ARC = search_pb2.GEO_DISTANCE_ARC
     PLANE = search_pb2.GEO_DISTANCE_PLANE
 
-class Sorter(object):
+class Sorter(DefaultJsonObject):
     def __init__(self):
         pass
 
@@ -125,12 +126,12 @@ class PrimaryKeySort(Sorter):
     def __init__(self, sort_order=SortOrder.ASC):
         self.sort_order = sort_order
 
-class Sort(object):
+class Sort(DefaultJsonObject):
 
     def __init__(self, sorters):
         self.sorters = sorters
 
-class IndexSetting(object):
+class IndexSetting(DefaultJsonObject):
 
     def __init__(self, routing_fields=[]):
         self.routing_fields = routing_fields
@@ -146,7 +147,7 @@ class VectorMetricType(Enum):
     VM_DOT_PRODUCT = search_pb2.VM_DOT_PRODUCT
 
 
-class VectorOptions(object):
+class VectorOptions(DefaultJsonObject):
 
     def __init__(self, data_type, metric_type, dimension):
         self.data_type = data_type
@@ -154,7 +155,7 @@ class VectorOptions(object):
         self.dimension = dimension
 
 
-class FieldSchema(object):
+class FieldSchema(DefaultJsonObject):
 
     def __init__(self, field_name, field_type, index=None,
                  store=None, is_array=None, enable_sort_and_agg=None,
@@ -180,13 +181,13 @@ class SyncPhase(Enum):
     FULL = 0
     INCR = 1
 
-class SyncStat(object):
+class SyncStat(DefaultJsonObject):
 
     def __init__(self, sync_phase, current_sync_timestamp):
         self.sync_phase = sync_phase
         self.current_sync_timestamp = current_sync_timestamp
 
-class SearchIndexMeta(object):
+class SearchIndexMeta(DefaultJsonObject):
 
     def __init__(self, fields, index_setting=None, index_sort=None, time_to_live=-1):
         self.fields = fields
@@ -194,7 +195,7 @@ class SearchIndexMeta(object):
         self.index_sort = index_sort
         self.time_to_live = time_to_live
 
-class DefinedColumnSchema(object):
+class DefinedColumnSchema(DefaultJsonObject):
 
     def __init__(self, name, column_type):
         self.name = name
@@ -204,7 +205,7 @@ class SecondaryIndexType(Enum):
     GLOBAL_INDEX = 0
     LOCAL_INDEX = 1
 
-class SecondaryIndexMeta(object):
+class SecondaryIndexMeta(DefaultJsonObject):
 
     def __init__(self, index_name, primary_key_names, defined_column_names, index_type=SecondaryIndexType.GLOBAL_INDEX):
         self.index_name = index_name
@@ -225,7 +226,7 @@ class ReturnType(object):
     RT_NONE = "RT_NONE"
     RT_PK = "RT_PK"
 
-class Column(object):
+class Column(DefaultJsonObject):
     def __init__(self, name, value = None, timestamp = None):
         self.name = name
         self.value = value
@@ -253,7 +254,7 @@ class UpdateType(object):
     DELETE_ALL = "DELETE_ALL"
     INCREMENT = "INCREMENT"
 
-class CommonResponse(object):
+class CommonResponse(DefaultJsonObject):
     def __init__(self):
         self.request_id = ''
 
@@ -276,7 +277,7 @@ class DescribeTableResponse(CommonResponse):
         self.secondary_indexes = secondary_indexes
 
 
-class RowDataItem(object):
+class RowDataItem(DefaultJsonObject):
 
     def __init__(self, is_ok, error_code, error_message, table_name, consumed, primary_key_columns, attribute_columns):
         # is_ok can be True or False
@@ -341,24 +342,21 @@ class ColumnConditionType(object):
     COMPOSITE_COLUMN_CONDITION = 0
     SINGLE_COLUMN_CONDITION = 1
 
-class ColumnCondition(object):
+class ColumnCondition(DefaultJsonObject):
     pass
 
 class CompositeColumnCondition(ColumnCondition):
 
     def __init__(self, combinator):
         self.sub_conditions = []
-        self.set_combinator(combinator)
+        if combinator not in LogicalOperator.__values__:
+            raise OTSClientError(
+                "Expect input combinator should be one of %s, but '%s'" % (str(LogicalOperator.__members__), combinator)
+            )
+        self.combinator = combinator
 
     def get_type(self):
         return ColumnConditionType.COMPOSITE_COLUMN_CONDITION
-
-    def set_combinator(self, combinator):
-        if combinator not in LogicalOperator.__values__:
-            raise OTSClientError(
-                "Expect input combinator should be one of %s, but '%s'"%(str(LogicalOperator.__members__), combinator)
-            )
-        self.combinator = combinator
 
     def get_combinator(self):
         return self.combinator
@@ -473,7 +471,7 @@ class RowExistenceExpectation(object):
         "RowExistenceExpectation.EXPECT_NOT_EXIST",
     ]
 
-class Condition(object):
+class Condition(DefaultJsonObject):
 
     def __init__(self, row_existence_expectation, column_condition = None):
         self.row_existence_expectation = None
@@ -505,12 +503,12 @@ class Condition(object):
     def get_column_condition(self):
         self.column_condition
 
-class Row(object):
+class Row(DefaultJsonObject):
     def __init__(self, primary_key, attribute_columns = None):
         self.primary_key = primary_key
         self.attribute_columns = attribute_columns
 
-class RowItem(object):
+class RowItem(DefaultJsonObject):
 
     def __init__(self, row_type, row, condition, return_type = None):
         self.type = row_type
@@ -534,7 +532,7 @@ class DeleteRowItem(RowItem):
         super(DeleteRowItem, self).__init__(BatchWriteRowType.DELETE, row, condition, return_type)
 
 
-class TableInBatchGetRowItem(object):
+class TableInBatchGetRowItem(DefaultJsonObject):
 
     def __init__(self, table_name, primary_keys, columns_to_get=None,
                  column_filter=None, max_version=None, time_range=None,
@@ -550,7 +548,7 @@ class TableInBatchGetRowItem(object):
         self.token = token
 
 
-class BatchGetRowRequest(object):
+class BatchGetRowRequest(DefaultJsonObject):
 
     def __init__(self):
         self.items = {}
@@ -569,7 +567,7 @@ class BatchGetRowRequest(object):
 
         self.items[table_item.table_name] = table_item
 
-class BatchGetRowResponse(object):
+class BatchGetRowResponse(DefaultJsonObject):
 
     def __init__(self, table_rows):
         self.items = table_rows
@@ -598,14 +596,14 @@ class BatchWriteRowType(object):
     DELETE = "delete"
 
 
-class TableInBatchWriteRowItem(object):
+class TableInBatchWriteRowItem(DefaultJsonObject):
 
     def __init__(self, table_name, row_items):
         self.table_name = table_name
         self.row_items = row_items
 
 
-class BatchWriteRowRequest(object):
+class BatchWriteRowRequest(DefaultJsonObject):
 
     def __init__(self):
         self.items = {}
@@ -629,7 +627,7 @@ class BatchWriteRowRequest(object):
         self.transaction_id = transcation_id
 
 
-class BatchWriteRowResponse(object):
+class BatchWriteRowResponse(DefaultJsonObject):
 
     def __init__(self, request, response):
         self.table_of_put = {}
@@ -735,7 +733,7 @@ class BatchWriteRowResponse(object):
     def is_all_succeed(self):
         return self.get_failed_of_put() == [] and self.get_failed_of_update() == [] and self.get_failed_of_delete() == []
 
-class BatchWriteRowResponseItem(object):
+class BatchWriteRowResponseItem(DefaultJsonObject):
 
     def __init__(self, is_ok, error_code, error_message, consumed, primary_key):
         self.is_ok = is_ok
@@ -781,7 +779,7 @@ class QueryOperator(Enum):
     OR = search_pb2.OR
     AND = search_pb2.AND
 
-class Query(object):
+class Query(DefaultJsonObject):
 
     def __init__(self):
         pass
@@ -875,18 +873,18 @@ class GeoPolygonQuery(Query):
         self.field_name = field_name
         self.points = points
 
-class Collapse(object):
+class Collapse(DefaultJsonObject):
 
     def __init__(self, field_name):
         self.field_name = field_name
 
-class NestedFilter(object):
+class NestedFilter(DefaultJsonObject):
 
     def __init__(self, path, query_filter):
         self.path = path
         self.query_filter = query_filter
 
-class FieldValueFactor(object):
+class FieldValueFactor(DefaultJsonObject):
 
     def __init__(self, field_name):
         self.field_name = field_name
@@ -910,7 +908,7 @@ class KnnVectorQuery(Query):
         self.float32_query_vector = float32_query_vector
         self.filter = filter
 
-class SearchQuery(object):
+class SearchQuery(DefaultJsonObject):
 
     def __init__(self, query, sort=None, get_total_count=False,
                  next_token=None, offset=None, limit=None,
@@ -926,7 +924,7 @@ class SearchQuery(object):
         self.group_bys = group_bys
         self.collapse = collapse_field
 
-class ScanQuery(object):
+class ScanQuery(DefaultJsonObject):
 
     def __init__(self, query, limit, next_token, current_parallel_id, max_parallel, alive_time = 60):
         self.query = query
@@ -943,7 +941,7 @@ class ColumnReturnType(Enum):
     NONE = search_pb2.RETURN_NONE
     ALL_FROM_INDEX = search_pb2.RETURN_ALL_FROM_INDEX
 
-class ColumnsToGet(object):
+class ColumnsToGet(DefaultJsonObject):
 
     def __init__(self, column_names=[], return_type=ColumnReturnType.NONE):
         self.column_names = column_names
