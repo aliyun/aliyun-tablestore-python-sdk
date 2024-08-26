@@ -4,6 +4,7 @@ from example_config import *
 from tablestore import *
 import time
 
+# Table support transaction must be set in advance, we can't create and use transaction immediately!
 table_name = 'TransactionTable'
 
 
@@ -102,7 +103,7 @@ def abort_transaction(transaction_id):
 
 
 if __name__ == '__main__':
-    client = OTSClient(OTS_ENDPOINT, OTS_ID, OTS_SECRET, OTS_INSTANCE)
+    client = OTSClient(OTS_ENDPOINT, OTS_ACCESS_KEY_ID, OTS_ACCESS_KEY_SECRET, OTS_INSTANCE)
 
     put_row()
     get_row(None)

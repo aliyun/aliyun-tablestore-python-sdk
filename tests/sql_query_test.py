@@ -2,9 +2,9 @@
 
 import sys
 import unittest
-from lib.api_test_base import APITestBase
+from tests.lib.api_test_base import APITestBase
 from tablestore import *
-import lib.restriction as restriction
+import tests.lib.restriction as restriction
 import copy
 from tablestore.error import *
 import math

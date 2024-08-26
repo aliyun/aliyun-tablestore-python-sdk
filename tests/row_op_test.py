@@ -1,9 +1,9 @@
 # -*- coding: utf8 -*-
 
 import unittest
-from lib.api_test_base import APITestBase
+from tests.lib.api_test_base import APITestBase
 from tablestore import *
-import lib.restriction as restriction
+import tests.lib.restriction as restriction
 import copy
 from tablestore.error import *
 import math
@@ -39,7 +39,7 @@ class RowOpTest(APITestBase):
             self.assert_error(e, 400, "OTSInvalidPK", error_msg)
 
         try:
-            self.client_test.delete_row(table_name, Row(wrong_pk), Condition(RowExistenceExpectation.IGNORE))
+            self.client_test.delete_row(table_name, wrong_pk, Condition(RowExistenceExpectation.IGNORE))
             self.assert_false()
         except OTSServiceError as e:
             self.assert_error(e, 400, "OTSInvalidPK", error_msg)
@@ -110,7 +110,7 @@ class RowOpTest(APITestBase):
         self.assert_equal(rrow.primary_key, pks)
         self.assert_columns(rrow.attribute_columns, cols)
 
-        cu,return_row = self.client_test.delete_row(table_name, Row(pks), Condition(RowExistenceExpectation.IGNORE))
+        cu,return_row = self.client_test.delete_row(table_name, pks, Condition(RowExistenceExpectation.IGNORE))
         cu, rrow, token = self.client_test.get_row(table_name, pks, max_version=1)
         self.assert_equal(rrow, None)
 
@@ -627,7 +627,7 @@ class RowOpTest(APITestBase):
         self.wait_for_partition_load(table_name)
 
         try:
-            self.client_test.delete_row(table_name, Row([('PK1', '0')]), Condition(RowExistenceExpectation.EXPECT_EXIST))
+            self.client_test.delete_row(table_name, [('PK1', '0')], Condition(RowExistenceExpectation.EXPECT_EXIST))
             self.assert_false()
         except OTSServiceError as e:
             self.assert_error(e, 403, "OTSConditionCheckFail", "Condition check failed.")
@@ -724,7 +724,7 @@ class RowOpTest(APITestBase):
         self.assert_equal(None, rrow)
 
         #delete_row
-        consumed, rrow = self.client_test.delete_row(table_name, Row(pk), Condition(RowExistenceExpectation.IGNORE))
+        consumed, rrow = self.client_test.delete_row(table_name, pk, Condition(RowExistenceExpectation.IGNORE))
         self.assert_equal(None, rrow)
 
         #batch_write_row
@@ -1323,7 +1323,7 @@ class RowOpTest(APITestBase):
 
         # Delete
         primary_key3 = [('PK1',bytearray([1,1,1])), ('PK2',bytearray("西安", 'utf-8'))]
-        self.client_test.delete_row(table_name, Row(primary_key3), None)
+        self.client_test.delete_row(table_name, primary_key3, None)
 
         # Read
         consumed, return_row, next_token = self.client_test.get_row(table_name, primary_key3, [], None, 1)

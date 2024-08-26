@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 
-__version__ = '5.4.4'
+__version__ = '6.0.0'
 __all__ = [
     'OTSClient',
 
@@ -57,8 +57,10 @@ __all__ = [
     'ScoreSort',
     'GeoDistanceSort',
     'FieldSort',
+    'DocSort',
     'SortOrder',
     'SortMode',
+    'ScoreMode',
     'AnalyzerType',
     'SingleWordAnalyzerParameter',
     'SplitAnalyzerParameter',
@@ -75,6 +77,7 @@ __all__ = [
     'BoolQuery',
     'FunctionScoreQuery',
     'NestedQuery',
+    'InnerHits',
     'WildcardQuery',
     'MatchAllQuery',
     'GeoBoundingBoxQuery',
@@ -83,6 +86,14 @@ __all__ = [
     'TermsQuery',
     'SearchQuery',
     'ScanQuery',
+    'HighlightParameter',
+    'Highlight',
+    'HighlightEncoder',
+    'HighlightFragmentOrder',
+    'SearchHit',
+    'SearchInnerHit',
+    'HighlightResult',
+    'HighlightField',
     'ColumnsToGet',
     'ColumnReturnType',
     'FieldValueFactor',

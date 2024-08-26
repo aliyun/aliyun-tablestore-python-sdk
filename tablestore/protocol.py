@@ -4,12 +4,10 @@ import hashlib
 import hmac
 import base64
 import time
-import calendar
 import logging
 import sys
 import platform
 import datetime
-from email.utils import parsedate
 
 try:
     from urlparse import urlparse, parse_qsl

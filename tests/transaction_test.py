@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-
 
 import unittest
-from lib.api_test_base import APITestBase
+from tests.lib.api_test_base import APITestBase
 from tablestore import *
 from tablestore.error import *
 import time
@@ -299,9 +299,8 @@ class TransactionTest(APITestBase):
         transaction_id = self.client_test.start_local_transaction(table_name, key)
 
         # delete row with transaction_id
-        row = Row(primary_key)
         condition = Condition(RowExistenceExpectation.IGNORE)
-        self.client_test.delete_row(table_name, row, condition, transaction_id=transaction_id)
+        self.client_test.delete_row(table_name, primary_key, condition, transaction_id=transaction_id)
 
         # assert value before abort
         inclusive_start_primary_key = [('PK0', 1), ('PK1', INF_MIN)]
@@ -360,9 +359,8 @@ class TransactionTest(APITestBase):
         transaction_id = self.client_test.start_local_transaction(table_name, key)
 
         # delete row with transaction_id
-        row = Row(primary_key)
         condition = Condition(RowExistenceExpectation.IGNORE)
-        self.client_test.delete_row(table_name, row, condition, transaction_id=transaction_id)
+        self.client_test.delete_row(table_name, primary_key, condition, transaction_id=transaction_id)
 
         # assert value before abort
         inclusive_start_primary_key = [('PK0', 1), ('PK1', INF_MIN)]

@@ -1,8 +1,8 @@
 # -*- coding: utf8 -*-
 
 import unittest
-from lib.api_test_base import APITestBase
-import lib.restriction as restriction
+from tests.lib.api_test_base import APITestBase
+import tests.lib.restriction as restriction
 from tablestore import *
 from tablestore.error import *
 import time
@@ -546,7 +546,7 @@ class FilterAndConditionUpdateTest(APITestBase):
         condition = Condition(RowExistenceExpectation.IGNORE, SingleColumnCondition("index", 0, ComparatorType.LESS_THAN))
 
         try:
-            self.client_test.delete_row(table_name, row, condition)
+            self.client_test.delete_row(table_name, primary_key, condition)
         except OTSServiceError as e:
             self.assert_error(e, 403, "OTSConditionCheckFail", "Condition check failed.")
 
@@ -557,7 +557,7 @@ class FilterAndConditionUpdateTest(APITestBase):
 
         condition = Condition(RowExistenceExpectation.IGNORE, cond)
         try:
-             self.client_test.delete_row(table_name, row, condition)
+             self.client_test.delete_row(table_name, primary_key, condition)
         except OTSServiceError as e:
              self.assert_error(e, 403, "OTSConditionCheckFail", "Condition check failed.")
 
@@ -566,7 +566,7 @@ class FilterAndConditionUpdateTest(APITestBase):
         cond.add_sub_condition(SingleColumnCondition("addr", 'china', ComparatorType.NOT_EQUAL))
 
         condition = Condition(RowExistenceExpectation.IGNORE, cond)
-        self.client_test.delete_row(table_name, row, condition)
+        self.client_test.delete_row(table_name, primary_key, condition)
 
 
     def test_batch_write_row(self): 

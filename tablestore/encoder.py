@@ -12,6 +12,8 @@ import tablestore.protobuf.table_store_pb2 as pb2
 import tablestore.protobuf.table_store_filter_pb2 as filter_pb2
 import tablestore.protobuf.search_pb2 as search_pb2
 
+INT8_MAX = 127
+INT8_MIN = -128
 INT32_MAX = 2147483647
 INT32_MIN = -2147483648
 
@@ -115,6 +117,34 @@ class OTSProtoBufferEncoder(object):
                 "expect int or long for the value, not %s"
                 % int32.__class__.__name__
             )
+
+    def _make_repeated_int8(self, int8_query_vector):
+        if int8_query_vector is None:
+            return None
+
+        if not isinstance(int8_query_vector, list):
+            raise OTSClientError(
+                "expect list for int8_query_vector, not %s"
+                % int8_query_vector.__class__.__name__
+            )
+
+        byte_array = bytearray(0)
+        for value in int8_query_vector:
+            if not isinstance(value, int) or (value > INT8_MAX or value < INT8_MIN):
+                raise OTSClientError(
+                    "expect int8 for int8_query_vector element, not %s"
+                    % value.__class__.__name__
+                )
+            else:
+                if value < 0:
+                    byte_array.append(value + 256)
+                else:
+                    byte_array.append(value)
+
+        if len(byte_array) != 0:
+            return bytes(byte_array)
+
+        return None
 
     def _make_repeated_column_names(self, proto, columns_to_get):
         if columns_to_get is None:
@@ -377,6 +407,9 @@ class OTSProtoBufferEncoder(object):
         if field_schema.store is not None:
             proto.store = field_schema.store
 
+        if field_schema.enable_highlighting is not None:
+            proto.enable_highlighting = field_schema.enable_highlighting
+
         if field_schema.is_array is not None:
             proto.is_array = field_schema.is_array
 
@@ -477,6 +510,8 @@ class OTSProtoBufferEncoder(object):
                 self._make_nested_filter(proto.geo_distance_sort.nested_filter, sorter.nested_filter)
         elif isinstance(sorter, ScoreSort):
             proto.score_sort.order = self._get_enum(sorter.sort_order)
+        elif isinstance(sorter, DocSort):
+            proto.doc_sort.order = self._get_enum(sorter.sort_order)
         else:
             raise OTSClientError(
                 "Only PrimaryKeySort and FieldSort are allowed, not %s."
@@ -856,7 +891,7 @@ class OTSProtoBufferEncoder(object):
 
         return proto
 
-    def _encode_delete_row(self, table_name, row, condition, return_type, transaction_id):
+    def _encode_delete_row(self, table_name, primary_key, condition, return_type, transaction_id):
         proto = pb2.DeleteRowRequest()
         proto.table_name = self._get_unicode(table_name)
         if condition is None:
@@ -866,7 +901,7 @@ class OTSProtoBufferEncoder(object):
         if return_type == ReturnType.RT_PK:
             proto.return_content.return_type = pb2.RT_PK
 
-        proto.primary_key = bytes(PlainBufferBuilder.serialize_for_delete_row(row.primary_key))
+        proto.primary_key = bytes(PlainBufferBuilder.serialize_for_delete_row(primary_key))
         if transaction_id is not None:
             proto.transaction_id = transaction_id
 
@@ -913,7 +948,7 @@ class OTSProtoBufferEncoder(object):
         if start_column is not None:
             proto.start_column = start_column
         if end_column is not None:
-            proto.end_colun = end_column
+            proto.end_column = end_column
         if token is not None:
             proto.token = token
         if transaction_id is not None:
@@ -1098,7 +1133,24 @@ class OTSProtoBufferEncoder(object):
         self._make_query(proto.query, query.query)
         if query.score_mode is not None:
             proto.score_mode = self._get_enum(query.score_mode)
+
+        if query.inner_hits is not None:
+            self._make_inner_hits(proto.inner_hits, query.inner_hits)
+
         return proto.SerializeToString()
+
+    def _make_inner_hits(self, proto, inner_hits):
+        if inner_hits.sort is not None:
+            self._make_index_sort(proto.sort, inner_hits.sort)
+
+        if inner_hits.offset is not None:
+            proto.offset = inner_hits.offset
+
+        if inner_hits.limit is not None:
+            proto.limit = inner_hits.limit
+
+        if inner_hits.highlight is not None:
+            self._make_highlight(proto.highlight, inner_hits.highlight)
 
     def _encode_wildcard_query(self, query):
         proto = search_pb2.WildcardQuery()
@@ -1250,6 +1302,9 @@ class OTSProtoBufferEncoder(object):
         if search_query.group_bys is not None:
             self._make_group_bys(proto.group_bys, search_query.group_bys)
 
+        if search_query.highlight is not None:
+            self._make_highlight(proto.highlight, search_query.highlight)
+
         return proto.SerializeToString()
 
     def _make_aggs(self, proto, aggs):
@@ -1263,7 +1318,7 @@ class OTSProtoBufferEncoder(object):
                 aggregation.type = agg.type
                 aggregation.body = self._agg_to_pb_str(agg)
         else:
-            raise OTSClientError('searh_query.aggs type must be list')
+            raise OTSClientError('search_query.aggs type must be list')
 
     def _make_group_bys(self, proto, group_bys):
         if isinstance(group_bys, list):
@@ -1275,7 +1330,37 @@ class OTSProtoBufferEncoder(object):
                 group_by_proto.type = group_by.type
                 group_by_proto.body = self._group_by_to_pb_str(group_by)
         else:
-            raise OTSClientError('searh_query.group_bys type must be list')
+            raise OTSClientError('search_query.group_bys type must be list')
+
+    def _make_highlight(self, proto, highlight):
+        if not isinstance(highlight, Highlight):
+            raise OTSClientError('search_query.highlight type must be Highlight')
+
+        for highlight_parameter in highlight.highlight_parameters:
+            if not isinstance(highlight_parameter, HighlightParameter):
+                raise OTSClientError('search_query.highlight_parameter type must be HighlightParameter')
+
+            proto_highlight_parameter = proto.highlight_parameters.add()
+            proto_highlight_parameter.field_name = highlight_parameter.field_name
+
+            if highlight_parameter.number_of_fragments is not None:
+                proto_highlight_parameter.number_of_fragments = highlight_parameter.number_of_fragments
+
+            if highlight_parameter.fragment_size is not None:
+                proto_highlight_parameter.fragment_size = highlight_parameter.fragment_size
+
+            if highlight_parameter.pre_tag is not None:
+                proto_highlight_parameter.pre_tag = highlight_parameter.pre_tag
+
+            if highlight_parameter.post_tag is not None:
+                proto_highlight_parameter.post_tag = highlight_parameter.post_tag
+
+            if highlight_parameter.fragments_order is not None:
+                proto_highlight_parameter.fragments_order = self._get_enum(highlight_parameter.fragments_order)
+
+        if highlight.highlight_encoder is not None:
+            proto.highlight_encoder = self._get_enum(highlight.highlight_encoder)
+
 
     def _agg_to_pb_str(self, agg):
         if isinstance(agg, TopRows):

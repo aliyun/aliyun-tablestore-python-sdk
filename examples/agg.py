@@ -35,18 +35,21 @@ SQL: SELECT MAX(l) as max FROM AggExampleTable.search_index_agg WHERE d = 0.1
 Result: max: 9.0 
 
 """
+
+
 def max_agg(table_name, index_name):
     print('**** Begin Sample 1 ****\n')
 
     query = TermQuery('d', 0.1)
-    agg = Max('l', name = 'max')
+    agg = Max('l', name='max')
 
     search_response = client.search(table_name, index_name,
-                                    SearchQuery(query, next_token = None, limit=0, aggs=[agg]),
-                                    columns_to_get = ColumnsToGet(return_type = ColumnReturnType.ALL_FROM_INDEX))
+                                    SearchQuery(query, next_token=None, limit=0, aggs=[agg]),
+                                    columns_to_get=ColumnsToGet(return_type=ColumnReturnType.ALL_FROM_INDEX))
 
     for agg_result in search_response.agg_results:
         print('{\n"name":"%s",\n"value":%s\n}\n' % (agg_result.name, str(agg_result.value)))
+
 
 """
 
@@ -57,18 +60,21 @@ SQL: SELECT MAX(ifnull(l, 100)) as max FROM AggExampleTable.search_index_agg WHE
 Result: max: 100
 
 """
+
+
 def max_agg(table_name, index_name):
     print('**** Begin Sample 1.1 ****\n')
 
     query = TermQuery('d', 0.1)
-    agg = Max('l', missing_value = 100, name = 'max')
+    agg = Max('l', missing_value=100, name='max')
 
     search_response = client.search(table_name, index_name,
-                                    SearchQuery(query, next_token = None, limit=0, aggs=[agg]),
-                                    columns_to_get = ColumnsToGet(return_type = ColumnReturnType.ALL_FROM_INDEX))
+                                    SearchQuery(query, next_token=None, limit=0, aggs=[agg]),
+                                    columns_to_get=ColumnsToGet(return_type=ColumnReturnType.ALL_FROM_INDEX))
 
     for agg_result in search_response.agg_results:
         print('{\n"name":"%s",\n"value":%s\n}\n' % (agg_result.name, str(agg_result.value)))
+
 
 """
 
@@ -79,19 +85,21 @@ SQL: SELECT MIN(l) as min FROM AggExampleTable.search_index_agg WHERE d = 0.1
 Result: min: 0
 
 """
+
+
 def min_agg(table_name, index_name):
     print('**** Begin Sample 2 ****\n')
 
     query = TermQuery('d', 0.1)
-    agg = Min('l', name = 'min')
+    agg = Min('l', name='min')
 
     search_response = client.search(table_name, index_name,
-                                    SearchQuery(query, next_token = None, limit=0, aggs=[agg]),
-                                    columns_to_get = ColumnsToGet(return_type = ColumnReturnType.ALL_FROM_INDEX))
+                                    SearchQuery(query, next_token=None, limit=0, aggs=[agg]),
+                                    columns_to_get=ColumnsToGet(return_type=ColumnReturnType.ALL_FROM_INDEX))
 
     for agg_result in search_response.agg_results:
         print('{\n"name":"%s",\n"value":%s\n}\n' % (agg_result.name, str(agg_result.value)))
-    
+
 
 """
 
@@ -102,18 +110,21 @@ SQL: SELECT AVG(l) as avg FROM AggExampleTable.search_index_agg WHERE d = 0.1
 Result: avg: 4.0
 
 """
+
+
 def avg_agg(table_name, index_name):
     print('**** Begin Sample 3 ****\n')
 
     query = TermQuery('d', 0.1)
-    agg = Avg('l', name = 'avg')
+    agg = Avg('l', name='avg')
 
     search_response = client.search(table_name, index_name,
-                                     SearchQuery(query, next_token = None, limit=2, aggs=[agg]),
-                                     columns_to_get = ColumnsToGet(return_type = ColumnReturnType.ALL_FROM_INDEX))
+                                    SearchQuery(query, next_token=None, limit=2, aggs=[agg]),
+                                    columns_to_get=ColumnsToGet(return_type=ColumnReturnType.ALL_FROM_INDEX))
 
     for agg_result in search_response.agg_results:
         print('{\n"name":"%s",\n"value":%s\n}\n' % (agg_result.name, str(agg_result.value)))
+
 
 """
 
@@ -123,19 +134,22 @@ SQL: SELECT SUM(l) as sum FROM AggExampleTable.search_index_agg WHERE d = 0.1
 
 Result: sum: 40
 
-"""    
+"""
+
+
 def sum_agg(table_name, index_name):
     print('**** Begin Sample 4 ****\n')
 
     query = TermQuery('d', 0.1)
-    agg = Sum('l', name = 'sum')
+    agg = Sum('l', name='sum')
 
     search_response = client.search(table_name, index_name,
-                                    SearchQuery(query, next_token = None, limit=2, aggs=[agg]),
-                                    columns_to_get = ColumnsToGet(return_type = ColumnReturnType.ALL_FROM_INDEX))
+                                    SearchQuery(query, next_token=None, limit=2, aggs=[agg]),
+                                    columns_to_get=ColumnsToGet(return_type=ColumnReturnType.ALL_FROM_INDEX))
 
     for agg_result in search_response.agg_results:
         print('{\n"name":"%s",\n"value":%s\n}\n' % (agg_result.name, str(agg_result.value)))
+
 
 """
 
@@ -146,18 +160,21 @@ SQL: SELECT COUNT(l) as count FROM AggExampleTable.search_index_agg WHERE d = 0.
 Result: count: 9
 
 """
+
+
 def count_agg(table_name, index_name):
     print('**** Begin Sample 5 ****\n')
 
     query = TermQuery('d', 0.1)
-    agg = Count('l', name = 'count')
+    agg = Count('l', name='count')
 
     search_response = client.search(table_name, index_name,
-                                    SearchQuery(query, next_token = None, limit=2, aggs=[agg]),
-                                    columns_to_get = ColumnsToGet(return_type = ColumnReturnType.ALL_FROM_INDEX))
+                                    SearchQuery(query, next_token=None, limit=2, aggs=[agg]),
+                                    columns_to_get=ColumnsToGet(return_type=ColumnReturnType.ALL_FROM_INDEX))
 
     for agg_result in search_response.agg_results:
         print('{\n"name":"%s",\n"value":%s\n}\n' % (agg_result.name, str(agg_result.value)))
+
 
 """
 
@@ -167,39 +184,45 @@ SQL: SELECT DISTINCT COUNT(l) as dcount FROM AggExampleTable.search_index_agg WH
 
 Result: dcount: 9
 
-"""        
+"""
+
+
 def distinct_count_agg(table_name, index_name):
     print('**** Begin Sample 6 ****\n')
 
     query = TermQuery('d', 0.1)
-    agg = DistinctCount('l', name = 'dcount')
+    agg = DistinctCount('l', name='dcount')
 
     search_response = client.search(table_name, index_name,
-                                    SearchQuery(query, next_token = None, limit=2, aggs=[agg]),
-                                    columns_to_get = ColumnsToGet(return_type = ColumnReturnType.ALL_FROM_INDEX))
+                                    SearchQuery(query, next_token=None, limit=2, aggs=[agg]),
+                                    columns_to_get=ColumnsToGet(return_type=ColumnReturnType.ALL_FROM_INDEX))
 
     for agg_result in search_response.agg_results:
         print('{\n"name":"%s",\n"value":%s\n}\n' % (agg_result.name, str(agg_result.value)))
+
 
 """
 
 Sample 7: Percentiles
 
-"""        
+"""
+
+
 def percentiles_agg(table_name, index_name):
     print('**** Begin Sample 7 ****\n')
 
     query = TermQuery('d', 0.1)
-    agg = Percentiles('l', percentiles_list = [50, 90, 95])
+    agg = Percentiles('l', percentiles_list=[50, 90, 95])
 
     search_response = client.search(table_name, index_name,
-                                    SearchQuery(query, next_token = None, limit=2, aggs=[agg]),
-                                    columns_to_get = ColumnsToGet(return_type = ColumnReturnType.ALL_FROM_INDEX))
+                                    SearchQuery(query, next_token=None, limit=2, aggs=[agg]),
+                                    columns_to_get=ColumnsToGet(return_type=ColumnReturnType.ALL_FROM_INDEX))
 
     for agg_result in search_response.agg_results:
         print('percentiles:%s' % agg_result.name)
         for item in agg_result.value:
             print('%s:%s' % (str(item.key), str(item.value)))
+
 
 """
 
@@ -212,19 +235,22 @@ Result:
 ([('PK1', 1), ('PK2', 'pk_1')])
 ([('PK1', 2), ('PK2', 'pk_2')])
 
-"""    
+"""
+
+
 def top_rows_agg(table_name, index_name):
     print('**** Begin Sample 8 ****\n')
 
     query = TermQuery('d', 0.1)
-    agg = TopRows(limit = 3, sort = Sort([PrimaryKeySort()]))
+    agg = TopRows(limit=3, sort=Sort([PrimaryKeySort()]))
 
     search_response = client.search(table_name, index_name,
-                                    SearchQuery(query, next_token = None, limit=0, aggs=[agg]),
-                                    columns_to_get = ColumnsToGet(return_type = ColumnReturnType.NONE))
+                                    SearchQuery(query, next_token=None, limit=0, aggs=[agg]),
+                                    columns_to_get=ColumnsToGet(return_type=ColumnReturnType.NONE))
 
     for agg_result in search_response.agg_results:
         print('{\n"name":"%s",\n"value":%s\n}\n' % (agg_result.name, str(agg_result.value)))
+
 
 """
 
@@ -238,40 +264,44 @@ s2 : 45
 c1 : 9
 
 """
+
+
 def multiple_agg(table_name, index_name):
     print('**** Begin Sample 9 ****\n')
 
     query = TermQuery('d', 0.1)
-    agg1 = Sum('l', name = 's1')
-    agg2 = Sum('n.nl', name = 's2')
-    agg3 = Count('l', name = 'c1')
+    agg1 = Sum('l', name='s1')
+    agg2 = Sum('n.nl', name='s2')
+    agg3 = Count('l', name='c1')
 
     search_response = client.search(table_name, index_name,
-                                    SearchQuery(query, next_token = None, limit = 0, aggs = [agg1, agg2, agg3]),
-                                    columns_to_get = ColumnsToGet(return_type = ColumnReturnType.ALL_FROM_INDEX))
+                                    SearchQuery(query, next_token=None, limit=0, aggs=[agg1, agg2, agg3]),
+                                    columns_to_get=ColumnsToGet(return_type=ColumnReturnType.ALL_FROM_INDEX))
 
     for agg_result in search_response.agg_results:
         print('{\n"name":"%s",\n"value":%s\n}\n' % (agg_result.name, str(agg_result.value)))
 
+
 def prepare_data(rows_count):
-    print ('Begin prepare data: %d' % rows_count)
+    print('Begin prepare data: %d' % rows_count)
     for i in range(rows_count):
         pk = [('PK1', i), ('PK2', 'pk_' + str(i % 10))]
         lj = i / 100
         li = i % 100
         cols = [('k', 'key%03d' % i), ('t', 'this is ' + str(i)),
-            ('g', '%f,%f' % (30.0 + 0.05 * lj, 114.0 + 0.05 * li)), ('ka', '["a", "%d"]' % i),
-            ('la', '[-1, %d]' % i), ('l', i),
-            ('b', i % 2 == 0), ('d', 0.1),
-            ('n', json.dumps([{'nk':'key%03d' % i, 'nl':i, 'nt':'nested ' + str(i)}]))]
+                ('g', '%f,%f' % (30.0 + 0.05 * lj, 114.0 + 0.05 * li)), ('ka', '["a", "%d"]' % i),
+                ('la', '[-1, %d]' % i), ('l', i),
+                ('b', i % 2 == 0), ('d', 0.1),
+                ('n', json.dumps([{'nk': 'key%03d' % i, 'nl': i, 'nt': 'nested ' + str(i)}]))]
 
         if i == 5:
             cols.remove(('l', 5))
         client.put_row(table_name, Row(pk, cols))
 
-    print ('End prepare data.')
-    print ('Wait for data sync to search index.')
+    print('End prepare data.')
+    print('Wait for data sync to search index.')
     time.sleep(10)
+
 
 def prepare_table():
     table_meta = TableMeta(table_name, [('PK1', 'INTEGER'), ('PK2', 'STRING')])
@@ -279,6 +309,7 @@ def prepare_table():
     table_options = TableOptions()
     reserved_throughput = ReservedThroughput(CapacityUnit(0, 0))
     client.create_table(table_meta, table_options, reserved_throughput)
+
 
 def prepare_index(index_name):
     field_a = FieldSchema('k', FieldType.KEYWORD, index=True, enable_sort_and_agg=True, store=True)
@@ -300,8 +331,9 @@ def prepare_index(index_name):
     fields.append(field_n)
     index_setting = IndexSetting(routing_fields=['PK1'])
     index_sort = None
-    index_meta = SearchIndexMeta(fields, index_setting=index_setting, index_sort=index_sort) # default with index sort
+    index_meta = SearchIndexMeta(fields, index_setting=index_setting, index_sort=index_sort)  # default with index sort
     client.create_search_index(table_name, index_name, index_meta)
+
 
 def delete_table():
     try:
@@ -309,14 +341,16 @@ def delete_table():
     except:
         pass
 
+
 def delete_search_index(index_name):
     try:
         client.delete_search_index(table_name, index_name)
     except:
         pass
 
+
 if __name__ == '__main__':
-    client = OTSClient(OTS_ENDPOINT, OTS_ID, OTS_SECRET, OTS_INSTANCE)
+    client = OTSClient(OTS_ENDPOINT, OTS_ACCESS_KEY_ID, OTS_ACCESS_KEY_SECRET, OTS_INSTANCE)
     delete_search_index(index_name)
     delete_table()
 
@@ -334,7 +368,7 @@ if __name__ == '__main__':
     count_agg(table_name, index_name)
     distinct_count_agg(table_name, index_name)
     percentiles_agg(table_name, index_name)
-    top_rows_agg(table_name, index_name) 
+    top_rows_agg(table_name, index_name)
     multiple_agg(table_name, index_name)
 
     delete_search_index(index_name)

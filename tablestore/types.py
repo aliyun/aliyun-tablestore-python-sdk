@@ -2,7 +2,6 @@
 
 from tablestore.utils import DefaultJsonObject
 
-
 class PrimaryKey(DefaultJsonObject):
     def __init__(self):
         self.pks = []
@@ -19,7 +18,6 @@ class PrimaryKey(DefaultJsonObject):
     def get_primary_key(self, index):
         return self.pks[index]
 
-
 class PrimaryKeyColumn(DefaultJsonObject):
     def __init(self, name, value):
         self.name = name
@@ -31,7 +29,6 @@ class PrimaryKeyColumn(DefaultJsonObject):
     def get_value(self, value):
         self.value = value
 
-
 class PrimaryKeyValue(DefaultJsonObject):
     def __init__(self, pk_type, value):
         self.type = pk_type
@@ -42,4 +39,4 @@ class PrimaryKeyValue(DefaultJsonObject):
 
     def get_value(self):
         return self.value
-
+        

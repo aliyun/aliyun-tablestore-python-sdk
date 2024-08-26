@@ -505,7 +505,7 @@ class OTSProtoBufferDecoder(object):
             else:
                 return None
         except Exception as e:
-            error_message = 'parse analyzer_parameter failed, please contact tablestore, exception:%s, request_id: %s.' % (str(e), request_id)
+            error_message = 'parse analyzer_parameter failed, please contact tablestore, exception:%s.' % (str(e))
             self.logger.error(error_message)
             raise e
 
@@ -655,10 +655,46 @@ class OTSProtoBufferDecoder(object):
             proto_result.ParseFromString(proto.group_bys)
             self._decode_group_by_results(proto_result, group_by_results)
 
+        search_hits = []
+        if proto.search_hits is not None and len(proto.search_hits) > 0:
+            if len(proto.search_hits) == len(rows):
+                self._decode_search_hits(proto.search_hits, rows, search_hits, request_id)
+            else:
+                raise OTSServiceError("Tablestore search response occur error, row count[%d] != search_hit count[%d], request_id:%s"
+                              % (len(rows), len(proto.search_hits), request_id))
+
         search_response = SearchResponse(rows, agg_results, group_by_results, 
-                                         proto.next_token, is_all_succeed, total_count)
+                                         proto.next_token, is_all_succeed, total_count, search_hits)
         search_response.set_request_id(request_id)
         return (search_response), proto
+
+    def _decode_search_hits(self, proto_results, rows, search_hits, request_id):
+        row_index = 0
+        for hit in proto_results:
+            score = hit.score
+            nested_doc_offset = hit.nested_doc_offset
+
+            highlight_result = None
+            if hit.highlight_result is not None:
+                highlight_fields = []
+                for field in hit.highlight_result.highlight_fields:
+                    highlight_field = HighlightField(field.field_name, field.field_fragments)
+                    highlight_fields.append(highlight_field)
+                highlight_result = HighlightResult(highlight_fields)
+
+            search_inner_hits = []
+            for innerHit in hit.search_inner_hits:
+                path = innerHit.path
+                search_hits2 = []
+                self._decode_search_hits(innerHit.search_hits, [], search_hits2, request_id)
+                search_inner_hits.append(SearchInnerHit(path, search_hits2))
+
+            row = rows[row_index] if len(rows) != 0 else None
+            row_index += 1
+
+            search_hit = SearchHit(row, score, highlight_result, search_inner_hits, nested_doc_offset)
+            search_hits.append(search_hit)
+
 
     def _decode_agg_results(self, proto_result, agg_results):
         if proto_result is not None:

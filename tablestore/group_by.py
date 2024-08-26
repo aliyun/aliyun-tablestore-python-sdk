@@ -184,8 +184,8 @@ class FieldRange(object):
 
 class GroupByHistogram(BaseGroupBy):
     
-    def __init__(self, field_name, interval, field_range, missing_value = None, min_doc_count = None, group_by_sort = None, 
-                 sub_aggs = [], sub_group_bys = [], name = 'group_by_histogram'):
+    def __init__(self, field_name, interval, field_range, missing_value=None, min_doc_count=None, group_by_sort=None,
+                 sub_aggs=[], sub_group_bys=[], name='group_by_histogram'):
         BaseGroupBy.__init__(self, field_name, sub_aggs, sub_group_bys, name, search_pb2.GROUP_BY_HISTOGRAM)
 
         self.interval = interval
@@ -203,8 +203,8 @@ class GroupByHistogram(BaseGroupBy):
         if self.missing_value is not None:
             proto.missing_value = bytes(PlainBufferBuilder.serialize_column_value(self.missing_value))
 
-        if self.min_doc_count is not None :
-            if isinstance(self.min_doc_count, int) or isinstance(self.min_doc_count, long):
+        if self.min_doc_count is not None:
+            if isinstance(self.min_doc_count, int):
                 proto.min_doc_count = self.min_doc_count
             else:
                 raise OTSClientError('min_doc_count must be integer')

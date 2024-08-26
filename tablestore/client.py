@@ -9,7 +9,6 @@ import time
 import _strptime
 
 import logging
-
 try:  # Python 2.7+
     from logging import NullHandler
 except ImportError:
@@ -37,6 +36,7 @@ class OTSClient(object):
     除非另外说明，``OTSClient``的所有接口都以抛异常的方式处理错误(请参考模块``tablestore.error``
     )，即如果某个函数有返回值，则会在描述中说明；否则返回None。
     """
+
 
     DEFAULT_ENCODING = 'utf8'
     DEFAULT_SOCKET_TIMEOUT = 50
@@ -223,7 +223,7 @@ class OTSClient(object):
 
         return self._request_helper('ListTable')
 
-    def update_table(self, table_name, table_options=None, reserved_throughput=None):
+    def update_table(self, table_name, table_options = None, reserved_throughput = None):
         """
         说明：更新表属性，目前只支持修改预留读写吞吐量。
 
@@ -243,7 +243,7 @@ class OTSClient(object):
         """
 
         return self._request_helper(
-            'UpdateTable', table_name, table_options, reserved_throughput
+                    'UpdateTable', table_name, table_options, reserved_throughput
         )
 
     def describe_table(self, table_name):
@@ -291,12 +291,12 @@ class OTSClient(object):
         """
 
         return self._request_helper(
-            'GetRow', table_name, primary_key, columns_to_get,
-            column_filter, max_version, time_range,
-            start_column, end_column, token, transaction_id
+                    'GetRow', table_name, primary_key, columns_to_get,
+                    column_filter, max_version, time_range,
+                    start_column, end_column, token, transaction_id
         )
 
-    def put_row(self, table_name, row, condition=None, return_type=None, transaction_id=None):
+    def put_row(self, table_name, row, condition = None, return_type = None, transaction_id = None):
         """
         说明：写入一行数据。返回本次操作消耗的CapacityUnit。
 
@@ -321,10 +321,10 @@ class OTSClient(object):
         """
 
         return self._request_helper(
-            'PutRow', table_name, row, condition, return_type, transaction_id
+                    'PutRow', table_name, row, condition, return_type, transaction_id
         )
 
-    def update_row(self, table_name, row, condition, return_type=None, transaction_id=None):
+    def update_row(self, table_name, row, condition, return_type = None, transaction_id = None):
         """
         说明：更新一行数据。
 
@@ -354,15 +354,15 @@ class OTSClient(object):
         """
 
         return self._request_helper(
-            'UpdateRow', table_name, row, condition, return_type, transaction_id
+                    'UpdateRow', table_name, row, condition, return_type, transaction_id
         )
 
-    def delete_row(self, table_name, row, condition, return_type=None, transaction_id=None):
+    def delete_row(self, table_name, primary_key, condition, return_type = None, transaction_id = None):
         """
         说明：删除一行数据。
 
         ``table_name``是对应的表名。
-        ``row``表示行数据，在delete_row仅包含主键。
+        ``primary_key``表示主键。
         ``condition``表示执行操作前做条件检查，满足条件才执行，是tablestore.metadata.Condition类的实例。
         目前支持两种条件检测，一是对行的存在性进行检查，检查条件包括：'IGNORE'，'EXPECT_EXIST'和'EXPECT_NOT_EXIST';二是对属性列值的条件检测。
 
@@ -374,33 +374,32 @@ class OTSClient(object):
         示例：
 
             primary_key = [('gid',1), ('uid',101)]
-            row = Row(primary_key)
             condition = Condition('IGNORE')
-            consumed, return_row = client.delete_row('myTable', row, condition)
+            consumed, return_row = client.delete_row('myTable', primary_key, condition)
         """
 
         return self._request_helper(
-            'DeleteRow', table_name, row, condition, return_type, transaction_id
+                    'DeleteRow', table_name, primary_key, condition, return_type, transaction_id
         )
-
-    def exe_sql_query(self, query):
+    
+    def exe_sql_query(self,query):
         """
         说明：执行sql query
 
         ``query``query是需要执行的query。
-
+        
         (rows,table_capacity_units,search_capacity_units)
 
         返回：
         ``table_capacity_units``  本次操作消耗的每张table对应的CapacityUnit
         ``search_capacity_units`` 本次操作消耗的每个search的CapacityUnit
         ``rows``                  返回的数据
-
+        
         示例：
         row_list,table_comsume_list,search_comsume_list = client.exe_sql_query(query)
         """
         return self._request_helper(
-            'SQLQuery', query
+                    'SQLQuery', query
         )
 
     def batch_get_row(self, request):
@@ -489,6 +488,7 @@ class OTSClient(object):
 
         return BatchWriteRowResponse(request, response)
 
+
     def get_range(self, table_name, direction,
                   inclusive_start_primary_key,
                   exclusive_end_primary_key,
@@ -499,7 +499,7 @@ class OTSClient(object):
                   time_range=None,
                   start_column=None,
                   end_column=None,
-                  token=None,
+                  token = None,
                   transaction_id=None):
         """
         说明：根据范围条件获取多行数据。
@@ -537,13 +537,13 @@ class OTSClient(object):
         """
 
         return self._request_helper(
-            'GetRange', table_name, direction,
-            inclusive_start_primary_key, exclusive_end_primary_key,
-            columns_to_get, limit,
-            column_filter, max_version,
-            time_range, start_column,
-            end_column, token,
-            transaction_id
+                    'GetRange', table_name, direction,
+                    inclusive_start_primary_key, exclusive_end_primary_key,
+                    columns_to_get, limit,
+                    column_filter, max_version,
+                    time_range, start_column,
+                    end_column, token,
+                    transaction_id
         )
 
     def xget_range(self, table_name, direction,
@@ -557,7 +557,7 @@ class OTSClient(object):
                    time_range=None,
                    start_column=None,
                    end_column=None,
-                   token=None):
+                   token = None):
         """
         说明：根据范围条件获取多行数据，iterator版本。
 
@@ -625,6 +625,7 @@ class OTSClient(object):
                     left_count -= 1
                     if left_count <= 0:
                         return
+
 
     def _validate_parameter(self, endpoint, access_key_id, access_key_secret, instance_name):
         if endpoint is None or endpoint == '':
@@ -713,6 +714,7 @@ class OTSClient(object):
 
         self._request_helper('UpdateSearchIndex', table_name, index_name, index_meta)
 
+
     def describe_search_index(self, table_name, index_name):
         """
         Describe search index.
@@ -781,7 +783,7 @@ class OTSClient(object):
             compute_splits_response = client.compute_splits(table_name, index_name)
             )
         """
-
+        
         return self._request_helper('ComputeSplits', table_name, index_name)
 
     def parallel_scan(self, table_name, index_name, scan_query, session_id, columns_to_get=None):
@@ -817,7 +819,7 @@ class OTSClient(object):
             )
         """
 
-        return self._request_helper('ParallelScan', table_name, index_name, scan_query,
+        return self._request_helper('ParallelScan', table_name, index_name, scan_query, 
                                     session_id, columns_to_get)
 
     def create_secondary_index(self, table_name, index_meta, include_base_data):
