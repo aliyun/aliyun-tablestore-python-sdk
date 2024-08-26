@@ -1,7 +1,14 @@
-TableStore SDK for Python 版本记录
+Tablestore SDK for Python 版本记录
 ===========================
 
-Python SDK的版本号遵循 `Semantic Versioning <http://semver.org/>`_ 规则。
+Python SDK 的版本号遵循 `Semantic Versioning <http://semver.org/>`_ 规则。
+
+Version 6.0.0
+-------------
+
+- Update protobuf from 3.19.0 to 4.25.0
+- Support Python 3.8、Python 3.9、Python 3.10、Python 3.11、Python 3.12
+- Support Highlight
 
 Version 5.4.4
 _____________

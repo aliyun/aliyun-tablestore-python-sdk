@@ -17,8 +17,8 @@ import logging
 
 def get_no_retry_client():
     no_retry_client = OTSClient(test_config.OTS_ENDPOINT,
-                           test_config.OTS_ID,
-                           test_config.OTS_SECRET,
+                           test_config.OTS_ACCESS_KEY_ID,
+                           test_config.OTS_ACCESS_KEY_SECRET,
                            test_config.OTS_INSTANCE,
                            logger_name='APITestBase',
                            retry_policy=NoRetryPolicy())
@@ -56,8 +56,8 @@ class APITestBase(TestCase):
     def setUp(self):
         self.client_test = OTSClient(
             test_config.OTS_ENDPOINT,
-            test_config.OTS_ID,
-            test_config.OTS_SECRET,
+            test_config.OTS_ACCESS_KEY_ID,
+            test_config.OTS_ACCESS_KEY_SECRET,
             test_config.OTS_INSTANCE,
             logger_name='APITestBase',
             retry_policy=DefaultRetryPolicy(),
@@ -160,7 +160,7 @@ class APITestBase(TestCase):
         if 1 == no_check_flag:
             try:
                 consumed_update, return_row = self.client_test.delete_row(
-                    table_name, Row(pk_dict_not_exist), Condition(RowExistenceExpectation.IGNORE))
+                    table_name, pk_dict_not_exist, Condition(RowExistenceExpectation.IGNORE))
             except OTSServiceError as e:
                 self.assert_false()
 
@@ -284,10 +284,27 @@ class APITestBase(TestCase):
             describe_response, reserved_throughput.capacity_unit, table_meta, table_options)
 
     def wait_for_capacity_unit_update(self, table_name):
-        time.sleep(5)
+        print("Wait for updating capacity unit")
+        time.sleep(60)
 
     def wait_for_partition_load(self, table_name, instance_name=""):
-        time.sleep(5)
+        print("Wait for loading partition")
+        time.sleep(60)
+
+    def wait_for_search_index_ready(self, client, table_name, index_name):
+        max_wait_time = 400
+        interval_time = 20
+
+        while max_wait_time > 0:
+            index_meta, sync_stat = client.describe_search_index(table_name, index_name)
+
+            if sync_stat.sync_phase == SyncPhase.INCR:
+                delta_time = time.time() - sync_stat.current_sync_timestamp/1000/1000/1000
+                if delta_time < 20:
+                    print('Search Index Ready!')
+                    return
+            time.sleep(interval_time)
+            max_wait_time = max_wait_time - interval_time
 
     def get_primary_keys(self, pk_cnt, pk_type, pk_name="PK", pk_value="x"):
         pk_schema = []

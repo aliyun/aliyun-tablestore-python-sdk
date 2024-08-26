@@ -2,8 +2,8 @@
 
 import unittest
 import time
-from lib.api_test_base import APITestBase
-from lib.api_test_base import get_no_retry_client
+from tests.lib.api_test_base import APITestBase
+from tests.lib.api_test_base import get_no_retry_client
 from tablestore import *
 from tablestore.error import *
 
@@ -271,7 +271,7 @@ class TableOperationTest(APITestBase):
             index_name, ['gid', 's'], ['bool', 'd'])
         self.client_test.create_secondary_index(table_name, secondary_index_meta, True)
 
-        time.sleep(1)  # 等待索引建立
+        time.sleep(30)  # 等待索引建立
         dtr = self.client_test.describe_table(table_name)
         self.assert_equal(1, len(dtr.secondary_indexes))
         self._assert_index_meta(secondary_index_meta, dtr.secondary_indexes[0])

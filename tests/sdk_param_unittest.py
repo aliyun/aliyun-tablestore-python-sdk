@@ -8,8 +8,8 @@ from builtins import range
 from tablestore.client import *
 from tablestore.metadata import *
 from tablestore.error import *
-from lib.mock_connection import MockConnection
-from lib.test_config import *
+from tests.lib.mock_connection import MockConnection
+from tests.lib.test_config import *
 
 class SDKParamTest(unittest.TestCase):
 
@@ -22,8 +22,7 @@ class SDKParamTest(unittest.TestCase):
         logger.addHandler(handler)
         logger.setLevel(logging.INFO)
 
-        OTSClient.connection_pool_class = MockConnection
-        self.client = OTSClient(OTS_ENDPOINT, OTS_ID, OTS_SECRET, OTS_INSTANCE)
+        self.client = OTSClient(OTS_ENDPOINT, OTS_ACCESS_KEY_ID, OTS_ACCESS_KEY_SECRET, OTS_INSTANCE)
 
     def tearDown(self):
         pass

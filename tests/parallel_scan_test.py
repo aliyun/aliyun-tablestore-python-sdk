@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-
 
 import unittest
-from lib.api_test_base import APITestBase
+from tests.lib.api_test_base import APITestBase
 from tablestore import *
 from tablestore.error import *
 import time
@@ -20,7 +20,8 @@ class ParallelScanTest(APITestBase):
         self._prepare_index(self.table_name, self.index_name)
         self._prepare_data(self.table_name, self.rows_count)
 
-        time.sleep(60) 
+        print("Wait for preparing the index and data")
+        time.sleep(300)
 
     def _prepare_data(self, table_name, rows_count):
         for i in range(rows_count):
@@ -143,7 +144,7 @@ class ParallelScanTest(APITestBase):
             columns_to_get = ColumnsToGet(return_type=ColumnReturnType.ALL_FROM_INDEX))
         
         self.assert_equal(0, len(parallel_scan_response3.rows))
-        self.assertTrue(parallel_scan_response3.next_token == '')
+        self.assertTrue(parallel_scan_response3.next_token == b'')
 
         
     def test_parallel_scan_with_invalid_parallel_id(self):

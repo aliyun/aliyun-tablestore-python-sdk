@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 
-from lib.api_test_base import APITestBase
+from tests.lib.api_test_base import APITestBase
 from tablestore import *
 from tablestore.error import *
 import sys
@@ -21,7 +21,8 @@ class GroupByTest(APITestBase):
         self._prepare_index()
         self._prepare_data()
 
-        time.sleep(60) 
+        print("Wait for preparing the index and data")
+        time.sleep(300)
 
     def _prepare_data(self):
         for i in range(self.rows_count):

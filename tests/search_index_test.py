@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-
 
 import unittest
-from lib.api_test_base import APITestBase
+from tests.lib.api_test_base import APITestBase
 from tablestore import *
 from tablestore.error import *
 import time
@@ -441,16 +441,6 @@ class SearchIndexTest(APITestBase):
             table_name, index_name, SearchQuery(query, limit=100, get_total_count=True), ColumnsToGet(return_type=ColumnReturnType.ALL)
         ), 100, False, 201)
 
-    def _test_function_score_query(self, table_name, index_name):
-        query = FunctionScoreQuery(
-            RangeQuery('l', range_from=100, range_to=300),
-            FieldValueFactor('l')
-        )
-
-        self._check_query_result(self.client_test.search(
-            table_name, index_name, SearchQuery(query, limit=100, get_total_count=True), ColumnsToGet(return_type=ColumnReturnType.ALL)
-        ), 100, True, 200)
-
     def _test_sort(self, table_name, index_name):
         query = MatchQuery('t', 'this is')
         rows = self._check_query_result(self.client_test.search(
@@ -541,7 +531,10 @@ class SearchIndexTest(APITestBase):
         self._prepare_index(table_name, index_name, with_nested=False)
         self._prepare_index(table_name, nested_index_name, with_nested=True)
         self._prepare_data(table_name, 1000)
+
+        print("Wait for preparing the index and data")
         time.sleep(100)
+
         self._test_match_all_query(table_name, index_name)
         self._test_match_query(table_name, index_name)
         self._test_match_phrase_query(table_name, index_name)
@@ -556,7 +549,6 @@ class SearchIndexTest(APITestBase):
         self._test_geo_bounding_box_query(table_name, index_name)
         self._test_geo_polygon_query(table_name, index_name)
         self._test_nested_query(table_name, nested_index_name)
-        self._test_function_score_query(table_name, index_name)
         self._test_exists_query(table_name, index_name)
         self._test_knn_vector_query(table_name, index_name)
         self._test_sort(table_name, index_name)

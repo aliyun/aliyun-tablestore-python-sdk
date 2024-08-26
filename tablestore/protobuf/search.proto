@@ -102,6 +102,14 @@ message NestedQuery {
     optional string path = 1;
     optional Query query = 2;
     optional ScoreMode score_mode = 3;
+    optional InnerHits inner_hits = 5;
+}
+
+message InnerHits {
+    optional Sort sort = 1;
+    optional int32 offset = 2;
+    optional int32 limit = 3;
+    optional Highlight highlight = 4;
 }
 
 message GeoBoundingBoxQuery {
@@ -172,6 +180,10 @@ message FieldSort {
     optional NestedFilter nested_filter = 4;
 }
 
+message DocSort {
+    optional SortOrder order = 1;
+}
+
 enum GeoDistanceType {
     GEO_DISTANCE_ARC = 0;
     GEO_DISTANCE_PLANE = 1;
@@ -191,6 +203,7 @@ message Sorter {
     optional GeoDistanceSort geo_distance_sort = 2;
     optional ScoreSort score_sort = 3;
     optional PrimaryKeySort pk_sort = 4;
+    optional DocSort doc_sort = 5;
 }
 
 message Sort {
@@ -478,6 +491,31 @@ message SearchQuery {
     optional bytes token = 9;
     optional Aggregations aggs = 10;
     optional GroupBys group_bys = 11;
+    optional Highlight highlight = 12;
+}
+
+message Highlight {
+    repeated HighlightParameter highlight_parameters = 1;
+    optional HighlightEncoder highlight_encoder = 2 [default=PLAIN_MODE];
+}
+
+message HighlightParameter {
+    optional string  field_name = 1;
+    optional int32   number_of_fragments = 2;
+    optional int32   fragment_size = 3;
+    optional string  pre_tag = 4;
+    optional string  post_tag = 5;
+    optional HighlightFragmentOrder fragments_order = 6 [default=TEXT_SEQUENCE];
+}
+
+enum HighlightFragmentOrder {
+    TEXT_SEQUENCE = 1;
+    SCORE = 2;
+}
+
+enum HighlightEncoder {
+    PLAIN_MODE = 1;
+    HTML_MODE = 2;
 }
 
 enum ColumnReturnType {
@@ -507,9 +545,31 @@ message SearchResponse {
     optional int64 total_hits = 1;
     repeated bytes rows = 2;
     optional bool is_all_succeed = 3;
+    repeated SearchHit search_hits = 5;
     optional bytes next_token = 6;
     optional bytes aggs = 7;
     optional bytes group_bys = 8;
+}
+
+message SearchHit {
+    optional double score = 3;
+    optional HighlightResult highlight_result = 4;
+    repeated SearchInnerHit search_inner_hits = 5;
+    optional int32 nested_doc_offset = 6;
+}
+
+message SearchInnerHit {
+    optional string path = 1;
+    repeated SearchHit search_hits = 2;
+}
+
+message HighlightResult {
+    repeated HighlightField highlight_fields = 1;
+}
+
+message HighlightField {
+    optional string field_name = 1;
+    repeated string field_fragments = 2;
 }
 
 /* Create Search Index */
@@ -553,6 +613,7 @@ message FieldSchema {
     optional bool is_virtual_field = 11;
     repeated string source_field_names = 12;
     repeated string date_formats = 13;
+    optional bool enable_highlighting = 14;
     optional VectorOptions vector_options = 15;
 }
 
