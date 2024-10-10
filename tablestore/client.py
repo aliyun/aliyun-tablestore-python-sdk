@@ -357,12 +357,12 @@ class OTSClient(object):
                     'UpdateRow', table_name, row, condition, return_type, transaction_id
         )
 
-    def delete_row(self, table_name, primary_key, condition, return_type = None, transaction_id = None):
+    def delete_row(self, table_name, row = None, condition = None, return_type = None, transaction_id = None, **kwargs):
         """
         说明：删除一行数据。
 
         ``table_name``是对应的表名。
-        ``primary_key``表示主键。
+        ``row``表示主键。
         ``condition``表示执行操作前做条件检查，满足条件才执行，是tablestore.metadata.Condition类的实例。
         目前支持两种条件检测，一是对行的存在性进行检查，检查条件包括：'IGNORE'，'EXPECT_EXIST'和'EXPECT_NOT_EXIST';二是对属性列值的条件检测。
 
@@ -374,12 +374,20 @@ class OTSClient(object):
         示例：
 
             primary_key = [('gid',1), ('uid',101)]
+            row = Row(primary_key)
             condition = Condition('IGNORE')
-            consumed, return_row = client.delete_row('myTable', primary_key, condition)
+            consumed, return_row = client.delete_row('myTable', row, condition)
         """
 
+        primary_key = kwargs.get('primary_key', None)
+        # row不为空时，优先使用row参数，但是传参需要primary_key
+        if row is not None:
+            primary_key = row
+        # 传参为Row时，取出primary_key
+        if isinstance(primary_key, Row):
+            primary_key = primary_key.primary_key
         return self._request_helper(
-                    'DeleteRow', table_name, primary_key, condition, return_type, transaction_id
+            'DeleteRow', table_name, primary_key, condition, return_type, transaction_id
         )
     
     def exe_sql_query(self,query):

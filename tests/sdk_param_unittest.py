@@ -210,6 +210,36 @@ class SDKParamTest(unittest.TestCase):
             self.assertTrue(False)
         except:
             pass
+    
+    def test_delete_row_compatible(self):
+        table_name = 'test_table'
+        primary_key = [('gid',1)]
+        row = Row(primary_key)
+        condition = Condition(RowExistenceExpectation.IGNORE)
+        return_type = ReturnType.RT_PK
+
+        if table_name in self.client.list_table():
+            self.client.delete_table(table_name)
+        schema_of_primary_key = [('gid', 'INTEGER')]
+        table_meta = TableMeta(table_name, schema_of_primary_key)
+        table_option = TableOptions(-1, 2)
+        reserved_throughput = ReservedThroughput(CapacityUnit(0, 0))
+        self.client.create_table(table_meta, table_option, reserved_throughput)
+
+        self.client.delete_row(table_name, row, condition)
+        self.client.delete_row(table_name, row, condition, return_type)
+        # self.client.delete_row(table_name, row, condition, return_type, transaction_id)
+        self.client.delete_row(table_name, row=row, condition=condition)
+        self.client.delete_row(table_name, row=row, condition=condition, return_type=return_type)
+        # self.client.delete_row(table_name, row=row, condition=condition, return_type=return_type, transaction_id=transaction_id)
+        self.client.delete_row(table_name, primary_key, condition)
+        self.client.delete_row(table_name, primary_key, condition, return_type)
+        # self.client.delete_row(table_name, primary_key, condition, return_type, transaction_id)
+        self.client.delete_row(table_name, primary_key=primary_key, condition=condition)
+        self.client.delete_row(table_name, primary_key=primary_key, condition=condition, return_type=return_type)
+        # self.client.delete_row(table_name, primary_key=primary_key, condition=condition, return_type=return_type, transaction_id=transaction_id)
+
+        self.client.delete_table(table_name)
 
     def test_batch_get_row(self):
         try:
