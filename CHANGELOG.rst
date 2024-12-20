@@ -3,6 +3,12 @@ Tablestore SDK for Python 版本记录
 
 Python SDK 的版本号遵循 `Semantic Versioning <http://semver.org/>`_ 规则。
 
+Version 6.1.0
+-------------
+- Support some timeseries api.
+- Update protobuf to ">=3.20.0,<=5.27.4"
+- Refine util shell 'protoc.sh'
+
 Version 6.0.1
 -------------
 - Fix incompatible changes in delete_row
