@@ -85,10 +85,10 @@ for proto_file in "${proto_files[@]}"; do
     proto_file=$(basename "$proto_file")
     proto_base=$(basename "$proto_file" .proto)
 
-    command="./$binary $proto_file --python_out=../tablestore/protobuf/py3"
+    command="./$binary $proto_file --python_out=../tablestore/protobuf/"
     echo "执行命令: $command"
     $command
-    py_file=../tablestore/protobuf/py3/${proto_base}_pb2.py
+    py_file=../tablestore/protobuf/${proto_base}_pb2.py
     CheckAndReplaceImportPathInPbPy $proto_file $py_file
 done
 

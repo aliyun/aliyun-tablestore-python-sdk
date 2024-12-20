@@ -7,11 +7,6 @@ try:
 except ImportError:
     from distutils.core import setup
 
-if sys.version_info[0] == 2:
-    base_dir = 'py2'
-elif sys.version_info[0] == 3:
-    base_dir = 'py3'
-
 version = ''
 with open('tablestore/__init__.py', 'r') as fd:
     version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]',
@@ -30,7 +25,7 @@ setup(
     description='Aliyun TableStore(OTS) SDK',
     long_description=readme,
     packages=['tablestore', 'tablestore.protobuf', 'tablestore.plainbuffer','tablestore.flatbuffer','tablestore.flatbuffer.timeseries','tablestore.flatbuffer.dataprotocol','dataprotocol'],
-    package_dir={'tablestore.protobuf': 'tablestore/protobuf/' + base_dir,'dataprotocol':'tablestore/flatbuffer/dataprotocol'},
+    package_dir={'tablestore.protobuf': 'tablestore/protobuf/','dataprotocol':'tablestore/flatbuffer/dataprotocol'},
     install_requires=['enum34>=1.1.6', 'protobuf>=3.20.0,<=5.27.4', 'urllib3>=1.14', 'certifi>=2016.2.28', 'future>=0.16.0', 'six>=1.11.0', 'flatbuffers>=22.9.24', 'numpy>=1.11.0', 'crc32c>=2.7.1'],
     include_package_data=True,
     url='https://cn.aliyun.com/product/ots',
