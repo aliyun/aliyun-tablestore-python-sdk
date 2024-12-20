@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 
-__version__ = '6.1.0'
+__version__ = '3.0.0'
 __all__ = [
     'OTSClient',
 
