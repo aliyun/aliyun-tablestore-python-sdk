@@ -10,9 +10,11 @@ from tablestore.plainbuffer.plain_buffer_builder import *
 import tablestore.protobuf.table_store_pb2 as pb
 import tablestore.protobuf.table_store_filter_pb2 as filter_pb
 import tablestore.protobuf.search_pb2 as search_pb
+import tablestore.protobuf.timeseries_pb2 as timeseries_pb2
 
-from tablestore.flatbuffer.dataprotocol.SQLResponseColumns import *
+from dataprotocol.SQLResponseColumns import *
 from tablestore.flatbuffer.flat_buffer_decoder import *
+
 
 class OTSProtoBufferDecoder(object):
 
@@ -45,7 +47,17 @@ class OTSProtoBufferDecoder(object):
             'StartLocalTransaction' : self._decode_start_local_transaction,
             'CommitTransaction'     : self._decode_commit_transaction,
             'AbortTransaction'      : self._decode_abort_transaction,
-            'SQLQuery'              : self._decode_exe_sql_query
+            'SQLQuery'              : self._decode_exe_sql_query,
+            'PutTimeseriesData'     : self._decode_put_timeseries_data,
+            'GetTimeseriesData'     : self._decode_get_timeseries_data,
+            'CreateTimeseriesTable' : self._decode_create_timeseries_table,
+            'ListTimeseriesTable'   : self._decode_list_timeseries_table,
+            'DeleteTimeseriesTable' : self._decode_delete_timeseries_table,
+            'DescribeTimeseriesTable': self._decode_describe_timeseries_table,
+            'UpdateTimeseriesTable' : self._decode_update_timeseries_table,
+            'UpdateTimeseriesMeta'  : self._decode_update_timeseries_meta,
+            'DeleteTimeseriesMeta'  : self._decode_delete_timeseries_meta,
+            'QueryTimeseriesMeta'   : self._decode_query_timeseries_meta,
         }
 
     def _parse_string(self, string):
@@ -56,9 +68,9 @@ class OTSProtoBufferDecoder(object):
 
     def _parse_column_type(self, column_type_enum):
         reverse_enum_map = {
-            pb.INTEGER : 'INTEGER',
-            pb.STRING  : 'STRING',
-            pb.BINARY  : 'BINARY'
+            pb.INTEGER: 'INTEGER',
+            pb.STRING: 'STRING',
+            pb.BINARY: 'BINARY'
         }
         if column_type_enum in reverse_enum_map:
             return reverse_enum_map[column_type_enum]
@@ -67,7 +79,7 @@ class OTSProtoBufferDecoder(object):
 
     def _parse_column_option(self, column_option_enum):
         reverse_enum_map = {
-            pb.AUTO_INCREMENT : PK_AUTO_INCR,
+            pb.AUTO_INCREMENT: PK_AUTO_INCR,
         }
         if column_option_enum in reverse_enum_map:
             return reverse_enum_map[column_option_enum]
@@ -139,13 +151,12 @@ class OTSProtoBufferDecoder(object):
     def _parse_table_options(self, proto):
         time_to_live = proto.time_to_live
         max_versions = proto.max_versions
-        max_deviation_time  = proto.deviation_cell_version_in_sec
+        max_deviation_time = proto.deviation_cell_version_in_sec
 
         allow_update = True
         if proto.HasField('allow_update'):
             allow_update = proto.allow_update
         return TableOptions(time_to_live, max_versions, max_deviation_time, allow_update)
-
 
     def _parse_get_row_item(self, proto, table_name):
         row_list = []
@@ -208,7 +219,7 @@ class OTSProtoBufferDecoder(object):
 
         write_row_item = BatchWriteRowResponseItem(
             row_item.is_ok, error_code, error_message, consumed, primary_key_columns
-            )
+        )
         return write_row_item
 
     def _parse_batch_write_row(self, proto):
@@ -296,7 +307,8 @@ class OTSProtoBufferDecoder(object):
         reserved_throughput_details = self._parse_reserved_throughput_details(proto.reserved_throughput_details)
         table_options = self._parse_table_options(proto.table_options)
         secondary_indexes = self._parse_secondary_indexes(proto.index_metas)
-        describe_table_response = DescribeTableResponse(table_meta, table_options, reserved_throughput_details, secondary_indexes)
+        describe_table_response = DescribeTableResponse(table_meta, table_options, reserved_throughput_details,
+                                                        secondary_indexes)
         describe_table_response.set_request_id(request_id)
         return describe_table_response, proto
 
@@ -376,7 +388,6 @@ class OTSProtoBufferDecoder(object):
 
         return (consumed, return_row), proto
 
-
     def _decode_batch_get_row(self, body, request_id):
         proto = pb.BatchGetRowResponse()
         proto.ParseFromString(body)
@@ -402,7 +413,7 @@ class OTSProtoBufferDecoder(object):
         if len(proto.next_start_primary_key) != 0:
             inputStream = PlainBufferInputStream(proto.next_start_primary_key)
             codedInputStream = PlainBufferCodedInputStream(inputStream)
-            next_start_pk,att = codedInputStream.read_row()
+            next_start_pk, att = codedInputStream.read_row()
 
         if len(proto.rows) != 0:
             inputStream = PlainBufferInputStream(proto.rows)
@@ -578,7 +589,6 @@ class OTSProtoBufferDecoder(object):
         index_sort = Sort(sorters)
         return index_sort
 
-
     def _parse_index_meta(self, proto):
         fields = []
         for field_schema_proto in proto.field_schemas:
@@ -591,7 +601,8 @@ class OTSProtoBufferDecoder(object):
         return index_meta
 
     def _parse_sync_stat(self, proto):
-        sync_stat = SyncStat(SyncPhase.FULL if proto.sync_phase == search_pb.FULL else SyncPhase.INCR, proto.current_sync_timestamp)
+        sync_stat = SyncStat(SyncPhase.FULL if proto.sync_phase == search_pb.FULL else SyncPhase.INCR,
+                             proto.current_sync_timestamp)
         return sync_stat
 
     def _decode_list_search_index(self, body, request_id):
@@ -660,10 +671,11 @@ class OTSProtoBufferDecoder(object):
             if len(proto.search_hits) == len(rows):
                 self._decode_search_hits(proto.search_hits, rows, search_hits, request_id)
             else:
-                raise OTSServiceError("Tablestore search response occur error, row count[%d] != search_hit count[%d], request_id:%s"
-                              % (len(rows), len(proto.search_hits), request_id))
+                raise OTSServiceError(
+                    "Tablestore search response occur error, row count[%d] != search_hit count[%d], request_id:%s"
+                    % (len(rows), len(proto.search_hits), request_id))
 
-        search_response = SearchResponse(rows, agg_results, group_by_results, 
+        search_response = SearchResponse(rows, agg_results, group_by_results,
                                          proto.next_token, is_all_succeed, total_count, search_hits)
         search_response.set_request_id(request_id)
         return (search_response), proto
@@ -694,7 +706,6 @@ class OTSProtoBufferDecoder(object):
 
             search_hit = SearchHit(row, score, highlight_result, search_inner_hits, nested_doc_offset)
             search_hits.append(search_hit)
-
 
     def _decode_agg_results(self, proto_result, agg_results):
         if proto_result is not None:
@@ -782,7 +793,7 @@ class OTSProtoBufferDecoder(object):
                 sub_agg_results = []
                 self._decode_group_by_results(item.sub_group_bys_result, sub_group_by_results)
                 self._decode_agg_results(item.sub_aggs_result, sub_agg_results)
-                
+
                 result_item = GroupByRangeResultItem(item.range_from, item.range_to, item.row_count,
                                                      sub_agg_results, sub_group_by_results)
                 result_items.append(result_item)
@@ -797,7 +808,7 @@ class OTSProtoBufferDecoder(object):
                 sub_agg_results = []
                 self._decode_group_by_results(item.sub_group_bys_result, sub_group_by_results)
                 self._decode_agg_results(item.sub_aggs_result, sub_agg_results)
-                
+
                 result_item = GroupByFilterResultItem(item.row_count,
                                                       sub_agg_results, sub_group_by_results)
                 result_items.append(result_item)
@@ -812,7 +823,7 @@ class OTSProtoBufferDecoder(object):
                 sub_agg_results = []
                 self._decode_group_by_results(item.sub_group_bys_result, sub_group_by_results)
                 self._decode_agg_results(item.sub_aggs_result, sub_agg_results)
-                
+
                 result_item = GroupByGeoDistanceResultItem(item.range_from, item.range_to, item.row_count,
                                                            sub_agg_results, sub_group_by_results)
                 result_items.append(result_item)
@@ -827,7 +838,7 @@ class OTSProtoBufferDecoder(object):
                 sub_agg_results = []
                 self._decode_group_by_results(item.sub_group_bys_result, sub_group_by_results)
                 self._decode_agg_results(item.sub_aggs_result, sub_agg_results)
-                
+
                 result_item = GroupByHistogramResultItem(self._decode_column_value(item.key), item.value,
                                                          sub_agg_results, sub_group_by_results)
                 result_items.append(result_item)
@@ -857,7 +868,7 @@ class OTSProtoBufferDecoder(object):
         proto.ParseFromString(body)
 
         session_id = proto.session_id.decode('utf-8')
-        
+
         splits_size = proto.splits_size
 
         compute_splits_response = ComputeSplitsResponse(session_id, splits_size)
@@ -910,6 +921,15 @@ class OTSProtoBufferDecoder(object):
 
         return None, proto
 
+    def _decode_put_timeseries_data(self, body, request_id):
+        proto = timeseries_pb2.PutTimeseriesDataResponse()
+        proto.ParseFromString(body)
+
+        resp = PutTimeseriesDataResponse()
+        for failed in proto.failed_rows:
+            resp.failedRows.append(self._parse_timeseries_failed_rows(failed))
+        return resp, proto
+
     def _decode_exe_sql_query(self, body, request_id):
         proto = pb.SQLQueryResponse()
         proto.ParseFromString(body)
@@ -920,21 +940,223 @@ class OTSProtoBufferDecoder(object):
             table_consumes_list.extend(proto.consumes)
         for table_consume in table_consumes_list:
             capacity_unit = self._parse_capacity_unit(table_consume.consumed.capacity_unit)
-            table_capacity_unit = (table_consume.table_name,capacity_unit)
+            table_capacity_unit = (table_consume.table_name, capacity_unit)
             table_capacity_units.append(table_capacity_unit)
-        
+
         search_capacity_units = []
         search_consumes_list = []
         if len(proto.search_consumes) != 0:
             search_consumes_list.extend(proto.search_consumes)
         for search_consume in search_consumes_list:
             capacity_unit = self._parse_capacity_unit(search_consume.consumed.capacity_unit)
-            search_capacity_unit = (search_consume.table_name,capacity_unit)
+            search_capacity_unit = (search_consume.table_name, capacity_unit)
             search_capacity_units.append(search_capacity_unit)
-        
+
         rows = []
         if len(proto.rows) != 0:
-            columns = flat_buffer_decoder.format_flat_buffer_columns(SQLResponseColumns.GetRootAsSQLResponseColumns(proto.rows))
+            columns = flat_buffer_decoder.format_flat_buffer_columns(
+                SQLResponseColumns.GetRootAsSQLResponseColumns(proto.rows))
             rows = flat_buffer_decoder.columns_to_rows(columns)
-        return (rows,table_capacity_units,search_capacity_units),proto
-    
+        return (rows, table_capacity_units, search_capacity_units), proto
+
+    def _decode_create_timeseries_table(self, body, request_id):
+        proto = timeseries_pb2.CreateTimeseriesTableResponse()
+        proto.ParseFromString(body)
+        return None, proto
+
+    def _decode_list_timeseries_table(self, body, request_id):
+        proto = timeseries_pb2.ListTimeseriesTableResponse()
+        proto.ParseFromString(body)
+        tables = []
+        for metaproto in proto.table_metas:
+            tables.append(self._parse_timeseries_table_meta(metaproto))
+        return tables, proto
+
+    def _parse_timeseries_table_meta(self, table_meta_proto):
+        meta = TimeseriesTableMeta(table_meta_proto.table_name)
+        meta.status = table_meta_proto.status
+        meta.timeseries_table_options = self._parse_timeseries_table_options(table_meta_proto.table_options)
+        meta.timeseries_meta_options = self._parse_timeseries_meta_options(table_meta_proto.meta_options)
+        timeseries_keys = []
+        for key in table_meta_proto.timeseries_key_schema:
+            timeseries_keys.append(key)
+        meta.timeseries_keys = timeseries_keys
+        meta.field_primary_keys = self._parse_field_primary_key_schema(table_meta_proto.field_primary_key_schema)
+        return meta
+
+    def _parse_timeseries_table_options(self, table_option_proto):
+        return TimeseriesTableOptions(table_option_proto.time_to_live)
+
+    def _parse_timeseries_meta_options(self, table_meta_proto):
+        if table_meta_proto is None:
+            meta_option = None
+        else:
+            allow_update_attributes = table_meta_proto.allow_update_attributes if table_meta_proto.HasField('allow_update_attributes') else None
+            meta_time_to_live = table_meta_proto.meta_time_to_live if table_meta_proto.HasField('meta_time_to_live') else None
+            meta_option = TimeseriesMetaOptions(meta_time_to_live, allow_update_attributes)
+        return meta_option
+
+    def _parse_field_primary_key_schema(self, field_primary_key_schema_protos):
+        if field_primary_key_schema_protos is None or len(field_primary_key_schema_protos) == 0:
+            schema_list = None
+        else:
+            schema_list = []
+            for proto in field_primary_key_schema_protos:
+                schema_list.append(self._parse_primary_key_schema(proto))
+        return schema_list
+
+    def _parse_primary_key_schema(self, proto):
+        if proto.HasField('option'):
+            return proto.name, self._parse_column_type(proto.type), self._parse_column_option(proto.option)
+        else:
+            return proto.name, self._parse_column_type(proto.type)
+
+    def _decode_delete_timeseries_table(self, body, request_id):
+        proto = timeseries_pb2.DeleteTimeseriesTableResponse()
+        proto.ParseFromString(body)
+        return None, proto
+
+    def _decode_describe_timeseries_table(self, body, request_id):
+        proto = timeseries_pb2.DescribeTimeseriesTableResponse()
+        proto.ParseFromString(body)
+        resp = DescribeTimeseriesTableResponse(self._parse_timeseries_table_meta(proto.table_meta))
+        return resp, proto
+
+    def _decode_update_timeseries_table(self, body, request_id):
+        proto = timeseries_pb2.UpdateTimeseriesTableResponse()
+        proto.ParseFromString(body)
+        return None, proto
+
+    def _decode_update_timeseries_meta(self, body, request_id):
+        proto = timeseries_pb2.UpdateTimeseriesMetaResponse()
+        proto.ParseFromString(body)
+        fails = []
+        for failed in proto.failed_rows:
+            fails.append(self._parse_timeseries_failed_rows(failed))
+
+        return UpdateTimeseriesMetaResponse(fails), proto
+
+    def _parse_timeseries_failed_rows(self, proto):
+        result = FailedRowResult()
+        result.index = proto.row_index
+        result.error.code = proto.error_code
+        result.error.message = proto.error_message
+        return result
+
+    def _decode_delete_timeseries_meta(self, body, request_id):
+        proto = timeseries_pb2.DeleteTimeseriesMetaResponse()
+        proto.ParseFromString(body)
+        fails = []
+        for failed in proto.failed_rows:
+            fails.append(self._parse_timeseries_failed_rows(failed))
+
+        return DeleteTimeseriesMetaResponse(fails), proto
+
+    def _decode_query_timeseries_meta(self, body, request_id):
+        proto = timeseries_pb2.QueryTimeseriesMetaResponse()
+        proto.ParseFromString(body)
+        response = QueryTimeseriesMetaResponse()
+        response.totalHits = proto.total_hit
+        if proto.HasField('next_token'):
+            response.nextToken = proto.next_token
+        response.timeseriesMetas = self._parse_timeseries_meta(proto.timeseries_metas)
+        return response, proto
+
+    def _parse_timeseries_meta(self, protos):
+        res = []
+        for proto in protos:
+            attr = None
+            if len(proto.attributes) > 0:
+                attr = self._parse_timeseries_tag_or_attribute(proto.attributes)
+            result = TimeseriesMeta(self._parse_timeseries_key(proto.time_series_key), attr, proto.update_time)
+            res.append(result)
+        return res
+
+    def _parse_timeseries_key(self, proto):
+        key = TimeseriesKey()
+        key.data_source = proto.source
+        key.measurement_name = proto.measurement
+        if len(proto.tag_list) > 0:
+            key.tags = self._parse_tag_list(proto.tag_list)
+        return key
+
+    def _parse_tag_list(self, tags):
+        res = {}
+        for tag in tags:
+            res[tag.name] = tag.value
+        return res
+
+    def _decode_get_timeseries_data(self, body, request_id):
+        proto = timeseries_pb2.GetTimeseriesDataResponse()
+        proto.ParseFromString(body)
+        res = GetTimeseriesDataResponse()
+        if proto.HasField('next_token'):
+            res.nextToken = proto.next_token
+        if len(proto.rows_data) != 0:
+            inputStream = PlainBufferInputStream(proto.rows_data)
+            codedInputStream = PlainBufferCodedInputStream(inputStream)
+            row_list = codedInputStream.read_rows()
+            rows = []
+            for row in row_list:
+                rows.append(self._parse_timeseries_rows_plain_buffer(row))
+            res.rows = rows
+        return res, proto
+
+    def _parse_timeseries_rows_plain_buffer(self, row):
+        measurement = None
+        source = None
+        tags_str = None
+        time = -1
+        count = 0
+        tags = {}
+        for index in range(0, len(row.primary_key)):
+            pkcell = row.primary_key[index]
+            if pkcell[0] == "_m_name":
+                measurement = pkcell[1]
+            elif pkcell[0] == "_data_source":
+                source = pkcell[1]
+            elif pkcell[0] == "_tags":
+                tags_str = pkcell[1]
+            elif pkcell[0] == "_time":
+                count = index
+                time = pkcell[1]
+                break
+            elif pkcell[0] != "_#h":
+                tags[pkcell[0]] = pkcell[1]
+        if tags_str is not None:
+            tags.update(self._parse_timeseries_tag_or_attribute(tags_str))
+        if time == -1:
+            raise OTSClientError('no time column in timeesries row')
+
+        key = TimeseriesKey(measurement, source, tags)
+        fields = self._parse_attribute_columns(row.attribute_columns)
+        for item in row.primary_key[count + 1:]:
+            fields[item[0]] = item[1]
+
+        return TimeseriesRow(key, fields, time)
+
+    def _parse_attribute_columns(self, columns):
+        res = {}
+        for i in range(0, len(columns)):
+            key = columns[i][0].split(":")[0]
+            value = columns[i][1]
+            res[key] = value
+        return res
+
+    def _parse_timeseries_tag_or_attribute(self, tag: str):
+        res = {}
+        if not tag.startswith("[") or not tag.endswith("]") or len(tag) < 2:
+            raise OTSClientError('invalid tag or attribute value:%s' % str(tag))
+        if len(tag) == 2:
+            return res
+        strs = tag[1:len(tag) - 1]
+        for items in strs.split(","):
+            if not items.startswith("\"") or not items.endswith("\""):
+                raise OTSClientError('invalid tag or attribute value:%s' % str(tag))
+            x = items[1:len(items) - 1].split("=")
+            if len(x) != 2:
+                raise OTSClientError('invalid tag or attribute value:%s' % str(tag))
+            if x[0] == "" or x[1] == "":
+                raise OTSClientError('invalid tag or attribute value:%s' % str(tag))
+            res[x[0]] = x[1]
+        return res

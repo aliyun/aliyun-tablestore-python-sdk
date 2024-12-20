@@ -79,3 +79,5 @@ dmypy.json
 .pytype/
 cython_debug/
 .idea
+.DS_Store
+.python-version

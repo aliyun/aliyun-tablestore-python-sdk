@@ -8,9 +8,15 @@ cd ${DIR}
 
 # 第二部分: 移动 tablestore/flatbuffer/dataprotocol 目录
 if [ -d "tablestore/flatbuffer/dataprotocol" ]; then
-    mv tablestore/flatbuffer/dataprotocol ./
+    cp -r tablestore/flatbuffer/dataprotocol ./
 else
     echo "Directory tablestore/flatbuffer/dataprotocol does not exist."
+fi
+
+if [ -d "tablestore/flatbuffer/timeseries" ]; then
+    cp -r tablestore/flatbuffer/timeseries ./
+else
+    echo "Directory tablestore/flatbuffer/timeseries does not exist."
 fi
 
 # 第三部分: 移动 protobuf/py3 目录下的文件

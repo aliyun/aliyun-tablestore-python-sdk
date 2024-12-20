@@ -37,7 +37,7 @@ class RetryUtil(object):
 
     @classmethod
     def is_repeatable_api(cls, api_name):
-        return api_name in ['ListTable', 'DescribeTable', 'GetRow', 'BatchGetRow', 'GetRange']
+        return api_name in ['ListTable', 'DescribeTable', 'GetRow', 'BatchGetRow', 'GetRange', 'GetTimeseriesData', 'ListTimeseriesTable', 'DescribeTimeseriesTable', 'QueryTimeseriesMeta']
 
     @classmethod
     def should_retry_when_api_repeatable(cls, retry_times, exception, api_name):

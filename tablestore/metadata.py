@@ -2,6 +2,7 @@
 
 import six
 from enum import IntEnum
+from typing import List
 from tablestore.error import *
 from tablestore.utils import DefaultJsonObject
 from tablestore.protobuf import search_pb2
@@ -81,6 +82,7 @@ class FuzzyAnalyzerParameter(DefaultJsonObject):
         self.min_chars = min_chars
         self.max_chars = max_chars
 
+
 class ScoreMode(IntEnum):
     NONE = search_pb2.SCORE_MODE_NONE
     AVG = search_pb2.SCORE_MODE_AVG
@@ -88,14 +90,17 @@ class ScoreMode(IntEnum):
     TOTAL = search_pb2.SCORE_MODE_TOTAL
     MIN = search_pb2.SCORE_MODE_MIN
 
+
 class SortMode(IntEnum):
     MIN = search_pb2.SORT_MODE_MIN
     MAX = search_pb2.SORT_MODE_MAX
     AVG = search_pb2.SORT_MODE_AVG
 
+
 class SortOrder(IntEnum):
     ASC = search_pb2.SORT_ORDER_ASC
     DESC = search_pb2.SORT_ORDER_DESC
+
 
 class GeoDistanceType(IntEnum):
     ARC = search_pb2.GEO_DISTANCE_ARC
@@ -225,9 +230,15 @@ class DefinedColumnSchema(DefaultJsonObject):
         self.name = name
         self.column_type = column_type
 
+
 class SecondaryIndexType(IntEnum):
     GLOBAL_INDEX = 0
     LOCAL_INDEX = 1
+
+
+class SyncType(IntEnum):
+    SYNC_TYPE_FULL = 1
+    SYNC_TYPE_INCR = 2
 
 
 class SecondaryIndexMeta(DefaultJsonObject):
@@ -524,7 +535,7 @@ class Condition(DefaultJsonObject):
         if row_existence_expectation not in RowExistenceExpectation.__values__:
             raise OTSClientError(
                 "Expect input row_existence_expectation should be one of %s, but '%s'" % (
-                str(RowExistenceExpectation.__members__), row_existence_expectation)
+                    str(RowExistenceExpectation.__members__), row_existence_expectation)
             )
 
         self.row_existence_expectation = row_existence_expectation
@@ -808,6 +819,7 @@ class PK_AUTO_INCR(object):
     # for put_row
     pass
 
+
 class QueryType(IntEnum):
     MATCH_QUERY = search_pb2.MATCH_QUERY
     MATCH_PHRASE_QUERY = search_pb2.MATCH_PHRASE_QUERY
@@ -825,6 +837,7 @@ class QueryType(IntEnum):
     GEO_POLYGON_QUERY = search_pb2.GEO_POLYGON_QUERY
     TERMS_QUERY = search_pb2.TERMS_QUERY
     KNN_VECTOR_QUERY = search_pb2.KNN_VECTOR_QUERY
+
 
 class QueryOperator(IntEnum):
     OR = search_pb2.OR
@@ -1017,6 +1030,7 @@ class ScanQuery(DefaultJsonObject):
         self.max_parallel = max_parallel
         self.alive_time = alive_time
 
+
 class HighlightFragmentOrder(IntEnum):
     TEXT_SEQUENCE = search_pb2.TEXT_SEQUENCE
     SCORE = search_pb2.SCORE
@@ -1045,6 +1059,7 @@ class Highlight(object):
     def __init__(self, highlight_parameters, highlight_encoder=HighlightEncoder.PLAIN_MODE):
         self.highlight_parameters = highlight_parameters
         self.highlight_encoder = highlight_encoder
+
 
 class ColumnReturnType(IntEnum):
     ALL = search_pb2.RETURN_ALL
@@ -1145,3 +1160,191 @@ class HighlightField(object):
     def __init__(self, field_name, field_fragments):
         self.field_name = field_name
         self.field_fragments = field_fragments
+
+
+class TimeseriesKey(object):
+    def __init__(self, measurement_name: str = None, data_source: str = None, tags = None):
+        self.measurement_name = measurement_name
+        self.data_source = data_source
+        self.tags = tags
+
+
+class TimeseriesRow(object):
+    def __init__(self, timeseries_key: TimeseriesKey, fields, time_in_us: int):
+        self.timeseries_key = timeseries_key
+        self.fields = fields
+        self.time_in_us = time_in_us
+
+
+class TimeseriesTableOptions(object):
+    def __init__(self, time_to_live: int):
+        self.time_to_live = time_to_live
+
+
+class TimeseriesMetaOptions(object):
+    def __init__(self, meta_time_to_live: int = None, allow_update_attributes: bool = None):
+        self.meta_time_to_live = meta_time_to_live
+        self.allow_update_attributes = allow_update_attributes
+
+
+class TimeseriesTableMeta(object):
+    """
+        表的结构信息，包含表的名称以及表的配置信息。
+
+        参数:
+            timeseries_table_name 表的名称
+            timeseries_table_options 表的配置项, 包括数据的TTL等。
+            timeseries_meta_options 时间线元数据相关配置项，包括元数据的TTL等。
+            status 表的状态。
+            timeseries_keys 自定义主键列。
+            field_primary_keys 扩展主键列。示例值：[('gid', 'INTEGER'), ('uid', 'INTEGER', PK_AUTO_INCR)]
+        """
+
+    def __init__(
+            self,
+            timeseries_table_name: str,
+            timeseries_table_options: TimeseriesTableOptions = None,
+            timeseries_meta_options: TimeseriesMetaOptions = None,
+            timeseries_keys: List[str] = None,
+            field_primary_keys=None
+    ):
+        self.timeseries_table_name = timeseries_table_name
+        self.timeseries_table_options = timeseries_table_options
+        self.timeseries_meta_options = timeseries_meta_options
+        self.status = None
+        self.timeseries_keys = timeseries_keys
+        self.field_primary_keys = field_primary_keys
+
+
+class TimeseriesAnalyticalStore(object):
+    """
+    分析存储配置信息
+    参数:
+    analytical_store_name 分析存储名称
+    time_to_live 分析存储数据保留时间
+    sync_option 分析存储同步方式，可选值：SYNC_TYPE_FULL SYNC_TYPE_INCR
+    """
+
+    def __init__(self, analytical_store_name: str, time_to_live: int = None, sync_option=None):
+        self.analytical_store_name = analytical_store_name
+        self.time_to_live = time_to_live
+        self.sync_option = sync_option
+
+
+class LastpointIndexMeta(object):
+    """
+    Lastpoint索引配置信息
+    参数:
+    index_table_name Lastpoint索引名称
+    """
+
+    def __init__(self, index_table_name: str):
+        self.index_table_name = index_table_name
+
+
+class CreateTimeseriesTableRequest(object):
+
+    """
+    创建时序表请求
+    参数:
+    table_meta 时序表的配置信息
+    analytical_stores 创建分析存储的配置信息
+    enable_analytical_store 是否开启分析存储
+    lastpoint_index_metas Lastpoint索引配置
+    """
+    def __init__(self,
+                 table_meta: TimeseriesTableMeta,
+                 analytical_stores: List[TimeseriesAnalyticalStore] = None,
+                 lastpoint_index_metas: List[LastpointIndexMeta] = None):
+        self.table_meta = table_meta
+        self.analytical_stores = analytical_stores
+        self.lastpoint_index_metas = lastpoint_index_metas
+
+
+class DescribeTimeseriesTableResponse(object):
+
+    def __init__(self, table_meta: TimeseriesTableMeta):
+        self.table_meta = table_meta
+
+
+class UpdateTimeseriesMetaRequest(object):
+
+    def __init__(self, timeseries_tablename: str, metas: list):
+        self.timeseries_tablename = timeseries_tablename
+        self.metas = metas
+
+
+class DeleteTimeseriesMetaRequest(object):
+
+    def __init__(self, timeseries_tablename: str, keys: list):
+        self.timeseries_tablename = timeseries_tablename
+        self.timeseries_keys = keys
+
+
+class TimeseriesMeta(object):
+
+    def __init__(self, timeseriesKey: TimeseriesKey, attributes, updateTimeInUs: int = None):
+        self.timeseries_key = timeseriesKey
+        self.attributes = attributes
+        self.update_time_in_us = updateTimeInUs
+
+
+class Error(object):
+    def __init__(self, code: str, message: str):
+        self.code = code
+        self.message = message
+
+class FailedRowResult(object):
+    def __init__(self, index, error: Error):
+        self.index = index
+        self.error = error
+
+class UpdateTimeseriesMetaResponse(object):
+    def __init__(self, failed_rows):
+        self.failedRows = failed_rows
+
+class PutTimeseriesDataResponse(object):
+    def __init__(self, failed_rows:FailedRowResult = None):
+        self.failedRows = failed_rows
+
+
+class DeleteTimeseriesMetaResponse(object):
+    def __init__(self, failed_rows):
+        self.failedRows = failed_rows
+
+
+class QueryTimeseriesMetaRequest(object):
+
+    def __init__(self, timeseriesTableName: str, condition=None, getTotalHits=False, limit=None, nextToken=None):
+        self.timeseriesTableName = timeseriesTableName
+        self.condition = condition
+        self.getTotalHits = getTotalHits
+        self.limit = limit
+        self.nextToken = nextToken
+
+
+class QueryTimeseriesMetaResponse(object):
+    def __init__(self, timeseriesMetas: TimeseriesMeta=None, totalHits=None, nextToken=None):
+        self.timeseriesMetas = timeseriesMetas
+        self.totalHits = totalHits
+        self.nextToken = nextToken
+
+
+class GetTimeseriesDataRequest(object):
+
+    def __init__(self, timeseriesTableName, timeseriesKey = None, beginTimeInUs=0, endTimeInUs=0, limit=0, nextToken=None, backward=False, fieldsToGet=None):
+        self.timeseriesTableName = timeseriesTableName
+        self.timeseriesKey = timeseriesKey
+        self.beginTimeInUs = beginTimeInUs
+        self.endTimeInUs = endTimeInUs
+        self.limit = limit
+        self.nextToken = nextToken
+        self.backward = backward
+        self.fieldsToGet = fieldsToGet
+
+
+class GetTimeseriesDataResponse(object):
+
+    def __init__(self, rows: TimeseriesRow = None, nextToken = None):
+        self.rows = rows
+        self.nextToken = nextToken

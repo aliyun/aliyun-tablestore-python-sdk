@@ -910,3 +910,34 @@ class OTSClient(object):
         """
 
         return self._request_helper('AbortTransaction', transaction_id)
+
+    def put_timeseries_data(self, timeseriesTableName: str, timeseriesRows: TimeseriesRow) -> PutTimeseriesDataResponse:
+
+        return self._request_helper('PutTimeseriesData', timeseriesTableName, timeseriesRows)
+
+    def create_timeseries_table(self, request: CreateTimeseriesTableRequest):
+        return self._request_helper('CreateTimeseriesTable', request)
+
+    def list_timeseries_table(self) -> list:
+        return self._request_helper('ListTimeseriesTable')
+
+    def delete_timeseries_table(self, timeseries_table_name: str):
+        return self._request_helper('DeleteTimeseriesTable', timeseries_table_name)
+
+    def describe_timeseries_table(self, timeseries_table_name: str) -> DescribeTimeseriesTableResponse:
+        return self._request_helper('DescribeTimeseriesTable', timeseries_table_name)
+
+    def update_timeseries_table(self, timeseries_meta: TimeseriesTableMeta):
+        return self._request_helper('UpdateTimeseriesTable', timeseries_meta)
+
+    def update_timeseries_meta(self, request: UpdateTimeseriesMetaRequest) -> UpdateTimeseriesMetaResponse:
+        return self._request_helper('UpdateTimeseriesMeta', request)
+
+    def delete_timeseries_meta(self, request: DeleteTimeseriesMetaRequest) -> DeleteTimeseriesMetaResponse:
+        return self._request_helper('DeleteTimeseriesMeta', request)
+
+    def query_timeseries_meta(self, request: QueryTimeseriesMetaRequest) -> QueryTimeseriesMetaResponse:
+        return self._request_helper('QueryTimeseriesMeta', request)
+
+    def get_timeseries_data(self, request: GetTimeseriesDataRequest) -> GetTimeseriesDataResponse:
+        return self._request_helper('GetTimeseriesData', request)

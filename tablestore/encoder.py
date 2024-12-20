@@ -3,6 +3,7 @@
 import six
 from builtins import int
 
+import crc32c
 from tablestore.error import *
 from tablestore.metadata import *
 from tablestore.aggregation import *
@@ -11,11 +12,18 @@ from tablestore.plainbuffer.plain_buffer_builder import *
 import tablestore.protobuf.table_store_pb2 as pb2
 import tablestore.protobuf.table_store_filter_pb2 as filter_pb2
 import tablestore.protobuf.search_pb2 as search_pb2
+import tablestore.protobuf.timeseries_pb2 as timeseries_pb2
+from tablestore.flatbuffer.timeseries_flat_buffer_encoder import *
+from tablestore.timeseries_condition import *
 
 INT8_MAX = 127
 INT8_MIN = -128
 INT32_MAX = 2147483647
 INT32_MIN = -2147483648
+INT64_MAX = (1<<63) -1
+INT64_MIN = -(1<<63)
+
+SUPPORT_TABLE_VERSION=1
 
 PRIMARY_KEY_TYPE_MAP = {
     'INTEGER'   : pb2.INTEGER,
@@ -24,7 +32,12 @@ PRIMARY_KEY_TYPE_MAP = {
 }
 
 PRIMARY_KEY_OPTION_MAP = {
-    PK_AUTO_INCR : pb2.AUTO_INCREMENT,
+    PK_AUTO_INCR: pb2.AUTO_INCREMENT,
+}
+
+ANALYTICAL_STORE_SYNC_TYPE_MAP = {
+    SyncType.SYNC_TYPE_FULL: timeseries_pb2.SYNC_TYPE_FULL,
+    SyncType.SYNC_TYPE_INCR: timeseries_pb2.SYNC_TYPE_INCR,
 }
 
 LOGICAL_OPERATOR_MAP = {
@@ -58,6 +71,7 @@ ROW_EXISTENCE_EXPECTATION_MAP = {
     RowExistenceExpectation.EXPECT_NOT_EXIST : pb2.EXPECT_NOT_EXIST ,
 }
 
+
 class OTSProtoBufferEncoder(object):
 
     def __init__(self, encoding):
@@ -89,7 +103,26 @@ class OTSProtoBufferEncoder(object):
             'StartLocalTransaction' : self._encode_start_local_transaction,
             'CommitTransaction'     : self._encode_commit_transaction,
             'AbortTransaction'      : self._encode_abort_transaction,
-            'SQLQuery'              : self._encode_exe_sql_query
+            'SQLQuery'              : self._encode_exe_sql_query,
+            'PutTimeseriesData'     : self._encode_put_timeseries_data,
+            'GetTimeseriesData'     : self._encode_get_timeseries_data,
+            'CreateTimeseriesTable' : self._encode_create_timeseries_table,
+            'ListTimeseriesTable'   : self._encode_list_timeseries_table,
+            'DeleteTimeseriesTable' : self._encode_delete_timeseries_table,
+            'DescribeTimeseriesTable':self._encode_describe_timeseries_table,
+            'UpdateTimeseriesTable'  :self._encode_update_timeseries_table,
+            'QueryTimeseriesMeta'   : self._encode_query_timeseries_meta,
+            'UpdateTimeseriesMeta'  : self._encode_update_timeseries_meta,
+            'DeleteTimeseriesMeta'  : self._encode_delete_timeseries_meta,
+        }
+
+        self.timeseries_meta_condition_encode_map = {
+            MeasurementMetaQueryCondition: self._make_timeseries_meta_condition_measurement,
+            DataSourceMetaQueryCondition : self._make_timeseries_meta_condition_datasource,
+            TagMetaQueryCondition:         self._make_timeseries_meta_condition_tag,
+            UpdateTimeMetaQueryCondition: self._make_timeseries_meta_condition_updatetime,
+            AttributeMetaQueryCondition: self._make_timeseries_meta_condition_attribute,
+            CompositeMetaQueryCondition: self._make_timeseries_meta_condition_composite,
         }
 
     def _get_enum(self, e):
@@ -107,17 +140,35 @@ class OTSProtoBufferEncoder(object):
                 value.__class__.__name__, str(value))
             )
 
-    def _get_int32(self, int32):
-        if isinstance(int32, int):
-            if int32 < INT32_MIN or int32 > INT32_MAX:
-                raise OTSClientError("%s exceeds the range of int32" % int32)
-            return int32
+    def _get_int32(self, value):
+        if isinstance(value, int):
+            if value < INT32_MIN or value > INT32_MAX:
+                raise OTSClientError("%s exceeds the range of int32" % value)
+            return value
         else:
             raise OTSClientError(
                 "expect int or long for the value, not %s"
-                % int32.__class__.__name__
+                % value.__class__.__name__
             )
 
+    def _get_int64(self, value):
+        if isinstance(value, int):
+            if value < INT64_MIN or value > INT64_MAX:
+                raise OTSClientError("%s exceeds the range of int64" % value)
+            return value
+        else:
+            raise OTSClientError(
+                "expect int or long for the value, not %s"
+                % value.__class__.__name__
+            )
+    def _get_bool(self, bool_value):
+        if isinstance(bool_value, bool):
+            return bool_value
+        else:
+            raise OTSClientError(
+                "expect bool for the value, not %s"
+                % bool_value.__class__.__name__
+            )
     def _make_repeated_int8(self, int8_query_vector):
         if int8_query_vector is None:
             return None
@@ -146,18 +197,18 @@ class OTSProtoBufferEncoder(object):
 
         return None
 
-    def _make_repeated_column_names(self, proto, columns_to_get):
-        if columns_to_get is None:
+    def _make_repeated_str(self, proto, str_list):
+        if str_list is None:
             # if no column name is given, get all primary_key_columns and attribute_columns.
             return
 
-        if not isinstance(columns_to_get, list) and not isinstance(columns_to_get, tuple):
+        if not isinstance(str_list, list) and not isinstance(str_list, tuple):
             raise OTSClientError(
-                "expect list or tuple for columns_to_get, not %s"
-                % columns_to_get.__class__.__name__
+                "expect list or tuple for value, not %s"
+                % str_list.__class__.__name__
             )
 
-        for column_name in columns_to_get:
+        for column_name in str_list:
             proto.append(self._get_unicode(column_name))
 
     def _make_column_value(self, proto, value):
@@ -683,7 +734,7 @@ class OTSProtoBufferEncoder(object):
         for table_name, item in list(request.items.items()):
             table_item = proto.tables.add()
             table_item.table_name = self._get_unicode(item.table_name)
-            self._make_repeated_column_names(table_item.columns_to_get, item.columns_to_get)
+            self._make_repeated_str(table_item.columns_to_get, item.columns_to_get)
 
             if item.column_filter is not None:
                 pb_filter = filter_pb2.Filter()
@@ -832,7 +883,7 @@ class OTSProtoBufferEncoder(object):
                         max_version, time_range, start_column, end_column, token, transaction_id):
         proto = pb2.GetRowRequest()
         proto.table_name = self._get_unicode(table_name)
-        self._make_repeated_column_names(proto.columns_to_get, columns_to_get)
+        self._make_repeated_str(proto.columns_to_get, columns_to_get)
 
         if column_filter is not None:
             pb_filter = filter_pb2.Filter()
@@ -925,7 +976,7 @@ class OTSProtoBufferEncoder(object):
         proto = pb2.GetRangeRequest()
         proto.table_name = self._get_unicode(table_name)
         proto.direction = self._get_direction(direction)
-        self._make_repeated_column_names(proto.columns_to_get, columns_to_get)
+        self._make_repeated_str(proto.columns_to_get, columns_to_get)
 
         proto.inclusive_start_primary_key = bytes(PlainBufferBuilder.serialize_primary_key(inclusive_start_primary_key))
         proto.exclusive_end_primary_key = bytes(PlainBufferBuilder.serialize_primary_key(exclusive_end_primary_key))
@@ -1012,7 +1063,7 @@ class OTSProtoBufferEncoder(object):
 
         if columns_to_get is not None:
             proto.columns_to_get.return_type = self._get_enum(columns_to_get.return_type)
-            self._make_repeated_column_names(proto.columns_to_get.column_names, columns_to_get.column_names)
+            self._make_repeated_str(proto.columns_to_get.column_names, columns_to_get.column_names)
 
         proto.search_query = self._encode_search_query(search_query)
         if routing_keys is not None:
@@ -1047,7 +1098,7 @@ class OTSProtoBufferEncoder(object):
 
         if columns_to_get is not None:
             proto.columns_to_get.return_type = self._get_enum(columns_to_get.return_type)
-            self._make_repeated_column_names(proto.columns_to_get.column_names, columns_to_get.column_names)
+            self._make_repeated_str(proto.columns_to_get.column_names, columns_to_get.column_names)
 
         if scan_query is not None:
             proto.scan_query = self._encode_scan_query(scan_query)
@@ -1443,4 +1494,273 @@ class OTSProtoBufferEncoder(object):
         proto.version = 2
         return proto
 
+    def _encode_put_timeseries_data(self, timeseries_table_name, timeseries_rows):
+        proto = timeseries_pb2.PutTimeseriesDataRequest()
+        proto.table_name = self._get_unicode(timeseries_table_name)
+        proto.meta_update_mode = timeseries_pb2.MUM_NORMAL
+        proto.supported_table_version = self._get_int32(SUPPORT_TABLE_VERSION)
 
+        flat_buffer_data = get_column_val_by_tp(timeseries_table_name, timeseries_rows)
+        databytes = bytes(flat_buffer_data)
+        proto.rows_data.rows_data = databytes
+        crc = self.unsigned_to_signed(crc32c.crc32c(databytes) & 0xffffffff, 32)
+
+        proto.rows_data.flatbuffer_crc32c = crc
+        proto.rows_data.type = timeseries_pb2.RST_FLAT_BUFFER
+
+        return proto
+
+
+    def _make_timeseries_table_options(self, proto, table_options:TimeseriesTableOptions):
+        if table_options.time_to_live is not None:
+            proto.time_to_live = self._get_int32(table_options.time_to_live)
+    def _make_timeseries_meta_options(self, proto, meta_options:TimeseriesMetaOptions):
+        if meta_options.allow_update_attributes is not None:
+            proto.allow_update_attributes = self._get_bool(meta_options.allow_update_attributes)
+        if meta_options.meta_time_to_live is not None:
+            proto.meta_time_to_live = self._get_int32(meta_options.meta_time_to_live)
+    def _make_timeseries_table_meta(self, proto, table_meta:TimeseriesTableMeta):
+        proto.table_name = self._get_unicode(table_meta.timeseries_table_name)
+        if table_meta.timeseries_table_options is not None:
+            self._make_timeseries_table_options(proto.table_options, table_meta.timeseries_table_options)
+        if table_meta.status is not None:
+            proto.status = self._get_unicode(table_meta.status)
+        if table_meta.timeseries_meta_options is not None:
+            self._make_timeseries_meta_options(proto.meta_options, table_meta.timeseries_meta_options)
+        if table_meta.timeseries_keys is not None:
+            self._make_repeated_str(proto.timeseries_key_schema, table_meta.timeseries_keys)
+        if table_meta.field_primary_keys is not None:
+            self._make_schemas_with_list(proto.field_primary_key_schema, table_meta.field_primary_keys)
+
+    def _get_analytical_store_sync_option(self, option):
+        global ANALYTICAL_STORE_SYNC_TYPE_MAP
+        enum_map = ANALYTICAL_STORE_SYNC_TYPE_MAP
+
+        proto_option = enum_map.get(option)
+
+        if proto_option != None:
+            return proto_option
+        else:
+            raise OTSClientError(
+                "analytical_store_sync_option should be one of [%s], not %s" % (
+                    ", ".join(list(enum_map.keys())), str(option)
+                )
+            )
+    def _make_analytical_store(self,proto, analytical_store:TimeseriesAnalyticalStore):
+        if analytical_store.analytical_store_name is not None:
+            proto.store_name = self._get_unicode(analytical_store.analytical_store_name)
+        if analytical_store.time_to_live is not None:
+            proto.time_to_live = self._get_int32(analytical_store.time_to_live)
+        if analytical_store.sync_option is not None:
+            proto.sync_option = self._get_analytical_store_sync_option(analytical_store.sync_option)
+
+    def _make_analytical_store_with_list(self, proto, analytical_store_list):
+        for analytical_store in analytical_store_list:
+            if not isinstance(analytical_store, TimeseriesAnalyticalStore):
+                raise OTSClientError(
+                    "all analytical stores should be TimeseriesAnalyticalStore, not %s" % (
+                        analytical_store.__class__.__name__
+                    )
+                )
+            analytical_store_proto = proto.add()
+            self._make_analytical_store(analytical_store_proto, analytical_store)
+
+    def _make_lastpoint_index_meta_with_list(self, proto, lastpoint_index_metas):
+        for lastpoint_index_meta in lastpoint_index_metas:
+            if not isinstance(lastpoint_index_meta, LastpointIndexMeta):
+                raise OTSClientError(
+                    "all lastpoint_index_meta should be LastpointIndexMeta, not %s" % (
+                        lastpoint_index_meta.__class__.__name__
+                    )
+                )
+            lastpoint_index_meta_proto = proto.add()
+            lastpoint_index_meta_proto.index_table_name = self._get_unicode(lastpoint_index_meta.index_table_name)
+
+    def _encode_create_timeseries_table(self, request:CreateTimeseriesTableRequest):
+        proto = timeseries_pb2.CreateTimeseriesTableRequest()
+        self._make_timeseries_table_meta(proto.table_meta,request.table_meta)
+        if request.analytical_stores is not None:
+            self._make_analytical_store_with_list(proto.analytical_stores, request.analytical_stores)
+        if request.lastpoint_index_metas is not None:
+            self._make_lastpoint_index_meta_with_list(proto.lastpoint_index_metas,request.lastpoint_index_metas)
+        return proto
+
+
+    def _encode_list_timeseries_table(self):
+        proto = timeseries_pb2.ListTimeseriesTableRequest()
+        return proto
+
+    def _encode_delete_timeseries_table(self, timeseries_table_name):
+        proto = timeseries_pb2.DeleteTimeseriesTableRequest()
+        proto.table_name = self._get_unicode(timeseries_table_name)
+        return proto
+
+    def unsigned_to_signed(self, num, bit):
+        if num & (1 << (bit-1)):
+            return num - (1 << bit)
+        return num
+
+    def _encode_describe_timeseries_table(self, timeseries_table_name):
+        proto = timeseries_pb2.DescribeTimeseriesTableRequest()
+        proto.table_name = self._get_unicode(timeseries_table_name)
+        return proto
+
+    def _encode_update_timeseries_table(self, timeseries_meta):
+        proto = timeseries_pb2.UpdateTimeseriesTableRequest()
+        self._make_timeseries_table_meta(proto, timeseries_meta)
+        return proto
+
+    def _encode_update_timeseries_meta(self, request):
+        proto = timeseries_pb2.UpdateTimeseriesMetaRequest()
+        proto.table_name = self._get_unicode(request.timeseries_tablename)
+        proto.supported_table_version = self._get_int64(SUPPORT_TABLE_VERSION)
+        self._make_timeseries_meta_list(proto.timeseries_meta, request.metas)
+        return proto
+
+    def _make_timeseries_meta_list(self, proto, timeseries_meta_list):
+        for item in timeseries_meta_list:
+            if not isinstance(item, TimeseriesMeta):
+                raise OTSClientError(
+                    "all timeseries_meta should be TimeseriesMeta, not %s" % (
+                        item.__class__.__name__
+                    )
+                )
+            meta_proto = proto.add()
+            self._make_timeseries_meta(meta_proto, item)
+
+
+    def _make_timeseries_meta(self, proto, timeseries_meta: TimeseriesMeta):
+        self._make_timeseries_key(proto.time_series_key, timeseries_meta.timeseries_key)
+        if len(timeseries_meta.attributes) > 0:
+            proto.attributes = self._get_unicode(self._build_timeseries_attribute(timeseries_meta.attributes))
+
+    def _make_timeseries_keys(self, proto, timeseries_keys):
+        for item in timeseries_keys:
+            key_proto = proto.add()
+            self._make_timeseries_key(key_proto, item)
+
+    def _make_timeseries_key(self, proto, timeseries_key):
+        if timeseries_key.measurement_name is not None:
+            proto.measurement = self._get_unicode(timeseries_key.measurement_name)
+        if timeseries_key.data_source is not None:
+            proto.source = self._get_unicode(timeseries_key.data_source)
+        if len(timeseries_key.tags) > 0:
+            self._make_timeseries_tag(proto.tag_list, timeseries_key.tags)
+
+    def _make_timeseries_tag(self, proto, tags):
+        sorted_keys = sorted(tags.keys())
+        for item in sorted_keys:
+            tag_proto = proto.add()
+            tag_proto.name = self._get_unicode(item)
+            tag_proto.value = self._get_unicode(tags[item])
+
+    def _build_timeseries_attribute(self, attributes):
+        sorted_keys = sorted(attributes.keys())
+        res = "["
+        first = True
+        for item in sorted_keys:
+            value = attributes[item]
+            if not first:
+                res = res + ","
+            res = res + "\"" + item + "=" + value + "\""
+            first = False
+        res = res + "]"
+        return res
+
+    def _encode_delete_timeseries_meta(self, request):
+        proto = timeseries_pb2.DeleteTimeseriesMetaRequest()
+        proto.table_name = request.timeseries_tablename
+        self._make_timeseries_keys(proto.timeseries_key, request.timeseries_keys)
+        proto.supported_table_version = self._get_int64(SUPPORT_TABLE_VERSION)
+        return proto
+
+    def _encode_query_timeseries_meta(self, request):
+        proto = timeseries_pb2.QueryTimeseriesMetaRequest()
+        proto.table_name = self._get_unicode(request.timeseriesTableName)
+        proto.get_total_hit = self._get_bool(request.getTotalHits)
+        if request.limit is not None and request.limit > 0:
+            proto.limit = self._get_int32(request.limit)
+        if request.nextToken is not None:
+            proto.token = request.nextToken
+
+        proto.supported_table_version = self._get_int64(SUPPORT_TABLE_VERSION)
+        if request.condition is not None:
+            proto.condition.proto_data = self._make_timeseries_meta_condition(request.condition)
+            proto.condition.type = request.condition.get_type()
+        return proto
+
+
+    def _make_timeseries_meta_condition_measurement(self, condition):
+        pb = timeseries_pb2.MetaQueryMeasurementCondition()
+        pb.op = condition.operator.to_pb()
+        pb.value = self._get_unicode(condition.value)
+        return pb.SerializeToString()
+
+    def _make_timeseries_meta_condition_datasource(self, condition):
+        pb = timeseries_pb2.MetaQuerySourceCondition()
+        pb.op = condition.operator.to_pb()
+        pb.value = self._get_unicode(condition.value)
+        return pb.SerializeToString()
+
+    def _make_timeseries_meta_condition_tag(self, condition):
+        pb = timeseries_pb2.MetaQueryTagCondition()
+        pb.op = condition.operator.to_pb()
+        pb.value = condition.value
+        pb.tag_name = self._get_unicode(condition.tag_name)
+        return pb.SerializeToString()
+
+    def _make_timeseries_meta_condition_updatetime(self, condition):
+        pb = timeseries_pb2.MetaQueryUpdateTimeCondition()
+        pb.op = condition.operator.to_pb()
+        pb.value = self._get_int64(condition.time_in_us)
+        return pb.SerializeToString()
+
+    def _make_timeseries_meta_condition_attribute(self, condition):
+        pb = timeseries_pb2.MetaQueryAttributeCondition()
+        pb.op = condition.operator.to_pb()
+        pb.value = self._get_unicode(condition.value)
+        pb.attr_name = self._get_unicode(condition.attribute_name)
+        return pb.SerializeToString()
+
+    def _make_timeseries_meta_condition_composite(self, condition):
+        pb = timeseries_pb2.MetaQueryCompositeCondition()
+        pb.op = condition.operator.to_pb()
+        for item in condition.subConditions:
+            proto = pb.sub_conditions.add()
+            proto.proto_data = self._make_timeseries_meta_condition(item)
+            proto.type = item.get_type()
+        return pb.SerializeToString()
+
+    def _make_timeseries_meta_condition(self, condition):
+        if condition.__class__ in self.timeseries_meta_condition_encode_map:
+            handler = self.timeseries_meta_condition_encode_map[condition.__class__]
+            return handler(condition)
+        else:
+            raise OTSClientError("timeseries meta condition type wrong, %s"
+                % condition.__class__.__name__)
+
+    def _encode_get_timeseries_data(self, request):
+        proto = timeseries_pb2.GetTimeseriesDataRequest()
+        proto.table_name = self._get_unicode(request.timeseriesTableName)
+        proto.begin_time = self._get_int64(request.beginTimeInUs)
+        proto.end_time = self._get_int64(request.endTimeInUs)
+        proto.supported_table_version = self._get_int64(SUPPORT_TABLE_VERSION)
+        self._make_timeseries_key(proto.time_series_key, request.timeseriesKey)
+        if request.backward:
+            proto.backward = self._get_bool(request.backward)
+        if request.limit is not None and request.limit > 0:
+            proto.limit = self._get_int32(request.limit)
+        if request.nextToken is not None:
+            proto.token = request.nextToken
+
+        if request.fieldsToGet is not None and len(request.fieldsToGet) > 0:
+            self._make_fieldtoget(proto.fields_to_get, request.fieldsToGet)
+
+        return proto
+
+
+    def _make_fieldtoget(self, proto, field_to_get):
+        for key in field_to_get.keys():
+            f_proto = proto.add()
+            f_proto.name = key
+            f_proto.type = field_to_get[key]

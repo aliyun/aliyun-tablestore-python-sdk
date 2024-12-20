@@ -2,6 +2,7 @@
 
 import time
 
+
 try:
     import httplib
 except ImportError:
@@ -31,7 +32,6 @@ class ConnectionPool(object):
             headers=None,
             cert_reqs='CERT_REQUIRED', # Force certificate check
             ca_certs=certifi.where(),  # Path to the Certifi bundle
-            strict=True,         # TODO more comments to explain these parameters
             timeout=timeout,
             maxsize=maxsize,
             block=True,
@@ -57,7 +57,7 @@ class ConnectionPool(object):
             _network_io_time += end - begin
 
         # TODO error handling
-        response_headers = dict(response.getheaders())
+        response_headers = dict(response.headers)
         response_body = response.data # TODO figure out why response.read() don't work
 
         return response.status, response.reason, response_headers, response_body

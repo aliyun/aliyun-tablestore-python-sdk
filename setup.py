@@ -29,9 +29,9 @@ setup(
     version=version,
     description='Aliyun TableStore(OTS) SDK',
     long_description=readme,
-    packages=['tablestore', 'tablestore.protobuf', 'tablestore.plainbuffer','tablestore.flatbuffer','tablestore.flatbuffer.dataprotocol','dataprotocol'],
+    packages=['tablestore', 'tablestore.protobuf', 'tablestore.plainbuffer','tablestore.flatbuffer','tablestore.flatbuffer.timeseries','tablestore.flatbuffer.dataprotocol','dataprotocol'],
     package_dir={'tablestore.protobuf': 'tablestore/protobuf/' + base_dir,'dataprotocol':'tablestore/flatbuffer/dataprotocol'},
-    install_requires=['enum34>=1.1.6', 'protobuf==4.25.0', 'urllib3>=1.14', 'certifi>=2016.2.28', 'future>=0.16.0', 'six>=1.11.0', 'flatbuffers>=22.9.24', 'numpy>=1.11.0'],
+    install_requires=['enum34>=1.1.6', 'protobuf==4.25.0', 'urllib3>=1.14', 'certifi>=2016.2.28', 'future>=0.16.0', 'six>=1.11.0', 'flatbuffers>=22.9.24', 'numpy>=1.11.0', 'crc32c>=2.7.1'],
     include_package_data=True,
     url='https://cn.aliyun.com/product/ots',
     classifiers=[
