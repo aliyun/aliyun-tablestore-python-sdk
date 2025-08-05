@@ -165,7 +165,7 @@ class OTSProtocol(object):
 
         # 3, check signature
         # decode the byte type
-        if signature != signer.make_response_signature(query, headers).decode(self.encoding):
+        if signature != signer.make_response_signature(query, headers):
             raise OTSClientError('Invalid signature in response.')
 
     def make_request(self, api_name, signer: SignBase, *args, **kwargs):

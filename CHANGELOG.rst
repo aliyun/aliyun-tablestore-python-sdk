@@ -3,6 +3,11 @@ Tablestore SDK for Python 版本记录
 
 Python SDK 的版本号遵循 `Semantic Versioning <http://semver.org/>`_ 规则。
 
+Version 6.3.0
+-------------
+- Support async client
+- Add async and sync mixed test by RandomOTSClient in tests/__init__.py
+
 Version 6.2.1
 -------------
 - Support SingleColumnRegexCondition filter

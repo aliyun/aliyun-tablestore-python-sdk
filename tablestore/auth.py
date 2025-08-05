@@ -28,12 +28,12 @@ def calculate_hmac(signing_key, signature_string, sign_method, encoding):
 
 def call_signature_method_sha1(signing_key, signature_string, encoding):
     # The signature method is supposed to be HmacSHA1
-    return base64.b64encode(calculate_hmac(signing_key, signature_string, hashlib.sha1, encoding))
+    return base64.b64encode(calculate_hmac(signing_key, signature_string, hashlib.sha1, encoding)).decode(encoding)
 
 
 def call_signature_method_sha256(signing_key, signature_string, encoding):
     # The signature method is supposed to be HmacSHA256
-    return base64.b64encode(calculate_hmac(signing_key, signature_string, hashlib.sha256, encoding))
+    return base64.b64encode(calculate_hmac(signing_key, signature_string, hashlib.sha256, encoding)).decode(encoding)
 
 
 class SignBase(ABC):
