@@ -11,6 +11,7 @@ import tablestore.protobuf.table_store_pb2 as pb
 import tablestore.protobuf.table_store_filter_pb2 as filter_pb
 import tablestore.protobuf.search_pb2 as search_pb
 import tablestore.protobuf.timeseries_pb2 as timeseries_pb2
+import tablestore.protobuf.global_table_pb2 as global_table_pb2
 
 from tablestore.flatbuffer.dataprotocol.SQLResponseColumns import *
 from tablestore.flatbuffer.flat_buffer_decoder import *
@@ -85,6 +86,11 @@ class OTSProtoBufferDecoder(object):
             'UpdateTimeseriesMeta'  : self._decode_update_timeseries_meta,
             'DeleteTimeseriesMeta'  : self._decode_delete_timeseries_meta,
             'QueryTimeseriesMeta'   : self._decode_query_timeseries_meta,
+            'CreateGlobalTable'     : self._decode_create_global_table,
+            'BindGlobalTable'       : self._decode_bind_global_table,
+            'UnbindGlobalTable'     : self._decode_unbind_global_table,
+            'DescribeGlobalTable'   : self._decode_describe_global_table,
+            'UpdateGlobalTable'     : self._decode_update_global_table,
         }
 
     def _parse_string(self, string):
@@ -183,7 +189,12 @@ class OTSProtoBufferDecoder(object):
         allow_update = True
         if proto.HasField('allow_update'):
             allow_update = proto.allow_update
-        return TableOptions(time_to_live, max_versions, max_deviation_time, allow_update)
+
+        update_full_row = None
+        if proto.HasField('update_full_row'):
+            update_full_row = proto.update_full_row
+
+        return TableOptions(time_to_live, max_versions, max_deviation_time, allow_update, update_full_row)
 
     def _parse_sse_details(self, proto):
         enable = proto.enable
@@ -1348,3 +1359,119 @@ class OTSProtoBufferDecoder(object):
                 raise OTSClientError('invalid tag or attribute value:%s' % str(tag))
             res[x[0]] = x[1]
         return res
+
+    # ==================== Global Table Decoders ====================
+
+    _GLOBAL_TABLE_STATUS_MAP = {
+        global_table_pb2.G_INIT: GlobalTableStatus.INIT,
+        global_table_pb2.G_RE_CONF: GlobalTableStatus.RECONF,
+        global_table_pb2.G_ACTIVE: GlobalTableStatus.ACTIVE,
+    }
+
+    _SERVE_MODE_MAP = {
+        global_table_pb2.PRIMARY_SECONDARY: ServeMode.PRIMARY_SECONDARY,
+        global_table_pb2.PEER_TO_PEER: ServeMode.PEER_TO_PEER,
+    }
+
+    _PHY_TABLE_STATUS_MAP = {
+        global_table_pb2.PHY_PENDING: PhyTableStatus.PENDING,
+        global_table_pb2.PHY_INIT: PhyTableStatus.INIT,
+        global_table_pb2.PHY_SYNCDATA: PhyTableStatus.SYNCDATA,
+        global_table_pb2.PHY_READY: PhyTableStatus.READY,
+        global_table_pb2.PHY_ACTIVE: PhyTableStatus.ACTIVE,
+        global_table_pb2.PHY_UNBINDING: PhyTableStatus.UNBINDING,
+        global_table_pb2.PHY_UNBOUND: PhyTableStatus.UNBOUND,
+    }
+
+    _SYNC_STAGE_MAP = {
+        global_table_pb2.SYNC_INIT: PhyTableSyncStage.INIT,
+        global_table_pb2.SYNC_FULL: PhyTableSyncStage.FULL,
+        global_table_pb2.SYNC_INCR: PhyTableSyncStage.INCR,
+    }
+
+    def _decode_create_global_table(self, body, request_id):
+        proto = global_table_pb2.CreateGlobalTableResponse()
+        proto.ParseFromString(body)
+
+        response = CreateGlobalTableResponse(
+            global_table_id=proto.globalTableId,
+            request_id=request_id,
+        )
+        return response, proto
+
+    def _decode_bind_global_table(self, body, request_id):
+        proto = global_table_pb2.BindGlobalTableResponse()
+        proto.ParseFromString(body)
+
+        response = BindGlobalTableResponse(request_id=request_id)
+        return response, proto
+
+    def _decode_unbind_global_table(self, body, request_id):
+        proto = global_table_pb2.UnbindGlobalTableResponse()
+        proto.ParseFromString(body)
+
+        response = UnbindGlobalTableResponse(request_id=request_id)
+        return response, proto
+
+    def _decode_describe_global_table(self, body, request_id):
+        proto = global_table_pb2.DescribeGlobalTableResponse()
+        proto.ParseFromString(body)
+
+        global_table_id = proto.globalTableId
+
+        status = self._GLOBAL_TABLE_STATUS_MAP.get(proto.status)
+
+        serve_mode = None
+        if proto.HasField('serveMode'):
+            serve_mode = self._SERVE_MODE_MAP.get(proto.serveMode)
+
+        phy_tables = []
+        for proto_table in proto.phyTables:
+            table = PhyTable(
+                region_id=proto_table.regionId,
+                instance_name=proto_table.instanceName,
+                table_name=proto_table.tableName,
+                writable=proto_table.writable,
+            )
+
+            if proto_table.HasField('status'):
+                table.status = self._PHY_TABLE_STATUS_MAP.get(proto_table.status)
+
+            if proto_table.HasField('statusTimestamp'):
+                table.status_timestamp = proto_table.statusTimestamp
+
+            if proto_table.HasField('tableId'):
+                table.table_id = proto_table.tableId
+
+            if proto_table.HasField('stage'):
+                table.stage = self._SYNC_STAGE_MAP.get(proto_table.stage)
+
+            if proto_table.HasField('isFailed'):
+                table.is_failed = proto_table.isFailed
+
+            if proto_table.HasField('message'):
+                table.message = proto_table.message
+
+            if proto_table.HasField('role'):
+                table.role = proto_table.role
+
+            if proto_table.HasField('rpoNanos'):
+                table.rpo_nanos = proto_table.rpoNanos
+
+            phy_tables.append(table)
+
+        response = DescribeGlobalTableResponse(
+            global_table_id=global_table_id,
+            status=status,
+            phy_tables=phy_tables,
+            serve_mode=serve_mode,
+            request_id=request_id,
+        )
+        return response, proto
+
+    def _decode_update_global_table(self, body, request_id):
+        proto = global_table_pb2.UpdateGlobalTableResponse()
+        proto.ParseFromString(body)
+
+        response = UpdateGlobalTableResponse(request_id=request_id)
+        return response, proto

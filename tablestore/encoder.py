@@ -14,6 +14,7 @@ import tablestore.protobuf.table_store_pb2 as pb2
 import tablestore.protobuf.table_store_filter_pb2 as filter_pb2
 import tablestore.protobuf.search_pb2 as search_pb2
 import tablestore.protobuf.timeseries_pb2 as timeseries_pb2
+import tablestore.protobuf.global_table_pb2 as global_table_pb2
 from tablestore.flatbuffer.timeseries_flat_buffer_encoder import *
 from tablestore.timeseries_condition import *
 
@@ -154,6 +155,11 @@ class OTSProtoBufferEncoder(object):
             'QueryTimeseriesMeta'   : self._encode_query_timeseries_meta,
             'UpdateTimeseriesMeta'  : self._encode_update_timeseries_meta,
             'DeleteTimeseriesMeta'  : self._encode_delete_timeseries_meta,
+            'CreateGlobalTable'     : self._encode_create_global_table,
+            'BindGlobalTable'       : self._encode_bind_global_table,
+            'UnbindGlobalTable'     : self._encode_unbind_global_table,
+            'DescribeGlobalTable'   : self._encode_describe_global_table,
+            'UpdateGlobalTable'     : self._encode_update_global_table,
         }
 
         self.timeseries_meta_condition_encode_map = {
@@ -738,6 +744,14 @@ class OTSProtoBufferEncoder(object):
                     % table_options.allow_update.__class__.__name__
                     )
             proto.allow_update = table_options.allow_update
+
+        if table_options.update_full_row is not None:
+            if not isinstance(table_options.update_full_row, bool):
+                raise OTSClientError(
+                    "update_full_row should be an instance of bool, not %s"
+                    % table_options.update_full_row.__class__.__name__
+                    )
+            proto.update_full_row = table_options.update_full_row
 
     def _make_sse_spec(self, proto, sse_spec):
         if not isinstance(sse_spec, SSESpecification):
@@ -2072,3 +2086,116 @@ class OTSProtoBufferEncoder(object):
             f_proto = proto.add()
             f_proto.name = key
             f_proto.type = field_to_get[key]
+
+    # ==================== Global Table Encoders ====================
+
+    _SYNC_MODE_MAP = {
+        SyncMode.ROW: global_table_pb2.SYNC_MODE_ROW,
+        SyncMode.COLUMN: global_table_pb2.SYNC_MODE_COLUMN,
+    }
+
+    _SERVE_MODE_MAP = {
+        ServeMode.PRIMARY_SECONDARY: global_table_pb2.PRIMARY_SECONDARY,
+        ServeMode.PEER_TO_PEER: global_table_pb2.PEER_TO_PEER,
+    }
+
+    def _encode_create_global_table(self, request):
+        proto = global_table_pb2.CreateGlobalTableRequest()
+
+        proto.baseTable.regionId = self._get_unicode(request.base_table.region_id)
+        proto.baseTable.instanceName = self._get_unicode(request.base_table.instance_name)
+        proto.baseTable.tableName = self._get_unicode(request.base_table.table_name)
+
+        for placement in request.placements:
+            proto_placement = proto.placements.add()
+            proto_placement.regionId = self._get_unicode(placement.region_id)
+            proto_placement.instanceName = self._get_unicode(placement.instance_name)
+            proto_placement.writable = placement.writable
+
+        if request.sync_mode not in self._SYNC_MODE_MAP:
+            raise OTSClientError("SyncMode is invalid: %s" % request.sync_mode)
+        proto.syncMode = self._SYNC_MODE_MAP[request.sync_mode]
+
+        if request.serve_mode not in self._SERVE_MODE_MAP:
+            raise OTSClientError("ServeMode is invalid: %s" % request.serve_mode)
+        proto.serveMode = self._SERVE_MODE_MAP[request.serve_mode]
+
+        return proto
+
+    def _encode_bind_global_table(self, request):
+        proto = global_table_pb2.BindGlobalTableRequest()
+        proto.globalTableId = self._get_unicode(request.global_table_id)
+        proto.globalTableName = self._get_unicode(request.global_table_name)
+
+        for placement in request.placements:
+            proto_placement = proto.placements.add()
+            proto_placement.regionId = self._get_unicode(placement.region_id)
+            proto_placement.instanceName = self._get_unicode(placement.instance_name)
+            proto_placement.writable = placement.writable
+
+        return proto
+
+    def _encode_unbind_global_table(self, request):
+        proto = global_table_pb2.UnbindGlobalTableRequest()
+        proto.globalTableId = self._get_unicode(request.global_table_id)
+        proto.globalTableName = self._get_unicode(request.global_table_name)
+
+        for removal in request.removals:
+            proto_removal = proto.removals.add()
+            proto_removal.regionId = self._get_unicode(removal.region_id)
+            proto_removal.instanceName = self._get_unicode(removal.instance_name)
+
+        return proto
+
+    def _encode_describe_global_table(self, request):
+        proto = global_table_pb2.DescribeGlobalTableRequest()
+        proto.globalTableName = self._get_unicode(request.global_table_name)
+
+        if request.global_table_id is not None and request.global_table_id != '':
+            proto.globalTableId = self._get_unicode(request.global_table_id)
+
+        if request.phy_table is not None:
+            proto.phyTable.regionId = self._get_unicode(request.phy_table.region_id)
+            proto.phyTable.instanceName = self._get_unicode(request.phy_table.instance_name)
+            proto.phyTable.tableName = self._get_unicode(request.phy_table.table_name)
+            proto.phyTable.writable = request.phy_table.writable
+
+        if request.return_rpo is not None:
+            proto.returnRpo = request.return_rpo
+
+        return proto
+
+    def _encode_update_global_table(self, request):
+        if not request.global_table_id:
+            raise OTSClientError("GlobalTableId is empty")
+        if not request.global_table_name:
+            raise OTSClientError("GlobalTableName is empty")
+
+        phy_table = request.phy_table
+        if not phy_table.region_id:
+            raise OTSClientError("PhyTable's RegionId is empty")
+        if not phy_table.instance_name:
+            raise OTSClientError("PhyTable's InstanceName is empty")
+        if not phy_table.table_name:
+            raise OTSClientError("PhyTable's TableName is empty")
+
+        proto = global_table_pb2.UpdateGlobalTableRequest()
+        proto.globalTableId = self._get_unicode(request.global_table_id)
+        proto.globalTableName = self._get_unicode(request.global_table_name)
+
+        proto.phyTable.regionId = self._get_unicode(phy_table.region_id)
+        proto.phyTable.instanceName = self._get_unicode(phy_table.instance_name)
+        proto.phyTable.tableName = self._get_unicode(phy_table.table_name)
+
+        changed = False
+        if phy_table.writable is not None:
+            proto.phyTable.writable = phy_table.writable
+            changed = True
+        if phy_table.primary_eligible is not None:
+            proto.phyTable.primaryEligible = phy_table.primary_eligible
+            changed = True
+
+        if not changed:
+            raise OTSClientError("UpdateGlobalTableRequest does not contain any update item")
+
+        return proto

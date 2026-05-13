@@ -76,6 +76,11 @@ class OTSProtocol(object):
         'ListDocuments',
         'DeleteDocuments',
         'Retrieve',
+        'CreateGlobalTable',
+        'BindGlobalTable',
+        'UnbindGlobalTable',
+        'DescribeGlobalTable',
+        'UpdateGlobalTable',
     ]
 
     def __init__(self, instance_name, encoding, logger, extra_headers=None,

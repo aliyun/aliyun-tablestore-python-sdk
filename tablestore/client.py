@@ -1049,6 +1049,68 @@ class OTSClient(BaseOTSClient):
     def retrieve(self, request):
         return self._vectors_request_helper('Retrieve', request)
 
+    def create_global_table(self, request):
+        """Create a global table based on an existing physical table.
+
+        ``request`` is an instance of ``CreateGlobalTableRequest``, which includes:
+            - ``base_table``: a ``BaseTable`` instance identifying the source table.
+            - ``sync_mode``: the synchronization mode (``SyncMode.ROW`` or ``SyncMode.COLUMN``).
+            - ``serve_mode``: the serving mode (``ServeMode.PRIMARY_SECONDARY`` or ``ServeMode.PEER_TO_PEER``).
+            - ``placements``: an optional list of ``Placement`` instances for initial replicas.
+
+        Return: a ``CreateGlobalTableResponse`` instance containing the ``global_table_id``.
+        """
+        return self._request_helper('CreateGlobalTable', request)
+
+    def bind_global_table(self, request):
+        """Bind new placements to an existing global table.
+
+        ``request`` is an instance of ``BindGlobalTableRequest``, which includes:
+            - ``global_table_id``: the ID of the global table.
+            - ``global_table_name``: the name of the global table.
+            - ``placements``: a list of ``Placement`` instances to bind.
+
+        Return: a ``BindGlobalTableResponse`` instance.
+        """
+        return self._request_helper('BindGlobalTable', request)
+
+    def unbind_global_table(self, request):
+        """Unbind placements from an existing global table.
+
+        ``request`` is an instance of ``UnbindGlobalTableRequest``, which includes:
+            - ``global_table_id``: the ID of the global table.
+            - ``global_table_name``: the name of the global table.
+            - ``removals``: a list of ``Removal`` instances to unbind.
+
+        Return: an ``UnbindGlobalTableResponse`` instance.
+        """
+        return self._request_helper('UnbindGlobalTable', request)
+
+    def describe_global_table(self, request):
+        """Describe the details of a global table.
+
+        ``request`` is an instance of ``DescribeGlobalTableRequest``, which includes:
+            - ``global_table_name``: the name of the global table (required).
+            - ``global_table_id``: the ID of the global table (optional).
+            - ``phy_table``: a ``PhyTable`` instance for filtering (optional).
+            - ``return_rpo``: whether to return RPO information (optional).
+
+        Return: a ``DescribeGlobalTableResponse`` instance containing global table details.
+        """
+        return self._request_helper('DescribeGlobalTable', request)
+
+    def update_global_table(self, request):
+        """Update properties of a physical table in a global table.
+
+        ``request`` is an instance of ``UpdateGlobalTableRequest``, which includes:
+            - ``global_table_id``: the ID of the global table.
+            - ``global_table_name``: the name of the global table.
+            - ``phy_table``: an ``UpdatePhyTable`` instance with the properties to update.
+
+        Return: an ``UpdateGlobalTableResponse`` instance.
+        """
+        return self._request_helper('UpdateGlobalTable', request)
+
 class AsyncOTSClient(BaseOTSClient):
 
     DEFAULT_KEEPALIVE_TIMEOUT = 12
@@ -1896,4 +1958,24 @@ class AsyncOTSClient(BaseOTSClient):
 
     async def get_timeseries_data(self, request: GetTimeseriesDataRequest) -> GetTimeseriesDataResponse:
         return await self._request_helper('GetTimeseriesData', request)
+
+    async def create_global_table(self, request) -> CreateGlobalTableResponse:
+        """Create a global table based on an existing physical table."""
+        return await self._request_helper('CreateGlobalTable', request)
+
+    async def bind_global_table(self, request) -> BindGlobalTableResponse:
+        """Bind new placements to an existing global table."""
+        return await self._request_helper('BindGlobalTable', request)
+
+    async def unbind_global_table(self, request) -> UnbindGlobalTableResponse:
+        """Unbind placements from an existing global table."""
+        return await self._request_helper('UnbindGlobalTable', request)
+
+    async def describe_global_table(self, request) -> DescribeGlobalTableResponse:
+        """Describe the details of a global table."""
+        return await self._request_helper('DescribeGlobalTable', request)
+
+    async def update_global_table(self, request) -> UpdateGlobalTableResponse:
+        """Update properties of a physical table in a global table."""
+        return await self._request_helper('UpdateGlobalTable', request)
 

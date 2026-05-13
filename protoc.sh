@@ -58,11 +58,12 @@ check_and_replace_import_path_in_pb_py() {
 ./$binary --proto_path=tablestore/protobuf/ --python_out=tablestore/protobuf/ tablestore/protobuf/table_store_filter.proto 
 ./$binary --proto_path=tablestore/protobuf/ --python_out=tablestore/protobuf/ tablestore/protobuf/search.proto 
 ./$binary --proto_path=tablestore/protobuf/ --python_out=tablestore/protobuf/ tablestore/protobuf/timeseries.proto
+./$binary --proto_path=tablestore/protobuf/ --python_out=tablestore/protobuf/ tablestore/protobuf/global_table.proto
 
 check_and_replace_import_path_in_pb_py tablestore/protobuf/table_store.proto tablestore/protobuf/table_store_pb2.py
 check_and_replace_import_path_in_pb_py tablestore/protobuf/table_store_filter.proto tablestore/protobuf/table_store_filter_pb2.py
 check_and_replace_import_path_in_pb_py tablestore/protobuf/search.proto tablestore/protobuf/search_pb2.py
 check_and_replace_import_path_in_pb_py tablestore/protobuf/timeseries.proto tablestore/protobuf/timeseries_pb2.py
-
+check_and_replace_import_path_in_pb_py tablestore/protobuf/global_table.proto tablestore/protobuf/global_table_pb2.py
 
 echo -e "${GREEN}所有命令执行完毕。${RESET}"

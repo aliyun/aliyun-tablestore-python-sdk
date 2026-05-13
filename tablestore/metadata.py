@@ -18,11 +18,12 @@ class TableMeta(DefaultJsonObject):
 
 
 class TableOptions(DefaultJsonObject):
-    def __init__(self, time_to_live=-1, max_version=1, max_time_deviation=86400, allow_update=None):
+    def __init__(self, time_to_live=-1, max_version=1, max_time_deviation=86400, allow_update=None, update_full_row=None):
         self.time_to_live = time_to_live
         self.max_version = max_version
         self.max_time_deviation = max_time_deviation
         self.allow_update = allow_update
+        self.update_full_row = update_full_row
 
 
 class SSEKeyType(object):
@@ -1562,3 +1563,135 @@ class GetTimeseriesDataResponse(object):
     def __init__(self, rows: TimeseriesRow = None, nextToken = None):
         self.rows = rows
         self.nextToken = nextToken
+
+
+# ==================== Global Table ====================
+
+class SyncMode(object):
+    ROW = 'row'
+    COLUMN = 'column'
+
+class ServeMode(object):
+    PRIMARY_SECONDARY = 'primary_secondary'
+    PEER_TO_PEER = 'peer_to_peer'
+
+class GlobalTableStatus(object):
+    INIT = 'init'
+    RECONF = 'reconf'
+    ACTIVE = 'active'
+
+class PhyTableStatus(object):
+    PENDING = 'pending'
+    INIT = 'init'
+    SYNCDATA = 'syncdata'
+    READY = 'ready'
+    ACTIVE = 'active'
+    UNBINDING = 'unbinding'
+    UNBOUND = 'unbound'
+
+class PhyTableSyncStage(object):
+    INIT = 'init'
+    FULL = 'full'
+    INCR = 'incr'
+
+class BaseTable(DefaultJsonObject):
+    def __init__(self, region_id, instance_name, table_name):
+        self.region_id = region_id
+        self.instance_name = instance_name
+        self.table_name = table_name
+
+class Placement(DefaultJsonObject):
+    def __init__(self, region_id, instance_name, writable=False):
+        self.region_id = region_id
+        self.instance_name = instance_name
+        self.writable = writable
+
+class Removal(DefaultJsonObject):
+    def __init__(self, region_id, instance_name):
+        self.region_id = region_id
+        self.instance_name = instance_name
+
+class PhyTable(DefaultJsonObject):
+    def __init__(self, region_id, instance_name, table_name, writable=False,
+                 status=None, status_timestamp=None, table_id=None,
+                 stage=None, is_failed=False, message=None, role=None, rpo_nanos=None):
+        self.region_id = region_id
+        self.instance_name = instance_name
+        self.table_name = table_name
+        self.writable = writable
+        self.status = status
+        self.status_timestamp = status_timestamp
+        self.table_id = table_id
+        self.stage = stage
+        self.is_failed = is_failed
+        self.message = message
+        self.role = role
+        self.rpo_nanos = rpo_nanos
+
+class UpdatePhyTable(DefaultJsonObject):
+    def __init__(self, region_id, instance_name, table_name,
+                 writable=None, primary_eligible=None):
+        self.region_id = region_id
+        self.instance_name = instance_name
+        self.table_name = table_name
+        self.writable = writable
+        self.primary_eligible = primary_eligible
+
+class CreateGlobalTableRequest(DefaultJsonObject):
+    def __init__(self, base_table, sync_mode, serve_mode, placements=None):
+        self.base_table = base_table
+        self.sync_mode = sync_mode
+        self.serve_mode = serve_mode
+        self.placements = placements if placements is not None else []
+
+class CreateGlobalTableResponse(DefaultJsonObject):
+    def __init__(self, global_table_id, request_id=None):
+        self.global_table_id = global_table_id
+        self.request_id = request_id
+
+class BindGlobalTableRequest(DefaultJsonObject):
+    def __init__(self, global_table_id, global_table_name, placements):
+        self.global_table_id = global_table_id
+        self.global_table_name = global_table_name
+        self.placements = placements
+
+class BindGlobalTableResponse(DefaultJsonObject):
+    def __init__(self, request_id=None):
+        self.request_id = request_id
+
+class UnbindGlobalTableRequest(DefaultJsonObject):
+    def __init__(self, global_table_id, global_table_name, removals):
+        self.global_table_id = global_table_id
+        self.global_table_name = global_table_name
+        self.removals = removals
+
+class UnbindGlobalTableResponse(DefaultJsonObject):
+    def __init__(self, request_id=None):
+        self.request_id = request_id
+
+class DescribeGlobalTableRequest(DefaultJsonObject):
+    def __init__(self, global_table_name, global_table_id=None,
+                 phy_table=None, return_rpo=None):
+        self.global_table_name = global_table_name
+        self.global_table_id = global_table_id
+        self.phy_table = phy_table
+        self.return_rpo = return_rpo
+
+class DescribeGlobalTableResponse(DefaultJsonObject):
+    def __init__(self, global_table_id, status, phy_tables, serve_mode,
+                 request_id=None):
+        self.global_table_id = global_table_id
+        self.status = status
+        self.phy_tables = phy_tables
+        self.serve_mode = serve_mode
+        self.request_id = request_id
+
+class UpdateGlobalTableRequest(DefaultJsonObject):
+    def __init__(self, global_table_id, global_table_name, phy_table):
+        self.global_table_id = global_table_id
+        self.global_table_name = global_table_name
+        self.phy_table = phy_table
+
+class UpdateGlobalTableResponse(DefaultJsonObject):
+    def __init__(self, request_id=None):
+        self.request_id = request_id

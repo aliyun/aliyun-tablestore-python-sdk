@@ -140,6 +140,28 @@ __all__ = [
     'GroupByFilterResultItem',
     'GroupByGeoDistanceResultItem',
     'GroupByHistogramResultItem',
+
+    # Global Table
+    'SyncMode',
+    'ServeMode',
+    'GlobalTableStatus',
+    'PhyTableStatus',
+    'PhyTableSyncStage',
+    'BaseTable',
+    'Placement',
+    'Removal',
+    'PhyTable',
+    'UpdatePhyTable',
+    'CreateGlobalTableRequest',
+    'CreateGlobalTableResponse',
+    'BindGlobalTableRequest',
+    'BindGlobalTableResponse',
+    'UnbindGlobalTableRequest',
+    'UnbindGlobalTableResponse',
+    'DescribeGlobalTableRequest',
+    'DescribeGlobalTableResponse',
+    'UpdateGlobalTableRequest',
+    'UpdateGlobalTableResponse',
 ]
 
 
