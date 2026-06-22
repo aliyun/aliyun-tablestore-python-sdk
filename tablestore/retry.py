@@ -160,5 +160,5 @@ class WriteRetryPolicy(DefaultRetryPolicy):
     """
 
     def is_repeatable_api(self, api_name):
-        return api_name in ['ListTable', 'DescribeTable', 'GetRow', 'BatchGetRow', 'GetRange',
+        return api_name in ['ListTable', 'DescribeTable', 'GetRow', 'BatchGetRow', 'GetRange', 'GetTimeseriesData', 'ListTimeseriesTable', 'DescribeTimeseriesTable', 'QueryTimeseriesMeta',
                             'PutRow', 'UpdatRow', 'DeleteRow', 'BatchWriteRow']
